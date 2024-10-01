@@ -1,5 +1,11 @@
+<script setup lang="ts">
+defineProps<{
+  filled?: boolean;
+}>();
+</script>
+
 <template>
-  <button class="app-button"><slot /></button>
+  <button class="app-button" :class="{ filled }"><slot /></button>
 </template>
 
 <style scoped>
@@ -14,6 +20,11 @@
   font-weight: 600;
   line-height: 1em;
   padding: 1ex;
+
+  &.filled {
+    background: var(--accent-color);
+    color: var(--background-light);
+  }
 
   & :slotted(.app-icon) {
     display: block;

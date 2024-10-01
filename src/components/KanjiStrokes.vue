@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, shallowReactive } from "vue";
+import { computed, ref, shallowReactive, watch } from "vue";
 
 import { useKanjiVG, useKanjiVGViewBox } from "../helpers/kanjivg";
 import { KanjiInfo } from "../types";
@@ -8,6 +8,7 @@ import AppButton from "./AppButton.vue";
 import AppIcon from "./AppIcon.vue";
 import KanjiStrokesBackground from "./KanjiStrokesBackground.vue";
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";
+import KanjiStrokesPracticeCanvas from "./KanjiStrokesPracticeCanvas.vue";
 
 defineProps<{
   kanji: KanjiInfo;
@@ -15,30 +16,49 @@ defineProps<{
 
 const kanjiVG = useKanjiVG();
 const viewBox = useKanjiVGViewBox();
+const strokes = computed(() => kanjiVG.value?.querySelectorAll("path") ?? []);
 
 const animations = shallowReactive<Animation[]>([]);
 const animating = computed(() => animations.length > 0);
 const animationPaused = ref(false);
 
-function animate() {
-  const strokes = kanjiVG.value?.querySelectorAll("path");
+const practicing = ref(false);
+const practiceStrokes = shallowReactive<string[]>([]);
 
-  if (!strokes) {
-    return;
+watch(practicing, (practiceStarted) => {
+  if (practiceStarted) {
+    // Clear any ongoing animation
+    for (const animation of animations) {
+      animation.cancel();
+    }
+    animations.splice(0, animations.length);
+    animationPaused.value = false;
+  } else {
+    // Practice ended. Clear they practice strokes.
+    practiceStrokes.splice(0, practiceStrokes.length);
   }
+});
 
-  for (const stroke of strokes) {
-    const l = stroke.getTotalLength();
+function strokeKeyframes(stroke: SVGPathElement): Keyframe[] {
+  const l = stroke.getTotalLength();
+
+  return [
+    { strokeDasharray: l, strokeDashoffset: l },
+    { strokeDasharray: l, strokeDashoffset: 0 },
+  ];
+}
+
+const strokeAnimationOptions = {
+  duration: 500,
+  endDelay: 100,
+  easing: "ease-in-out",
+};
+
+function animate() {
+  for (const stroke of strokes.value) {
     const animation = stroke.animate(
-      [
-        { strokeDasharray: l, strokeDashoffset: l },
-        { strokeDasharray: l, strokeDashoffset: 0 },
-      ],
-      {
-        duration: 500,
-        endDelay: 100,
-        easing: "ease-in-out",
-      }
+      strokeKeyframes(stroke),
+      strokeAnimationOptions
     );
 
     animation.pause();
@@ -68,31 +88,101 @@ function resumeAnimation() {
   animations.at(0)?.play();
   animationPaused.value = false;
 }
+
+function showHint() {
+  const stroke = strokes.value[practiceStrokes.length];
+
+  if (!stroke) {
+    return;
+  }
+
+  stroke.style.display = "block";
+
+  const animation = stroke.animate(
+    strokeKeyframes(stroke),
+    strokeAnimationOptions
+  );
+
+  animation.finished.then(() => {
+    stroke.style.removeProperty("display");
+  });
+}
 </script>
 
 <template>
   <section>
-    <h2>Strokes ({{ kanji.strokeCount }})</h2>
+    <h2>
+      Strokes
+      <template v-if="strokes.length > 0"> ({{ strokes.length }}) </template>
+    </h2>
 
     <figure class="strokes-figure">
       <svg v-if="kanjiVG" :viewBox="viewBox" class="svg">
         <KanjiStrokesBackground :viewBox="viewBox" />
-        <KanjiStrokesGroup :strokes="kanjiVG" />
+
+        <KanjiStrokesGroup
+          :strokes="kanjiVG"
+          class="strokes"
+          :class="{
+            comparing: animating || strokes.length <= practiceStrokes.length,
+            practicing,
+          }"
+        />
+
+        <KanjiStrokesPracticeCanvas
+          v-if="practicing"
+          :practice-strokes="practiceStrokes"
+          :animate="animating"
+          :animate-pause="animationPaused"
+          @stroke="practiceStrokes.push($event)"
+        />
       </svg>
 
       <figcaption class="controls">
         <template v-if="animating">
-          <AppButton v-if="animationPaused" @click="resumeAnimation()">
+          <AppButton
+            v-if="animationPaused"
+            aria-label="Play"
+            @click="resumeAnimation()"
+          >
             <AppIcon icon="play" />
           </AppButton>
-          <AppButton v-else @click="pauseAnimation()">
+
+          <AppButton v-else aria-label="Pause" @click="pauseAnimation()">
             <AppIcon icon="pause" />
           </AppButton>
         </template>
 
-        <AppButton v-else @click="animate()">
-          <AppIcon icon="play" />
+        <template v-else>
+          <AppButton
+            v-if="practicing && practiceStrokes.length < strokes.length"
+            aria-lable="hint"
+            @click="showHint"
+          >
+            <AppIcon icon="help-circle" />
+          </AppButton>
+
+          <AppButton v-else aria-label="Play Stroke Order" @click="animate()">
+            <AppIcon icon="play" />
+          </AppButton>
+        </template>
+
+        <AppButton
+          aria-lable="Practice Drawing"
+          :aria-pressed="`${practicing}`"
+          :filled="practicing"
+          @click="practicing = !practicing"
+        >
+          <AppIcon icon="draw" />
         </AppButton>
+
+        <template v-if="practicing">
+          <hr class="rule" />
+
+          <AppButton aria-label="Undo" @click="practiceStrokes.pop()">
+            <AppIcon icon="rotate-left" />
+          </AppButton>
+        </template>
       </figcaption>
     </figure>
   </section>
@@ -100,18 +190,39 @@ function resumeAnimation() {
 
 <style scoped>
 .strokes-figure {
-  row-gap: 1ex;
-  display: flex;
-  flex-direction: column;
-  inline-size: max-content;
+  display: grid;
+  grid-template:
+    "svg . controls ."
+    / minmax(15em, 25em) 1ex auto minmax(0, 1fr);
   margin: 0;
 
   & .svg {
-    block-size: 15em;
+    grid-area: svg;
+    max-inline-size: 25em;
+
+    & .strokes.practicing :deep(path) {
+      color: var(--light-gray);
+      display: none;
+    }
+
+    & .strokes.practicing.comparing :deep(path) {
+      display: block;
+    }
   }
 
   & .controls {
-    align-self: center;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    grid-area: controls;
+    row-gap: 1ex;
+
+    & .rule {
+      background: var(--accent-color);
+      block-size: 1px;
+      border: none;
+      inline-size: 100%;
+    }
   }
 }
 </style>

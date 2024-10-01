@@ -24,17 +24,22 @@ import { aboutRoute, homeRoute, kanjiListsRoute } from "../router";
 
 <style scoped>
 .nav-list {
+  display: flex;
+  flex-direction: column;
   list-style: none;
   padding: 0;
   margin: 0;
+  row-gap: 1ex;
+
+  @media screen and (max-width: 75ch) {
+    justify-content: space-evenly;
+    column-gap: 1ex;
+    flex-direction: row;
+  }
 
   & > li {
     font-size: 1.2em;
     font-weight: 600;
-
-    &:not(:first-child) {
-      margin-block-start: 1ex;
-    }
   }
 
   & .nav-item {

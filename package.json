@@ -18,6 +18,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@luncheon/simplify-svg-path": "^0.2.0",
+    "simplify-js": "^1.2.4",
     "vue": "^3.5.10",
     "vue-router": "^4.4.5"
   },

@@ -29,5 +29,10 @@ const components = useKanjiVGComponents();
   list-style: none;
   margin: 0;
   padding: 0;
+
+  @media screen and (max-width: 60ch) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

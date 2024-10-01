@@ -22,6 +22,13 @@ import MainTitle from "./components/MainTitle.vue";
   column-gap: 2em;
   display: flex;
   margin: 2em;
+
+  @media screen and (max-width: 75ch) {
+    align-items: stretch;
+    flex-direction: column;
+    margin-inline: 1ex;
+    row-gap: 2em;
+  }
 }
 
 .header,
