@@ -1,280 +1,310 @@
 import { createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 
+import Database from "better-sqlite3";
 import sax from "sax";
-import sql from "sql-template-strings";
-import { open as opendb } from "sqlite";
-import sqlite3 from "sqlite3";
 
-const db = await opendb({
-  filename: fileURLToPath(import.meta.resolve("../assets.db")),
-  driver: sqlite3.Database,
-});
+const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
+db.pragma("journal_mode = WAL");
 
-await db.exec(sql`DROP TABLE IF EXISTS words`);
-await db.exec(sql`
-  CREATE TABLE words (
-    id INTEGER PRIMARY KEY
-  )
-`);
+db.exec("DROP TABLE IF EXISTS words");
+db.exec("CREATE TABLE words (id INTEGER PRIMARY KEY)");
 
-await db.exec(sql`DROP TABLE IF EXISTS word_writings`);
-await db.exec(sql`
+db.exec("DROP TABLE IF EXISTS word_writings");
+db.exec(`
   CREATE TABLE word_writings (
-    word INTEGER REFERENCES words (id),
-    text TEXT,
+    word INTEGER NOT NULL REFERENCES words (id),
+    text TEXT NOT NULL,
     ateji INTEGER,
     irregular INTEGER,
     rare INTEGER,
     outdated INTEGER,
     search_only INTEGER,
-    UNIQUE (word, text)
+    UNIQUE (word, text ASC)
   )
 `);
 
-await db.exec(sql`DROP INDEX IF EXISTS writing_index`);
-await db.exec(sql`CREATE INDEX writing_index ON word_writings (word, text)`);
-
-await db.exec(sql`DROP TABLE IF EXISTS word_readings`);
-await db.exec(sql`
+db.exec("DROP TABLE IF EXISTS word_readings");
+db.exec(`
   CREATE TABLE word_readings (
-    word INTEGER REFERENCES words (id),
-    text TEXT,
+    word INTEGER NOT NULL REFERENCES words (id),
+    text TEXT NOT NULL,
     no_kanji INTEGER,
     gikun INTEGER,
     irregular INTEGER,
     rare INTEGER,
     outdated INTEGER,
     search_only INTEGER,
-    UNIQUE (word, text)
+    UNIQUE (word, text ASC)
   )
 `);
 
-await db.exec(sql`DROP INDEX IF EXISTS reading_index`);
-await db.exec(sql`CREATE INDEX reading_index ON word_readings (word, text)`);
-
-await db.exec(sql`DROP TABLE IF EXISTS word_meanings`);
-await db.exec(sql`
+db.exec("DROP TABLE IF EXISTS word_meanings");
+db.exec(`
   CREATE TABLE word_meanings (
-    id INTEGER,
+    id INTEGER NOT NULL,
     word INTEGER REFERENCES words (id),
     info TEXT,
     pos BLOB,
     misc BLOB,
     kana_preferred INTEGER,
-    PRIMARY KEY (id, word)
+    PRIMARY KEY (id ASC, word)
   )
 `);
 
-await db.exec(sql`DROP TABLE IF EXISTS word_meaning_glossary`);
-await db.exec(sql`
+db.exec("DROP TABLE IF EXISTS word_meaning_glossary");
+db.exec(`
   CREATE TABLE word_meaning_glossary (
-    word INTEGER REFERENCES words (id),
-    word_meaning INTEGER REFERENCES word_meanings (id),
+    word INTEGER NOT NULL REFERENCES words (id),
+    meaning INTEGER NOT NULL,
     seq INTEGER NOT NULL,
-    text TEXT,
-    PRIMARY KEY (word, word_meaning, seq)
+    text TEXT NOT NULL,
+    PRIMARY KEY (word ASC, meaning, seq),
+    FOREIGN KEY (word, meaning) REFERENCES word_meanings (word, id)
   )
 `);
 
-await db.exec(sql`DROP TABLE IF EXISTS word_priority`);
-await db.exec(sql`
+db.exec("DROP INDEX IF EXISTS word_meaning_glossary_index");
+db.exec(
+  "CREATE INDEX word_meaning_glossary_index ON word_meaning_glossary (word, text ASC)"
+);
+
+db.exec("DROP TABLE IF EXISTS word_priority");
+db.exec(`
   CREATE TABLE word_priority (
-    word INTEGER REFERENCES words (id),
-    writing TEXT REFERENCES word_writings (text),
-    reading TEXT REFERENCES word_readings (text),
+    word INTEGER NOT NULL REFERENCES words (id),
+    writing TEXT,
+    reading TEXT,
     freq INTEGER,
     news INTEGER,
     ichi INTEGER,
     spec INTEGER,
-    gai INTEGER
+    gai INTEGER,
+    UNIQUE (word ASC, writing),
+    UNIQUE (word ASC, reading),
+    FOREIGN KEY (word, writing) REFERENCES word_writings (word, text),
+    FOREIGN KEY (word, reading) REFERENCES word_readings (word, text)
   )
 `);
 
-await db.exec(sql`DROP TABLE IF EXISTS word_reading_writing_pairs`);
-await db.exec(sql`
+db.exec("DROP TABLE IF EXISTS word_reading_writing_pairs");
+db.exec(`
   CREATE TABLE word_reading_writing_pairs (
-    word INTEGER REFERENCES words (id),
-    writing TEXT REFERENCES word_writings (text),
-    reading TEXT REFERENCES word_readings (text)
+    word INTEGER NOT NULL REFERENCES words (id),
+    writing TEXT NOT NULL,
+    reading TEXT NOT NULL,
+    UNIQUE (word, writing ASC, reading),
+    FOREIGN KEY (word, writing) REFERENCES word_writings (word, text),
+    FOREIGN KEY (word, reading) REFERENCES word_readings (word, text)
   )
 `);
 
-await db.exec(sql`DROP TABLE IF EXISTS word_meaning_writing_pairs`);
-await db.exec(sql`
+db.exec("DROP TABLE IF EXISTS word_meaning_writing_pairs");
+db.exec(`
   CREATE TABLE word_meaning_writing_pairs (
-    word INTEGER REFERENCES words (id),
-    writing TEXT REFERENCES word_writings (text),
-    word_meanings INTEGER REFERENCES word_meanings (id)
+    word INTEGER NOT NULL REFERENCES words (id),
+    meaning INTEGER NOT NULL,
+    writing TEXT NOT NULL,
+    FOREIGN KEY (word, meaning) REFERENCES word_meanings (word, id),
+    FOREIGN KEY (word, writing) REFERENCES word_writings (word, text)
   )
 `);
 
-await db.exec(sql`DROP TABLE IF EXISTS word_meaning_reading_pairs`);
-await db.exec(sql`
+db.exec("DROP TABLE IF EXISTS word_meaning_reading_pairs");
+db.exec(`
   CREATE TABLE word_meaning_reading_pairs (
-    word INTEGER REFERENCES words (id),
-    reading TEXT REFERENCES word_readings (text),
-    word_meanings INTEGER REFERENCES word_meanings (id)
+    word INTEGER NOT NULL REFERENCES words (id),
+    meaning INTEGER NOT NULL,
+    reading TEXT NOT NULL,
+    FOREIGN KEY (word, meaning) REFERENCES word_meanings (word, id),
+    FOREIGN KEY (word, reading) REFERENCES word_readings (word, text)
   )
+`);
+
+const insertWord = db.prepare("INSERT INTO words (id) VALUES (?)");
+const insertWordWriting = db.prepare(`
+  INSERT INTO word_writings (
+    word,
+    text,
+    ateji,
+    irregular,
+    rare,
+    outdated,
+    search_only
+  )
+  VALUES (
+    @wordId,
+    @text,
+    @ateji,
+    @irregular,
+    @rare,
+    @outdated,
+    @searchOnly
+  )
+`);
+
+const insertWordReading = db.prepare(`
+  INSERT INTO word_readings (
+    word,
+    text,
+    no_kanji,
+    gikun,
+    irregular,
+    rare,
+    outdated,
+    search_only
+  )
+  VALUES (
+    @wordId,
+    @text,
+    @noKanji,
+    @gikun,
+    @irregular,
+    @rare,
+    @outdated,
+    @searchOnly
+  )
+`);
+
+const insertWordMeaning = db.prepare(`
+  INSERT INTO word_meanings (
+    id,
+    word,
+    info,
+    pos,
+    misc,
+    kana_preferred
+  )
+  VALUES (
+    @meaningId,
+    @wordId,
+    @info,
+    @pos,
+    @misc,
+    @kanaPreferred
+  )
+`);
+
+const insertWordMeaningGlossary = db.prepare(`
+  INSERT INTO word_meaning_glossary (word, meaning, seq, text)
+  VALUES (@wordId, @meaningId, @seq, @text)
+`);
+
+const insertWordPriority = db.prepare(`
+  INSERT INTO word_priority (word, writing, reading, freq, news, ichi, spec, gai)
+  VALUES (@wordId, @writing, @reading, @nf, @news, @ichi, @spec, @gai)
+`);
+
+const insertReadingWritingPair = db.prepare(`
+  INSERT INTO word_reading_writing_pairs (word, writing, reading)
+  VALUES (?, ?, ?)
+`);
+
+const insertMeaningWritingPair = db.prepare(`
+  INSERT INTO word_meaning_writing_pairs (word, meaning, writing)
+  VALUES (?, ?, ?)
+`);
+
+const insertMeaningReadingPair = db.prepare(`
+  INSERT INTO word_meaning_reading_pairs (word, meaning, reading)
+  VALUES (?, ?, ?)
 `);
 
 const priorityRegExp = /^(news|ichi|spec|gai|nf)(\d\d?)$/;
 
 async function saveEntryToDb(entry) {
-  db.run(sql`
-    INSERT INTO words (id)
-    VALUES (${entry.id})
-  `);
+  insertWord.run(entry.id);
 
   for (const writing of entry.kanji) {
-    db.run(sql`
-      INSERT INTO word_writings (
-        word,
-        text,
-        ateji,
-        irregular,
-        rare,
-        outdated,
-        search_only
-      )
-      VALUES (
-        ${entry.id},
-        ${writing.text},
-        ${writing.ateji},
-        ${writing.irregular},
-        ${writing.rare},
-        ${writing.outdated},
-        ${writing.searchOnly}
-      )
-    `);
+    insertWordWriting.run({ wordId: entry.id, ...writing });
 
     if (writing.priority) {
-      const priorities = {};
+      const priorities = {
+        nf: null,
+        news: null,
+        ichi: null,
+        spec: null,
+        gai: null,
+      };
 
       for (const priority of writing.priority) {
         const [, cat, n] = priorityRegExp.exec(priority);
         priorities[cat] = Number.parseInt(n);
       }
 
-      db.run(sql`
-        INSERT INTO word_priority (word, writing, freq, news, ichi, spec, gai)
-        VALUES (
-          ${entry.id},
-          ${writing.text},
-          ${priorities.nf},
-          ${priorities.news},
-          ${priorities.ichi},
-          ${priorities.spec},
-          ${priorities.gai}
-        )
-      `);
+      insertWordPriority.run({
+        wordId: entry.id,
+        writing: writing.text,
+        reading: null,
+        ...priorities,
+      });
     }
   }
 
   for (const reading of entry.kana) {
-    db.run(sql`
-      INSERT INTO word_readings (
-        word,
-        text,
-        no_kanji,
-        gikun,
-        irregular,
-        rare,
-        outdated,
-        search_only
-      )
-      VALUES (
-        ${entry.id},
-        ${reading.text},
-        ${reading.noKanji},
-        ${reading.gikun},
-        ${reading.irregular},
-        ${reading.rare},
-        ${reading.outdated},
-        ${reading.searchOnly}
-      )
-    `);
+    insertWordReading.run({ wordId: entry.id, ...reading });
 
     if (reading.useWith) {
       for (const writing of reading.useWith) {
-        db.run(sql`
-          INSERT INTO word_reading_writing_pairs (word, writing, reading)
-          VALUES (${entry.id}, ${writing}, ${reading.text})
-        `);
+        insertReadingWritingPair.run(entry.id, writing, reading.text);
       }
     }
 
     if (reading.priority) {
-      const priorities = {};
+      const priorities = {
+        nf: null,
+        news: null,
+        ichi: null,
+        spec: null,
+        gai: null,
+      };
 
       for (const priority of reading.priority) {
         const [, cat, n] = priorityRegExp.exec(priority);
         priorities[cat] = Number.parseInt(n);
       }
 
-      db.run(sql`
-        INSERT INTO word_priority (word, reading, freq, news, ichi, spec, gai)
-        VALUES (
-          ${entry.id},
-          ${reading.text},
-          ${priorities.nf},
-          ${priorities.news},
-          ${priorities.ichi},
-          ${priorities.spec},
-          ${priorities.gai}
-        )
-      `);
+      insertWordPriority.run({
+        wordId: entry.id,
+        writing: null,
+        reading: reading.text,
+        ...priorities,
+      });
     }
   }
 
   let meaningId = 0;
   for (const meaning of entry.meanings) {
     meaningId += 1;
-    db.run(
-      sql`
-      INSERT INTO word_meanings (
-        id,
-        word,
-        info,
-        pos,
-        misc,
-        kana_preferred
-      )
-      VALUES (
-        ${meaningId},
-        ${entry.id},
-        ${meaning.info},
-        ${JSON.stringify(meaning.pos)},
-        ${JSON.stringify(meaning.misc)},
-        ${meaning.kanaPreferred}
-      )
-    `
-    );
+    insertWordMeaning.run({
+      wordId: entry.id,
+      meaningId,
+      info: meaning.info,
+      pos: JSON.stringify(meaning.pos),
+      misc: JSON.stringify(meaning.misc),
+      kanaPreferred: meaning.kanaPreferred,
+    });
 
     let glossSeq = 0;
     for (const text of meaning.gloss) {
       glossSeq += 1;
-      db.run(sql`
-        INSERT INTO word_meaning_glossary (word, word_meaning, seq, text)
-        VALUES (${entry.id}, ${meaningId}, ${glossSeq}, ${text})
-      `);
+      insertWordMeaningGlossary.run({
+        wordId: entry.id,
+        meaningId,
+        seq: glossSeq,
+        text,
+      });
     }
 
     if (meaning.useWithWriting) {
       for (const writing of meaning.useWithWriting) {
-        db.run(sql`
-          INSERT INTO word_meaning_writing_pairs (word, writing, word_meanings)
-          VALUES (${entry.id}, ${writing}, ${meaningId})
-        `);
+        insertMeaningWritingPair.run(entry.id, meaningId, writing);
       }
     }
 
     if (meaning.useWithReading) {
       for (const reading of meaning.useWithReading) {
-        db.run(sql`
-          INSERT INTO word_meaning_reading_pairs (word, reading, word_meanings)
-          VALUES (${entry.id}, ${reading}, ${meaningId})
-        `);
+        insertMeaningReadingPair.run(entry.id, meaningId, reading);
       }
     }
   }
@@ -309,15 +339,28 @@ const xmlStream = sax.createStream(false, {
     } else if (tag.name === "k_ele") {
       kanji = {
         text: null,
+        ateji: 0,
+        irregular: 0,
+        outdated: 0,
+        rare: 0,
+        searchOnly: 0,
       };
     } else if (tag.name === "r_ele") {
       kana = {
         text: null,
+        noKanji: 0,
+        gikun: 0,
+        irregular: 0,
+        outdated: 0,
+        rare: 0,
+        searchOnly: 0,
       };
     } else if (tag.name === "re_nokanji") {
-      kana.noKanji = true;
+      kana.noKanji = 1;
     } else if (tag.name === "sense") {
       meanings = {
+        info: null,
+        kanaPreferred: 0,
         gloss: [],
         pos: [],
         misc: [],
@@ -354,15 +397,15 @@ const xmlStream = sax.createStream(false, {
       kanji.text = text;
     } else if (tag.name === "ke_inf") {
       if (text === "&ateji;") {
-        kanji.ateji = true;
+        kanji.ateji = 1;
       } else if (text === "&ik;" || text === "&iK;" || text === "&io;") {
-        kanji.irregular = true;
+        kanji.irregular = 1;
       } else if (text === "&oK;") {
-        kanji.outdated = true;
+        kanji.outdated = 1;
       } else if (text === "&rK;") {
-        kanji.rare = true;
+        kanji.rare = 1;
       } else if (text === "&sK;") {
-        kanji.searchOnly = true;
+        kanji.searchOnly = 1;
       }
     } else if (tag.name === "ke_pri") {
       if (!kanji.priority) {
@@ -373,15 +416,15 @@ const xmlStream = sax.createStream(false, {
       kana.text = text;
     } else if (tag.name === "re_inf") {
       if (text === "&gikun;") {
-        kana.gikun = true;
+        kana.gikun = 1;
       } else if (text === "&ik;") {
-        kana.irregular = true;
+        kana.irregular = 1;
       } else if (text === "&ok;") {
-        kana.outdated = true;
+        kana.outdated = 1;
       } else if (text === "&rk;") {
-        kana.rare = true;
+        kana.rare = 1;
       } else if (text === "&sk;") {
-        kana.searchOnly = true;
+        kana.searchOnly = 1;
       }
     } else if (tag.name === "re_pri") {
       if (!kana.priority) {
@@ -407,7 +450,7 @@ const xmlStream = sax.createStream(false, {
       meanings.useWithReading.push(text);
     } else if (tag.name === "misc") {
       if (text === "&uk;") {
-        meanings.kanaPreferred = true;
+        meanings.kanaPreferred = 1;
       } else {
         meanings.misc.push(text.slice(1, -1));
       }
@@ -424,9 +467,21 @@ const xmlStream = sax.createStream(false, {
   });
 }
 
-db.exec("BEGIN");
-xmlStream.on("end", () => {
-  db.exec("COMMIT");
+const finished = new Promise((resolve, reject) => {
+  xmlStream.on("end", () => {
+    resolve();
+  });
+
+  xmlStream.on("error", (error) => {
+    reject(error);
+  });
 });
 
+db.exec("BEGIN");
+
 readStream.pipe(xmlStream);
+await finished;
+
+db.exec("COMMIT");
+
+import("./update-db-word-priorities.js");

@@ -31,6 +31,7 @@ fast.
    node scripts/populate-db-kanji.js
    node scripts/populate-db-words.js
    node scripts/populate-db-words-furigana.js
+   node scripts/populate-db-word-lists.js
    node scripts/populate-db-sentences.js
    ```
 3. Build the data assets
@@ -40,8 +41,8 @@ fast.
    cp -r assets/kanji-lists public/data/
    node scripts/build-assets-kanji.js
    node scripts/build-assets-words.js
-   node scripts/build-assets-sentences.js
-   node scripts/build-assets-kanji-vocab.js  ## This will take a few hours
+   node scripts/build-assets-sentences.js  ## This takes a couple of hours
+   node scripts/build-assets-kanji-vocab.js  ## This takes an hour
    ```
 
 ### Run the dev server

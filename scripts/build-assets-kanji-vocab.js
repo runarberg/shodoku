@@ -1,21 +1,16 @@
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-import sql from "sql-template-strings";
-import { open as opendb } from "sqlite";
-import sqlite3 from "sqlite3";
+import Database from "better-sqlite3";
 
 await fs.mkdir(new URL("../public/data/kanji-vocab-v1", import.meta.url), {
   recursive: true,
 });
 
-const db = await opendb({
-  filename: fileURLToPath(import.meta.resolve("../assets.db")),
-  driver: sqlite3.Database,
-});
+const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
+db.pragma("journal_mode = WAL");
 
-db.each(
-  sql`
+const selectKanji = db.prepare(`
   SELECT
     codepoint,
     literal,
@@ -27,8 +22,19 @@ db.each(
             'sentences', json(s.sentences)
           )
           ORDER BY
+            (
+              SELECT min(priority)
+              FROM word_lists
+              WHERE
+                word_lists.name in (
+                  SELECT list
+                  FROM word_list_words
+                  WHERE word_list_words.writing = word_writings.text
+                )
+            ) ASC NULLS LAST,
             word_priority.freq ASC NULLS LAST,
-            min(word_priority.ichi, word_priority.news, word_priority.spec) ASC NULLS LAST
+            min(word_priority.ichi, word_priority.news, word_priority.spec) ASC NULLS LAST,
+            word_writings.text ASC
         )
       FROM
         word_writings
@@ -38,22 +44,24 @@ db.each(
       LEFT OUTER JOIN
         (
           SELECT
+            word,
+            text,
             writing,
             json_group_array(sentence) as sentences
           FROM sentence_words
-          WHERE
-            good_example = 1
-            AND (sentence_words.text ISNULL OR instr(sentence_words.text, literal))
-          GROUP BY writing
+          WHERE good_example = 1
+          GROUP BY word
         ) as s
-        ON s.writing = word_writings.text
+        ON
+          s.word = word_writings.word
+          AND instr(coalesce(s.text, s.writing), literal)
       WHERE
         instr(word_writings.text, kanji.literal)
-        AND word_writings.ateji ISNULL
-        AND word_writings.irregular ISNULL
-        AND word_writings.rare ISNULL
-        AND word_writings.outdated ISNULL
-        AND word_writings.search_only ISNULL
+        AND word_writings.ateji = 0
+        AND word_writings.irregular = 0
+        AND word_writings.rare = 0
+        AND word_writings.outdated = 0
+        AND word_writings.search_only = 0
         AND (
           SELECT min(coalesce(kana_preferred, 0))
           FROM word_meanings
@@ -61,33 +69,35 @@ db.each(
         ) = 0
     ) as words
   FROM kanji
-`,
-  (error, row) => {
-    if (error) {
-      console.error(error);
-      return;
+`);
+
+let i = 0;
+for (const row of selectKanji.iterate()) {
+  const hex = row.codepoint.toString(16).padStart(5, "0");
+  const fileURL = new URL(
+    `../public/data/kanji-vocab-v1/${hex}.json`,
+    import.meta.url
+  );
+
+  const words = JSON.parse(row.words);
+  for (const word of words) {
+    if (!word.sentences) {
+      delete word.sentences;
     }
-
-    const hex = row.codepoint.toString(16).padStart(5, "0");
-    const path = new URL(
-      `../public/data/kanji-vocab-v1/${hex}.json`,
-      import.meta.url
-    );
-
-    const words = JSON.parse(row.words).map((word) => JSON.parse(word));
-    for (const word of words) {
-      if (!word.sentences) {
-        delete word.sentences;
-      }
-    }
-
-    fs.writeFile(
-      path,
-      JSON.stringify({
-        codepoint: row.codepoint,
-        literal: row.literal,
-        words,
-      })
-    );
   }
-);
+
+  fs.writeFile(
+    fileURL,
+    JSON.stringify({
+      codepoint: row.codepoint,
+      literal: row.literal,
+      words,
+    })
+  );
+
+  i += 1;
+
+  if (i % 100 === 0) {
+    console.log(i, fileURL.pathname);
+  }
+}

@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { Readable, Duplex } from "node:stream";
+import { Readable } from "node:stream";
 import { finished } from "node:stream/promises";
 import { fileURLToPath } from "node:url";
 import zlib from "node:zlib";

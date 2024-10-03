@@ -1,3 +1,5 @@
+const hasKanjiRE = /\p{Script=Han}/u;
+
 export function parseSentenceIndexLine(line) {
   const iter = line[Symbol.iterator]();
   let next = iter.next();
@@ -27,9 +29,9 @@ export function parseSentenceIndexLine(line) {
   const words = [];
 
   while (!next.done) {
-    let word = "";
+    let writing = "";
     while (!next.done && !/[ ([{~]/.test(next.value)) {
-      word += next.value;
+      writing += next.value;
       next = iter.next();
     }
 
@@ -46,17 +48,17 @@ export function parseSentenceIndexLine(line) {
       next = iter.next();
     }
 
-    let sense = null;
+    let meaning = null;
     if (next.value === "[") {
-      let senseStr = "";
+      let meaningStr = "";
       next = iter.next();
 
       while (!next.done && next.value !== "]") {
-        senseStr += next.value;
+        meaningStr += next.value;
         next = iter.next();
       }
 
-      sense = Number.parseInt(senseStr);
+      meaning = Number.parseInt(meaningStr);
       next = iter.next();
     }
 
@@ -73,19 +75,24 @@ export function parseSentenceIndexLine(line) {
       next = iter.next();
     }
 
-    let goodExample = false;
+    let goodExample = 0;
     if (next.value === "~") {
-      goodExample = true;
+      goodExample = 1;
       iter.next();
     }
 
-    let wordId = null;
+    let word = null;
     if (reading?.startsWith("#")) {
-      wordId = Number.parseInt(reading.slice(1));
+      word = Number.parseInt(reading.slice(1));
       reading = null;
     }
 
-    words.push({ word, wordId, reading, text, sense, goodExample });
+    if (!reading && !hasKanjiRE.test(writing)) {
+      reading = writing;
+      writing = null;
+    }
+
+    words.push({ word, writing, reading, meaning, text, goodExample });
     next = iter.next();
   }
 

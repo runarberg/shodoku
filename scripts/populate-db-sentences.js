@@ -1,52 +1,180 @@
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-import sql from "sql-template-strings";
-import { open as opendb } from "sqlite";
-import sqlite3 from "sqlite3";
+import Database from "better-sqlite3";
 
 import { parseSentenceIndexLine } from "./parsers.js";
 
-const db = await opendb({
-  filename: fileURLToPath(import.meta.resolve("../assets.db")),
-  driver: sqlite3.Database,
-});
+const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
+db.pragma("journal_mode = WAL");
 
-await db.exec(sql`DROP TABLE IF EXISTS sentences`);
-await db.exec(sql`
+db.exec(`DROP TABLE IF EXISTS sentence_meanings`);
+db.exec("DROP TABLE IF EXISTS sentence_words");
+db.exec("DROP TABLE IF EXISTS sentences");
+
+db.exec(`
   CREATE TABLE sentences (
     id INTEGER PRIMARY KEY,
     lang TEXT NOT NULL,
-    text TEXT
+    text TEXT NOT NULL
   )
 `);
 
-await db.exec(sql`DROP TABLE IF EXISTS sentence_words`);
-await db.exec(sql`
+db.exec(`
   CREATE TABLE sentence_words (
-    sentence INTEGER REFERENCES sentences (id),
-    text TEXT,
-    writing TEXT REFERENCES words_writings (text),
-    word_id INTEGER REFERENCES words (id),
+    sentence INTEGER NOT NULL REFERENCES sentences (id),
+    word INTEGER REFERENCES words (id),
+    writing TEXT,
     reading TEXT,
-    sense INTEGER,
+    meaning INTEGER,
+    text TEXT,
     good_example INTEGER,
-    seq INTEGER NOT NULL
+    seq INTEGER NOT NULL,
+    PRIMARY KEY (sentence ASC, seq ASC),
+    FOREIGN KEY (word, writing) REFERENCES word_writings (word, text),
+    FOREIGN KEY (word, reading) REFERENCES word_readings (word, text)
   )
 `);
 
-await db.exec(sql`DROP INDEX IF EXISTS sentence_word_index`);
-await db.exec(
-  sql`CREATE INDEX sentence_word_index ON sentence_words (sentence, writing)`
-);
+db.exec(`DROP INDEX IF EXISTS sentence_word_writing_index`);
+db.exec(`
+  CREATE INDEX sentence_word_index ON sentence_words (word, writing ASC)
+`);
 
-await db.exec(sql`DROP TABLE IF EXISTS sentence_meanings`);
-await db.exec(sql`
+db.exec(`DROP INDEX IF EXISTS sentence_word_reading_index`);
+db.exec(`
+  CREATE INDEX sentence_word_reading_index ON sentence_words(word, reading ASC)
+`);
+
+db.exec(`DROP INDEX IF EXISTS sentence_word_text_index`);
+db.exec(`
+  CREATE INDEX sentence_word_text_index ON sentence_words(text)
+`);
+
+db.exec(`
   CREATE TABLE sentence_meanings (
-    sentence INTEGER REFERENCES sentences (id),
-    meaning INTEGER REFERENCES sentences (id)
+    sentence INTEGER NOT NULL REFERENCES sentences (id),
+    meaning INTEGER NOT NULL REFERENCES sentences (id),
+    PRIMARY KEY (sentence ASC)
   )
 `);
+
+const insertSentence = db.prepare(`
+  INSERT INTO sentences (id, lang, text)
+  VALUES (?, ?, ?)
+`);
+
+const insertSentenceMeaning = db.prepare(`
+  INSERT INTO sentence_meanings (sentence, meaning)
+  VALUES (?, ?)
+`);
+
+const insertSentenceWordWriting = db.prepare(`
+  INSERT INTO sentence_words (
+    sentence,
+    seq,
+    word,
+    writing,
+    text,
+    meaning,
+    good_example
+  )
+  VALUES (
+    @sentenceId,
+    @seq,
+    coalesce(
+      @word,
+      (
+        SELECT word
+        FROM word_writings
+        WHERE text = @writing
+      )
+    ),
+    @writing,
+    @text,
+    @meaning,
+    @goodExample
+  )
+`);
+
+const insertSentenceWordReading = db.prepare(`
+  INSERT INTO sentence_words (
+    sentence,
+    seq,
+    word,
+    reading,
+    text,
+    meaning,
+    good_example
+  )
+  VALUES (
+    @sentenceId,
+    @seq,
+    coalesce(
+      @word,
+      (
+        SELECT word
+        FROM word_readings
+        WHERE text = @reading
+      )
+    ),
+    @reading,
+    @text,
+    @meaning,
+    @goodExample
+  )
+`);
+
+const insertSentenceWordReadingWriting = db.prepare(`
+  INSERT INTO sentence_words (
+    sentence,
+    seq,
+    word,
+    writing,
+    reading,
+    text,
+    meaning,
+    good_example
+  )
+  VALUES (
+    @sentenceId,
+    @seq,
+    coalesce(
+      @word,
+      (
+        SELECT word_writings.word
+        FROM word_writings
+        INNER JOIN word_readings ON word_readings.word = word_writings.word
+        WHERE
+          word_writings.text = @writing AND word_readings.text = @reading
+      )
+    ),
+    @writing,
+    @reading,
+    @text,
+    @meaning,
+    @goodExample
+  )
+`);
+
+const insertSentenceWord = db.prepare(
+  `
+  INSERT INTO sentence_words (
+    sentence,
+    seq,
+    text,
+    meaning,
+    good_example
+  )
+  VALUES (
+    @sentenceId,
+    @seq,
+    @text,
+    @meaning,
+    @goodExample
+  )
+`
+);
 
 db.exec("BEGIN");
 const sentencesJpnPath = new URL(
@@ -56,10 +184,7 @@ const sentencesJpnPath = new URL(
 for await (const line of (await fs.open(sentencesJpnPath)).readLines()) {
   const [id, lang, text] = line.split("\t");
 
-  db.run(sql`
-    INSERT INTO sentences (id, lang, text) VALUES
-    (${Number.parseInt(id)}, ${lang}, ${text})
-  `);
+  insertSentence.run(Number.parseInt(id), lang, text);
 }
 db.exec("COMMIT");
 
@@ -71,10 +196,7 @@ const sentencesEngPath = new URL(
 for await (const line of (await fs.open(sentencesEngPath)).readLines()) {
   const [id, lang, text] = line.split("\t");
 
-  db.run(sql`
-    INSERT INTO sentences (id, lang, text) VALUES
-    (${Number.parseInt(id)}, ${lang}, ${text})
-  `);
+  insertSentence.run(Number.parseInt(id), lang, text);
 }
 db.exec("COMMIT");
 
@@ -83,38 +205,46 @@ const sentenceJpnIndicesPath = new URL(
   "../assets/jpn_indices.csv",
   import.meta.url
 );
+let i = 0;
 for await (const line of (await fs.open(sentenceJpnIndicesPath)).readLines()) {
   const { sentenceId, meaningId, words } = parseSentenceIndexLine(line);
 
-  db.run(sql`
-    INSERT INTO sentence_meanings (sentence, meaning) VALUES
-    (${sentenceId}, ${meaningId})
-  `);
+  try {
+    insertSentenceMeaning.run(sentenceId, meaningId);
+  } catch (error) {
+    console.error("Failed sentence meaning", sentenceId, meaningId);
+    continue;
+  }
 
-  let i = 0;
+  let seq = 0;
   for (const word of words) {
-    i += 1;
-    db.run(sql`
-      INSERT INTO sentence_words (
-        sentence,
-        writing,
-        word_id,
-        reading,
-        text,
-        sense,
-        good_example,
-        seq
-      ) VALUES (
-        ${sentenceId},
-        ${word.word},
-        ${word.wordId},
-        ${word.reading},
-        ${word.text},
-        ${word.sense},
-        ${word.goodExample},
-        ${i}
-      )
-    `);
+    seq += 1;
+    const entry = { sentenceId, seq, ...word };
+
+    try {
+      if (word.reading && word.writing) {
+        insertSentenceWordReadingWriting.run(entry);
+      } else if (word.reading) {
+        insertSentenceWordReading.run(entry);
+      } else {
+        insertSentenceWordWriting.run(entry);
+      }
+    } catch (error) {
+      // Word not found. Write the entry as a standalone text.
+      entry.text = entry.text || entry.writing || entry.reading;
+      console.error("Failed sentence word", sentenceId, entry);
+
+      try {
+        insertSentenceWord.run(entry);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+  i += 1;
+  if (i % 1000 === 0) {
+    console.log(i, sentenceId);
   }
 }
+
 db.exec(`COMMIT`);

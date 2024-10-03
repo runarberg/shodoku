@@ -1,81 +1,15 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { Sentence } from "../types";
 
-import { Furigana, Sentence } from "../types";
-
-const props = defineProps<{
+defineProps<{
   sentence: Sentence;
 }>();
-
-const words = computed(() => {
-  const { sentence: text } = props.sentence;
-  const words: Array<{ word: number | null; furigana: Furigana }> = [];
-  let start = 0;
-
-  for (const word of props.sentence.words) {
-    const i = text.indexOf(word.text, start);
-
-    if (i === -1) {
-      // Word was wrongly indexed and is not in this sentence.
-      // It will be picked up unannotated in the next round
-      continue;
-    }
-
-    if (i > start) {
-      // Missing word index, possibly a name.
-      words.push({ word: null, furigana: [{ ruby: text.slice(start, i) }] });
-      start = i;
-    }
-
-    const furigana = [];
-    if (word.furigana) {
-      // Fix alternative forms, icl. kana, te-form, etc.
-      let lastEnd = 0;
-
-      for (const { ruby, rt } of word.furigana) {
-        if (!rt) {
-          continue;
-        }
-
-        const pos = word.text.indexOf(ruby, lastEnd);
-        if (pos === -1) {
-          continue;
-        }
-
-        // TODO: Make sure we skip this ruby if we matched it prematurely.
-
-        if (pos > lastEnd) {
-          furigana.push({ ruby: word.text.slice(lastEnd, pos) });
-        }
-
-        furigana.push({ ruby, rt });
-        lastEnd = pos + ruby.length;
-      }
-
-      if (lastEnd < word.text.length) {
-        furigana.push({ ruby: word.text.slice(lastEnd) });
-      }
-    } else {
-      furigana.push({ ruby: word.text });
-    }
-
-    words.push({ word: word.word, furigana });
-    start += word.text.length;
-  }
-
-  if (start < text.length) {
-    // Grab the remainder at the end.
-    words.push({ word: null, furigana: [{ ruby: text.slice(start) }] });
-  }
-
-  return words;
-});
 </script>
 
 <template>
   <div>
     <p lang="ja" class="sentence">
-      <template v-for="word of words">
+      <template v-for="word of sentence.words">
         <template v-for="{ ruby, rt } of word.furigana">
           <template v-if="rt">
             <ruby

@@ -52,9 +52,8 @@ export type Word = {
 };
 
 export type SentenceWord = {
-  text: string;
   word: number;
-  furigana?: Furigana | null;
+  furigana: Furigana;
 };
 
 export type Sentence = {

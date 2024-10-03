@@ -1,15 +1,11 @@
 import { createReadStream } from "node:fs";
 import { fileURLToPath } from "node:url";
 
+import Database from "better-sqlite3";
 import sax from "sax";
-import sql from "sql-template-strings";
-import { open as opendb } from "sqlite";
-import sqlite3 from "sqlite3";
 
-const db = await opendb({
-  filename: fileURLToPath(import.meta.resolve("../assets.db")),
-  driver: sqlite3.Database,
-});
+const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
+db.pragma("journal_mode = WAL");
 
 function* enumerate(iterable) {
   let i = 0;
@@ -20,8 +16,8 @@ function* enumerate(iterable) {
   }
 }
 
-await db.exec(sql`DROP TABLE IF EXISTS kanji`);
-await db.exec(sql`
+db.exec(`DROP TABLE IF EXISTS kanji`);
+db.exec(`
   CREATE TABLE kanji (
     codepoint INTEGER PRIMARY KEY,
     literal TEXT NOT NULL,
@@ -32,26 +28,69 @@ await db.exec(sql`
   )
 `);
 
-await db.exec(sql`DROP TABLE IF EXISTS kanji_readings`);
-await db.exec(sql`
+db.exec(`DROP TABLE IF EXISTS kanji_readings`);
+db.exec(`
   CREATE TABLE kanji_readings (
-    kanji INTEGER REFERENCES kanji (codepoint),
+    kanji INTEGER REFERENCES kanji (codepoint) NOT NULL,
     type TEXT NOT NULL,
     text TEXT NOT NULL,
     seq INTIGER,
-    UNIQUE (kanji, type, seq)
+    PRIMARY KEY (kanji ASC, type, seq)
   )
 `);
 
-await db.exec(sql`DROP TABLE IF EXISTS kanji_meanings`);
-await db.exec(sql`
+db.exec(`DROP TABLE IF EXISTS kanji_meanings`);
+db.exec(`
   CREATE TABLE kanji_meanings (
-    kanji INTEGER REFERENCES kanji (codepoint),
+    kanji INTEGER REFERENCES kanji (codepoint) NOT NULL,
     text TEXT NOT NULL,
     seq INTEGER NOT NULL,
-    UNIQUE (kanji, seq)
+    PRIMARY KEY (kanji ASC, seq)
   )
 `);
+
+const insertKanji = db.prepare(`
+  INSERT INTO kanji (codepoint, literal, radical, grade, freq, stroke_count)
+  VALUES (@codepoint, @literal, @radical, @grade, @freq, @strokeCount)
+`);
+
+const insertKanjiReading = db.prepare(`
+  INSERT INTO kanji_readings (kanji, type, text, seq)
+  VALUES (@codepoint, @type, @reading, @seq)
+`);
+
+const insertKanjiMeaning = db.prepare(`
+  INSERT INTO kanji_meanings (kanji, text, seq)
+  VALUES (@codepoint, @meaning, @seq)
+`);
+
+const insertCharacter = db.transaction(
+  (kanji, onReadings, kunReadings, meanings) => {
+    insertKanji.run(kanji);
+
+    for (const [seq, reading] of enumerate(onReadings)) {
+      insertKanjiReading.run({
+        codepoint: kanji.codepoint,
+        type: "on",
+        reading,
+        seq,
+      });
+    }
+
+    for (const [seq, reading] of enumerate(kunReadings)) {
+      insertKanjiReading.run({
+        codepoint: kanji.codepoint,
+        type: "kun",
+        reading,
+        seq,
+      });
+    }
+
+    for (const [seq, meaning] of enumerate(meanings)) {
+      insertKanjiMeaning.run({ codepoint: kanji.codepoint, meaning, seq });
+    }
+  }
+);
 
 const readStream = createReadStream(
   new URL("../assets/kanjidic2.xml", import.meta.url),
@@ -86,35 +125,16 @@ const xmlStream = sax.createStream(true);
     tag = null;
 
     if (tagName === "character") {
-      db.exec("BEGIN");
-      const stmt = sql`
-        INSERT INTO kanji (codepoint, literal, radical, grade, freq, stroke_count)
-        VALUES (${codepoint}, ${literal}, ${radical}, ${grade}, ${freq}, ${strokeCount})
-      `;
-      db.run(stmt);
+      const kanji = {
+        codepoint,
+        literal,
+        radical,
+        grade,
+        freq,
+        strokeCount,
+      };
 
-      for (const [seq, reading] of enumerate(onReadings)) {
-        db.run(sql`
-          INSERT INTO kanji_readings (kanji, type, text, seq)
-          VALUES (${codepoint}, 'on', ${reading}, ${seq})
-        `);
-      }
-
-      for (const [seq, reading] of enumerate(kunReadings)) {
-        db.run(sql`
-          INSERT INTO kanji_readings (kanji, type, text, seq)
-          VALUES (${codepoint}, 'kun', ${reading}, ${seq})
-        `);
-      }
-
-      for (const [seq, meaning] of enumerate(meanings)) {
-        db.run(sql`
-          INSERT INTO kanji_meanings (kanji, text, seq)
-          VALUES (${codepoint}, ${meaning}, ${seq})
-        `);
-      }
-
-      db.exec("COMMIT");
+      insertCharacter(kanji, onReadings, kunReadings, meanings);
 
       literal = null;
       codepoint = null;
