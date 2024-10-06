@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { aboutRoute, homeRoute, kanjiListsRoute } from "../router";
+import { aboutRoute, homeRoute, decksRoute } from "../router";
 </script>
 
 <template>
@@ -10,9 +10,7 @@ import { aboutRoute, homeRoute, kanjiListsRoute } from "../router";
       </li>
 
       <li>
-        <RouterLink :to="kanjiListsRoute" class="nav-item">
-          Kanji Lists
-        </RouterLink>
+        <RouterLink :to="decksRoute" class="nav-item"> Decks </RouterLink>
       </li>
 
       <li>

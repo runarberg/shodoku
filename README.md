@@ -29,10 +29,11 @@ fast.
 2. Populate the database
    ```bash
    node scripts/populate-db-kanji.js
+   node scripts/populate-db-kanji-extra.js
    node scripts/populate-db-words.js
    node scripts/populate-db-words-furigana.js
    node scripts/populate-db-word-lists.js
-   node scripts/populate-db-sentences.js
+   node scripts/populate-db-sentences.js ## This takes half an hour
    ```
 3. Build the data assets
    ```bash

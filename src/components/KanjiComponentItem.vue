@@ -2,7 +2,7 @@
 import { computed, watchEffect } from "vue";
 
 import { useKanjiVG, useKanjiVGViewBox } from "../helpers/kanjivg";
-import { useRadical } from "../helpers/radicals";
+import { useRadical } from "../store/radicals";
 import { KanjiComponent } from "../types";
 
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";

@@ -2,15 +2,15 @@ import { createWebHistory, createRouter, RouteLocationRaw } from "vue-router";
 
 export const HOME_ROUTE_NAME = Symbol("home-route-name");
 export const KANJI_ROUTE_NAME = Symbol("kanji-route-name");
-export const KANJI_LISTS_ROUTE_NAME = Symbol("kanji-lists-route-name");
+export const DECKS_ROUTE_NAME = Symbol("decks-route-name");
+export const DECK_BROWSER_ROUTE_NAME = Symbol("deck-browser-route-name");
 export const ABOUT_ROUTE_NAME = Symbol("about-route-name");
 
 export const homeRoute: RouteLocationRaw = { name: HOME_ROUTE_NAME };
-
-export const kanjiListsRoute: RouteLocationRaw = {
-  name: KANJI_LISTS_ROUTE_NAME,
+export const decksRoute: RouteLocationRaw = { name: DECKS_ROUTE_NAME };
+export const deckBrowserRoute: RouteLocationRaw = {
+  name: DECK_BROWSER_ROUTE_NAME,
 };
-
 export const aboutRoute: RouteLocationRaw = { name: ABOUT_ROUTE_NAME };
 
 export function kanjiRoute(kanji: string): RouteLocationRaw {
@@ -26,14 +26,24 @@ export const router = createRouter({
       component: () => import("./views/HomeView.vue"),
     },
     {
-      path: "/list",
-      name: KANJI_LISTS_ROUTE_NAME,
-      component: () => import("./views/KanjiListsView.vue"),
-    },
-    {
       path: "/kanji/:kanji",
       name: KANJI_ROUTE_NAME,
       component: () => import("./views/KanjiView.vue"),
+    },
+    {
+      path: "/decks",
+      children: [
+        {
+          path: "",
+          name: DECKS_ROUTE_NAME,
+          component: () => import("./views/DecksView.vue"),
+        },
+        {
+          path: "add",
+          name: DECK_BROWSER_ROUTE_NAME,
+          component: () => import("./views/DeckBrowserView.vue"),
+        },
+      ],
     },
     {
       path: "/about",

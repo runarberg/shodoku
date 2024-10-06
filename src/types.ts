@@ -1,3 +1,5 @@
+import { type Card as FSRSCard } from "ts-fsrs";
+
 export type KanjiInfo = {
   codepoint: number;
   literal: string;
@@ -71,4 +73,40 @@ export type KanjiVocab = {
   codepoint: number;
   literal: string;
   words: KanjiVocabWord[];
+};
+
+export type Radical = {
+  id: number;
+  literal: string;
+  strokes: number;
+  meaning: string;
+  reading: string;
+};
+
+// A description of a deck for deck browser.
+export type DeckTemplate = {
+  name: string;
+  label: string;
+  priority: number;
+  content: string;
+};
+
+export type Deck = {
+  name: string;
+  label: string;
+  category: string;
+  priority: number;
+};
+
+export type Card = {
+  id: number;
+  value: string;
+  decks: string[];
+  priority: number;
+  order: number;
+  deckPositions: Array<{ deck: string; priority: number; order: number }>;
+  fsrs: {
+    write: FSRSCard;
+    read: FSRSCard;
+  };
 };

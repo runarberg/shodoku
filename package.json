@@ -19,7 +19,10 @@
   },
   "dependencies": {
     "@luncheon/simplify-svg-path": "^0.2.0",
+    "dexie": "^4.0.8",
+    "pinia": "^2.2.4",
     "simplify-js": "^1.2.4",
+    "ts-fsrs": "^4.3.1",
     "vue": "^3.5.10",
     "vue-router": "^4.4.5"
   },
