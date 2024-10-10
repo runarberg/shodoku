@@ -1,4 +1,4 @@
-import { type Card as FSRSCard } from "ts-fsrs";
+import { type Card as FSRSCard, ReviewLog } from "ts-fsrs";
 
 export type KanjiInfo = {
   codepoint: number;
@@ -109,4 +109,11 @@ export type Card = {
     write: FSRSCard;
     read: FSRSCard;
   };
+};
+
+export type Review = {
+  id: number;
+  cardId: number;
+  type: "read" | "write";
+  log: ReviewLog;
 };

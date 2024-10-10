@@ -4,11 +4,23 @@ import { computed } from "vue";
 import { Word, WordReading, WordWriting } from "../types";
 
 import VocabularyWordMeaning from "./VocabularyWordMeaning.vue";
+import MaybeHideKanji from "./MaybeHideKanji.vue";
 
-const props = defineProps<{
-  word: Word;
-  kanji?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    word: Word;
+    kanji?: string | null;
+    hideKanji?: boolean;
+    hideReading?: boolean;
+    hideMeaning?: boolean;
+  }>(),
+  {
+    kanji: null,
+    hideKanji: false,
+    hideReading: false,
+    hideMeaning: false,
+  }
+);
 
 const hasKanjiRE = /\p{Script=Han}/u;
 
@@ -95,21 +107,33 @@ const reading = computed(() => {
 });
 
 const furigana = computed(() => {
-  if (!reading.value || !writing.value) {
-    return props.word.furigana?.at(0)?.furigana ?? null;
-  }
+  let found;
 
-  return (
-    props.word.furigana?.find(
+  if (!reading.value || !writing.value) {
+    found = props.word.furigana?.at(0);
+  } else {
+    found = props.word.furigana?.find(
       (other) =>
         other.writing === writing.value && other.reading === reading.value
-    )?.furigana ??
-    props.word.furigana?.at(0)?.furigana ??
-    null
-  );
+    );
+  }
+
+  if (!found) {
+    found = props.word.furigana?.at(0);
+  }
+
+  return found?.furigana ?? null;
 });
 
 const meaning = computed(() => meanings.value.at(0));
+
+function hideAnnotation(ruby: string) {
+  if (!props.hideReading || !props.kanji) {
+    return false;
+  }
+
+  return ruby.includes(props.kanji);
+}
 const additionalMeanings = computed(() => meanings.value.slice(1));
 </script>
 
@@ -119,16 +143,18 @@ const additionalMeanings = computed(() => meanings.value.slice(1));
       <template v-for="{ ruby, rt } of furigana">
         <template v-if="rt">
           <ruby
-            >{{ ruby }}<rp>(</rp><rt>{{ rt }}</rt
+            ><MaybeHideKanji :hide="hideKanji" :kanji="kanji" :str="ruby" /><rp>
+              (</rp
+            ><rt v-if="hideAnnotation(ruby)">◌</rt><rt v-else>{{ rt }}</rt
             ><rp>)</rp></ruby
           >
         </template>
-        <template v-else>{{ ruby }}</template>
+        <MaybeHideKanji v-else :hide="hideKanji" :kanji="kanji" :str="ruby" />
       </template>
     </p>
     <p v-else class="word" lang="ja">{{ writing }}</p>
 
-    <div class="meaning">
+    <div class="meaning" v-show="!hideMeaning">
       <VocabularyWordMeaning v-if="meaning" :meaning="meaning" />
       <details
         v-if="additionalMeanings.length > 0"

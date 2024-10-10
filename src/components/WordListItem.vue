@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 
-import SentenceListItem from "./SentenceListItem.vue";
+import VocabularySentence from "./VocabularySentence.vue";
 import VocabularyWord from "./VocabularyWord.vue";
 
 const props = defineProps<{
   word: { word: number; sentences?: number[] };
   kanji?: string;
+  hideKanji?: boolean;
+  hideReading?: boolean;
+  hideMeaning?: boolean;
 }>();
 
 const wordInfo = ref(null);
@@ -25,7 +28,14 @@ watch(
 
 <template>
   <article class="word-list-item">
-    <VocabularyWord v-if="wordInfo" :word="wordInfo" :kanji="kanji" />
+    <VocabularyWord
+      v-if="wordInfo"
+      :word="wordInfo"
+      :kanji="kanji"
+      :hide-kanji="hideKanji"
+      :hide-reading="hideReading"
+      :hide-meaning="hideMeaning"
+    />
 
     <section v-if="word.sentences" aria-label="Sentences">
       <ul class="sentences">
@@ -34,7 +44,12 @@ watch(
           :key="sentence"
           class="sentence-item"
         >
-          <SentenceListItem :sentence-id="sentence" />
+          <VocabularySentence
+            :sentence-id="sentence"
+            :hide-kanji="hideKanji ? kanji : null"
+            :hide-reading="hideReading ? kanji : null"
+            :hide-meaning="hideMeaning"
+          />
         </li>
       </ul>
     </section>

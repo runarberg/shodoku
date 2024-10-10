@@ -1,10 +1,11 @@
 import Dexie, { type EntityTable } from "dexie";
 
-import { Card, Deck } from "../types.ts";
+import { Card, Deck, Review } from "../types.ts";
 
 export const db = new Dexie("shodoku") as Dexie & {
   decks: EntityTable<Deck, "name">;
   cards: EntityTable<Card, "id">;
+  reviews: EntityTable<Review, "id">;
 };
 
 db.version(1).stores({
@@ -14,11 +15,12 @@ db.version(1).stores({
     value,
     *decks,
     [priority+order],
-    fsrs.read.due,
     fsrs.read.state,
-    fsrs.write.due,
+    fsrs.read.due,
     fsrs.write.state,
-    [fsrs.write.due+fsrs.read.due],
-    [fsrs.write.state+fsrs.read.state]
+    fsrs.write.due,
+    [fsrs.read.state+fsrs.read.due],
+    [fsrs.write.state+fsrs.write.due]
   `,
+  reviews: "++id, cardId, type, log.review",
 });

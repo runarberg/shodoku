@@ -10,9 +10,15 @@ import KanjiStrokesBackground from "./KanjiStrokesBackground.vue";
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";
 import KanjiStrokesPracticeCanvas from "./KanjiStrokesPracticeCanvas.vue";
 
-defineProps<{
-  kanji: KanjiInfo;
-}>();
+const props = withDefaults(
+  defineProps<{
+    kanji: KanjiInfo;
+    practiceMode?: boolean;
+  }>(),
+  {
+    practiceMode: false,
+  }
+);
 
 const kanjiVG = useKanjiVG();
 const viewBox = useKanjiVGViewBox();
@@ -38,6 +44,16 @@ watch(practicing, (practiceStarted) => {
     practiceStrokes.splice(0, practiceStrokes.length);
   }
 });
+
+watch(
+  () => props.practiceMode,
+  (isPracticeMode) => {
+    if (isPracticeMode !== practicing.value) {
+      practicing.value = isPracticeMode;
+    }
+  },
+  { immediate: true }
+);
 
 function strokeKeyframes(stroke: SVGPathElement): Keyframe[] {
   const l = stroke.getTotalLength();
@@ -113,7 +129,9 @@ function showHint() {
   <section>
     <h2>
       Strokes
-      <template v-if="strokes.length > 0"> ({{ strokes.length }}) </template>
+      <template v-if="!practiceMode && strokes.length > 0">
+        ({{ strokes.length }})
+      </template>
     </h2>
 
     <figure class="strokes-figure">
@@ -168,6 +186,7 @@ function showHint() {
         </template>
 
         <AppButton
+          v-if="!practiceMode"
           aria-lable="Practice Drawing"
           :aria-pressed="`${practicing}`"
           :filled="practicing"

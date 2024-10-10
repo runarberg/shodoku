@@ -5,6 +5,9 @@ import WordListItem from "./WordListItem.vue";
 
 defineProps<{
   kanjiVocab: KanjiVocab;
+  hideKanji?: boolean;
+  hideReading?: boolean;
+  hideMeaning?: boolean;
 }>();
 </script>
 
@@ -14,7 +17,13 @@ defineProps<{
 
     <ul class="kanji-word-list">
       <li v-for="word of kanjiVocab.words" :key="word.word">
-        <WordListItem :word="word" :kanji="kanjiVocab.literal" />
+        <WordListItem
+          :word="word"
+          :kanji="kanjiVocab.literal"
+          :hide-kanji="hideKanji"
+          :hide-reading="hideReading"
+          :hide-meaning="hideMeaning"
+        />
       </li>
     </ul>
   </section>

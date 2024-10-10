@@ -5,6 +5,8 @@ import { KanjiInfo } from "../types";
 
 const prop = defineProps<{
   kanji: KanjiInfo;
+  hideLiteral?: boolean;
+  hideMeaning?: boolean;
 }>();
 
 const freq = computed(() => {
@@ -38,9 +40,11 @@ const freq = computed(() => {
 
 <template>
   <header class="kanji-title">
-    <h1 class="literal" lang="ja">{{ kanji.literal }}</h1>
+    <h2 class="literal" lang="ja" v-show="!hideLiteral">
+      {{ kanji.literal }}
+    </h2>
 
-    <p class="main-meaning meaning">
+    <p class="main-meaning meaning" v-show="!hideMeaning">
       <strong>{{ kanji.meanings?.at(0) }}</strong>
     </p>
 
@@ -48,7 +52,11 @@ const freq = computed(() => {
       <span v-if="freq" class="freq">Top {{ freq }}</span>
     </aside>
 
-    <ul v-if="kanji.meanings?.length > 1" class="additional-meanings">
+    <ul
+      v-if="kanji.meanings?.length > 1"
+      v-show="!hideMeaning"
+      class="additional-meanings"
+    >
       <li v-for="meaning of kanji.meanings.slice(1)" class="meaning">
         {{ meaning }}
       </li>

@@ -1,5 +1,5 @@
 <script setup lang="ts" ̣>
-import { computed, ref, watch } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import KanjiComponents from "../components/KanjiComponents.vue";
@@ -8,50 +8,27 @@ import KanjiStrokes from "../components/KanjiStrokes.vue";
 import KanjiTitle from "../components/KanjiTitle.vue";
 import KanjiWordList from "../components/KanjiWordList.vue";
 import { provideKanjiVG } from "../helpers/kanjivg";
+import { useKanji } from "../helpers/kanji";
+import { useKanjiVocab } from "../helpers/kanji";
 
 const route = useRoute();
-
-const hex = computed(() => {
+const codepoint = computed(() => {
   const value = route.params.kanji;
 
   if (typeof value !== "string" || value.length !== 1) {
     return null;
   }
 
-  return value.codePointAt(0)?.toString(16).padStart(5, "0") ?? null;
+  return value.codePointAt(0) ?? null;
 });
 
-const kanji = ref(null);
-const kanjiVocab = ref(null);
+const hex = computed(() => {
+  return codepoint.value?.toString(16).padStart(5, "0") ?? null;
+});
 
+const kanji = useKanji(codepoint);
+const kanjiVocab = useKanjiVocab(codepoint);
 provideKanjiVG(hex);
-
-watch(
-  hex,
-  async (value) => {
-    if (!value) {
-      kanji.value = null;
-      return;
-    }
-
-    const response = await fetch(`/data/kanji-v1/${value}.json`);
-    const data = await response.json();
-
-    kanji.value = data;
-  },
-  { immediate: true }
-);
-
-watch(
-  hex,
-  async (hexValue) => {
-    const response = await fetch(`/data/kanji-vocab-v1/${hexValue}.json`);
-    const data = await response.json();
-
-    kanjiVocab.value = data;
-  },
-  { immediate: true }
-);
 </script>
 
 <template>
