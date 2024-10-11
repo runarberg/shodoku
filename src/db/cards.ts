@@ -1,20 +1,49 @@
 import { State } from "ts-fsrs";
 
+import { EPOC, MAX_DATE, midnight } from "../helpers/time.ts";
+
 import { db } from "./index.ts";
 
 const NEW_LIMIT = 10;
 const REVIEW_LIMIT = 50;
 
-const HOUR = 1000 * 60 * 60;
+const LEARNING_STATES: Array<[State, State]> = [
+  [State.Learning, State.New],
+  [State.Learning, State.Learning],
+  [State.Learning, State.Review],
+  [State.Learning, State.Relearning],
+  [State.Relearning, State.New],
+  [State.Relearning, State.Learning],
+  [State.Relearning, State.Review],
+  [State.Relearning, State.Relearning],
 
-function midnight(): Date {
-  const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  [State.New, State.Learning],
+  [State.Review, State.Learning],
+  [State.New, State.Relearning],
+  [State.Review, State.Relearning],
+];
+
+const NEW_STATES: Array<[State, State]> = [
+  [State.New, State.New],
+  [State.New, State.Review],
+  [State.Review, State.New],
+];
+
+const newStateOrderRanges: Array<
+  [[State, State, number, number], [State, State, number, number]]
+> = NEW_STATES.map(([read, write]) => [
+  [read, write, 0, 0],
+  [read, write, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY],
+]);
+
+function getLearningCards() {
+  return db.cards
+    .where(["fsrs.read.state", "fsrs.write.state"])
+    .anyOf(LEARNING_STATES);
 }
 
-export function getNewCards() {
+function getNewCards() {
   const now = new Date();
-  const dayAgo = now.getTime() - 24 * HOUR;
 
   return db.transaction("r", [db.cards, db.reviews], async () => {
     const doneCount = await db.reviews
@@ -25,88 +54,203 @@ export function getNewCards() {
     const limit = Math.max(0, NEW_LIMIT - doneCount);
 
     return db.cards
-      .orderBy("[priority+order]")
-      .filter(
-        ({ fsrs: { read, write } }) =>
-          write.state === State.New ||
-          (read.state === State.New &&
-            write.state === State.Review &&
-            (write.last_review ?? now).getTime() < dayAgo)
-      )
+      .where(["fsrs.read.state", "fsrs.write.state", "priority", "order"])
+      .inAnyRange(newStateOrderRanges)
       .limit(limit);
   });
 }
 
-export function getDueCards() {
+async function newRemainingCount() {
+  const statement = await getNewCards();
+  return statement.count();
+}
+
+function getDueCards() {
   const epoc = new Date(0);
   const now = new Date();
 
   return db.transaction("r", [db.cards, db.reviews], async () => {
+    const reviewed = new Set<number>();
+    await db.reviews
+      .where("log.review")
+      .above(midnight())
+      .each(({ cardId }) => reviewed.add(cardId));
+
     const doneCount = await db.reviews
       .where(["log.state", "log.review"])
-      .between([State.Review, midnight()], [State.Review, now], true, true)
+      .between([State.Review, midnight()], [State.Review, now])
       .count();
 
     const limit = Math.max(0, REVIEW_LIMIT - doneCount);
 
-    return db.cards
-      .where(["fsrs.write.state", "fsrs.write.due"])
-      .between([State.Review, epoc], [State.Review, now], true, true)
-      .or("[fsrs.read.state+fsrs.read.due]")
-      .between([State.Review, epoc], [State.Review, now], true, true)
-      .filter(({ decks }) => decks.length !== 0)
+    const readCards = db.cards
+      .where(["fsrs.read.state", "fsrs.read.due"])
+      .between([State.Review, epoc], [State.Review, now])
       .filter(
-        ({ fsrs: { write, read } }) =>
-          read.state === State.Review && write.state === State.Review
+        ({ id, fsrs: { write } }) =>
+          write.state !== State.Learning &&
+          write.state !== State.Relearning &&
+          !reviewed.has(id)
       )
       .limit(limit);
-  });
-}
 
-export function getOngoingCards() {
-  return db.cards
-    .where("fsrs.read.state")
-    .anyOf([State.Learning, State.Relearning])
-    .or("fsrs.write.state")
-    .anyOf([State.Learning, State.Relearning])
-    .limit(REVIEW_LIMIT);
-}
-
-export function scheduledCardCount() {
-  return db.transaction("r", [db.cards, db.reviews], async () => {
-    const newCards = await getNewCards();
-    const dueCards = await getDueCards();
+    const writeCards = db.cards
+      .where(["fsrs.write.state", "fsrs.write.due"])
+      .between([State.Review, epoc], [State.Review, now])
+      .filter(
+        ({ id, fsrs: { read } }) =>
+          read.state !== State.Learning &&
+          read.state !== State.Relearning &&
+          !reviewed.has(id)
+      )
+      .limit(limit);
 
     return {
-      new: await newCards.count(),
-      due: await dueCards.count(),
-      ongoing: await getOngoingCards().count(),
+      limit,
+      readCards,
+      writeCards,
     };
   });
 }
 
-export function scheduledCardIds() {
-  return db.transaction("r", [db.cards, db.reviews], async () => {
-    const newCards = await getNewCards();
-    const ongoingCards = getOngoingCards();
-    const dueCards = await getDueCards();
+async function dueRemainingCount() {
+  const { limit, readCards, writeCards } = await getDueCards();
 
-    const newIds = await newCards.primaryKeys();
-    const ongoingIds = await ongoingCards.primaryKeys();
-    const dueIds = await dueCards.primaryKeys();
+  return Math.min(
+    limit,
+    (await readCards.count()) + (await writeCards.count())
+  );
+}
 
-    const ids = [...ongoingIds, ...dueIds];
+export async function nextReviewCard() {
+  const now = new Date();
 
-    if (newIds.length > 0) {
-      // Zip in the new cards at regular intervals
-      const interval = Math.floor(ids.length / newIds.length);
-      let offset = Math.floor(interval / 2);
-      for (const newId of newIds) {
-        ids.splice(offset, 0, newId);
-        offset = Math.max(ids.length, offset + interval + 1);
-      }
+  return db.transaction("r", [db.reviews, db.cards], async () => {
+    const writeLearning = await db.cards
+      .where(["fsrs.write.state", "fsrs.write.due"])
+      .inAnyRange([
+        [
+          [State.Learning, EPOC],
+          [State.Learning, now],
+        ],
+        [
+          [State.Relearning, EPOC],
+          [State.Relearning, now],
+        ],
+      ])
+      .reverse()
+      .first();
+
+    if (writeLearning) {
+      return writeLearning;
     }
 
-    return ids;
+    const readLearning = await db.cards
+      .where(["fsrs.read.state", "fsrs.read.due"])
+      .inAnyRange([
+        [
+          [State.Learning, EPOC],
+          [State.Learning, now],
+        ],
+        [
+          [State.Relearning, EPOC],
+          [State.Relearning, now],
+        ],
+      ])
+      .reverse()
+      .first();
+
+    if (readLearning) {
+      return readLearning;
+    }
+
+    const newDoneCount = await db.reviews
+      .where(["log.state", "log.review"])
+      .between([State.New, midnight()], [State.New, now])
+      .count();
+
+    const dueDoneCount = await db.reviews
+      .where(["log.state", "log.review"])
+      .between([State.Review, midnight()], [State.Review, now])
+      .count();
+
+    const newCount = await newRemainingCount();
+    const dueCount = await dueRemainingCount();
+
+    const totalNewCount = newCount + newDoneCount;
+    const totalDueCount = dueCount + dueDoneCount;
+
+    const newCardInterval = Math.ceil(
+      (totalNewCount + totalDueCount) / totalNewCount
+    );
+    const newCardOffset = Math.floor(newCardInterval / 2);
+
+    if (newCount === 0 && dueCount === 0) {
+      return null;
+    }
+
+    if (dueCount === 0 || dueCount % newCardInterval === newCardOffset) {
+      return (await getNewCards()).first();
+    }
+
+    const { readCards, writeCards } = await getDueCards();
+    let firstRead = await readCards.first();
+    let firstWrite = await writeCards.first();
+
+    if (!firstRead && !firstWrite) {
+      firstRead = await db.cards
+        .where("fsrs.read.state")
+        .anyOf([State.Learning, State.Relearning])
+        .first();
+      firstRead = await db.cards
+        .where(["fsrs.read.state", "fsrs.read.due"])
+        .inAnyRange([
+          [
+            [State.Learning, EPOC],
+            [State.Learning, MAX_DATE],
+          ],
+          [
+            [State.Relearning, EPOC],
+            [State.Relearning, MAX_DATE],
+          ],
+        ])
+        .first();
+
+      firstWrite = await db.cards
+        .where(["fsrs.write.state", "fsrs.write.due"])
+        .inAnyRange([
+          [
+            [State.Learning, EPOC],
+            [State.Learning, MAX_DATE],
+          ],
+          [
+            [State.Relearning, EPOC],
+            [State.Relearning, MAX_DATE],
+          ],
+        ])
+        .first();
+    }
+
+    if (!firstWrite) {
+      return firstRead;
+    }
+
+    if (!firstRead) {
+      return firstWrite;
+    }
+
+    if (firstRead.fsrs.read.due < firstWrite.fsrs.write.due) {
+      return firstRead;
+    } else {
+      return firstWrite;
+    }
   });
+}
+
+export function remainingCount() {
+  return db.transaction("r", [db.reviews, db.cards], async () => ({
+    new: await newRemainingCount(),
+    due: await dueRemainingCount(),
+    learning: await getLearningCards().count(),
+  }));
 }

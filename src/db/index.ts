@@ -20,7 +20,11 @@ db.version(1).stores({
     fsrs.write.state,
     fsrs.write.due,
     [fsrs.read.state+fsrs.read.due],
-    [fsrs.write.state+fsrs.write.due]
+    [fsrs.write.state+fsrs.write.due],
+    [fsrs.read.state+fsrs.write.state],
+    [fsrs.read.state+fsrs.write.state+priority+order]
   `,
-  reviews: "++id, cardId, type, log.review",
+  reviews: "++id, cardId, type, log.review, [log.state+log.review]",
 });
+
+window.db = db;

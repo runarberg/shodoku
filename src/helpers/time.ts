@@ -6,7 +6,10 @@ export const WEEK = 7 * DAY;
 export const MONTH = 29.53 * DAY;
 export const YEAR = 365.2425 * DAY;
 
-export function midnight(date: Date): Date {
+export const MAX_DATE = new Date(8.64e15);
+export const EPOC = new Date(0);
+
+export function midnight(date: Date = new Date()): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
