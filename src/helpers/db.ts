@@ -1,4 +1,3 @@
-import { liveQuery } from "dexie";
 import {
   computed,
   ComputedRef,
@@ -8,6 +7,8 @@ import {
   unref,
   watch,
 } from "vue";
+
+import { liveQueryChannel } from "./channels.ts";
 
 type LiveQueryResults<T> = {
   value: ComputedRef<T | null>;
@@ -20,29 +21,20 @@ export function useLiveQuery<T>(
   const valueRef = ref<T | null>(null);
   const errorRef = ref<unknown>(null);
 
-  const subscription = computed(() => {
-    const observable = liveQuery(unref(query));
-
-    return observable.subscribe({
-      next(value) {
-        errorRef.value = null;
-        valueRef.value = value ?? null;
-      },
-      error(error: unknown) {
-        errorRef.value = error;
-        valueRef.value = null;
-      },
-    });
-  });
-
-  watch(subscription, (_, oldSubscription) => {
-    if (oldSubscription) {
-      oldSubscription.unsubscribe();
+  async function runQuery() {
+    const run = unref(query);
+    try {
+      valueRef.value = await run();
+    } catch (error) {
+      errorRef.value = error;
     }
-  });
+  }
+
+  liveQueryChannel.addEventListener("message", runQuery);
+  watch(() => unref(query), runQuery, { immediate: true });
 
   onScopeDispose(() => {
-    subscription.value.unsubscribe();
+    liveQueryChannel.removeEventListener("message", runQuery);
   });
 
   return {

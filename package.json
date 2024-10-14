@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@luncheon/simplify-svg-path": "^0.2.0",
-    "dexie": "^4.0.8",
+    "idb": "^8.0.0",
     "pinia": "^2.2.4",
     "simplify-js": "^1.2.4",
     "ts-fsrs": "^4.3.1",

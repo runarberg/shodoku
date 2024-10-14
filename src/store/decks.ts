@@ -9,8 +9,7 @@ export function useDeck(
 ): ComputedRef<Deck | undefined | null> {
   const query = computed(() => {
     const nameValue = toValue(name);
-
-    return () => db.decks.where("name").equals(nameValue).first();
+    return () => (nameValue ? db.get("decks", nameValue) : null);
   });
 
   const { value } = useLiveQuery(query);
@@ -20,12 +19,6 @@ export function useDeck(
 
 export function useDecks(): ComputedRef<Deck[] | null> {
   return useLiveQuery(() =>
-    db.decks
-      .where("[category+priority]")
-      .between(
-        ["\u{0000}", Number.NEGATIVE_INFINITY],
-        ["\u{10FFFF}", Number.POSITIVE_INFINITY]
-      )
-      .toArray()
+    db.transaction("decks").store.index("category+priority").getAll()
   ).value;
 }

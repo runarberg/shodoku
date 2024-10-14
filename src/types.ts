@@ -1,4 +1,4 @@
-import { type Card as FSRSCard, ReviewLog } from "ts-fsrs";
+import { type Card as FSRSCard, ReviewLog, State } from "ts-fsrs";
 
 export type KanjiInfo = {
   codepoint: number;
@@ -96,24 +96,29 @@ export type Deck = {
   label: string;
   category: string;
   priority: number;
+  cards: number[];
 };
+
+export type CardType = "kanji-read" | "kanji-write";
 
 export type Card = {
   id: number;
   value: string;
   decks: string[];
-  priority: number;
-  order: number;
+  types: CardType[];
+  position: { priority: number; order: number };
   deckPositions: Array<{ deck: string; priority: number; order: number }>;
-  fsrs: {
-    write: FSRSCard;
-    read: FSRSCard;
-  };
 };
 
-export type Review = {
+export type CardProgress = {
+  cardId: number;
+  cardType: CardType;
+  fsrs: FSRSCard;
+};
+
+export type CardReview = {
   id: number;
   cardId: number;
-  type: "read" | "write";
+  cardType: CardType;
   log: ReviewLog;
 };

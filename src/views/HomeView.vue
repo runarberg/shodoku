@@ -1,21 +1,40 @@
 <script setup lang="ts">
 import AppButton from "../components/AppButton.vue";
-import { reviewRoute } from "../router";
-import { useRemainingCount } from "../store/cards";
+import { reviewRoute } from "../router.ts";
+import { useRemainingCount } from "../store/cards.ts";
 
-const count = useRemainingCount();
+const remainingCount = useRemainingCount();
 </script>
 
 <template>
   <article>
-    <div v-if="count" class="counts">
-      <span class="review-count">
-        {{ count.due }}
-      </span>
-      <span class="new-count">(+ {{ count.new }})</span>
-      <span class="learning-count"> {{ count.learning }}</span>
-    </div>
-
-    <AppButton :to="reviewRoute">Start</AppButton>
+    <p v-if="remainingCount" class="counts">
+      You have
+      <span class="due-count">{{ remainingCount.due }} reviews</span> due
+      <span class="new-count">(+ {{ remainingCount.new }} new)</span> and
+      <span class="learning-count">{{ remainingCount.learning }} learning</span
+      >. Click the button below to start review.
+    </p>
+    <AppButton :to="reviewRoute" filled>Start</AppButton>
   </article>
 </template>
+
+<style scoped>
+.due-count,
+.new-count,
+.learning-count {
+  font-weight: 600;
+}
+
+.due-count {
+  color: var(--blue);
+}
+
+.new-count {
+  color: var(--green);
+}
+
+.learning-count {
+  color: var(--orange);
+}
+</style>

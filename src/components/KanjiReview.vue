@@ -6,7 +6,7 @@ import { useFsrs } from "../helpers/fsrs.ts";
 import { useKanji, useKanjiVocab } from "../helpers/kanji.ts";
 import { provideKanjiVG } from "../helpers/kanjivg.ts";
 import { formatRelativeTime } from "../helpers/time.ts";
-import { Card } from "../types.ts";
+import { CardProgress } from "../types.ts";
 
 import AppButton from "./AppButton.vue";
 import KanjiComponents from "./KanjiComponents.vue";
@@ -16,8 +16,7 @@ import KanjiTitle from "./KanjiTitle.vue";
 import KanjiWordList from "./KanjiWordList.vue";
 
 const props = defineProps<{
-  card: Card;
-  type: "read" | "write";
+  progress: CardProgress;
   answered?: boolean;
 }>();
 
@@ -26,13 +25,13 @@ const emit = defineEmits<{
   rate: [card: RecordLogItem];
 }>();
 
-const kanji = useKanji(() => props.card.id);
-const kanjiVocab = useKanjiVocab(() => props.card.id);
-provideKanjiVG(() => props.card.id.toString(16).padStart(5, "0"));
+const kanji = useKanji(() => props.progress.cardId);
+const kanjiVocab = useKanjiVocab(() => props.progress.cardId);
+provideKanjiVG(() => props.progress.cardId.toString(16).padStart(5, "0"));
 
 const fsrs = useFsrs();
 const ratings = computed(() =>
-  fsrs.value.repeat(props.card.fsrs[props.type], new Date())
+  fsrs.value.repeat(props.progress.fsrs, new Date())
 );
 
 function nextReview(next: FSRSCard): string {
@@ -48,10 +47,7 @@ function gradeCard(rating: Rating) {
     return;
   }
 
-  emit(
-    "rate",
-    fsrs.value.next(props.card.fsrs[props.type], new Date(), rating)
-  );
+  emit("rate", fsrs.value.next(props.progress.fsrs, new Date(), rating));
 }
 </script>
 
@@ -60,18 +56,18 @@ function gradeCard(rating: Rating) {
     <KanjiTitle
       class="title"
       :kanji="kanji"
-      :hide-literal="type === 'write' && !answered"
-      :hide-meaning="type === 'read' && !answered"
+      :hide-literal="!answered && progress.cardType === 'kanji-write'"
+      :hide-meaning="!answered && progress.cardType === 'kanji-read'"
     />
     <KanjiReadings
-      v-if="type === 'write' || answered"
+      v-if="answered || progress.cardType === 'kanji-write'"
       class="readings"
       :kanji="kanji"
     />
     <KanjiStrokes
       class="strokes"
       :kanji="kanji"
-      :practice-mode="type === 'write' && !answered"
+      :practice-mode="!answered && progress.cardType === 'kanji-write'"
     />
 
     <div class="advance-buttons">
@@ -89,7 +85,7 @@ function gradeCard(rating: Rating) {
       </template>
       <AppButton v-else @click="$emit('answer')" filled>
         Show
-        <template v-if="type === 'read'"> Reading</template>
+        <template v-if="progress.cardType === 'kanji-read'"> Reading</template>
         <template v-else> Writing</template>
       </AppButton>
     </div>
@@ -100,9 +96,9 @@ function gradeCard(rating: Rating) {
       class="words"
       v-if="kanjiVocab"
       :kanji-vocab="kanjiVocab"
-      :hide-kanji="type === 'write' && !answered"
-      :hide-reading="type === 'read' && !answered"
-      :hide-meaning="type === 'read' && !answered"
+      :hide-kanji="!answered && progress.cardType === 'kanji-write'"
+      :hide-reading="!answered && progress.cardType === 'kanji-read'"
+      :hide-meaning="!answered && progress.cardType === 'kanji-read'"
     />
   </section>
 </template>

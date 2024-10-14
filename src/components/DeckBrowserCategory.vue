@@ -23,7 +23,8 @@ const { value: storedDeckCount } = useLiveQuery(
   computed(() => {
     const { category } = props;
 
-    return () => db.decks.where({ category }).count();
+    return () =>
+      db.transaction("decks").store.index("category").count(category);
   })
 );
 

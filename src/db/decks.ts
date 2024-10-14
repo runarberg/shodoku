@@ -1,96 +1,108 @@
+import { IDBPObjectStore } from "idb";
 import { createEmptyCard } from "ts-fsrs";
 
+import { liveQueryBroadcaster } from "../helpers/channels.ts";
 import { Card, Deck, DeckTemplate } from "../types.ts";
 
-import { db } from "./index.ts";
+import { db, DB } from "./index.ts";
 
 function isNotNull<T>(thing: T | null | undefined): thing is T {
   return thing != null;
 }
 
-type DeckPosition = { deck: string; priority: number; order: number };
-
 async function addCardToDeck(
+  cards: IDBPObjectStore<
+    DB,
+    Array<"decks" | "cards" | "progress">,
+    "cards",
+    "readwrite"
+  >,
+  progress: IDBPObjectStore<
+    DB,
+    Array<"decks" | "cards" | "progress">,
+    "progress",
+    "readwrite"
+  >,
   id: number,
-  { deck, priority, order }: DeckPosition
-): Promise<{ type: "create" | "put"; card: Card } | null> {
-  const card = await db.cards.get(id);
-
-  if (!card) {
-    return {
-      type: "create",
-      card: {
-        id,
-        value: String.fromCodePoint(id),
-        decks: [deck],
-        priority,
-        order,
-        deckPositions: [{ deck, priority, order }],
-        fsrs: {
-          read: createEmptyCard(),
-          write: createEmptyCard(),
-        },
-      },
-    };
-  }
-
-  let modified = false;
-
-  if (card.priority > priority) {
-    card.priority = priority;
-    card.order = order;
-    modified = true;
-  }
-
-  if (!card.decks.includes(deck)) {
-    card.decks.push(deck);
-    card.deckPositions.push({ deck, priority, order });
-    modified = true;
-  }
-
-  if (modified) {
-    return {
-      type: "put",
-      card,
-    };
-  }
-
-  return null;
-}
-
-export function browserAddDeck(deck: Deck, cardIds: number[]) {
-  return db.transaction("rw", [db.cards, db.decks], async () => {
-    await db.decks.add(deck);
-
-    let order = 0;
-    const updates = [];
-    const creates = [];
-
-    for (const id of cardIds) {
-      order += 1;
-      const added = await addCardToDeck(id, {
-        deck: deck.name,
-        priority: deck.priority,
-        order,
-      });
-
-      if (added?.type === "create") {
-        creates.push(added.card);
-      } else if (added?.type === "put") {
-        updates.push(added.card);
-      }
+  order: number,
+  deck: Deck
+) {
+  const card = await cards.get(id);
+  if (card) {
+    if (card.decks.includes(deck.name)) {
+      return;
     }
 
-    await db.cards.bulkAdd(creates);
-    await db.cards.bulkPut(updates);
-  });
+    card.decks.push(deck.name);
+    card.deckPositions.push({
+      deck: deck.name,
+      priority: deck.priority,
+      order,
+    });
+    if (deck.priority === card.position.priority) {
+      card.position.order = Math.min(order, card.position.order);
+    } else if (deck.priority < card.position.priority) {
+      card.position.priority = deck.priority;
+      card.position.order = order;
+    }
+
+    await cards.put(card);
+  } else {
+    await cards.add({
+      id,
+      value: String.fromCodePoint(id),
+      types: ["kanji-read", "kanji-write"],
+      decks: [deck.name],
+      position: {
+        priority: deck.priority,
+        order,
+      },
+      deckPositions: [{ deck: deck.name, priority: deck.priority, order }],
+    });
+
+    await progress.add({
+      cardId: id,
+      cardType: "kanji-write",
+      fsrs: createEmptyCard(),
+    });
+
+    await progress.add({
+      cardId: id,
+      cardType: "kanji-read",
+      fsrs: createEmptyCard(),
+    });
+  }
+}
+
+export async function browserAddDeck(deck: Deck) {
+  const tx = db.transaction(["cards", "decks", "progress"], "readwrite");
+
+  const decks = tx.objectStore("decks");
+  await decks.add(deck);
+
+  const cards = tx.objectStore("cards");
+  const progress = tx.objectStore("progress");
+
+  let order = 0;
+  for (const id of deck.cards) {
+    order += 1;
+    await addCardToDeck(cards, progress, id, order, deck);
+  }
+
+  await tx.done;
+  liveQueryBroadcaster.postMessage("deck-added");
 }
 
 export async function browserAddCategory(
   category: string,
   deckTemplates: DeckTemplate[]
 ) {
-  const storedDecks = await db.decks.where({ category }).primaryKeys();
+  const storedDecks = await db.getAllKeysFromIndex(
+    "decks",
+    "category",
+    category
+  );
+
   const decks = await Promise.all(
     deckTemplates
       .filter(({ name }) => !storedDecks.includes(name))
@@ -98,7 +110,7 @@ export async function browserAddCategory(
         const response = await fetch(content);
         const csv = await response.text();
 
-        const cardIds = csv
+        const cards = csv
           .split("\n")
           .map((line) => line.codePointAt(0))
           .filter(isNotNull);
@@ -108,38 +120,29 @@ export async function browserAddCategory(
           label,
           priority,
           category,
-          cardIds,
+          cards,
         };
       })
   );
 
-  return db.transaction("rw", [db.cards, db.decks], async () => {
-    for (const { cardIds, ...deck } of decks) {
-      await db.decks.add(deck);
+  const tx = db.transaction(["cards", "decks", "progress"], "readwrite");
 
-      let order = 0;
-      const updates = [];
-      const creates = [];
+  const decksStore = tx.objectStore("decks");
+  const cardsStore = tx.objectStore("cards");
+  const progressStore = tx.objectStore("progress");
 
-      for (const id of cardIds) {
-        order += 1;
-        const added = await addCardToDeck(id, {
-          deck: deck.name,
-          priority: deck.priority,
-          order,
-        });
+  for (const deck of decks) {
+    await decksStore.add(deck);
 
-        if (added?.type === "create") {
-          creates.push(added.card);
-        } else if (added?.type === "put") {
-          updates.push(added.card);
-        }
-      }
-
-      await db.cards.bulkAdd(creates);
-      await db.cards.bulkPut(updates);
+    let order = 0;
+    for (const id of deck.cards) {
+      order += 1;
+      await addCardToDeck(cardsStore, progressStore, id, order, deck);
     }
-  });
+  }
+
+  await tx.done;
+  liveQueryBroadcaster.postMessage("deck-category-added");
 }
 
 function removeCardFromDeck(card: Card, deckName: string) {
@@ -154,7 +157,10 @@ function removeCardFromDeck(card: Card, deckName: string) {
   if (positionIndex !== -1) {
     const [position] = card.deckPositions.splice(positionIndex, 1);
 
-    if (position.priority === card.priority && position.order === card.order) {
+    if (
+      position.priority === card.position.priority &&
+      position.order === card.position.order
+    ) {
       // adjust the new position.
       let priority = Number.POSITIVE_INFINITY;
       let order = Number.POSITIVE_INFINITY;
@@ -166,30 +172,43 @@ function removeCardFromDeck(card: Card, deckName: string) {
         }
       }
 
-      card.priority = priority;
-      card.order = order;
+      card.position.priority = priority;
+      card.position.order = order;
     }
   }
 }
 
-export function browserRemoveDeck(name: string) {
-  return db.transaction("rw", [db.cards, db.decks], async () => {
-    await db.decks.delete(name);
+export async function browserRemoveDeck(name: string) {
+  const tx = db.transaction(["cards", "decks"], "readwrite");
+  const decks = tx.objectStore("decks");
+  const cards = tx.objectStore("cards");
 
-    const updateCards = await db.cards.where("decks").equals(name).toArray();
+  await decks.delete(name);
 
-    for (const card of updateCards) {
-      removeCardFromDeck(card, name);
-    }
+  const cardsInDeck = cards.index("decks").iterate(IDBKeyRange.only(name));
 
-    await db.cards.bulkPut(updateCards);
-  });
+  for await (const cursor of cardsInDeck) {
+    const card = cursor.value;
+
+    removeCardFromDeck(cursor.value, name);
+
+    cursor.update(card);
+  }
+
+  await tx.done;
+  liveQueryBroadcaster.postMessage("deck-removed");
 }
 
 export async function browserRemoveCategory(category: string) {
-  const decks = await db.decks.where("category").equals(category).toArray();
+  const tx = db.transaction(["cards", "decks"], "readwrite");
+  const decks = await tx
+    .objectStore("decks")
+    .index("category")
+    .getAllKeys(category);
 
   for (const deck of decks) {
-    await browserRemoveDeck(deck.name);
+    await browserRemoveDeck(deck);
   }
+
+  await tx.done;
 }

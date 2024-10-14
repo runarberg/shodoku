@@ -3,8 +3,6 @@ import { computed, useId } from "vue";
 import { LocationQueryValue, useRoute } from "vue-router";
 
 import { Deck } from "../types.ts";
-import { useLiveQuery } from "../helpers/db";
-import { db } from "../db";
 import DeckKanjiCards from "./DeckKanjiCards.vue";
 
 const props = defineProps<{
@@ -21,10 +19,6 @@ const label = computed(() => {
 
   return props.deck.label;
 });
-
-const { value: cardCount } = useLiveQuery(() =>
-  db.cards.where("decks").equals(props.deck.name).count()
-);
 
 function toArray(
   item: LocationQueryValue | LocationQueryValue[]
@@ -66,10 +60,10 @@ const toggleExpanded = computed(() => {
     </strong>
 
     <div class="status">
-      <span class="card-count">({{ cardCount }} cards)</span>
+      <span class="card-count">({{ deck.cards.length }} cards)</span>
     </div>
 
-    <DeckKanjiCards v-if="expanded" :deck="deck.name" class="cards" />
+    <DeckKanjiCards v-if="expanded" :kanji="deck.cards" class="cards" />
   </article>
 </template>
 

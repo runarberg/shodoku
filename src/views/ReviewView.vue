@@ -1,61 +1,45 @@
 <script setup lang="ts">
-import { computed, toRaw } from "vue";
+import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { RecordLogItem, State } from "ts-fsrs";
+import { RecordLogItem } from "ts-fsrs";
 
 import KanjiReview from "../components/KanjiReview.vue";
-import { db } from "../db/index.ts";
-import { Card } from "../types";
-import { useRemainingCount, useReviewCard } from "../store/cards";
-
-function currentReviewType({ fsrs }: Card): "read" | "write" {
-  if (
-    fsrs.write.state === State.New ||
-    fsrs.write.state === State.Learning ||
-    fsrs.write.state === State.Relearning
-  ) {
-    // Learn write first
-    return "write";
-  }
-
-  // review whichever is more overdue.
-  if (fsrs.write.due < fsrs.read.due) {
-    return "write";
-  }
-
-  return "read";
-}
+import { CardProgress, CardType } from "../types";
+import { useCardProgress } from "../store/cards";
+import { rateCard } from "../db/cards";
+import { liveQueryBroadcaster } from "../helpers/channels";
+import ReviewRemainCount from "../components/ReviewRemainCount.vue";
 
 const route = useRoute();
 const router = useRouter();
 
-const answeredKanji = computed(() => {
-  if (typeof route.query.kanji !== "string") {
+function isCardType(thing: string): thing is CardType {
+  return thing === "kanji-read" || thing === "kanji-write";
+}
+
+const answered = computed<{ cardId: number; cardType: CardType } | null>(() => {
+  const { kanji, "card-type": cardType } = route.query;
+
+  if (typeof kanji !== "string" || typeof cardType !== "string") {
     return null;
   }
 
-  return route.query.kanji;
+  const cardId = kanji.codePointAt(0);
+
+  if (!cardId || !isCardType(cardType)) {
+    return null;
+  }
+
+  return { cardId, cardType };
 });
 
-const currentCard = useReviewCard(() => answeredKanji.value?.charCodeAt(0));
-const remainingCount = useRemainingCount();
+const currentCard = useCardProgress(answered);
 
-async function handleRate(card: Card, next: RecordLogItem) {
-  const type = currentReviewType(card);
-
+async function handleRate(progress: CardProgress, next: RecordLogItem) {
   try {
-    await db.transaction("rw", [db.cards, db.reviews], async () => {
-      await db.reviews.add({ cardId: card.id, type, log: next.log });
-      await db.cards.put({
-        ...toRaw(card),
-        fsrs: {
-          ...toRaw(card.fsrs),
-          [type]: next.card,
-        },
-      });
-    });
-
-    router.replace({ query: { kanji: undefined } });
+    await rateCard(progress.cardId, progress.cardType, next);
+    liveQueryBroadcaster.postMessage("card-review");
+    router.replace({ query: { kanji: undefined, "card-type": undefined } });
   } catch (error) {
     console.error(error);
   }
@@ -67,7 +51,7 @@ async function handleRate(card: Card, next: RecordLogItem) {
     <header class="header">
       <strong class="title">
         <template v-if="currentCard">
-          <template v-if="currentReviewType(currentCard) === 'read'">
+          <template v-if="currentCard.cardType === 'kanji-read'">
             Reading
           </template>
           <template v-else>Writing</template>
@@ -76,21 +60,21 @@ async function handleRate(card: Card, next: RecordLogItem) {
         <template v-else>Finished Review</template>
       </strong>
 
-      <div v-if="remainingCount" class="counts">
-        <span class="review-count">
-          {{ remainingCount.due }}
-        </span>
-        <span class="new-count">(+ {{ remainingCount.new }})</span>
-        <span class="learning-count"> {{ remainingCount.learning }}</span>
-      </div>
+      <ReviewRemainCount class="counts" />
     </header>
 
     <KanjiReview
       v-if="currentCard"
-      :card="currentCard"
-      :type="currentReviewType(currentCard)"
-      :answered="answeredKanji != null"
-      @answer="$router.replace({ query: { kanji: currentCard.value } })"
+      :progress="currentCard"
+      :answered="answered != null"
+      @answer="
+        $router.replace({
+          query: {
+            kanji: String.fromCodePoint(currentCard.cardId),
+            'card-type': currentCard.cardType,
+          },
+        })
+      "
       @rate="handleRate(currentCard, $event)"
     />
   </article>
@@ -107,22 +91,6 @@ async function handleRate(card: Card, next: RecordLogItem) {
 }
 
 .counts {
-  column-gap: 1ex;
-  display: flex;
-  font-size: 0.8em;
-  font-weight: 600;
   margin-inline-start: auto;
-}
-
-.review-count {
-  color: var(--blue);
-}
-
-.new-count {
-  color: var(--green);
-}
-
-.learning-count {
-  color: var(--orange);
 }
 </style>

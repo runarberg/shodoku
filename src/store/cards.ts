@@ -9,16 +9,19 @@ import {
 import { nextReviewCard, remainingCount } from "../db/cards.ts";
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
-import { Card } from "../types.ts";
+import { CardProgress, CardType } from "../types.ts";
 
-export function useReviewCard(
-  id: MaybeRefOrGetter<number | null | undefined>
-): ComputedRef<Card | null | undefined> {
+export function useCardProgress(
+  progress: MaybeRefOrGetter<
+    { cardId: number; cardType: CardType } | null | undefined
+  >
+): ComputedRef<CardProgress | null | undefined> {
   const query = computed(() => {
-    const idValue = toValue(id);
+    const value = toValue(progress);
 
-    if (idValue) {
-      return () => db.cards.get(idValue);
+    if (value) {
+      const { cardId, cardType } = value;
+      return () => db.get("progress", [cardId, cardType]);
     }
 
     return nextReviewCard;

@@ -9,7 +9,7 @@ import { Deck } from "../types.ts";
 import DeckAddButton from "./DeckAddButton.vue";
 
 const props = defineProps<{
-  deck: Deck;
+  deck: Omit<Deck, "cards">;
   contentPath: string;
 }>();
 
@@ -24,14 +24,14 @@ async function addDeck() {
   const cards = kanjiList.value.map((kanji) => kanji.codePointAt(0) ?? NaN);
 
   try {
-    await browserAddDeck(props.deck, cards);
+    await browserAddDeck({ ...props.deck, cards });
   } catch (error) {
     console.error(error);
   }
 }
 
 const storedDeck = useDeck(() => props.deck.name);
-const hasAddedDeck = computed(() => storedDeck.value !== null);
+const hasAddedDeck = computed(() => storedDeck.value != null);
 
 watch(
   () => props.contentPath,
