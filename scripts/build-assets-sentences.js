@@ -36,8 +36,9 @@ const selectSentences = db.prepare(`
                    (SELECT text FROM word_readings WHERE word_readings.word = sentence_words.word)
              )
           )
-          ORDER BY sentence_words.seq
         )
+        ORDER BY sentence_words.seq
+      )
       FROM sentence_words
       WHERE sentence_words.sentence = sentence_meanings.sentence
     ) AS words
@@ -69,7 +70,7 @@ for (const row of selectSentences.iterate()) {
   );
 
   i += 1;
-  if (i % 1000 === 0) {
+  if (i % 10000 === 0) {
     console.log(i, fileURL.pathname);
   }
 }

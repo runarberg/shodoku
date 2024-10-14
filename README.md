@@ -42,7 +42,7 @@ fast.
    cp -r assets/kanji-lists public/data/
    node scripts/build-assets-kanji.js
    node scripts/build-assets-words.js
-   node scripts/build-assets-sentences.js  ## This takes a couple of hours
+   node scripts/build-assets-sentences.js
    node scripts/build-assets-kanji-vocab.js  ## This takes an hour
    ```
 
