@@ -1,0 +1,1 @@
+{"id":1919010,"writings":[{"text":"バッファ確保失敗"}],"readings":[{"text":"バッファかくほしっぱい"}],"furigana":[{"writing":"バッファ確保失敗","reading":"バッファかくほしっぱい","furigana":[{"ruby":"バッファ"},{"ruby":"確","rt":"かく"},{"ruby":"保","rt":"ほ"},{"ruby":"失","rt":"しっ"},{"ruby":"敗","rt":"ぱい"}]}],"meanings":[{"pos":["n"],"glossary":["buffer (full) error (i.e. space cannot be reserved as it is full)"]}]}
