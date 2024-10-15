@@ -9,7 +9,7 @@ export function useDeck(
 ): ComputedRef<Deck | undefined | null> {
   const query = computed(() => {
     const nameValue = toValue(name);
-    return () => (nameValue ? db.get("decks", nameValue) : null);
+    return async () => (nameValue ? (await db).get("decks", nameValue) : null);
   });
 
   const { value } = useLiveQuery(query);
@@ -18,7 +18,7 @@ export function useDeck(
 }
 
 export function useDecks(): ComputedRef<Deck[] | null> {
-  return useLiveQuery(() =>
-    db.transaction("decks").store.index("category+priority").getAll()
+  return useLiveQuery(async () =>
+    (await db).transaction("decks").store.index("category+priority").getAll()
   ).value;
 }

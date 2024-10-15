@@ -75,7 +75,10 @@ async function addCardToDeck(
 }
 
 export async function browserAddDeck(deck: Deck) {
-  const tx = db.transaction(["cards", "decks", "progress"], "readwrite");
+  const tx = (await db).transaction(
+    ["cards", "decks", "progress"],
+    "readwrite"
+  );
 
   const decks = tx.objectStore("decks");
   await decks.add(deck);
@@ -97,11 +100,9 @@ export async function browserAddCategory(
   category: string,
   deckTemplates: DeckTemplate[]
 ) {
-  const storedDecks = await db.getAllKeysFromIndex(
-    "decks",
-    "category",
-    category
-  );
+  const storedDecks = await (
+    await db
+  ).getAllKeysFromIndex("decks", "category", category);
 
   const decks = await Promise.all(
     deckTemplates
@@ -125,7 +126,10 @@ export async function browserAddCategory(
       })
   );
 
-  const tx = db.transaction(["cards", "decks", "progress"], "readwrite");
+  const tx = (await db).transaction(
+    ["cards", "decks", "progress"],
+    "readwrite"
+  );
 
   const decksStore = tx.objectStore("decks");
   const cardsStore = tx.objectStore("cards");
@@ -179,7 +183,7 @@ function removeCardFromDeck(card: Card, deckName: string) {
 }
 
 export async function browserRemoveDeck(name: string) {
-  const tx = db.transaction(["cards", "decks"], "readwrite");
+  const tx = (await db).transaction(["cards", "decks"], "readwrite");
   const decks = tx.objectStore("decks");
   const cards = tx.objectStore("cards");
 
@@ -200,7 +204,7 @@ export async function browserRemoveDeck(name: string) {
 }
 
 export async function browserRemoveCategory(category: string) {
-  const tx = db.transaction(["cards", "decks"], "readwrite");
+  const tx = (await db).transaction(["cards", "decks"], "readwrite");
   const decks = await tx
     .objectStore("decks")
     .index("category")

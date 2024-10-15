@@ -21,7 +21,7 @@ export function useCardProgress(
 
     if (value) {
       const { cardId, cardType } = value;
-      return () => db.get("progress", [cardId, cardType]);
+      return async () => (await db).get("progress", [cardId, cardType]);
     }
 
     return nextReviewCard;

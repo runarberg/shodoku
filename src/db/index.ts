@@ -43,7 +43,7 @@ export interface DB extends DBSchema {
   };
 }
 
-export const db = await openDB<DB>("shodoku", 1, {
+export const db = openDB<DB>("shodoku", 1, {
   upgrade(db, oldVersion) {
     if (oldVersion < 1) {
       const decks = db.createObjectStore("decks", { keyPath: "name" });

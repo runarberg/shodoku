@@ -6,12 +6,12 @@ import { Config as SvgoConfig, optimize } from "svgo";
 
 type GenerateOptions = {
   filter(file: string): boolean;
-  svgoConfig: SvgoConfig;
+  svgoConfig?: SvgoConfig;
 };
 
 export async function generate(
   source: string,
-  { filter, svgoConfig }: GenerateOptions,
+  { filter, svgoConfig = {} }: GenerateOptions
 ): Promise<string> {
   let svg = `<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg">`;
 

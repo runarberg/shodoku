@@ -12,7 +12,7 @@ const REVIEW_LIMIT = 50;
 async function* getLearningCards(dueBefore?: Date) {
   const cardIds = new Set<number>();
 
-  let cursor = await db
+  let cursor = await (await db)
     .transaction("progress")
     .store.index("state+due")
     .openCursor();
@@ -45,7 +45,7 @@ async function* getLearningCards(dueBefore?: Date) {
 
 async function getReviewedToday(): Promise<Set<number>> {
   const reviewed = new Set<number>();
-  const index = db
+  const index = (await db)
     .transaction("reviews")
     .store.index("review")
     .iterate(IDBKeyRange.lowerBound(midnight()));
@@ -57,10 +57,10 @@ async function getReviewedToday(): Promise<Set<number>> {
   return reviewed;
 }
 
-function getNewDoneCount() {
+async function getNewDoneCount() {
   const now = new Date();
 
-  return db
+  return (await db)
     .transaction("reviews")
     .store.index("state+review")
     .count(
@@ -71,7 +71,7 @@ function getNewDoneCount() {
 async function* getNewCards() {
   const reviewed = await getReviewedToday();
 
-  const tx = db.transaction(["cards", "progress"], "readwrite");
+  const tx = (await db).transaction(["cards", "progress"], "readwrite");
   const cardsStore = tx.objectStore("cards");
   const progressStateIndex = tx
     .objectStore("progress")
@@ -107,10 +107,10 @@ async function* getNewCards() {
   }
 }
 
-function getDueDoneCount() {
+async function getDueDoneCount() {
   const now = new Date();
 
-  return db
+  return (await db)
     .transaction("reviews")
     .store.index("state+review")
     .count(
@@ -127,7 +127,10 @@ async function* getDueCards() {
   const now = new Date();
   const reviewed = await getReviewedToday();
 
-  const tx = db.transaction(["cards", "progress", "reviews"], "readonly");
+  const tx = (await db).transaction(
+    ["cards", "progress", "reviews"],
+    "readonly"
+  );
   const cardsStore = tx.objectStore("cards");
   const progressStore = tx.objectStore("progress");
 
@@ -225,7 +228,7 @@ export async function rateCard(
   cardType: CardType,
   next: RecordLogItem
 ) {
-  const tx = db.transaction(["progress", "reviews"], "readwrite");
+  const tx = (await db).transaction(["progress", "reviews"], "readwrite");
   const progress = tx.objectStore("progress");
   const reviews = tx.objectStore("reviews");
 
