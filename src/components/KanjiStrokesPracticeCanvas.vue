@@ -38,7 +38,6 @@ function handlePointerDown(event: PointerEvent) {
     return;
   }
 
-  event.preventDefault();
   points.push(toSVGCoords(event));
 }
 
@@ -158,13 +157,14 @@ watch(
 </template>
 
 <style scoped>
+/** Safari IOS issue: touch-action will not work on an SVG element */
 :global(svg:has(.canvas)) {
-  /** Safari IOS issue: touch-action will not work on an SVG element */
   touch-action: pinch-zoom;
 }
 
 .canvas {
   cursor: crosshair;
+  touch-action: none;
 }
 
 .background {
