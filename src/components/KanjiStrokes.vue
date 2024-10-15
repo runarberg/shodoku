@@ -9,6 +9,7 @@ import AppIcon from "./AppIcon.vue";
 import KanjiStrokesBackground from "./KanjiStrokesBackground.vue";
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";
 import KanjiStrokesPracticeCanvas from "./KanjiStrokesPracticeCanvas.vue";
+import { sleep } from "../helpers/time";
 
 const props = withDefaults(
   defineProps<{
@@ -66,7 +67,6 @@ function strokeKeyframes(stroke: SVGPathElement): Keyframe[] {
 
 const strokeAnimationOptions = {
   duration: 500,
-  endDelay: 100,
   easing: "ease-in-out",
 };
 
@@ -92,6 +92,10 @@ async function playAnimations() {
 
     animations.shift();
     animation = animations.at(0);
+
+    if (animation) {
+      await sleep(100);
+    }
   }
 }
 

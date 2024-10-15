@@ -99,3 +99,9 @@ export function formatRelativeTime(ms: number): string {
 
   return relativeTimeFormat.format(Math.round(value), unit);
 }
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    globalThis.setTimeout(resolve, ms);
+  });
+}

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, shallowReactive, watch } from "vue";
 import simplifySvgPath from "@luncheon/simplify-svg-path";
-import simplify from "simplify-js";
 
 const props = defineProps<{
   practiceStrokes: string[];
@@ -35,11 +34,16 @@ function toSVGCoords(event: PointerEvent): Point {
 }
 
 function handlePointerDown(event: PointerEvent) {
+  if (!event.isPrimary) {
+    return;
+  }
+
+  event.preventDefault();
   points.push(toSVGCoords(event));
 }
 
 function handlePointerMove(event: PointerEvent) {
-  if (points.length === 0) {
+  if (points.length === 0 || !event.isPrimary) {
     return;
   }
 
@@ -48,7 +52,13 @@ function handlePointerMove(event: PointerEvent) {
 }
 
 function handlePointerUp(event: PointerEvent) {
-  emit("stroke", simplifySvgPath(points));
+  if (!event.isPrimary) {
+    return;
+  }
+
+  if (points.length > 1) {
+    emit("stroke", simplifySvgPath(points));
+  }
 
   el.value?.releasePointerCapture(event.pointerId);
   points.splice(0, points.length);
@@ -142,25 +152,24 @@ watch(
     <path v-for="stroke of practiceStrokes" class="stroke" :d="stroke" />
     <polyline
       class="stroke current-stroke"
-      :points="
-        simplify(points)
-          .map(({ x, y }) => `${x},${y}`)
-          .join(' ')
-      "
+      :points="points.map(({ x, y }) => `${x},${y}`).join(' ')"
     />
   </g>
 </template>
 
 <style scoped>
+:global(svg:has(.canvas)) {
+  /** Safari IOS issue: touch-action will not work on an SVG element */
+  touch-action: pinch-zoom;
+}
+
 .canvas {
   cursor: crosshair;
-  touch-action: none;
 }
 
 .background {
   fill: transparent;
   stroke: none;
-  touch-action: none;
 }
 
 .stroke {

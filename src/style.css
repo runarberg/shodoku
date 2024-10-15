@@ -1,10 +1,10 @@
 :root {
   --pink: oklch(66.5% 0.226 3);
-  --orange: oklch(from var(--pink) l c calc(h + 75));
-  --gold: oklch(from var(--pink) l c calc(h + 90));
-  --green: oklch(from var(--pink) l c calc(h + 140));
-  --blue: oklch(from var(--pink) l c calc(h + 240));
-  --purple: oklch(from var(--pink) l c calc(h + 300));
+  --orange: oklch(from var(--pink) l c 78);
+  --gold: oklch(from var(--pink) l c 93);
+  --green: oklch(from var(--pink) l c 143);
+  --blue: oklch(from var(--pink) l c 243);
+  --purple: oklch(from var(--pink) l c 303);
 
   --accent-color: var(--pink);
   --light-gray: oklch(90% none none);
@@ -14,7 +14,7 @@
   --background-gradient: linear-gradient(
     66deg,
     var(--background-gradient-color) 0%,
-    oklch(from var(--background-gradient-color) l c calc(h + 180)) 65%,
+    oklch(from var(--background-gradient-color) l c 360) 65%,
     var(--background-gradient-color) 100%
   );
   --background-light: oklch(from var(--accent-color) 92.5% 0.02 h);

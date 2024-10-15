@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import { Card as FSRSCard, Rating, RecordLogItem } from "ts-fsrs";
-import { computed } from "vue";
+import { RecordLogItem } from "ts-fsrs";
 
-import { useFsrs } from "../helpers/fsrs.ts";
 import { useKanji, useKanjiVocab } from "../helpers/kanji.ts";
 import { provideKanjiVG } from "../helpers/kanjivg.ts";
-import { formatRelativeTime } from "../helpers/time.ts";
 import { CardProgress } from "../types.ts";
 
 import AppButton from "./AppButton.vue";
@@ -14,13 +11,14 @@ import KanjiReadings from "./KanjiReadings.vue";
 import KanjiStrokes from "./KanjiStrokes.vue";
 import KanjiTitle from "./KanjiTitle.vue";
 import KanjiWordList from "./KanjiWordList.vue";
+import RateButtons from "./RateButtons.vue";
 
 const props = defineProps<{
   progress: CardProgress;
   answered?: boolean;
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
   answer: [];
   rate: [card: RecordLogItem];
 }>();
@@ -28,27 +26,6 @@ const emit = defineEmits<{
 const kanji = useKanji(() => props.progress.cardId);
 const kanjiVocab = useKanjiVocab(() => props.progress.cardId);
 provideKanjiVG(() => props.progress.cardId.toString(16).padStart(5, "0"));
-
-const fsrs = useFsrs();
-const ratings = computed(() =>
-  fsrs.value.repeat(props.progress.fsrs, new Date())
-);
-
-function nextReview(next: FSRSCard): string {
-  const currentReviewTime = next.last_review?.getTime() ?? Date.now();
-  const nextReviewTime = next.due.getTime();
-
-  return formatRelativeTime(nextReviewTime - currentReviewTime);
-}
-
-function gradeCard(rating: Rating) {
-  if (rating === Rating.Manual) {
-    // Not implemented
-    return;
-  }
-
-  emit("rate", fsrs.value.next(props.progress.fsrs, new Date(), rating));
-}
 </script>
 
 <template>
@@ -71,18 +48,12 @@ function gradeCard(rating: Rating) {
     />
 
     <div class="advance-buttons">
-      <template v-if="answered">
-        <AppButton
-          v-for="{ log, card: next } of ratings"
-          class="rating-button"
-          :key="log.rating"
-          :data-rating="Rating[log.rating]"
-          @click="gradeCard(log.rating)"
-        >
-          {{ Rating[log.rating] }}
-          <small class="next-review-time">{{ nextReview(next) }}</small>
-        </AppButton>
-      </template>
+      <RateButtons
+        v-if="answered"
+        :fsrs="progress.fsrs"
+        @rate="$emit('rate', $event)"
+      />
+
       <AppButton v-else @click="$emit('answer')" filled>
         Show
         <template v-if="progress.cardType === 'kanji-read'"> Reading</template>
@@ -106,38 +77,10 @@ function gradeCard(rating: Rating) {
 <style scoped>
 .advance-buttons {
   backdrop-filter: blur(2em);
-  column-gap: 1ex;
-  display: flex;
-  padding-block: 1em 1ex;
-  position: sticky;
-  inset-block-start: 0;
-  padding-inline-end: 1em;
   inline-size: max-content;
-}
-
-.rating-button {
-  background: var(--background-strong);
-  border-color: currentColor;
-
-  &[data-rating="Again"] {
-    color: var(--pink);
-  }
-
-  &[data-rating="Hard"] {
-    color: var(--orange);
-  }
-
-  &[data-rating="Good"] {
-    color: var(--green);
-  }
-
-  &[data-rating="Easy"] {
-    color: var(--blue);
-  }
-
-  & .next-review-time {
-    font-weight: normal;
-    font-size: 0.7em;
-  }
+  inset-block-start: 0;
+  padding-block: 1em 1ex;
+  padding-inline-end: 1em;
+  position: sticky;
 }
 </style>

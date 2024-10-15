@@ -28,7 +28,7 @@ const radical = computed(() => {
 const componentInfo = useRadical(() => props.literal);
 
 function accentColorOffset(deg: number): string {
-  return `oklch(from var(--accent-color) l c calc(h + ${deg})`;
+  return `oklch(from var(--accent-color) l c ${deg + 3})`;
 }
 
 watchEffect(() => {
@@ -117,6 +117,7 @@ watchEffect(() => {
   background: var(--background-strong);
   block-size: 5em;
   border-radius: 1ex;
+  flex-shrink: 0;
 
   & .strokes-group {
     color: var(--light-gray);
