@@ -12,7 +12,7 @@ export function useDeck(
     return async () => (nameValue ? (await db).get("decks", nameValue) : null);
   });
 
-  const { value } = useLiveQuery(query);
+  const { result: value } = useLiveQuery(query);
 
   return value;
 }
@@ -20,5 +20,5 @@ export function useDeck(
 export function useDecks(): ComputedRef<Deck[] | null> {
   return useLiveQuery(async () =>
     (await db).transaction("decks").store.index("category+priority").getAll()
-  ).value;
+  ).result;
 }

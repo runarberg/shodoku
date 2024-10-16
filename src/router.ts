@@ -35,7 +35,10 @@ export const router = createRouter({
     {
       path: "/kanji/:kanji",
       name: KANJI_ROUTE_NAME,
-      component: () => import("./views/KanjiView.vue"),
+      components: {
+        default: () => import("./views/KanjiView.vue"),
+        aside: () => import("./views/KanjiAsideView.vue"),
+      },
     },
     {
       path: "/decks",

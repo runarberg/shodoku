@@ -2,7 +2,9 @@
 import { computed, useId } from "vue";
 import { LocationQueryValue, useRoute } from "vue-router";
 
+import { deckLabel } from "../helpers/decks.ts";
 import { Deck } from "../types.ts";
+
 import DeckKanjiCards from "./DeckKanjiCards.vue";
 
 const props = defineProps<{
@@ -12,13 +14,7 @@ const props = defineProps<{
 const labelId = useId();
 const route = useRoute();
 
-const label = computed(() => {
-  if (props.deck.category === "genki") {
-    return `Genki ${props.deck.label}`;
-  }
-
-  return props.deck.label;
-});
+const label = computed(() => deckLabel(props.deck));
 
 function toArray(
   item: LocationQueryValue | LocationQueryValue[]

@@ -100,6 +100,9 @@ export type Deck = {
 };
 
 export type CardType = "kanji-read" | "kanji-write";
+export function isCardType(thing: string): thing is CardType {
+  return thing === "kanji-read" || thing === "kanji-write";
+}
 
 export type Card = {
   id: number;

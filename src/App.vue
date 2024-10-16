@@ -10,6 +10,8 @@ import MainTitle from "./components/MainTitle.vue";
       <MainNav class="main-nav" />
     </header>
 
+    <RouterView class="aside" name="aside" />
+
     <main class="main">
       <RouterView />
     </main>
@@ -19,12 +21,25 @@ import MainTitle from "./components/MainTitle.vue";
 <style scoped>
 .app {
   align-items: start;
-  column-gap: 2em;
-  display: flex;
+  display: grid;
+  grid-template:
+    "header . main aside"
+    / auto 1em minmax(min-content, 90ch) 1fr;
   margin: 2em;
+  justify-items: start;
+
+  @media screen and (max-width: 90ch) {
+    grid-template:
+      "header header"
+      ". ." 2em
+      "main aside"
+      / 1fr auto;
+    justify-items: stretch;
+  }
 
   @media screen and (max-width: 75ch) {
     align-items: stretch;
+    display: flex;
     flex-direction: column;
     margin-inline: 1ex;
     row-gap: 2em;
@@ -32,10 +47,29 @@ import MainTitle from "./components/MainTitle.vue";
 }
 
 .header,
+.aside,
 .main {
   background: oklch(100% none none / 0.4);
   border-radius: 1ex;
   padding: 1em;
+}
+
+.header,
+.aside {
+  position: sticky;
+  inset-block-start: 1em;
+
+  @media screen and (max-width: 75ch) {
+    position: static;
+  }
+}
+
+.header {
+  grid-area: header;
+
+  @media screen and (max-width: 90ch) {
+    position: static;
+  }
 }
 
 .main-title {
@@ -45,7 +79,15 @@ import MainTitle from "./components/MainTitle.vue";
 }
 
 .main {
-  flex-grow: 1;
-  max-inline-size: 90ch;
+  grid-area: main;
+}
+
+.aside {
+  grid-area: aside;
+  margin-inline-start: 1em;
+
+  @media screen and (max-width: 75ch) {
+    margin-inline-start: 0;
+  }
 }
 </style>

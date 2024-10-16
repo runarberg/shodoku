@@ -181,7 +181,7 @@ const additionalMeanings = computed(() => meanings.value.slice(1));
   display: grid;
   grid-template:
     "word meaning"
-    / max-content auto;
+    / fit-content(30ch) auto;
 }
 
 .word {

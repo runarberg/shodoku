@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowReactive, watch } from "vue";
 import simplifySvgPath from "@luncheon/simplify-svg-path";
+import { sleep } from "../helpers/time";
 
 const props = defineProps<{
   practiceStrokes: string[];
@@ -74,7 +75,6 @@ function strokeKeyframes(stroke: SVGPathElement): Keyframe[] {
 
 const strokeAnimationOptions = {
   duration: 500,
-  endDelay: 100,
   easing: "ease-in-out",
 };
 
@@ -108,6 +108,10 @@ async function playAnimations() {
 
     animations.shift();
     animation = animations.at(0);
+
+    if (animation) {
+      await sleep(100);
+    }
   }
 }
 
@@ -148,7 +152,14 @@ watch(
       :width="viewBox.width"
       :height="viewBox.height"
     />
-    <path v-for="stroke of practiceStrokes" class="stroke" :d="stroke" />
+    <g class="practice-strokes">
+      <path
+        v-for="(stroke, i) of practiceStrokes"
+        class="stroke practice-stroke"
+        :key="i"
+        :d="stroke"
+      />
+    </g>
     <polyline
       class="stroke current-stroke"
       :points="points.map(({ x, y }) => `${x},${y}`).join(' ')"

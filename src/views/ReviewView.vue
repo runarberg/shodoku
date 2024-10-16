@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { RecordLogItem } from "ts-fsrs";
 
 import KanjiReview from "../components/KanjiReview.vue";
-import { CardProgress, CardType } from "../types";
-import { useCardProgress } from "../store/cards";
-import { rateCard } from "../db/cards";
-import { liveQueryBroadcaster } from "../helpers/channels";
 import ReviewRemainCount from "../components/ReviewRemainCount.vue";
+import ReviewSummary from "../components/ReviewSummary.vue";
+import { rateCard } from "../db/cards.ts";
+import { liveQueryBroadcaster } from "../helpers/channels.ts";
+import { useCardProgress } from "../store/cards.ts";
+import { CardProgress, CardType, isCardType } from "../types.ts";
 
 const route = useRoute();
 const router = useRouter();
-
-function isCardType(thing: string): thing is CardType {
-  return thing === "kanji-read" || thing === "kanji-write";
-}
 
 const answered = computed<{ cardId: number; cardType: CardType } | null>(() => {
   const { kanji, "card-type": cardType } = route.query;
@@ -33,10 +30,37 @@ const answered = computed<{ cardId: number; cardType: CardType } | null>(() => {
   return { cardId, cardType };
 });
 
-const currentCard = useCardProgress(answered);
+const lastReview = ref<{ cardId: number; cardType: CardType } | null>(null);
+const { result: currentCard, loading: loadingProgress } =
+  useCardProgress(answered);
+
+const initialLoading = ref(true);
+watch(loadingProgress, (isProgressLoading) => {
+  if (!isProgressLoading) {
+    initialLoading.value = false;
+  }
+});
+
+const isLoadingNextCard = computed(() => {
+  if (initialLoading.value) {
+    return true;
+  }
+
+  if (!currentCard.value || !lastReview.value) {
+    return false;
+  }
+
+  return (
+    loadingProgress.value &&
+    currentCard.value.cardId === lastReview.value.cardId &&
+    currentCard.value.cardType === currentCard.value.cardType
+  );
+});
 
 async function handleRate(progress: CardProgress, next: RecordLogItem) {
   try {
+    lastReview.value = { cardId: progress.cardId, cardType: progress.cardType };
+
     await rateCard(progress.cardId, progress.cardType, next);
     liveQueryBroadcaster.postMessage("card-review");
     router.replace({ query: { kanji: undefined, "card-type": undefined } });
@@ -57,14 +81,15 @@ async function handleRate(progress: CardProgress, next: RecordLogItem) {
           <template v-else>Writing</template>
           Review
         </template>
-        <template v-else>Finished Review</template>
+        <template v-else-if="!initialLoading">Review Summary</template>
       </strong>
 
       <ReviewRemainCount class="counts" />
     </header>
 
+    <p v-if="isLoadingNextCard">Loading next card...</p>
     <KanjiReview
-      v-if="currentCard"
+      v-else-if="currentCard"
       :progress="currentCard"
       :answered="answered != null"
       @answer="
@@ -77,6 +102,7 @@ async function handleRate(progress: CardProgress, next: RecordLogItem) {
       "
       @rate="handleRate(currentCard, $event)"
     />
+    <ReviewSummary v-else />
   </article>
 </template>
 

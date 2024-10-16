@@ -29,7 +29,7 @@ import { aboutRoute, homeRoute, decksRoute } from "../router";
   margin: 0;
   row-gap: 1ex;
 
-  @media screen and (max-width: 75ch) {
+  @media screen and (max-width: 90ch) {
     justify-content: space-evenly;
     column-gap: 1ex;
     flex-direction: row;

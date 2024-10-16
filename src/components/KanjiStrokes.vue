@@ -15,12 +15,15 @@ const props = withDefaults(
   defineProps<{
     kanji: KanjiInfo;
     practiceMode?: boolean;
+    autoHint?: boolean;
   }>(),
   {
     practiceMode: false,
+    autoHint: false,
   }
 );
 
+const svgEl = ref<SVGSVGElement | null>(null);
 const kanjiVG = useKanjiVG();
 const viewBox = useKanjiVGViewBox();
 const strokes = computed(() => kanjiVG.value?.querySelectorAll("path") ?? []);
@@ -31,30 +34,6 @@ const animationPaused = ref(false);
 
 const practicing = ref(false);
 const practiceStrokes = shallowReactive<string[]>([]);
-
-watch(practicing, (practiceStarted) => {
-  if (practiceStarted) {
-    // Clear any ongoing animation
-    for (const animation of animations) {
-      animation.cancel();
-    }
-    animations.splice(0, animations.length);
-    animationPaused.value = false;
-  } else {
-    // Practice ended. Clear they practice strokes.
-    practiceStrokes.splice(0, practiceStrokes.length);
-  }
-});
-
-watch(
-  () => props.practiceMode,
-  (isPracticeMode) => {
-    if (isPracticeMode !== practicing.value) {
-      practicing.value = isPracticeMode;
-    }
-  },
-  { immediate: true }
-);
 
 function strokeKeyframes(stroke: SVGPathElement): Keyframe[] {
   const l = stroke.getTotalLength();
@@ -109,8 +88,8 @@ function resumeAnimation() {
   animationPaused.value = false;
 }
 
-function showHint() {
-  const stroke = strokes.value[practiceStrokes.length];
+function showHint(n = practiceStrokes.length) {
+  const stroke = strokes.value[n];
 
   if (!stroke) {
     return;
@@ -127,6 +106,51 @@ function showHint() {
     stroke.style.removeProperty("display");
   });
 }
+
+function pushPracticeStroke(d: string) {
+  practiceStrokes.push(d);
+
+  if (props.practiceMode && props.autoHint) {
+    if (practiceStrokes.length < strokes.value.length) {
+      showHint();
+    }
+  }
+}
+
+watch(practicing, (practiceStarted) => {
+  if (practiceStarted) {
+    // Clear any ongoing animation
+    for (const animation of animations) {
+      animation.cancel();
+    }
+    animations.splice(0, animations.length);
+    animationPaused.value = false;
+  } else {
+    // Practice ended. Clear they practice strokes.
+    practiceStrokes.splice(0, practiceStrokes.length);
+  }
+});
+
+watch(
+  () => props.practiceMode,
+  (isPracticeMode) => {
+    for (const stroke of strokes.value) {
+      for (const animation of stroke.getAnimations()) {
+        animation.cancel();
+      }
+    }
+
+    if (isPracticeMode !== practicing.value) {
+      practicing.value = isPracticeMode;
+    }
+  },
+  { immediate: true }
+);
+
+watch(strokes, () => {
+  // We have a new kanji. Clear the practice strokes.
+  practiceStrokes.splice(0, practiceStrokes.length);
+});
 </script>
 
 <template>
@@ -139,7 +163,7 @@ function showHint() {
     </h2>
 
     <figure class="strokes-figure">
-      <svg v-if="kanjiVG" :viewBox="viewBox" class="svg">
+      <svg v-if="kanjiVG" ref="svgEl" :viewBox="viewBox" class="svg">
         <KanjiStrokesBackground :viewBox="viewBox" />
 
         <KanjiStrokesGroup
@@ -156,7 +180,7 @@ function showHint() {
           :practice-strokes="practiceStrokes"
           :animate="animating"
           :animate-pause="animationPaused"
-          @stroke="practiceStrokes.push($event)"
+          @stroke="pushPracticeStroke($event)"
         />
       </svg>
 
@@ -179,7 +203,7 @@ function showHint() {
           <AppButton
             v-if="practicing && practiceStrokes.length < strokes.length"
             aria-lable="hint"
-            @click="showHint"
+            @click="showHint()"
           >
             <AppIcon icon="help-circle" />
           </AppButton>

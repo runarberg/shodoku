@@ -67,6 +67,17 @@ export const useRadicalsStore = defineStore("radicals", () => {
       return;
     }
 
+    if (codePoint === 0x4e1a) {
+      // Missing component
+      radicals.set(literal, {
+        id: codePoint,
+        literal,
+        strokes: 5,
+        meaning: "North",
+        reading: "ほく",
+      });
+    }
+
     const hex = codePoint?.toString(16).padStart(5, "0");
     const response = await fetch(`/data/kanji-v1/${hex}.json`);
     const kanji = (await response.json()) as KanjiInfo;

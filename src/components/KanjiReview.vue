@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { RecordLogItem } from "ts-fsrs";
+import { RecordLogItem, State } from "ts-fsrs";
+import { computed } from "vue";
 
 import { useKanji, useKanjiVocab } from "../helpers/kanji.ts";
 import { provideKanjiVG } from "../helpers/kanjivg.ts";
@@ -26,6 +27,8 @@ defineEmits<{
 const kanji = useKanji(() => props.progress.cardId);
 const kanjiVocab = useKanjiVocab(() => props.progress.cardId);
 provideKanjiVG(() => props.progress.cardId.toString(16).padStart(5, "0"));
+
+const isNewCard = computed(() => props.progress.fsrs.state === State.New);
 </script>
 
 <template>
@@ -33,18 +36,23 @@ provideKanjiVG(() => props.progress.cardId.toString(16).padStart(5, "0"));
     <KanjiTitle
       class="title"
       :kanji="kanji"
-      :hide-literal="!answered && progress.cardType === 'kanji-write'"
+      :hide-literal="
+        !answered && progress.cardType === 'kanji-write' && !isNewCard
+      "
       :hide-meaning="!answered && progress.cardType === 'kanji-read'"
     />
+
     <KanjiReadings
       v-if="answered || progress.cardType === 'kanji-write'"
       class="readings"
       :kanji="kanji"
     />
+
     <KanjiStrokes
       class="strokes"
       :kanji="kanji"
       :practice-mode="!answered && progress.cardType === 'kanji-write'"
+      :auto-hint="!answered && progress.cardType === 'kanji-write' && isNewCard"
     />
 
     <div class="advance-buttons">
@@ -61,13 +69,18 @@ provideKanjiVG(() => props.progress.cardId.toString(16).padStart(5, "0"));
       </AppButton>
     </div>
 
-    <KanjiComponents v-if="answered" class="components" />
+    <KanjiComponents
+      v-if="answered || (progress.cardType === 'kanji-write' && isNewCard)"
+      class="components"
+    />
 
     <KanjiWordList
       class="words"
       v-if="kanjiVocab"
       :kanji-vocab="kanjiVocab"
-      :hide-kanji="!answered && progress.cardType === 'kanji-write'"
+      :hide-kanji="
+        !answered && progress.cardType === 'kanji-write' && !isNewCard
+      "
       :hide-reading="!answered && progress.cardType === 'kanji-read'"
       :hide-meaning="!answered && progress.cardType === 'kanji-read'"
     />

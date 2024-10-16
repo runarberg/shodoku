@@ -19,7 +19,7 @@ const props = defineProps<{
 const expanded = ref(false);
 const titleId = useId();
 
-const { value: storedDeckCount } = useLiveQuery(
+const { result: storedDeckCount } = useLiveQuery(
   computed(() => {
     const { category } = props;
 

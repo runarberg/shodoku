@@ -77,7 +77,16 @@ async function* getNewCards() {
     .objectStore("progress")
     .index("cardId+cardType+state");
 
-  let cardsCursor = await cardsStore.index("position").openKeyCursor();
+  let cardsCursor = await cardsStore
+    .index("position")
+    .openKeyCursor(
+      IDBKeyRange.bound(
+        [0, 0],
+        [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY],
+        false,
+        true
+      )
+    );
 
   while (cardsCursor) {
     if (reviewed.has(cardsCursor.primaryKey)) {
