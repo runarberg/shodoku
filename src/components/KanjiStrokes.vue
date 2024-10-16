@@ -14,14 +14,20 @@ import { sleep } from "../helpers/time";
 const props = withDefaults(
   defineProps<{
     kanji: KanjiInfo;
-    practiceMode?: boolean;
     autoHint?: boolean;
+    practiceMode?: boolean;
+    practiceReview?: boolean;
   }>(),
   {
-    practiceMode: false,
     autoHint: false,
+    practiceReview: false,
+    practiceMode: false,
   }
 );
+
+const emit = defineEmits<{
+  practiceDone: [];
+}>();
 
 const svgEl = ref<SVGSVGElement | null>(null);
 const kanjiVG = useKanjiVG();
@@ -110,10 +116,16 @@ function showHint(n = practiceStrokes.length) {
 function pushPracticeStroke(d: string) {
   practiceStrokes.push(d);
 
-  if (props.practiceMode && props.autoHint) {
-    if (practiceStrokes.length < strokes.value.length) {
-      showHint();
-    }
+  if (props.practiceMode && practiceStrokes.length === strokes.value.length) {
+    emit("practiceDone");
+  }
+
+  if (
+    props.practiceMode &&
+    props.autoHint &&
+    practiceStrokes.length < strokes.value.length
+  ) {
+    showHint();
   }
 }
 
@@ -140,7 +152,12 @@ watch(
       }
     }
 
-    if (isPracticeMode !== practicing.value) {
+    if (
+      props.practiceReview &&
+      practiceStrokes.length === strokes.value.length
+    ) {
+      practicing.value = true;
+    } else if (isPracticeMode !== practicing.value) {
       practicing.value = isPracticeMode;
     }
   },

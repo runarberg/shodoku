@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@luncheon/simplify-svg-path": "^0.2.0",
+    "@vueuse/core": "^11.1.0",
     "idb": "^8.0.0",
     "pinia": "^2.2.4",
     "ts-fsrs": "^4.3.1",

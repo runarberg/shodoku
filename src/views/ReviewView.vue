@@ -88,6 +88,7 @@ async function handleRate(progress: CardProgress, next: RecordLogItem) {
     </header>
 
     <p v-if="isLoadingNextCard">Loading next card...</p>
+
     <KanjiReview
       v-else-if="currentCard"
       :progress="currentCard"
@@ -102,6 +103,7 @@ async function handleRate(progress: CardProgress, next: RecordLogItem) {
       "
       @rate="handleRate(currentCard, $event)"
     />
+
     <ReviewSummary v-else />
   </article>
 </template>

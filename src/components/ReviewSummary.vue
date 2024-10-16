@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { db } from "../db";
+import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
-import { midnight } from "../helpers/time";
-import { CardReview } from "../types";
+import { midnight } from "../helpers/time.ts";
+import { increaseReviewLimit } from "../store/reviews.ts";
+import { CardReview } from "../types.ts";
+
+import AppButton from "./AppButton.vue";
 import ReviewSummaryItem from "./ReviewSummaryItem.vue";
 
 const { result: reviewedCards } = useLiveQuery(async () => {
@@ -28,11 +31,15 @@ const { result: reviewedCards } = useLiveQuery(async () => {
 </script>
 
 <template>
-  <ul v-if="reviewedCards" class="review-summary-list">
-    <li v-for="[cardId, reviews] of reviewedCards">
-      <ReviewSummaryItem :card-id="cardId" :reviews="reviews" />
-    </li>
-  </ul>
+  <section class="review-summary">
+    <ul v-if="reviewedCards" class="review-summary-list">
+      <li v-for="[cardId, reviews] of reviewedCards">
+        <ReviewSummaryItem :card-id="cardId" :reviews="reviews" />
+      </li>
+    </ul>
+
+    <AppButton @click="increaseReviewLimit()">Continue Review</AppButton>
+  </section>
 </template>
 
 <style scoped>

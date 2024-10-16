@@ -41,9 +41,23 @@ export interface DB extends DBSchema {
       "state+review": [State, Date];
     };
   };
+
+  "review-limits": {
+    key: number;
+    value: {
+      time: Date;
+      count: {
+        new: number;
+        due: number;
+      };
+    };
+    indexes: {
+      time: Date;
+    };
+  };
 }
 
-export const db = openDB<DB>("shodoku", 1, {
+export const db = openDB<DB>("shodoku", 2, {
   upgrade(db, oldVersion) {
     if (oldVersion < 1) {
       const decks = db.createObjectStore("decks", { keyPath: "name" });
@@ -72,6 +86,15 @@ export const db = openDB<DB>("shodoku", 1, {
       reviews.createIndex("cardId", "cardId");
       reviews.createIndex("review", "log.review");
       reviews.createIndex("state+review", ["log.state", "log.review"]);
+    }
+
+    if (oldVersion < 2) {
+      const reviewLimits = db.createObjectStore("review-limits", {
+        keyPath: "id",
+        autoIncrement: true,
+      });
+
+      reviewLimits.createIndex("time", "time");
     }
   },
 });

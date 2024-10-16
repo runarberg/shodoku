@@ -51,8 +51,10 @@ const isNewCard = computed(() => props.progress.fsrs.state === State.New);
     <KanjiStrokes
       class="strokes"
       :kanji="kanji"
-      :practice-mode="!answered && progress.cardType === 'kanji-write'"
       :auto-hint="!answered && progress.cardType === 'kanji-write' && isNewCard"
+      :practice-mode="!answered && progress.cardType === 'kanji-write'"
+      :practice-review="progress.cardType === 'kanji-write'"
+      @practice-done="$emit('answer')"
     />
 
     <div class="advance-buttons">

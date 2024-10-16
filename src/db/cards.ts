@@ -5,9 +5,7 @@ import { EPOC, midnight } from "../helpers/time.ts";
 import { CardProgress, CardType } from "../types.ts";
 
 import { db } from "./index.ts";
-
-const NEW_LIMIT = 10;
-const REVIEW_LIMIT = 50;
+import { dueLimit, newLimit } from "../store/reviews";
 
 async function* getLearningCards(dueBefore?: Date) {
   const cardIds = new Set<number>();
@@ -166,16 +164,35 @@ async function* getDueCards() {
   }
 }
 
-async function newRemainingCount(): Promise<number> {
+type ExtraLimit = { due: number; new: number };
+async function getExtraLimits(): Promise<ExtraLimit> {
+  const extraLimits = await (
+    await db
+  ).getAllFromIndex(
+    "review-limits",
+    "time",
+    IDBKeyRange.lowerBound(midnight())
+  );
+
+  const sum = { due: 0, new: 0 };
+  for (const { count } of extraLimits) {
+    sum.due += count.due;
+    sum.new += count.new;
+  }
+
+  return sum;
+}
+
+async function newRemainingCount(extraLimit = 0): Promise<number> {
   const doneCount = await getNewDoneCount();
-  const limit = Math.max(0, NEW_LIMIT - doneCount);
+  const limit = Math.max(0, newLimit.value + extraLimit - doneCount);
 
   return count(take(limit, getNewCards()));
 }
 
-async function dueRemainingCount(): Promise<number> {
+async function dueRemainingCount(extraLimit = 0): Promise<number> {
   const doneCount = await getDueDoneCount();
-  const limit = Math.max(0, REVIEW_LIMIT - doneCount);
+  const limit = Math.max(0, dueLimit.value + extraLimit - doneCount);
 
   return count(take(limit, getDueCards()));
 }
@@ -186,14 +203,17 @@ export async function nextReviewCard(): Promise<CardProgress | null> {
     return nextDueLearningCard.value;
   }
 
-  const newCount = await newRemainingCount();
+  const extraLimits = await getExtraLimits();
+
+  const newCount = await newRemainingCount(extraLimits.new);
   const newDoneCount = await getNewDoneCount();
 
-  const dueCount = await dueRemainingCount();
+  const dueCount = await dueRemainingCount(extraLimits.due);
   const dueDoneCount = await getDueDoneCount();
 
   const totalNewCount = newCount + newDoneCount;
   const totalDueCount = dueCount + dueDoneCount;
+  const remainingCount = newCount + dueCount;
 
   const newCardInterval = Math.ceil(
     (totalNewCount + totalDueCount) / totalNewCount
@@ -203,7 +223,7 @@ export async function nextReviewCard(): Promise<CardProgress | null> {
 
   if (
     newCount > 0 &&
-    (dueCount === 0 || dueCount % newCardInterval === newCardOffset)
+    (dueCount === 0 || remainingCount % newCardInterval === newCardOffset)
   ) {
     const nextNewCard = await first(getNewCards());
     if (nextNewCard) {
@@ -225,9 +245,11 @@ export async function nextReviewCard(): Promise<CardProgress | null> {
 }
 
 export async function remainingCount() {
+  const extraLimits = await getExtraLimits();
+
   return {
-    new: await newRemainingCount(),
-    due: await dueRemainingCount(),
+    new: await newRemainingCount(extraLimits.new),
+    due: await dueRemainingCount(extraLimits.due),
     learning: await count(getLearningCards()),
   };
 }

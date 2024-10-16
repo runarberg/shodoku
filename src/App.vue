@@ -20,13 +20,12 @@ import MainTitle from "./components/MainTitle.vue";
 
 <style scoped>
 .app {
-  align-items: start;
   display: grid;
   grid-template:
     "header . main aside"
     / auto 1em minmax(min-content, 90ch) 1fr;
   margin: 2em;
-  justify-items: start;
+  justify-items: stretch;
 
   @media screen and (max-width: 90ch) {
     grid-template:
@@ -85,6 +84,7 @@ import MainTitle from "./components/MainTitle.vue";
 .aside {
   grid-area: aside;
   margin-inline-start: 1em;
+  justify-self: start;
 
   @media screen and (max-width: 75ch) {
     margin-inline-start: 0;
