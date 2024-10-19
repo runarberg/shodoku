@@ -3,6 +3,7 @@ import { createWebHistory, createRouter, RouteLocationRaw } from "vue-router";
 export const HOME_ROUTE_NAME = Symbol("home-route-name");
 export const REVIEW_ROUTE_NAME = Symbol("review-route-name");
 export const KANJI_ROUTE_NAME = Symbol("kanji-route-name");
+export const WORD_ROUTE_NAME = Symbol("word-route-name");
 export const DECKS_ROUTE_NAME = Symbol("decks-route-name");
 export const DECK_BROWSER_ROUTE_NAME = Symbol("deck-browser-route-name");
 export const ABOUT_ROUTE_NAME = Symbol("about-route-name");
@@ -17,6 +18,10 @@ export const aboutRoute: RouteLocationRaw = { name: ABOUT_ROUTE_NAME };
 
 export function kanjiRoute(kanji: string): RouteLocationRaw {
   return { name: KANJI_ROUTE_NAME, params: { kanji } };
+}
+
+export function wordRoute(wordId: number): RouteLocationRaw {
+  return { name: WORD_ROUTE_NAME, params: { wordId: `${wordId}` } };
 }
 
 export const router = createRouter({
@@ -39,6 +44,11 @@ export const router = createRouter({
         default: () => import("./views/KanjiView.vue"),
         aside: () => import("./views/KanjiAsideView.vue"),
       },
+    },
+    {
+      path: "/word/:wordId",
+      name: WORD_ROUTE_NAME,
+      component: () => import("./views/WordView.vue"),
     },
     {
       path: "/decks",

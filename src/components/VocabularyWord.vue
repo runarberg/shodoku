@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 
-import { Word, WordReading, WordWriting } from "../types";
+import { useWordFurigana } from "../helpers/words.ts";
+import { wordRoute } from "../router.ts";
+import { Furigana, Word } from "../types.ts";
 
 import VocabularyWordMeaning from "./VocabularyWordMeaning.vue";
-import MaybeHideKanji from "./MaybeHideKanji.vue";
+import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
+import { hasKanjiRE } from "../helpers/text";
+import WordWritingSelect from "./WordWritingSelect.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -21,8 +25,6 @@ const props = withDefaults(
     hideMeaning: false,
   }
 );
-
-const hasKanjiRE = /\p{Script=Han}/u;
 
 const meanings = computed(() => {
   const { kanji, word } = props;
@@ -52,110 +54,43 @@ const meanings = computed(() => {
   });
 });
 
-const writing = computed(() => {
-  if (!props.word.writings) {
-    return null;
-  }
-
-  let selected: WordWriting | null = null;
-
-  for (const writing of props.word.writings) {
-    if (!selected) {
-      selected = writing;
-      continue;
-    }
-
-    if (props.kanji && !writing.text.includes(props.kanji)) {
-      continue;
-    }
-
-    if (
-      writing.priority?.freq &&
-      writing.priority.freq <
-        (selected.priority?.freq ?? Number.POSITIVE_INFINITY)
-    ) {
-      selected = writing;
-    }
-  }
-
-  return selected?.text;
-});
-
-const reading = computed(() => {
-  if (!props.word.readings) {
-    return null;
-  }
-
-  let selected: WordReading | null = null;
-
-  for (const reading of props.word.readings) {
-    if (!selected) {
-      selected = reading;
-      continue;
-    }
-
-    if (
-      reading.priority?.freq &&
-      reading.priority.freq <
-        (selected.priority?.freq ?? Number.POSITIVE_INFINITY)
-    ) {
-      selected = reading;
-    }
-  }
-
-  return selected?.text;
-});
-
-const furigana = computed(() => {
-  let found;
-
-  if (!reading.value || !writing.value) {
-    found = props.word.furigana?.at(0);
-  } else {
-    found = props.word.furigana?.find(
-      (other) =>
-        other.writing === writing.value && other.reading === reading.value
-    );
-  }
-
-  if (!found) {
-    found = props.word.furigana?.at(0);
-  }
-
-  return found?.furigana ?? null;
-});
-
+const furigana = useWordFurigana(() => props.word);
 const meaning = computed(() => meanings.value.at(0));
+const selectedFurigana = ref<Furigana | string | null>(null);
 
-function hideAnnotation(ruby: string) {
-  if (!props.hideReading || !props.kanji) {
-    return false;
-  }
-
-  return ruby.includes(props.kanji);
-}
 const additionalMeanings = computed(() => meanings.value.slice(1));
+
+watch(
+  () => props.word.id,
+  (newId, oldId) => {
+    if (newId !== oldId) {
+      selectedFurigana.value = null;
+    }
+  }
+);
 </script>
 
 <template>
   <div class="vocabulary-word">
-    <p v-if="furigana" class="word" lang="ja">
-      <template v-for="{ ruby, rt } of furigana">
-        <template v-if="rt">
-          <ruby
-            ><MaybeHideKanji :hide="hideKanji" :kanji="kanji" :str="ruby" /><rp>
-              (</rp
-            ><rt v-if="hideAnnotation(ruby)">◌</rt><rt v-else>{{ rt }}</rt
-            ><rp>)</rp></ruby
-          >
+    <p class="word" lang="ja">
+      <RouterLink :to="wordRoute(word.id)" class="word-link">
+        <template v-if="typeof selectedFurigana === 'string'">
+          {{ selectedFurigana }}
         </template>
-        <MaybeHideKanji v-else :hide="hideKanji" :kanji="kanji" :str="ruby" />
-      </template>
+
+        <VocabularyWordFurigana
+          v-else
+          :furigana="selectedFurigana || furigana"
+          :hide-kanji="hideKanji"
+          :hide-reading="hideReading"
+          :kanji="kanji"
+        />
+      </RouterLink>
     </p>
-    <p v-else class="word" lang="ja">{{ writing }}</p>
 
     <div class="meaning" v-show="!hideMeaning">
       <VocabularyWordMeaning v-if="meaning" :meaning="meaning" />
+
       <details
         v-if="additionalMeanings.length > 0"
         class="additional-meanings-details"
@@ -172,6 +107,15 @@ const additionalMeanings = computed(() => meanings.value.slice(1));
         </ul>
       </details>
     </div>
+
+    <div class="actions">
+      <WordWritingSelect
+        v-if="!hideKanji && !hideReading"
+        v-model="selectedFurigana"
+        :word="word"
+        :default="furigana"
+      />
+    </div>
   </div>
 </template>
 
@@ -180,14 +124,20 @@ const additionalMeanings = computed(() => meanings.value.slice(1));
   column-gap: 1em;
   display: grid;
   grid-template:
-    "word meaning"
-    / fit-content(30ch) auto;
+    "word meaning actions"
+    / minmax(0, auto) 1fr auto;
 }
 
 .word {
   font-size: 2em;
   grid-area: word;
   margin: 0;
+  max-inline-size: 9ch;
+}
+
+.word-link {
+  color: inherit;
+  text-decoration: none;
 }
 
 .meaning {
@@ -196,8 +146,9 @@ const additionalMeanings = computed(() => meanings.value.slice(1));
 }
 
 .additional-meanings-details summary {
-  color: gray;
+  color: var(--text-light);
   cursor: pointer;
+  inline-size: max-content;
 }
 
 .additional-meanings {

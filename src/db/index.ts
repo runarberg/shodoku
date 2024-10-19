@@ -55,9 +55,14 @@ export interface DB extends DBSchema {
       time: Date;
     };
   };
+
+  "bookmarked-words": {
+    key: number;
+    value: { wordId: number };
+  };
 }
 
-export const db = openDB<DB>("shodoku", 2, {
+export const db = openDB<DB>("shodoku", 3, {
   upgrade(db, oldVersion) {
     if (oldVersion < 1) {
       const decks = db.createObjectStore("decks", { keyPath: "name" });
@@ -95,6 +100,10 @@ export const db = openDB<DB>("shodoku", 2, {
       });
 
       reviewLimits.createIndex("time", "time");
+    }
+
+    if (oldVersion < 3) {
+      db.createObjectStore("bookmarked-words", { keyPath: "wordId" });
     }
   },
 });

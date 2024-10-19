@@ -22,11 +22,19 @@ export type KanjiComponent = {
 export type WordWriting = {
   text: string;
   priority?: { freq?: number };
+  irregular?: boolean;
+  rare?: boolean;
+  outdated?: boolean;
+  searchOnly?: boolean;
 };
 
 export type WordReading = {
   text: string;
   priority?: { freq?: number };
+  irregular?: boolean;
+  rare?: boolean;
+  outdated?: boolean;
+  searchOnly?: boolean;
 };
 
 export type WordMeaning = {
@@ -34,6 +42,7 @@ export type WordMeaning = {
   info?: string;
   glossary?: string[];
   useWithWriting?: string[];
+  kanaPreferred?: boolean;
 };
 
 export type Furigana = Array<{

@@ -20,12 +20,14 @@ import MainTitle from "./components/MainTitle.vue";
 
 <style scoped>
 .app {
+  align-items: start;
   display: grid;
   grid-template:
     "header . main aside"
     / auto 1em minmax(min-content, 90ch) 1fr;
   margin: 2em;
   justify-items: stretch;
+  min-block-size: calc(100vh - 4em);
 
   @media screen and (max-width: 90ch) {
     grid-template:
@@ -40,8 +42,9 @@ import MainTitle from "./components/MainTitle.vue";
     align-items: stretch;
     display: flex;
     flex-direction: column;
+    margin-block: 1ex;
     margin-inline: 1ex;
-    row-gap: 2em;
+    row-gap: 1ex;
   }
 }
 
@@ -78,7 +81,12 @@ import MainTitle from "./components/MainTitle.vue";
 }
 
 .main {
+  align-self: stretch;
   grid-area: main;
+
+  @media screen and (max-width: 75ch) {
+    min-block-size: calc(100vh - 4ex);
+  }
 }
 
 .aside {

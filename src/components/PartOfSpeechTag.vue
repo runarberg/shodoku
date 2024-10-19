@@ -48,6 +48,7 @@ defineProps<{
     <template v-else-if="tag === 'pref'"> prefix</template>
     <template v-else-if="tag === 'prt'"> particle</template>
     <template v-else-if="tag === 'suf'"> suffix</template>
+    <template v-else-if="tag === 'uk'"> Usually written with kana</template>
     <template v-else-if="tag === 'v-unspec'"> verb</template>
     <template v-else-if="tag === 'v1'"> Ichidan verb</template>
     <template v-else-if="tag === 'v1-s'">
@@ -113,7 +114,7 @@ defineProps<{
 
 <style scoped>
 .pos-tag {
-  color: gray;
+  color: var(--medium-gray);
   font-size: 0.8em;
 }
 </style>

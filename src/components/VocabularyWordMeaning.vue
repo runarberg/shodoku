@@ -12,6 +12,7 @@ defineProps<{
   <div class="vocabulary-word-meaning">
     <div class="meaning-pos">
       <PartOfSpeechTag v-for="pos of meaning.pos" :tag="pos" />
+      <PartOfSpeechTag v-if="meaning.kanaPreferred" tag="uk" />
     </div>
     <div class="glossary">
       <span v-for="word of meaning.glossary" class="glossary-word">

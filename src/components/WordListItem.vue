@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { useWord } from "../helpers/words.ts";
 
+import BookmarkWordButton from "./BookmarkWordButton.vue";
 import VocabularySentence from "./VocabularySentence.vue";
 import VocabularyWord from "./VocabularyWord.vue";
 
@@ -12,22 +13,15 @@ const props = defineProps<{
   hideMeaning?: boolean;
 }>();
 
-const wordInfo = ref(null);
-
-watch(
-  () => props.word,
-  async ({ word: id }) => {
-    const response = await fetch(`/data/words-v1/${id}.json`);
-    const data = await response.json();
-
-    wordInfo.value = data;
-  },
-  { immediate: true }
-);
+const wordInfo = useWord(() => props.word.word);
 </script>
 
 <template>
   <article class="word-list-item">
+    <aside class="bullet">
+      <BookmarkWordButton :word-id="word.word" class="bookmark-button" />
+    </aside>
+
     <VocabularyWord
       v-if="wordInfo"
       :word="wordInfo"
@@ -35,9 +29,14 @@ watch(
       :hide-kanji="hideKanji"
       :hide-reading="hideReading"
       :hide-meaning="hideMeaning"
+      class="word-section"
     />
 
-    <section v-if="word.sentences" aria-label="Sentences">
+    <section
+      v-if="word.sentences"
+      aria-label="Sentences"
+      class="sentences-section"
+    >
       <ul class="sentences">
         <li
           v-for="sentence of word.sentences"
@@ -58,14 +57,41 @@ watch(
 
 <style scoped>
 .word-list-item {
+  display: grid;
+  grid-template:
+    "bullet . word"
+    ".      . sentences"
+    / auto 0.5ex 1fr;
   margin-block-start: 2em;
+  justify-content: start;
+
+  & .bullet {
+    display: flex;
+    grid-area: bullet;
+    flex-direction: column;
+  }
+
+  & .word-section {
+    grid-area: word;
+  }
+
+  & .sentences-section {
+    grid-area: sentences;
+  }
+}
+
+.bookmark-button {
+  margin-block-start: 0.9ex;
+
+  .word-list-item:has(.word-section ruby rt) & {
+    margin-block-start: 0.9em;
+  }
 }
 
 .sentences {
-  border-inline-start: 2px solid lightgray;
+  border-inline-start: 2px solid var(--light-gray);
+  grid-area: sentences;
   list-style: none;
-  margin-block-start: 1em;
-  margin-inline: 1ex;
   padding-inline: 1ex;
 }
 

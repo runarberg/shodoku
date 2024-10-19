@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSentence } from "../helpers/sentences";
-import MaybeHideKanji from "./MaybeHideKanji.vue";
+import { wordRoute } from "../router";
+import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
 
 const props = defineProps<{
   sentenceId: number;
@@ -10,36 +11,25 @@ const props = defineProps<{
 }>();
 
 const sentence = useSentence(() => props.sentenceId);
-
-function hideAnnotation(ruby: string) {
-  return props.hideReading && ruby.includes(props.hideReading);
-}
 </script>
 
 <template>
   <div v-if="sentence">
     <p lang="ja" class="sentence">
-      <template v-for="word of sentence.words">
-        <template v-for="{ ruby, rt } of word.furigana">
-          <template v-if="rt">
-            <ruby
-              ><MaybeHideKanji
-                :hide="hideKanji != null"
-                :kanji="hideKanji"
-                :str="ruby"
-              /><rp>(</rp><rt v-if="hideAnnotation(ruby)">◌</rt
-              ><rt v-else>{{ rt }}</rt
-              ><rp>)</rp></ruby
-            >
-          </template>
-          <MaybeHideKanji
-            v-else
-            :hide="hideKanji != null"
-            :kanji="hideKanji"
-            :str="ruby"
-          />
-        </template>
-      </template>
+      <component
+        :is="word.word ? 'RouterLink' : 'span'"
+        v-for="word of sentence.words"
+        :key="word.word"
+        :to="wordRoute(word.word)"
+        class="word"
+      >
+        <VocabularyWordFurigana
+          :furigana="word.furigana"
+          :hide-kanji="hideKanji ? true : false"
+          :hide-reading="hideReading ? true : false"
+          :kanji="hideKanji ?? hideReading"
+        />
+      </component>
     </p>
 
     <p v-show="!hideMeaning" lang="en" class="translation">
@@ -52,5 +42,10 @@ function hideAnnotation(ruby: string) {
 .sentence,
 .translation {
   margin: 0;
+}
+
+.word {
+  color: inherit;
+  text-decoration: none;
 }
 </style>

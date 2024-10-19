@@ -47,5 +47,9 @@ const tag = computed(() => (props.to ? "RouterLink" : "button"));
   & :slotted(.app-icon) {
     display: block;
   }
+
+  &:disabled {
+    cursor: default;
+  }
 }
 </style>

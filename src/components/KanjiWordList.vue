@@ -1,14 +1,68 @@
 <script setup lang="ts">
-import { KanjiVocab } from "../types";
+import { computed, ref, watch } from "vue";
+import { vIntersectionObserver } from "@vueuse/components";
+
+import { KanjiVocab } from "../types.ts";
 
 import WordListItem from "./WordListItem.vue";
+import { db } from "../db";
+import { asyncComputed } from "@vueuse/core";
 
-defineProps<{
+const props = defineProps<{
   kanjiVocab: KanjiVocab;
   hideKanji?: boolean;
   hideReading?: boolean;
   hideMeaning?: boolean;
 }>();
+
+const wordListsResult = asyncComputed(async () => {
+  const { words } = props.kanjiVocab;
+  const bookmarked = [];
+  const rest = [];
+  const { store } = (await db).transaction("bookmarked-words");
+  for (const word of words) {
+    if (await store.count(word.word)) {
+      bookmarked.push(word);
+    } else {
+      rest.push(word);
+    }
+  }
+
+  return { bookmarked, rest };
+}, null);
+
+const pageLimit = ref(20);
+const wordLists = computed(() => {
+  const limit = pageLimit.value;
+
+  if (wordListsResult.value) {
+    const { bookmarked, rest } = wordListsResult.value;
+    return [bookmarked, rest.slice(0, limit)];
+  }
+
+  return [props.kanjiVocab.words.slice(0, limit)];
+});
+
+function nextPage() {
+  pageLimit.value += 20;
+}
+
+function handleNextPageIntersecting([
+  { isIntersecting },
+]: IntersectionObserverEntry[]) {
+  if (isIntersecting) {
+    nextPage();
+  }
+}
+
+watch(
+  () => props.kanjiVocab.codepoint,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      pageLimit.value = 20;
+    }
+  }
+);
 </script>
 
 <template>
@@ -16,16 +70,27 @@ defineProps<{
     <h2>Words ({{ kanjiVocab.words.length }})</h2>
 
     <ul class="kanji-word-list">
-      <li v-for="word of kanjiVocab.words" :key="word.word">
-        <WordListItem
-          :word="word"
-          :kanji="kanjiVocab.literal"
-          :hide-kanji="hideKanji"
-          :hide-reading="hideReading"
-          :hide-meaning="hideMeaning"
-        />
-      </li>
+      <template v-for="words of wordLists">
+        <li v-for="word of words" :key="word.word">
+          <WordListItem
+            :word="word"
+            :kanji="kanjiVocab.literal"
+            :hide-kanji="hideKanji"
+            :hide-reading="hideReading"
+            :hide-meaning="hideMeaning"
+          />
+        </li>
+      </template>
     </ul>
+
+    <button
+      v-if="pageLimit < kanjiVocab.words.length"
+      v-intersection-observer="handleNextPageIntersecting"
+      class="next-page-button"
+      @click="nextPage()"
+    >
+      Load More
+    </button>
   </section>
 </template>
 
@@ -33,5 +98,15 @@ defineProps<{
 .kanji-word-list {
   list-style: none;
   padding: 0;
+}
+
+.next-page-button {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: 600;
 }
 </style>

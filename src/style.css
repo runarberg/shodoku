@@ -9,6 +9,8 @@
   --accent-color: var(--pink);
   --light-gray: oklch(90% none none);
   --medium-gray: oklch(70% none none);
+  --text-color: oklch(0% none none);
+  --text-light: oklch(50% none none);
 
   --background-gradient-color: oklch(90% 0.05 180);
   --background-gradient: linear-gradient(
@@ -21,6 +23,7 @@
   --background-strong: white;
 
   accent-color: var(--accent-color);
+  color: var(--text-color);
 }
 
 body {
