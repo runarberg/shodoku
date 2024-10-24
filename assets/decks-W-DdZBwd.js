@@ -1,1 +1,0 @@
-import{d as t,u as s}from"./db-ywXYyXbd.js";import{g as n,v as o}from"./index-uL2dLKam.js";function l(a){const r=n(()=>{const e=o(a);return async()=>e?(await t).get("decks",e):null}),{result:u}=s(r);return u}function d(){return s(async()=>(await t).transaction("decks").store.index("category+priority").getAll()).result}export{l as a,d as u};
