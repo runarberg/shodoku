@@ -12,7 +12,9 @@ dist
 dist-ssr
 assets/
 assets.db
-public/data
+public/data/*
+!public/data/radicals.csv
+!public/data/kanji-lists/
 public/kanjivg
 *.local
 

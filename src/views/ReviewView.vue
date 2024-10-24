@@ -50,6 +50,10 @@ const isLoadingNextCard = computed(() => {
     return false;
   }
 
+  if (answered.value?.cardId === currentCard.value.cardId) {
+    return false;
+  }
+
   return (
     loadingProgress.value &&
     currentCard.value.cardId === lastReview.value.cardId &&

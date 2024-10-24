@@ -10,6 +10,7 @@ import { liveQueryBroadcaster } from "../helpers/channels";
 
 const props = defineProps<{
   wordId: number;
+  reading?: string | null;
 }>();
 
 const { result: isBookmarked } = useLiveQuery(
@@ -28,7 +29,11 @@ async function toggleBookmark() {
   if (isBookmarked.value) {
     (await db).delete("bookmarked-words", props.wordId);
   } else {
-    (await db).add("bookmarked-words", { wordId: props.wordId });
+    (await db).add("bookmarked-words", {
+      wordId: props.wordId,
+      reading: props.reading,
+      bookmarkedAt: new Date(),
+    });
   }
 
   liveQueryBroadcaster.postMessage("word-bookmarked");

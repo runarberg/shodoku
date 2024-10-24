@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, shallowReactive, watch } from "vue";
 
-import { useKanjiVG, useKanjiVGViewBox } from "../helpers/kanjivg";
+import {
+  useKanjiVG,
+  useKanjiVGSyncing,
+  useKanjiVGViewBox,
+} from "../helpers/kanjivg";
 import { KanjiInfo } from "../types";
 
 import AppButton from "./AppButton.vue";
@@ -10,6 +14,7 @@ import KanjiStrokesBackground from "./KanjiStrokesBackground.vue";
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";
 import KanjiStrokesPracticeCanvas from "./KanjiStrokesPracticeCanvas.vue";
 import { sleep } from "../helpers/time";
+import { until } from "@vueuse/core";
 
 const props = withDefaults(
   defineProps<{
@@ -32,6 +37,8 @@ const emit = defineEmits<{
 const svgEl = ref<SVGSVGElement | null>(null);
 const kanjiVG = useKanjiVG();
 const viewBox = useKanjiVGViewBox();
+const isKanjiVGSyncing = useKanjiVGSyncing();
+
 const strokes = computed(() => kanjiVG.value?.querySelectorAll("path") ?? []);
 
 const animations = shallowReactive<Animation[]>([]);
@@ -40,6 +47,7 @@ const animationPaused = ref(false);
 
 const practicing = ref(false);
 const practiceStrokes = shallowReactive<string[]>([]);
+const lastPracticed = ref<number | null>(null);
 
 function strokeKeyframes(stroke: SVGPathElement): Keyframe[] {
   const l = stroke.getTotalLength();
@@ -108,6 +116,8 @@ function showHint(n = practiceStrokes.length) {
     strokeAnimationOptions
   );
 
+  animation.play();
+
   animation.finished.then(() => {
     stroke.style.removeProperty("display");
   });
@@ -117,6 +127,7 @@ function pushPracticeStroke(d: string) {
   practiceStrokes.push(d);
 
   if (props.practiceMode && practiceStrokes.length === strokes.value.length) {
+    lastPracticed.value = props.kanji.codepoint;
     emit("practiceDone");
   }
 
@@ -153,21 +164,37 @@ watch(
     }
 
     if (
-      props.practiceReview &&
-      practiceStrokes.length === strokes.value.length
+      isPracticeMode !== practicing.value &&
+      !(props.practiceReview && lastPracticed.value === props.kanji.codepoint)
     ) {
-      practicing.value = true;
-    } else if (isPracticeMode !== practicing.value) {
       practicing.value = isPracticeMode;
     }
   },
   { immediate: true }
 );
 
-watch(strokes, () => {
-  // We have a new kanji. Clear the practice strokes.
-  practiceStrokes.splice(0, practiceStrokes.length);
-});
+watch(
+  () => props.autoHint,
+  (isAutoHint) => {
+    if (isAutoHint) {
+      requestAnimationFrame(async () => {
+        await until(isKanjiVGSyncing).toBe(false);
+        showHint(0);
+      });
+    }
+  },
+  { immediate: true }
+);
+
+watch(
+  () => props.kanji.codepoint,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      // We have a new kanji. Clear the practice strokes.
+      practiceStrokes.splice(0, practiceStrokes.length);
+    }
+  }
+);
 </script>
 
 <template>
@@ -203,13 +230,13 @@ watch(strokes, () => {
 
       <figcaption class="controls">
         <template v-if="animating">
-          <AppButton
+          <Appbutton
             v-if="animationPaused"
             aria-label="Play"
             @click="resumeAnimation()"
           >
             <AppIcon icon="play" />
-          </AppButton>
+          </Appbutton>
 
           <AppButton v-else aria-label="Pause" @click="pauseAnimation()">
             <AppIcon icon="pause" />
@@ -219,13 +246,16 @@ watch(strokes, () => {
         <template v-else>
           <AppButton
             v-if="practicing && practiceStrokes.length < strokes.length"
-            aria-lable="hint"
+            aria-label="Show Hint"
             @click="showHint()"
           >
             <AppIcon icon="help-circle" />
           </AppButton>
-
-          <AppButton v-else aria-label="Play Stroke Order" @click="animate()">
+          <AppButton
+            v-else
+            aria-label="Animate Stroke Order"
+            @click="animate()"
+          >
             <AppIcon icon="play" />
           </AppButton>
         </template>
@@ -262,7 +292,7 @@ watch(strokes, () => {
 
   & .svg {
     grid-area: svg;
-    max-inline-size: 25em;
+    max-inline-size: 100%;
 
     & .strokes.practicing :deep(path) {
       color: var(--light-gray);

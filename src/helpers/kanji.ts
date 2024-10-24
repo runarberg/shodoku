@@ -14,6 +14,10 @@ export function useKanji(
         return;
       }
 
+      if (value === kanji.value?.codepoint) {
+        return;
+      }
+
       const hex = value.toString(16).padStart(5, "0");
       const response = await fetch(`/data/kanji-v1/${hex}.json`);
       const data = await response.json();

@@ -62,6 +62,12 @@ export type Word = {
   }>;
 };
 
+export type BookmarkedWord = {
+  wordId: number;
+  bookmarkedAt: Date;
+  reading?: string | null;
+};
+
 export type SentenceWord = {
   word: number;
   furigana: Furigana;

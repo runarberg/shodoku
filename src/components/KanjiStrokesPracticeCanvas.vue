@@ -39,6 +39,7 @@ function handlePointerDown(event: PointerEvent) {
     return;
   }
 
+  el.value?.setPointerCapture(event.pointerId);
   points.push(toSVGCoords(event));
 }
 
@@ -47,7 +48,6 @@ function handlePointerMove(event: PointerEvent) {
     return;
   }
 
-  el.value?.setPointerCapture(event.pointerId);
   points.push(toSVGCoords(event));
 }
 
@@ -62,6 +62,8 @@ function handlePointerUp(event: PointerEvent) {
 
   el.value?.releasePointerCapture(event.pointerId);
   points.splice(0, points.length);
+
+  svg.value?.parentElement?.click();
 }
 
 function strokeKeyframes(stroke: SVGPathElement): Keyframe[] {
@@ -170,7 +172,7 @@ watch(
 <style scoped>
 /** Safari IOS issue: touch-action will not work on an SVG element */
 :global(svg:has(.canvas)) {
-  touch-action: pinch-zoom;
+  touch-action: none;
 }
 
 .canvas {

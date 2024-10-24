@@ -19,7 +19,11 @@ const wordInfo = useWord(() => props.word.word);
 <template>
   <article class="word-list-item">
     <aside class="bullet">
-      <BookmarkWordButton :word-id="word.word" class="bookmark-button" />
+      <BookmarkWordButton
+        :word-id="word.word"
+        :reading="wordInfo?.readings?.at(0)?.text"
+        class="bookmark-button"
+      />
     </aside>
 
     <VocabularyWord

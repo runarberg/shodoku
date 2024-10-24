@@ -37,14 +37,13 @@ fast.
    ```
 3. Build the data assets
    ```bash
-   mkdir public/data
-   cp assets/radicals.csv public/data/
-   cp -r assets/kanji-lists public/data/
    node scripts/build-assets-kanji.js
    node scripts/build-assets-words.js
    node scripts/build-assets-sentences.js
    node scripts/build-assets-kanji-vocab.js  ## This takes an hour
    node scripts/build-assets-words-sentences.js
+   node scripts/build-assets-kanji-index.js
+   node scripts/build-assets-word-index.js
    ```
 
 ### Run the dev server

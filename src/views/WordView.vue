@@ -55,7 +55,11 @@ watch(wordId, (newId, oldId) => {
       </h2>
 
       <div class="actions">
-        <BookmarkWordButton v-if="wordId" :wordId="wordId" />
+        <BookmarkWordButton
+          :word-id="word.id"
+          :reading="word.readings?.at(0)?.text"
+        />
+
         <WordWritingSelect
           v-model="selectedFurigana"
           :word="word"

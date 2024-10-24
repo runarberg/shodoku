@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { aboutRoute, homeRoute, decksRoute } from "../router";
+import { aboutRoute, homeRoute, decksRoute, dictionaryRoute } from "../router";
 </script>
 
 <template>
@@ -11,6 +11,12 @@ import { aboutRoute, homeRoute, decksRoute } from "../router";
 
       <li>
         <RouterLink :to="decksRoute" class="nav-item"> Decks </RouterLink>
+      </li>
+
+      <li>
+        <RouterLink :to="dictionaryRoute" class="nav-item">
+          Dictionary
+        </RouterLink>
       </li>
 
       <li>

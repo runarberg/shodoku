@@ -17,6 +17,7 @@ type KanjiVGStore = {
   strokesEl: Ref<SVGGElement | null>;
   viewBox: Ref<string | null>;
   components: ComputedRef<Map<string, KanjiComponent>>;
+  syncing: Ref<boolean>;
 };
 
 const KANJIVG_NAMESPACE = "http://kanjivg.tagaini.net";
@@ -39,6 +40,7 @@ function gatherPositions(el: SVGElement): string[] {
 export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
   const strokesEl = ref<SVGGElement | null>(null);
   const viewBox = ref<string | null>(null);
+  const syncing = ref(false);
 
   watch(
     () => toValue(hex),
@@ -47,38 +49,44 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
         return;
       }
 
-      const response = await fetch(`/kanjivg/kanji/${hexValue}.svg`);
-      const svgText = await response.text();
-      const svg = parser.parseFromString(svgText, "image/svg+xml");
+      syncing.value = true;
 
-      if (svg.documentElement instanceof SVGSVGElement) {
-        const { x, y, width, height } = svg.documentElement.viewBox.baseVal;
+      try {
+        const response = await fetch(`/kanjivg/kanji/${hexValue}.svg`);
+        const svgText = await response.text();
+        const svg = parser.parseFromString(svgText, "image/svg+xml");
 
-        viewBox.value = `${x},${y},${width},${height}`;
-      }
+        if (svg.documentElement instanceof SVGSVGElement) {
+          const { x, y, width, height } = svg.documentElement.viewBox.baseVal;
 
-      const strokes = svg.getElementById(
-        `kvg:${hexValue}`
-      ) as SVGGElement | null;
-
-      if (strokes) {
-        for (const el of [...strokes?.querySelectorAll("*"), strokes]) {
-          if (!(el instanceof SVGElement)) {
-            continue;
-          }
-
-          for (const attr of [...el.attributes]) {
-            if (attr.namespaceURI === KANJIVG_NAMESPACE) {
-              el.dataset[attr.localName] = attr.value;
-              el.removeAttributeNS(KANJIVG_NAMESPACE, attr.localName);
-            }
-          }
-
-          el.removeAttribute("xmlns:kvg");
+          viewBox.value = `${x},${y},${width},${height}`;
         }
-      }
 
-      strokesEl.value = strokes;
+        const strokes = svg.getElementById(
+          `kvg:${hexValue}`
+        ) as SVGGElement | null;
+
+        if (strokes) {
+          for (const el of [...strokes?.querySelectorAll("*"), strokes]) {
+            if (!(el instanceof SVGElement)) {
+              continue;
+            }
+
+            for (const attr of [...el.attributes]) {
+              if (attr.namespaceURI === KANJIVG_NAMESPACE) {
+                el.dataset[attr.localName] = attr.value;
+                el.removeAttributeNS(KANJIVG_NAMESPACE, attr.localName);
+              }
+            }
+
+            el.removeAttribute("xmlns:kvg");
+          }
+        }
+
+        strokesEl.value = strokes;
+      } finally {
+        syncing.value = false;
+      }
     },
     { immediate: true }
   );
@@ -144,7 +152,7 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
     return sorted;
   });
 
-  provide(KANJIVG_KEY, { strokesEl, viewBox, components });
+  provide(KANJIVG_KEY, { strokesEl, viewBox, components, syncing });
 }
 
 export function useKanjiVG(): ComputedRef<SVGGElement | null> {
@@ -169,4 +177,10 @@ export function useKanjiVGComponents(): ComputedRef<
   const store = inject(KANJIVG_KEY, null);
 
   return computed(() => store?.components.value ?? new Map());
+}
+
+export function useKanjiVGSyncing(): ComputedRef<boolean> {
+  const store = inject(KANJIVG_KEY, null);
+
+  return computed(() => store?.syncing.value ?? false);
 }

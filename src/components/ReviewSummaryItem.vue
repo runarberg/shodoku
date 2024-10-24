@@ -17,10 +17,7 @@ const isNew = computed(() => {
     return false;
   }
 
-  return (
-    firstReview.value.cardType === "kanji-write" &&
-    firstReview.value.log.state === State.New
-  );
+  return firstReview.value.log.state === State.New;
 });
 </script>
 

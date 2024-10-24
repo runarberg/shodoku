@@ -125,14 +125,22 @@ watch(
   display: grid;
   grid-template:
     "word meaning actions"
-    / minmax(0, auto) 1fr auto;
+    / fit-content(50%) 1fr auto;
+
+  @media screen and (max-width: 60ch) {
+    column-gap: 0.5ex;
+    grid-template:
+      "word actions"
+      "meaning meaning"
+      / 1fr auto;
+  }
 }
 
 .word {
   font-size: 2em;
   grid-area: word;
   margin: 0;
-  max-inline-size: 9ch;
+  max-inline-size: 75vw;
 }
 
 .word-link {
@@ -141,8 +149,11 @@ watch(
 }
 
 .meaning {
-  flex-shrink: 1;
   grid-area: meaning;
+}
+
+.actions {
+  grid-area: actions;
 }
 
 .additional-meanings-details summary {

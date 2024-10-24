@@ -15,6 +15,16 @@ const extraKanji = [
     freq: null,
     strokeCount: 3,
   },
+  {
+    codepoint: 0x4e1a,
+    meanings: ["north"],
+    kunYomi: ["きた"],
+    onYomi: ["ホク"],
+    radical: 1,
+    grade: null,
+    freq: null,
+    strokeCount: 5,
+  },
 ];
 
 const insertKanji = db.prepare(`

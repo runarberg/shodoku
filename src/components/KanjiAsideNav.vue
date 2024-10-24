@@ -67,6 +67,10 @@ const expanded = ref(true);
   cursor: pointer;
   writing-mode: vertical-lr;
 
+  &::-webkit-details-marker {
+    display: none;
+  }
+
   @media screen and (max-width: 75ch) {
     writing-mode: horizontal-tb;
   }
