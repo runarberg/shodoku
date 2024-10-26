@@ -3,6 +3,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { RecordLogItem } from "ts-fsrs";
 
+import AppLoading from "../components/AppLoading.vue";
 import KanjiReview from "../components/KanjiReview.vue";
 import ReviewRemainCount from "../components/ReviewRemainCount.vue";
 import ReviewSummary from "../components/ReviewSummary.vue";
@@ -91,7 +92,10 @@ async function handleRate(progress: CardProgress, next: RecordLogItem) {
       <ReviewRemainCount class="counts" />
     </header>
 
-    <p v-if="isLoadingNextCard">Loading next card...</p>
+    <section v-if="isLoadingNextCard" class="loading">
+      <p>Loading next card…</p>
+      <AppLoading class="loading-icon" />
+    </section>
 
     <KanjiReview
       v-else-if="currentCard"
@@ -119,6 +123,15 @@ async function handleRate(progress: CardProgress, next: RecordLogItem) {
 
   & .title {
     font-size: 1.5em;
+  }
+}
+
+.loading {
+  text-align: center;
+
+  & .loading-icon {
+    font-size: 5em;
+    color: var(--accent-color);
   }
 }
 

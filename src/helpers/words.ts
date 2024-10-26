@@ -1,6 +1,8 @@
 import { computed, MaybeRefOrGetter, ref, Ref, toValue, watch } from "vue";
 
 import { Word, WordReading, WordWriting } from "../types.ts";
+import { isKanji } from "./text";
+import { useHighKanjiReadingRetrievability } from "./fsrs";
 
 export function useWord(
   wordId: MaybeRefOrGetter<number | null>
@@ -127,6 +129,24 @@ export function useWordFurigana(
   const writing = useWordWriting(word, options);
   const reading = useWordReading(word);
 
+  const proficientKanji = useHighKanjiReadingRetrievability(() =>
+    toValue(word)
+      ?.writings?.map(({ text }) => text)
+      .join("")
+  );
+
+  const knowsRuby = computed(() => {
+    return (ruby: string): boolean => {
+      for (const char of ruby) {
+        if (isKanji(char) && !proficientKanji.has(char)) {
+          return false;
+        }
+      }
+
+      return true;
+    };
+  });
+
   return computed(() => {
     const { furigana } = toValue(word) ?? {};
 
@@ -145,6 +165,20 @@ export function useWordFurigana(
       found = furigana?.at(0);
     }
 
-    return found?.furigana ?? [{ ruby: writing.value ?? reading.value ?? "" }];
+    const result = found?.furigana ?? [
+      { ruby: writing.value ?? reading.value ?? "" },
+    ];
+
+    return result.map(({ ruby, rt }) => {
+      if (!rt) {
+        return { ruby };
+      }
+
+      if (knowsRuby.value(ruby)) {
+        return { ruby };
+      }
+
+      return { ruby, rt };
+    });
   });
 }

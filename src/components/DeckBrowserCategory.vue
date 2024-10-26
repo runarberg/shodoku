@@ -28,23 +28,30 @@ const { result: storedDeckCount } = useLiveQuery(
   })
 );
 
+const adding = ref(false);
 const added = computed(
   () => (storedDeckCount.value ?? 0) >= props.deckTemplates.length
 );
 
 async function addDeckCategory() {
+  adding.value = true;
   try {
     await browserAddCategory(props.category, props.deckTemplates);
   } catch (error) {
     console.error(error);
+  } finally {
+    adding.value = false;
   }
 }
 
 async function removeDeckCategory() {
+  adding.value = true;
   try {
     await browserRemoveCategory(props.category);
   } catch (error) {
     console.error(error);
+  } finally {
+    adding.value = false;
   }
 }
 
@@ -67,6 +74,7 @@ function fromDeckTemplate({
     <div class="controls">
       <strong :id="titleId" class="title">{{ title }}</strong>
       <DeckAddButton
+        :adding="adding"
         :added="added"
         @add="addDeckCategory"
         @remove="removeDeckCategory"
@@ -87,7 +95,8 @@ function fromDeckTemplate({
       <li v-for="deck of deckTemplates" :key="deck.name">
         <DeckBrowserItem
           :deck="fromDeckTemplate(deck)"
-          :contentPath="deck.content"
+          :content-path="deck.content"
+          :adding-category="adding"
         />
       </li>
     </ol>

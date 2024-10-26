@@ -4,6 +4,7 @@ import { computed, ref, useId } from "vue";
 import { Furigana, Word } from "../types.ts";
 
 import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
+import { zip } from "../helpers/iterators";
 
 type ModelValue = Furigana | string | null;
 
@@ -37,11 +38,25 @@ const noopReadings = computed(
       .map(({ text }) => text) ?? []
 );
 
+function furiganaEquals(aFurigana: Furigana, bFurigana: Furigana): boolean {
+  if (aFurigana.length !== bFurigana.length) {
+    return false;
+  }
+
+  for (const [a, b] of zip(aFurigana, bFurigana)) {
+    if (a.ruby !== b.ruby || a.rt !== b.rt) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 const additionalFurigana = computed(
   () =>
     props.word.furigana?.filter(
       (other) =>
-        other.furigana !== props.default &&
+        !furiganaEquals(props.default, other.furigana) &&
         !noopWritings.value.includes(other.writing) &&
         !noopReadings.value.includes(other.reading)
     ) ?? []

@@ -11,10 +11,26 @@ const props = defineProps<{
 }>();
 
 const tag = computed(() => (props.to ? "RouterLink" : "button"));
+
+// Sometimes button clicks don’t trigger in Safari. Focus the button should force it to listen.
+function handleTouchStart(event: TouchEvent) {
+  if (
+    event.target instanceof HTMLButtonElement ||
+    event.target instanceof HTMLAnchorElement
+  ) {
+    event.target.focus();
+  }
+}
 </script>
 
 <template>
-  <component :is="tag" :to="to" class="app-button" :class="{ filled }">
+  <component
+    :is="tag"
+    :to="to"
+    class="app-button"
+    :class="{ filled }"
+    @touchstart="handleTouchStart"
+  >
     <AppIcon v-if="prefixIcon" :icon="prefixIcon" class="prefix-icon" />
     <span class="content"><slot /></span>
   </component>
@@ -36,6 +52,7 @@ const tag = computed(() => (props.to ? "RouterLink" : "button"));
   line-height: 1em;
   padding: 1ex;
   text-decoration: none;
+  touch-action: manipulation;
 
   &.filled {
     background: var(--accent-color);
@@ -49,7 +66,16 @@ const tag = computed(() => (props.to ? "RouterLink" : "button"));
   }
 
   &:disabled {
+    background: var(--background-light);
+    border-color: var(--accent-color-light);
     cursor: default;
+    color: var(--accent-color-light);
+
+    &.filled {
+      background: var(--accent-color-light);
+      border-color: var(--accent-color-light);
+      color: var(--background-light);
+    }
   }
 }
 </style>

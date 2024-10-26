@@ -6,6 +6,8 @@ import { useLiveQuery } from "../helpers/db";
 import { db } from "../db";
 import { deckLabel } from "../helpers/decks";
 import { DECKS_ROUTE_NAME } from "../router";
+import { useKanjiRetrievability } from "../helpers/fsrs";
+import { formatPercent } from "../helpers/formats";
 
 const props = defineProps<{
   kanji: KanjiInfo;
@@ -52,6 +54,20 @@ const { result: decks } = useLiveQuery(
         .getAll(IDBKeyRange.only(cardId));
   })
 );
+
+const retrievability = useKanjiRetrievability(() => props.kanji.codepoint);
+
+function rGrade(p: number): "good" | "fair" | "poor" {
+  if (p > 0.9) {
+    return "good";
+  }
+
+  if (p > 0.7) {
+    return "fair";
+  }
+
+  return "poor";
+}
 </script>
 
 <template>
@@ -76,6 +92,23 @@ const { result: decks } = useLiveQuery(
           {{ deckLabel(deck) }}
         </RouterLink>
       </template>
+      <span
+        v-if="retrievability?.write"
+        class="label retrievability"
+        title="Writing Retrievability"
+        :data-r="rGrade(retrievability.write)"
+      >
+        書 {{ formatPercent(retrievability.write) }}
+      </span>
+
+      <span
+        v-if="retrievability?.read"
+        class="label retrievability"
+        title="Reading Retrievability"
+        :data-r="rGrade(retrievability.read)"
+      >
+        読 {{ formatPercent(retrievability.read) }}
+      </span>
     </aside>
 
     <ul
@@ -98,6 +131,14 @@ const { result: decks } = useLiveQuery(
     "literal meaning labels"
     "literal additional additional" 1fr
     / min-content auto 1fr;
+
+  @media screen and (max-width: 75ch) {
+    grid-template:
+      "literal labels"
+      "literal meaning"
+      "literal additional"
+      / min-content 1fr;
+  }
 }
 
 .literal {
@@ -151,6 +192,22 @@ const { result: decks } = useLiveQuery(
     background: var(--blue);
     color: var(--background-strong);
     text-decoration: none;
+  }
+
+  & .retrievability {
+    color: var(--background-strong);
+
+    &[data-r="good"] {
+      background: var(--green);
+    }
+
+    &[data-r="fair"] {
+      background: var(--gold);
+    }
+
+    &[data-r="poor"] {
+      background: var(--orange);
+    }
   }
 }
 </style>

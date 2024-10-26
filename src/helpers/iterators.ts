@@ -35,3 +35,36 @@ export async function* take<T>(
     i += 1;
   }
 }
+
+export function* zip<T extends unknown[]>(
+  ...items: { [K in keyof T]: Iterable<T[K]> }
+): Generator<T, void> {
+  const iters = items.map((item) => item[Symbol.iterator]());
+
+  try {
+    let results = iters.map((iter) => iter.next());
+
+    while (!results.some(({ done }) => done)) {
+      yield results.map(({ value }) => value) as T;
+
+      results = iters.map((iter) => iter.next());
+    }
+  } finally {
+    iters.forEach((iter) => {
+      if (typeof iter.return === "function") {
+        iter.return();
+      }
+    });
+  }
+}
+
+export async function* enumerate<T>(
+  items: AsyncIterable<T>
+): AsyncIterable<[number, T]> {
+  let i = 0;
+  for await (const item of items) {
+    yield [i, item];
+
+    i += 1;
+  }
+}

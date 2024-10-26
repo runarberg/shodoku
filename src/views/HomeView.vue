@@ -3,7 +3,9 @@ import { computed } from "vue";
 
 import AppButton from "../components/AppButton.vue";
 import ReviewSummary from "../components/ReviewSummary.vue";
-import { reviewRoute } from "../router.ts";
+import { db } from "../db/index.ts";
+import { useLiveQuery } from "../helpers/db.ts";
+import { deckBrowserRoute, reviewRoute } from "../router.ts";
 import { useRemainingCount } from "../store/cards.ts";
 
 const remainingCount = useRemainingCount();
@@ -17,11 +19,26 @@ const doneToday = computed(() => {
 
   return counts.due === 0 && counts.new === 0 && counts.learning === 0;
 });
+
+const { result: deckCount } = useLiveQuery(async () =>
+  (await db).count("decks")
+);
 </script>
 
 <template>
   <article>
-    <ReviewSummary v-if="doneToday" />
+    <!-- deckCount === null means we are still loading the count -->
+    <template v-if="deckCount === 0">
+      <p>
+        You don’t have any active decks. Click the button below to select a deck
+        and start learning new kanji.
+      </p>
+
+      <AppButton :to="deckBrowserRoute" filled>Select Decks</AppButton>
+    </template>
+
+    <ReviewSummary v-else-if="doneToday" />
+
     <template v-else>
       <p v-if="remainingCount" class="counts">
         You have

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { kanjiRoute } from "../router.ts";
+import DeckKanjiCardItem from "./DeckKanjiCardItem.vue";
 
 defineProps<{
   kanji: number[];
@@ -8,29 +8,20 @@ defineProps<{
 
 <template>
   <ol class="kanji-list">
-    <li v-for="kanji of kanji" class="kanji">
-      <RouterLink :to="kanjiRoute(String.fromCodePoint(kanji))" :key="kanji">{{
-        String.fromCodePoint(kanji)
-      }}</RouterLink>
+    <li v-for="kanji of kanji" :key="kanji" class="kanji">
+      <DeckKanjiCardItem :codepoint="kanji" />
     </li>
   </ol>
 </template>
 
 <style scoped>
 .kanji-list {
+  column-gap: 1ex;
   display: flex;
   flex-wrap: wrap;
-  column-gap: 1ex;
   list-style: none;
   margin: 0;
-}
-
-.kanji {
-  font-size: 1.2em;
-
-  & a {
-    color: inherit;
-    text-decoration: none;
-  }
+  padding-inline-start: 1em;
+  row-gap: 1em;
 }
 </style>

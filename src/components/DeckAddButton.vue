@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import AppButton from "./AppButton.vue";
 import AppIcon from "./AppIcon.vue";
+import AppLoading from "./AppLoading.vue";
 
 const props = withDefaults(
   defineProps<{
     added?: boolean;
+    adding?: boolean;
   }>(),
   {
     added: false,
+    adding: false,
   }
 );
 
@@ -30,9 +33,11 @@ function handleClick() {
     :aria-label="added ? 'Remove Deck' : 'Add Deck'"
     class="add-button"
     :filled="added"
+    :disabled="adding"
     @click="handleClick"
   >
-    <AppIcon icon="plus" />
+    <AppLoading v-if="adding" />
+    <AppIcon v-else icon="plus" />
   </AppButton>
 </template>
 

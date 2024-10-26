@@ -11,8 +11,10 @@ import DeckAddButton from "./DeckAddButton.vue";
 const props = defineProps<{
   deck: Omit<Deck, "cards">;
   contentPath: string;
+  addingCategory?: boolean;
 }>();
 
+const adding = ref(false);
 const labelId = useId();
 const kanjiList = ref<string[] | null>(null);
 
@@ -22,11 +24,26 @@ async function addDeck() {
   }
 
   const cards = kanjiList.value.map((kanji) => kanji.codePointAt(0) ?? NaN);
+  adding.value = true;
 
   try {
     await browserAddDeck({ ...props.deck, cards });
   } catch (error) {
     console.error(error);
+  } finally {
+    adding.value = false;
+  }
+}
+
+async function removeDeck() {
+  adding.value = true;
+
+  try {
+    await browserRemoveDeck(props.deck.name);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    adding.value = false;
   }
 }
 
@@ -50,9 +67,10 @@ watch(
     <div class="controls">
       <strong :id="labelId">{{ deck.label }}</strong>
       <DeckAddButton
+        :adding="adding || addingCategory"
         :added="hasAddedDeck"
         @add="addDeck"
-        @remove="browserRemoveDeck(deck.name)"
+        @remove="removeDeck"
       />
     </div>
 

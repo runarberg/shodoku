@@ -6,6 +6,8 @@ import { deckLabel } from "../helpers/decks.ts";
 import { Deck } from "../types.ts";
 
 import DeckKanjiCards from "./DeckKanjiCards.vue";
+import { useDeckStatus } from "../store/decks";
+import { formatPercent } from "../helpers/formats";
 
 const props = defineProps<{
   deck: Deck;
@@ -45,6 +47,21 @@ const toggleExpanded = computed(() => {
     query: { ...route.query, deck: deckQuery },
   };
 });
+
+const deckStatus = useDeckStatus(() => props.deck.name);
+function sumStatus(status: "new" | "due" | "review") {
+  if (!deckStatus.value) {
+    return 0;
+  }
+
+  const { "kanji-read": read, "kanji-write": write } = deckStatus.value;
+
+  return (read[status] + write[status]) / 2;
+}
+
+const newCount = computed(() => sumStatus("new"));
+const dueCount = computed(() => sumStatus("due"));
+const reviewCount = computed(() => sumStatus("review"));
 </script>
 
 <template>
@@ -56,7 +73,18 @@ const toggleExpanded = computed(() => {
     </strong>
 
     <div class="status">
-      <span class="card-count">({{ deck.cards.length }} cards)</span>
+      <span class="count total-count">{{ deck.cards.length }} cards</span>
+      <template v-if="deckStatus">
+        <span v-if="dueCount > 0" class="count due-count">
+          {{ formatPercent(dueCount / deck.cards.length) }} due
+        </span>
+        <span v-if="reviewCount > 0" class="count review-count">
+          {{ formatPercent(reviewCount / deck.cards.length) }} learning
+        </span>
+        <span v-if="newCount > 0" class="count new-count">
+          {{ formatPercent(newCount / deck.cards.length) }} remaining
+        </span>
+      </template>
     </div>
 
     <DeckKanjiCards v-if="expanded" :kanji="deck.cards" class="cards" />
@@ -68,9 +96,10 @@ const toggleExpanded = computed(() => {
   column-gap: 1em;
   display: grid;
   grid-template:
-    "label status"
-    "cards cards"
-    / auto 1fr;
+    "label"
+    "status"
+    "cards"
+    / 1fr;
   justify-content: start;
 }
 
@@ -86,10 +115,30 @@ const toggleExpanded = computed(() => {
 }
 
 .status {
+  column-gap: 1ex;
+  display: flex;
+  font-size: 0.9em;
   grid-area: status;
+}
+
+.count {
+  font-weight: 500;
+
+  &.due-count {
+    color: var(--orange);
+  }
+
+  &.review-count {
+    color: var(--blue);
+  }
+
+  &.new-count {
+    color: var(--medium-gray);
+  }
 }
 
 .cards {
   grid-area: cards;
+  margin-block: 1ex 1em;
 }
 </style>

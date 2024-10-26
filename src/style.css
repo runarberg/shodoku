@@ -7,6 +7,8 @@
   --purple: oklch(from var(--pink) l c 303);
 
   --accent-color: var(--pink);
+  --accent-color-light: oklch(from var(--accent-color) 92.5% c h);
+
   --light-gray: oklch(90% none none);
   --medium-gray: oklch(70% none none);
   --text-color: oklch(0% none none);
@@ -19,7 +21,7 @@
     oklch(from var(--background-gradient-color) l c 360) 65%,
     var(--background-gradient-color) 100%
   );
-  --background-light: oklch(from var(--accent-color) 92.5% 0.02 h);
+  --background-light: oklch(from var(--accent-color-light) l 0.02 h);
   --background-strong: white;
 
   accent-color: var(--accent-color);

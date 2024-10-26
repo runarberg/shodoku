@@ -1,8 +1,8 @@
 import { IDBPObjectStore } from "idb";
-import { createEmptyCard } from "ts-fsrs";
+import { createEmptyCard, State } from "ts-fsrs";
 
 import { liveQueryBroadcaster } from "../helpers/channels.ts";
-import { Card, Deck, DeckTemplate } from "../types.ts";
+import { Card, CardType, Deck, DeckTemplate } from "../types.ts";
 
 import { db, DB } from "./index.ts";
 
@@ -215,4 +215,62 @@ export async function browserRemoveCategory(category: string) {
   }
 
   await tx.done;
+}
+
+type DeckStatusCount = {
+  new: number;
+  due: number;
+  review: number;
+};
+
+type DeckStatus = { [Property in CardType]: DeckStatusCount };
+
+export async function getDeckStatus(name: string) {
+  const tx = (await db).transaction(["cards", "progress"]);
+  const cardsStore = tx.objectStore("cards");
+  const progressStore = tx.objectStore("progress");
+
+  const deckStatus: DeckStatus = {
+    "kanji-read": {
+      new: 0,
+      due: 0,
+      review: 0,
+    },
+
+    "kanji-write": {
+      new: 0,
+      due: 0,
+      review: 0,
+    },
+  };
+
+  const now = new Date();
+  const cards = cardsStore.index("decks").iterate(IDBKeyRange.only(name));
+
+  for await (const card of cards) {
+    for (const [type, counts] of Object.entries(deckStatus) as [
+      CardType,
+      DeckStatusCount
+    ][]) {
+      const progress = await progressStore.get([card.primaryKey, type]);
+
+      if (!progress) {
+        continue;
+      }
+
+      if (progress.fsrs.state === State.New) {
+        counts.new += 1;
+      } else if (
+        progress.fsrs.state === State.Learning ||
+        progress.fsrs.state === State.Relearning ||
+        progress.fsrs.due < now
+      ) {
+        counts.due += 1;
+      } else {
+        counts.review += 1;
+      }
+    }
+  }
+
+  return deckStatus;
 }

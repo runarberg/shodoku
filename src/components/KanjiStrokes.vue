@@ -207,7 +207,18 @@ watch(
     </h2>
 
     <figure class="strokes-figure">
-      <svg v-if="kanjiVG" ref="svgEl" :viewBox="viewBox" class="svg">
+      <svg
+        v-if="kanjiVG"
+        ref="svgEl"
+        class="svg"
+        :class="{ practicing }"
+        :viewBox="viewBox"
+        @touchstart="
+          if (practicing) {
+            $event.preventDefault();
+          }
+        "
+      >
         <KanjiStrokesBackground :viewBox="viewBox" />
 
         <KanjiStrokesGroup
@@ -230,13 +241,13 @@ watch(
 
       <figcaption class="controls">
         <template v-if="animating">
-          <Appbutton
+          <AppButton
             v-if="animationPaused"
             aria-label="Play"
             @click="resumeAnimation()"
           >
             <AppIcon icon="play" />
-          </Appbutton>
+          </AppButton>
 
           <AppButton v-else aria-label="Pause" @click="pauseAnimation()">
             <AppIcon icon="pause" />
@@ -292,7 +303,12 @@ watch(
 
   & .svg {
     grid-area: svg;
+    touch-action: manipulation;
     max-inline-size: 100%;
+
+    &.practicing {
+      touch-action: none;
+    }
 
     & .strokes.practicing :deep(path) {
       color: var(--light-gray);
