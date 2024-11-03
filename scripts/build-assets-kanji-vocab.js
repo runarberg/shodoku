@@ -17,10 +17,7 @@ const selectKanji = db.prepare(`
     (
       SELECT
         json_group_array(
-          json_object(
-            'word', word_writings.word,
-            'sentences', json(s.sentences)
-          )
+          DISTINCT word_writings.word
           ORDER BY
             (
               SELECT min(priority)
@@ -41,20 +38,6 @@ const selectKanji = db.prepare(`
       INNER JOIN word_priority
         ON word_priority.word = word_writings.word
         AND word_priority.writing = word_writings.text
-      LEFT OUTER JOIN
-        (
-          SELECT
-            word,
-            text,
-            writing,
-            json_group_array(sentence) as sentences
-          FROM sentence_words
-          WHERE good_example = 1
-          GROUP BY word
-        ) as s
-        ON
-          s.word = word_writings.word
-          AND instr(coalesce(s.text, s.writing), literal)
       WHERE
         instr(word_writings.text, kanji.literal)
         AND word_writings.ateji = 0
@@ -79,24 +62,15 @@ for (const row of selectKanji.iterate()) {
     import.meta.url
   );
 
-  const words = JSON.parse(row.words);
-  for (const word of words) {
-    if (!word.sentences) {
-      delete word.sentences;
-    }
-  }
+  const data = {
+    codepoint: row.codepoint,
+    literal: row.literal,
+    words: JSON.parse(row.words),
+  };
 
-  fs.writeFile(
-    fileURL,
-    JSON.stringify({
-      codepoint: row.codepoint,
-      literal: row.literal,
-      words,
-    })
-  );
+  fs.writeFile(fileURL, JSON.stringify(data));
 
   i += 1;
-
   if (i % 100 === 0) {
     console.log(i, fileURL.pathname);
   }

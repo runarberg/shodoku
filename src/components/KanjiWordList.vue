@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { vIntersectionObserver } from "@vueuse/components";
+import { asyncComputed } from "@vueuse/core";
 
+import { db } from "../db/index.ts";
 import { KanjiVocab } from "../types.ts";
 
 import WordListItem from "./WordListItem.vue";
-import { db } from "../db";
-import { asyncComputed } from "@vueuse/core";
 
 const props = defineProps<{
   kanjiVocab: KanjiVocab;
@@ -21,7 +21,7 @@ const wordListsResult = asyncComputed(async () => {
   const rest = [];
   const { store } = (await db).transaction("bookmarked-words");
   for (const word of words) {
-    if (await store.count(word.word)) {
+    if (await store.count(word)) {
       bookmarked.push(word);
     } else {
       rest.push(word);
@@ -71,7 +71,7 @@ watch(
 
     <ul class="kanji-word-list">
       <template v-for="words of wordLists">
-        <li v-for="word of words" :key="word.word">
+        <li v-for="word of words" :key="word">
           <WordListItem
             :word="word"
             :kanji="kanjiVocab.literal"

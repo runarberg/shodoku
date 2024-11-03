@@ -49,7 +49,7 @@ const toggleExpanded = computed(() => {
 });
 
 const deckStatus = useDeckStatus(() => props.deck.name);
-function sumStatus(status: "new" | "due" | "review") {
+function sumStatus(status: "new" | "due" | "review" | "know") {
   if (!deckStatus.value) {
     return 0;
   }
@@ -62,6 +62,7 @@ function sumStatus(status: "new" | "due" | "review") {
 const newCount = computed(() => sumStatus("new"));
 const dueCount = computed(() => sumStatus("due"));
 const reviewCount = computed(() => sumStatus("review"));
+const knowCount = computed(() => sumStatus("know"));
 </script>
 
 <template>
@@ -75,11 +76,14 @@ const reviewCount = computed(() => sumStatus("review"));
     <div class="status">
       <span class="count total-count">{{ deck.cards.length }} cards</span>
       <template v-if="deckStatus">
-        <span v-if="dueCount > 0" class="count due-count">
-          {{ formatPercent(dueCount / deck.cards.length) }} due
+        <span v-if="knowCount > 0" class="count know-count">
+          {{ formatPercent(knowCount / deck.cards.length) }} know
         </span>
         <span v-if="reviewCount > 0" class="count review-count">
-          {{ formatPercent(reviewCount / deck.cards.length) }} learning
+          {{ formatPercent(reviewCount / deck.cards.length) }} reviewed
+        </span>
+        <span v-if="dueCount > 0" class="count due-count">
+          {{ formatPercent(dueCount / deck.cards.length) }} due
         </span>
         <span v-if="newCount > 0" class="count new-count">
           {{ formatPercent(newCount / deck.cards.length) }} remaining
@@ -124,12 +128,16 @@ const reviewCount = computed(() => sumStatus("review"));
 .count {
   font-weight: 500;
 
-  &.due-count {
-    color: var(--orange);
+  &.know-count {
+    color: var(--green);
   }
 
   &.review-count {
     color: var(--blue);
+  }
+
+  &.due-count {
+    color: var(--orange);
   }
 
   &.new-count {

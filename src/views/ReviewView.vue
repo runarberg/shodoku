@@ -130,8 +130,9 @@ async function handleRate(progress: CardProgress, next: RecordLogItem) {
   text-align: center;
 
   & .loading-icon {
-    font-size: 5em;
     color: var(--accent-color);
+    font-size: 50cqmin;
+    opacity: 0.5;
   }
 }
 

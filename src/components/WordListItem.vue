@@ -1,26 +1,27 @@
 <script setup lang="ts">
-import { useWord } from "../helpers/words.ts";
+import { useWord, useWordSetenceIds } from "../helpers/words.ts";
 
 import BookmarkWordButton from "./BookmarkWordButton.vue";
 import VocabularySentence from "./VocabularySentence.vue";
 import VocabularyWord from "./VocabularyWord.vue";
 
 const props = defineProps<{
-  word: { word: number; sentences?: number[] };
+  word: number;
   kanji?: string;
   hideKanji?: boolean;
   hideReading?: boolean;
   hideMeaning?: boolean;
 }>();
 
-const wordInfo = useWord(() => props.word.word);
+const wordInfo = useWord(() => props.word);
+const sentences = useWordSetenceIds(() => props.word);
 </script>
 
 <template>
   <article class="word-list-item">
     <aside class="bullet">
       <BookmarkWordButton
-        :word-id="word.word"
+        :word-id="word"
         :reading="wordInfo?.readings?.at(0)?.text"
         class="bookmark-button"
       />
@@ -36,17 +37,9 @@ const wordInfo = useWord(() => props.word.word);
       class="word-section"
     />
 
-    <section
-      v-if="word.sentences"
-      aria-label="Sentences"
-      class="sentences-section"
-    >
+    <section v-if="sentences" aria-label="Sentences" class="sentences-section">
       <ul class="sentences">
-        <li
-          v-for="sentence of word.sentences"
-          :key="sentence"
-          class="sentence-item"
-        >
+        <li v-for="sentence of sentences" :key="sentence" class="sentence-item">
           <VocabularySentence
             :sentence-id="sentence"
             :hide-kanji="hideKanji ? kanji : null"

@@ -4,7 +4,7 @@ import { asyncComputed } from "@vueuse/core";
 import { ref } from "vue";
 
 import { db } from "../db/index.ts";
-import BookmarkedWordListItem from "./BookmarkedWordListItem.vue";
+import WordListItem from "./WordListItem.vue";
 
 const wordIds = asyncComputed(async () => {
   const result = [];
@@ -41,7 +41,7 @@ function handleNextPageIntersecting([
 
     <ul class="results-list">
       <li v-for="wordId of wordIds.slice(0, pageLimit)" :key="wordId">
-        <BookmarkedWordListItem :word-id="wordId" />
+        <WordListItem :word="wordId" />
       </li>
     </ul>
 

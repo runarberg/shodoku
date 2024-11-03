@@ -1,5 +1,5 @@
 import { IDBPObjectStore } from "idb";
-import { createEmptyCard, State } from "ts-fsrs";
+import { createEmptyCard, FSRS, generatorParameters, State } from "ts-fsrs";
 
 import { liveQueryBroadcaster } from "../helpers/channels.ts";
 import { Card, CardType, Deck, DeckTemplate } from "../types.ts";
@@ -221,11 +221,15 @@ type DeckStatusCount = {
   new: number;
   due: number;
   review: number;
+  know: number;
 };
 
 type DeckStatus = { [Property in CardType]: DeckStatusCount };
 
-export async function getDeckStatus(name: string) {
+export async function getDeckStatus(
+  name: string,
+  fsrs = new FSRS(generatorParameters())
+) {
   const tx = (await db).transaction(["cards", "progress"]);
   const cardsStore = tx.objectStore("cards");
   const progressStore = tx.objectStore("progress");
@@ -235,12 +239,14 @@ export async function getDeckStatus(name: string) {
       new: 0,
       due: 0,
       review: 0,
+      know: 0,
     },
 
     "kanji-write": {
       new: 0,
       due: 0,
       review: 0,
+      know: 0,
     },
   };
 
@@ -266,6 +272,8 @@ export async function getDeckStatus(name: string) {
         progress.fsrs.due < now
       ) {
         counts.due += 1;
+      } else if (fsrs.get_retrievability(progress.fsrs, now, false) > 0.99) {
+        counts.know += 1;
       } else {
         counts.review += 1;
       }

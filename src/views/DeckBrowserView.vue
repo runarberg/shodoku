@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppButton from "../components/AppButton.vue";
 import DeckBrowser from "../components/DeckBrowser.vue";
-import { decksRoute } from "../router";
+import { decksRoute } from "../router.ts";
 </script>
 
 <template>

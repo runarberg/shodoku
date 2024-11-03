@@ -81,7 +81,12 @@ function rGrade(p: number): "good" | "fair" | "poor" {
     </p>
 
     <aside class="labels">
-      <span v-if="freq" class="label freq">Top {{ freq }}</span>
+      <span
+        v-if="freq && !decks?.some(({ name }) => name === `news-top-${freq}`)"
+        class="label freq"
+      >
+        Top {{ freq }}
+      </span>
       <template v-if="decks">
         <RouterLink
           :to="{ name: DECKS_ROUTE_NAME, query: { deck: deck.name } }"

@@ -5,6 +5,7 @@ import { computed } from "vue";
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
 import { kanjiRoute } from "../router.ts";
+import { useFsrs } from "../helpers/fsrs";
 
 const props = defineProps<{
   codepoint: number;
@@ -22,23 +23,29 @@ const { result: progress } = useLiveQuery(async () => {
   return { read, write };
 });
 
+const fsrs = useFsrs();
+
 function getStatus(
-  fsrs: FSRSCard | undefined
-): "due" | "review" | "new" | null {
-  if (!fsrs) {
+  fsrsCard: FSRSCard | undefined
+): "know" | "review" | "due" | "new" | null {
+  if (!fsrsCard) {
     return null;
   }
 
-  if (fsrs.state === State.New) {
+  if (fsrsCard.state === State.New) {
     return "new";
   }
 
   if (
-    fsrs.state === State.Learning ||
-    fsrs.state === State.Relearning ||
-    fsrs.due < new Date()
+    fsrsCard.state === State.Learning ||
+    fsrsCard.state === State.Relearning ||
+    fsrsCard.due < new Date()
   ) {
     return "due";
+  }
+
+  if (fsrs.value.get_retrievability(fsrsCard, new Date(), false) > 0.99) {
+    return "know";
   }
 
   return "review";
@@ -74,20 +81,28 @@ const writeStatus = computed(() => getStatus(progress.value?.write?.fsrs));
   padding: 0.3ex;
   text-decoration: none;
 
-  &[data-read="due"] {
-    --read-color: var(--orange);
+  &[data-read="know"] {
+    --read-color: var(--green);
   }
 
   &[data-read="review"] {
     --read-color: var(--blue);
   }
 
-  &[data-write="due"] {
-    --write-color: var(--orange);
+  &[data-read="due"] {
+    --read-color: var(--orange);
+  }
+
+  &[data-write="know"] {
+    --write-color: var(--green);
   }
 
   &[data-write="review"] {
     --write-color: var(--blue);
+  }
+
+  &[data-write="due"] {
+    --write-color: var(--orange);
   }
 }
 </style>

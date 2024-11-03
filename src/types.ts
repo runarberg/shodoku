@@ -79,15 +79,10 @@ export type Sentence = {
   words: SentenceWord[];
 };
 
-export type KanjiVocabWord = {
-  word: number;
-  sentences?: number[];
-};
-
 export type KanjiVocab = {
   codepoint: number;
   literal: string;
-  words: KanjiVocabWord[];
+  words: number[];
 };
 
 export type Radical = {
