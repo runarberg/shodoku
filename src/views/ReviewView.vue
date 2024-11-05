@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { RecordLogItem } from "ts-fsrs";
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { RecordLogItem } from "ts-fsrs";
 
 import AppLoading from "../components/AppLoading.vue";
 import KanjiReview from "../components/KanjiReview.vue";

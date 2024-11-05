@@ -79,7 +79,7 @@ export const newsFrequencyDecks = [
   {
     name: "news-top-2500",
     label: "Top 2501",
-    priority: 75,
+    priority: 100,
     content: "/data/kanji-lists/news-top-2500.csv",
   },
 ];
