@@ -15,11 +15,16 @@ const kanjiId = computed(() => {
   return route.params.kanji.codePointAt(0) ?? null;
 });
 
-const { result: decks } = useLiveQuery(async () =>
-  (await db)
-    .transaction("decks")
-    .store.index("cards")
-    .getAll(IDBKeyRange.only(kanjiId.value))
+const { result: decks } = useLiveQuery(
+  computed(() => {
+    const id = kanjiId.value;
+
+    return async () =>
+      (await db)
+        .transaction("decks")
+        .store.index("cards")
+        .getAll(IDBKeyRange.only(id));
+  })
 );
 </script>
 

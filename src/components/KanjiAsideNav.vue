@@ -13,9 +13,27 @@ const props = defineProps<{
 }>();
 
 const index = computed(() => props.deck.cards.indexOf(props.cardId));
-const start = computed(() => Math.max(0, index.value - 5));
-const end = computed(() => Math.min(props.deck.cards.length, start.value + 10));
-const startOffset = computed(() => end.value - start.value - 9);
+const start = computed(() => Math.max(0, index.value - 4));
+const end = computed(() => Math.min(props.deck.cards.length, index.value + 5));
+
+const cards = computed(() => {
+  const cardsValue = props.deck.cards;
+  const { length } = cardsValue;
+
+  if (length <= 9) {
+    return cardsValue;
+  }
+
+  if (start.value === 0) {
+    return cardsValue.slice(0, 9);
+  }
+
+  if (end.value === length) {
+    return cardsValue.slice(length - 9);
+  }
+
+  return cardsValue.slice(start.value, end.value);
+});
 
 const expanded = ref(true);
 </script>
@@ -35,7 +53,7 @@ const expanded = ref(true);
       </summary>
 
       <ol v-if="expanded" class="kanji-deck-index">
-        <li v-for="id of deck.cards.slice(start + startOffset, end)">
+        <li v-for="id of cards">
           <RouterLink
             :to="kanjiRoute(String.fromCodePoint(id))"
             :class="{ 'kanji-link-active': id === cardId }"

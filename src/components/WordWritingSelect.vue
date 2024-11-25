@@ -226,8 +226,8 @@ function handleBeforeToggle(event: ToggleEvent) {
   }
 
   .popover {
-    inset-area: block-end span-inline-start;
     position-anchor: v-bind(anchorName);
+    position-area: block-end span-inline-start;
     position-try: flip-block, flip-inline, flip-block flip-inline;
   }
 }
