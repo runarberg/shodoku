@@ -66,7 +66,7 @@ async function handleRate(progress: CardProgress, next: RecordLogItem) {
   try {
     lastReview.value = { cardId: progress.cardId, cardType: progress.cardType };
 
-    await rateCard(progress.cardId, progress.cardType, next);
+    await rateCard(progress, next);
     liveQueryBroadcaster.postMessage("card-review");
     router.replace({ query: { kanji: undefined, "card-type": undefined } });
   } catch (error) {

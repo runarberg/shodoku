@@ -1,7 +1,7 @@
 import { useLocalStorage } from "@vueuse/core";
 
 import { db } from "../db/index.ts";
-import { liveQueryBroadcaster } from "../helpers/channels";
+import { liveQueryBroadcaster } from "../helpers/channels.ts";
 
 export const dueLimit = useLocalStorage(
   "shodoku.app.preferences.limit.due",
