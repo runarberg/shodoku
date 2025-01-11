@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import MainFooter from "./components/MainFooter.vue";
 import MainNav from "./components/MainNav.vue";
 import MainTitle from "./components/MainTitle.vue";
 </script>
@@ -15,6 +16,8 @@ import MainTitle from "./components/MainTitle.vue";
     <main class="main">
       <RouterView />
     </main>
+
+    <MainFooter class="footer" />
   </div>
 </template>
 
@@ -23,7 +26,9 @@ import MainTitle from "./components/MainTitle.vue";
   align-items: start;
   display: grid;
   grid-template:
-    "header . main aside"
+    "header . main aside" 1fr
+    "header . . aside" 1em
+    "header . footer aside"
     / auto 1em minmax(min-content, 90ch) 1fr;
   margin: 2em;
   justify-items: stretch;
@@ -33,7 +38,9 @@ import MainTitle from "./components/MainTitle.vue";
     grid-template:
       "header header"
       ". ." 2em
-      "main aside"
+      "main aside" 1fr
+      ". ." 2em
+      "footer footer"
       / 1fr auto;
     justify-items: stretch;
   }
@@ -50,7 +57,8 @@ import MainTitle from "./components/MainTitle.vue";
 
 .header,
 .aside,
-.main {
+.main,
+.footer {
   background: oklch(100% none none / 0.4);
   border-radius: 1ex;
   padding: 1em;
@@ -97,5 +105,9 @@ import MainTitle from "./components/MainTitle.vue";
   @media screen and (max-width: 75ch) {
     margin-inline-start: 0;
   }
+}
+
+.footer {
+  grid-area: footer;
 }
 </style>

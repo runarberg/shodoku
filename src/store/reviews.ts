@@ -13,6 +13,11 @@ export const newLimit = useLocalStorage(
   10
 );
 
+export const fsrsFuzzEnabled = useLocalStorage(
+  "shodoku.app.preferences.fsrs.fuzz-enabled",
+  true
+);
+
 export async function increaseReviewLimit(
   count = { new: newLimit.value, due: dueLimit.value }
 ) {

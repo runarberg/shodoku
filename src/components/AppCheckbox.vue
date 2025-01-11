@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useId } from "vue";
+
+const model = defineModel<boolean>();
+
 defineProps<{
   label?: string;
 }>();
@@ -6,21 +10,25 @@ defineProps<{
 defineOptions({
   inheritAttrs: false,
 });
+
+const id = useId();
 </script>
 
 <template>
-  <label class="app-checkbox" :class="[$attrs.class, $style.field]">
+  <div class="app-checkbox" :class="[$attrs.class, $style.field]">
     <input
+      :id="id"
+      v-model="model"
       v-bind="{ ...$attrs, class: undefined }"
       :class="$style.input"
       class="input"
       type="checkbox"
     />
 
-    <span :class="$style.label">
+    <label :for="id" :class="$style.label">
       <slot name="label">{{ label }}</slot>
-    </span>
-  </label>
+    </label>
+  </div>
 </template>
 
 <style module>
@@ -31,13 +39,13 @@ defineOptions({
 }
 
 .label {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .input {
   align-items: center;
   appearance: none;
-  background: var(--accent-light);
+  background: var(--background-light);
   block-size: 1.2em;
   border: 2px solid var(--accent-color);
   border-radius: 3px;

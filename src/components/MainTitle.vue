@@ -1,8 +1,12 @@
+<script setup lang="ts">
+import { homeRoute } from "../router";
+</script>
+
 <template>
-  <div class="main-title">
+  <RouterLink :to="homeRoute" class="main-title">
     <strong class="kanji" lang="ja">書読</strong>
     <h1 class="romaji">shodoku</h1>
-  </div>
+  </RouterLink>
 </template>
 
 <style scoped>
@@ -10,6 +14,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
 }
 
 .kanji {

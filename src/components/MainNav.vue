@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { aboutRoute, homeRoute, decksRoute, dictionaryRoute } from "../router";
+import {
+  decksRoute,
+  dictionaryRoute,
+  reviewRoute,
+  settingsRoute,
+} from "../router";
+
+import AppButton from "./AppButton.vue";
 </script>
 
 <template>
   <nav class="main-nav">
     <ul class="nav-list">
       <li>
-        <RouterLink :to="homeRoute" class="nav-item"> Home </RouterLink>
+        <AppButton :to="reviewRoute" filled> Review </AppButton>
       </li>
 
       <li>
@@ -20,7 +27,7 @@ import { aboutRoute, homeRoute, decksRoute, dictionaryRoute } from "../router";
       </li>
 
       <li>
-        <RouterLink :to="aboutRoute" class="nav-item"> About </RouterLink>
+        <RouterLink :to="settingsRoute" class="nav-item"> Settings </RouterLink>
       </li>
     </ul>
   </nav>
@@ -36,6 +43,7 @@ import { aboutRoute, homeRoute, decksRoute, dictionaryRoute } from "../router";
   row-gap: 1ex;
 
   @media screen and (max-width: 90ch) {
+    align-items: center;
     justify-content: space-evenly;
     column-gap: 1ex;
     flex-direction: row;

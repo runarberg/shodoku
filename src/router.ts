@@ -7,6 +7,7 @@ export const WORD_ROUTE_NAME = Symbol("word-route-name");
 export const DECKS_ROUTE_NAME = Symbol("decks-route-name");
 export const DECK_BROWSER_ROUTE_NAME = Symbol("deck-browser-route-name");
 export const DICTIONARY_ROUTE_NAME = Symbol("dictionary-route-name");
+export const SETTINGS_ROUTE_NAME = Symbol("settings-route-name");
 export const ABOUT_ROUTE_NAME = Symbol("about-route-name");
 
 export const homeRoute: RouteLocationRaw = { name: HOME_ROUTE_NAME };
@@ -18,6 +19,7 @@ export const deckBrowserRoute: RouteLocationRaw = {
 export const dictionaryRoute: RouteLocationRaw = {
   name: DICTIONARY_ROUTE_NAME,
 };
+export const settingsRoute: RouteLocationRaw = { name: SETTINGS_ROUTE_NAME };
 export const aboutRoute: RouteLocationRaw = { name: ABOUT_ROUTE_NAME };
 
 export function kanjiRoute(kanji: string): RouteLocationRaw {
@@ -73,6 +75,11 @@ export const router = createRouter({
       path: "/dictionary",
       name: DICTIONARY_ROUTE_NAME,
       component: () => import("./views/DictionaryView.vue"),
+    },
+    {
+      path: "/settings",
+      name: SETTINGS_ROUTE_NAME,
+      component: () => import("./views/SettingsView.vue"),
     },
     {
       path: "/about",

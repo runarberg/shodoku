@@ -154,8 +154,12 @@ import { deckBrowserRoute, reviewRoute } from "../router";
 
       <p>
         If you insist on paying for this app, consider
-        <a href="https://donate.unrwa.org" target="_blank">donating to UNWRA</a>
-        instead. They need the money far more than I.
+        <a
+          href="https://getinvolved.unrwausa.org/fundraiser/6003750"
+          target="_blank"
+          >donating to UNWRA</a
+        >
+        instead.
         <strong class="free-palestine">Free Palestine 🇵🇸</strong>.
       </p>
     </section>

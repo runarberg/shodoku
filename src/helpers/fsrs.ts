@@ -9,6 +9,7 @@ import {
   watch,
 } from "vue";
 
+import { fsrsFuzzEnabled } from "../store/reviews.ts";
 import { db } from "../db/index.ts";
 
 import { useLiveQuery } from "./db.ts";
@@ -16,7 +17,9 @@ import { isKanji } from "./text";
 
 export function useFsrs() {
   return computed(() => {
-    const params = generatorParameters();
+    const params = generatorParameters({
+      enable_fuzz: fsrsFuzzEnabled.value,
+    });
 
     return fsrs(params);
   });
