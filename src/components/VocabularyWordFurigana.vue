@@ -11,9 +11,13 @@ const props = defineProps<{
   linkKanji?: boolean;
 }>();
 
-function hideAnnotation(ruby: string) {
+function hideAnnotation(ruby: string, index: number) {
   if (!props.hideReading || !props.kanji) {
     return false;
+  }
+
+  if (ruby === "々" && props.furigana.at(index - 1)?.ruby === props.kanji) {
+    return true;
   }
 
   return ruby.includes(props.kanji);
@@ -21,7 +25,7 @@ function hideAnnotation(ruby: string) {
 </script>
 
 <template>
-  <template v-for="{ ruby, rt } of furigana">
+  <template v-for="({ ruby, rt }, i) of furigana">
     <template v-if="rt">
       <ruby
         ><MaybeHideKanji
@@ -29,7 +33,7 @@ function hideAnnotation(ruby: string) {
           :kanji="kanji"
           :str="ruby"
           :link="linkKanji"
-        /><rp>(</rp><rt v-if="hideAnnotation(ruby)">◌</rt
+        /><rp>(</rp><rt v-if="hideAnnotation(ruby, i)">◌</rt
         ><rt v-else>{{ rt }}</rt
         ><rp>)</rp></ruby
       >

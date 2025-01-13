@@ -35,18 +35,29 @@ const knowsRuby = computed(() => {
 });
 
 const furigana = computed(() => {
-  return (word: SentenceWord): Furigana =>
-    word.furigana.map(({ ruby, rt }) => {
+  return (word: SentenceWord): Furigana => {
+    let wasProficient = false;
+
+    return word.furigana.map(({ ruby, rt }) => {
+      const lastWasProficient = wasProficient;
+      wasProficient = false;
+
       if (!rt) {
         return { ruby };
       }
 
+      if (ruby === "々" && lastWasProficient) {
+        return { ruby };
+      }
+
       if (knowsRuby.value(ruby)) {
+        wasProficient = true;
         return { ruby };
       }
 
       return { ruby, rt };
     });
+  };
 });
 </script>
 

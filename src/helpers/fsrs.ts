@@ -1,4 +1,4 @@
-import { fsrs, generatorParameters } from "ts-fsrs";
+import { fsrs, generatorParameters, State } from "ts-fsrs";
 import {
   ComputedRef,
   computed,
@@ -84,6 +84,10 @@ export function useHighKanjiReadingRetrievability(
             await db
           ).get("progress", [codepoint, "kanji-read"]);
           if (result) {
+            if (result.fsrs.state !== State.Review) {
+              continue;
+            }
+
             const r = fsrs.value.get_retrievability(result.fsrs, now, false);
 
             if (r > 0.99) {

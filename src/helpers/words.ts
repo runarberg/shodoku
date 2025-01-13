@@ -169,12 +169,21 @@ export function useWordFurigana(
       { ruby: writing.value ?? reading.value ?? "" },
     ];
 
+    let wasProficient = false;
     return result.map(({ ruby, rt }) => {
+      const lastWasProficient = wasProficient;
+      wasProficient = false;
+
       if (!rt) {
         return { ruby };
       }
 
+      if (ruby === "々" && lastWasProficient) {
+        return { ruby };
+      }
+
       if (knowsRuby.value(ruby)) {
+        wasProficient = true;
         return { ruby };
       }
 
