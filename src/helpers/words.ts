@@ -76,8 +76,17 @@ function useWordWriting(
         continue;
       }
 
-      if (kanji && !writing.text.includes(kanji)) {
-        continue;
+      if (kanji) {
+        const hasKanji = writing.text.includes(kanji);
+
+        if (!hasKanji) {
+          continue;
+        }
+
+        if (!selected?.text.includes(kanji)) {
+          selected = writing;
+          continue;
+        }
       }
 
       if (

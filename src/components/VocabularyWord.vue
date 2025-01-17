@@ -54,7 +54,10 @@ const meanings = computed(() => {
   });
 });
 
-const furigana = useWordFurigana(() => props.word);
+const furigana = useWordFurigana(() => props.word, {
+  kanji: () => props.kanji,
+});
+
 const meaning = computed(() => meanings.value.at(0));
 const selectedFurigana = ref<Furigana | string | null>(null);
 
