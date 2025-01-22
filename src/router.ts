@@ -2,6 +2,7 @@ import { createWebHistory, createRouter, RouteLocationRaw } from "vue-router";
 
 export const HOME_ROUTE_NAME = Symbol("home-route-name");
 export const REVIEW_ROUTE_NAME = Symbol("review-route-name");
+export const REVIEW_SUMMARY_ROUTE_NAME = Symbol("review-summary-route-name");
 export const KANJI_ROUTE_NAME = Symbol("kanji-route-name");
 export const WORD_ROUTE_NAME = Symbol("word-route-name");
 export const DECKS_ROUTE_NAME = Symbol("decks-route-name");
@@ -12,6 +13,9 @@ export const ABOUT_ROUTE_NAME = Symbol("about-route-name");
 
 export const homeRoute: RouteLocationRaw = { name: HOME_ROUTE_NAME };
 export const reviewRoute: RouteLocationRaw = { name: REVIEW_ROUTE_NAME };
+export const reviewSummaryRoute: RouteLocationRaw = {
+  name: REVIEW_SUMMARY_ROUTE_NAME,
+};
 export const decksRoute: RouteLocationRaw = { name: DECKS_ROUTE_NAME };
 export const deckBrowserRoute: RouteLocationRaw = {
   name: DECK_BROWSER_ROUTE_NAME,
@@ -42,6 +46,11 @@ export const router = createRouter({
       path: "/review",
       name: REVIEW_ROUTE_NAME,
       component: () => import("./views/ReviewView.vue"),
+    },
+    {
+      path: "/review/summary",
+      name: REVIEW_SUMMARY_ROUTE_NAME,
+      component: () => import("./views/ReviewSummaryView.vue"),
     },
     {
       path: "/kanji/:kanji",

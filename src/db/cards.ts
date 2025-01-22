@@ -1,14 +1,11 @@
 import { RecordLogItem, State } from "ts-fsrs";
 
-import { count, first, take } from "../helpers/iterators.ts";
-import { EPOC, HOUR, midnight } from "../helpers/time.ts";
+import { EPOC, midnight } from "../helpers/time.ts";
 import { CardProgress } from "../types.ts";
 
 import { db } from "./index.ts";
-import { dueLimit, newLimit } from "../store/reviews";
-import { liveQueryChannel } from "../helpers/channels";
 
-async function* getLearningCards(dueBefore?: Date) {
+export async function* getLearningCards(dueBefore?: Date) {
   const cardIds = new Set<number>();
 
   let cursor = await (await db)
@@ -56,24 +53,17 @@ async function getReviewedToday(): Promise<Set<number>> {
   return reviewed;
 }
 
-let newDoneCountCache: number | null = null;
-async function getNewDoneCount() {
+export async function getNewDoneCount() {
   const now = new Date();
-  const counting = (await db)
+  return (await db)
     .transaction("reviews")
     .store.index("state+review")
     .count(
       IDBKeyRange.bound([State.New, midnight()], [State.New, now], true, true)
     );
-
-  counting.then((result) => {
-    newDoneCountCache = result;
-  });
-
-  return counting;
 }
 
-async function* getNewCards() {
+export async function* getNewCards() {
   const reviewed = await getReviewedToday();
 
   const tx = (await db).transaction(["cards", "progress"], "readwrite");
@@ -121,10 +111,9 @@ async function* getNewCards() {
   }
 }
 
-let dueDoneCountCache: number | null = null;
-async function getDueDoneCount() {
+export async function getDueDoneCount() {
   const now = new Date();
-  const counting = (await db)
+  return (await db)
     .transaction("reviews")
     .store.index("state+review")
     .count(
@@ -135,15 +124,9 @@ async function getDueDoneCount() {
         true
       )
     );
-
-  counting.then((result) => {
-    dueDoneCountCache = result;
-  });
-
-  return counting;
 }
 
-async function* getDueCards() {
+export async function* getDueCards() {
   const now = new Date();
   const reviewed = await getReviewedToday();
 
@@ -178,7 +161,7 @@ async function* getDueCards() {
 }
 
 type ExtraLimit = { due: number; new: number };
-async function getExtraLimits(): Promise<ExtraLimit> {
+export async function getExtraLimits(): Promise<ExtraLimit> {
   const extraLimits = await (
     await db
   ).getAllFromIndex(
@@ -196,129 +179,14 @@ async function getExtraLimits(): Promise<ExtraLimit> {
   return sum;
 }
 
-let newRemainingCountCache: number | null = null;
-async function newRemainingCount(extraLimit = 0): Promise<number> {
-  const doneCount = await getNewDoneCount();
-  const limit = Math.max(0, newLimit.value + extraLimit - doneCount);
-  const counting = count(take(limit, getNewCards()));
-
-  counting.then((result) => {
-    newRemainingCountCache = result;
-  });
-
-  return counting;
-}
-
-let dueRemainingCountCache: number | null = null;
-async function dueRemainingCount(extraLimit = 0): Promise<number> {
-  const doneCount = await getDueDoneCount();
-  const limit = Math.max(0, dueLimit.value + extraLimit - doneCount);
-  const counting = count(take(limit, getDueCards()));
-
-  counting.then((result) => {
-    dueRemainingCountCache = result;
-  });
-
-  return counting;
-}
-
-export async function nextReviewCard(): Promise<CardProgress | null> {
-  const nextDueLearningCard = await first(getLearningCards(new Date()));
-  if (nextDueLearningCard) {
-    return nextDueLearningCard.value;
-  }
-
-  const extraLimits = await getExtraLimits();
-
-  const newCount =
-    newRemainingCountCache ?? (await newRemainingCount(extraLimits.new));
-  const newDoneCount = newDoneCountCache ?? (await getNewDoneCount());
-
-  const dueCount =
-    dueRemainingCountCache ?? (await dueRemainingCount(extraLimits.due));
-  const dueDoneCount = dueDoneCountCache ?? (await getDueDoneCount());
-
-  const totalNewCount = newCount + newDoneCount;
-  const totalDueCount = dueCount + dueDoneCount;
-  const remainingCount = newCount + dueCount;
-
-  const newCardInterval = Math.ceil(
-    (totalNewCount + totalDueCount) / totalNewCount
-  );
-
-  const newCardOffset = Math.floor(newCardInterval / 2);
-
-  if (
-    newCount > 0 &&
-    (dueCount === 0 || remainingCount % newCardInterval === newCardOffset)
-  ) {
-    const nextNewCard = await first(getNewCards());
-    if (nextNewCard) {
-      return nextNewCard.value;
-    }
-  }
-
-  const nextDueCard = await first(getDueCards());
-  if (nextDueCard) {
-    return nextDueCard.value;
-  }
-
-  const nextLearningCard = await first(getLearningCards());
-  if (nextLearningCard) {
-    return nextLearningCard.value;
-  }
-
-  return null;
-}
-
-export async function remainingCount() {
-  const extraLimits = await getExtraLimits();
-
-  return {
-    new: await newRemainingCount(extraLimits.new),
-    due: await dueRemainingCount(extraLimits.due),
-    learning: await count(getLearningCards()),
-  };
-}
-
 export async function rateCard(
-  { cardId, cardType, fsrs }: CardProgress,
+  { cardId, cardType }: Omit<CardProgress, "fsrs">,
   next: RecordLogItem
 ) {
   const tx = (await db).transaction(["progress", "reviews"], "readwrite");
   const progress = tx.objectStore("progress");
   const reviews = tx.objectStore("reviews");
 
-  if (fsrs.state === State.New) {
-    if (newRemainingCountCache !== null) {
-      newRemainingCountCache -= 1;
-    }
-    if (newDoneCountCache !== null) {
-      newDoneCountCache += 1;
-    }
-  } else if (fsrs.state === State.Review) {
-    if (dueRemainingCountCache !== null) {
-      dueRemainingCountCache -= 1;
-    }
-    if (dueDoneCountCache !== null) {
-      dueDoneCountCache += 1;
-    }
-  }
-
   await progress.put({ cardId, cardType, fsrs: next.card });
   await reviews.add({ cardId, cardType, log: next.log });
 }
-
-function clearCache() {
-  dueDoneCountCache = null;
-  dueRemainingCountCache = null;
-  newDoneCountCache = null;
-  newRemainingCountCache = null;
-}
-
-globalThis.setInterval(clearCache, HOUR);
-liveQueryChannel.addEventListener("message", (event: MessageEvent<string>) => {
-  if (event.data === "review-limit-increased") {
-    clearCache();
-  }
-});

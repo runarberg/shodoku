@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@luncheon/simplify-svg-path": "^0.2.0",
+    "@runarberg/yta": "^0.1.0",
     "@vueuse/components": "^11.1.0",
     "@vueuse/core": "^11.1.0",
     "idb": "^8.0.0",

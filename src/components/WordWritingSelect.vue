@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { zip } from "@runarberg/yta/sync";
 import { computed, ref, useId } from "vue";
 
 import { Furigana, Word } from "../types.ts";
 
 import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
-import { zip } from "../helpers/iterators";
 
 type ModelValue = Furigana | string | null;
 

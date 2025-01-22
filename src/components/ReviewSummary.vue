@@ -1,40 +1,19 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { db } from "../db/index.ts";
-import { useLiveQuery } from "../helpers/db.ts";
-import { midnight } from "../helpers/time.ts";
-import { increaseReviewLimit } from "../store/reviews.ts";
-import { CardReview } from "../types.ts";
+import { useRouter } from "vue-router";
+import {
+  increaseReviewLimit,
+  useRemainingCount,
+  useReviewedCards,
+} from "../store/reviews.ts";
 
 import AppButton from "./AppButton.vue";
 import ReviewSummaryItem from "./ReviewSummaryItem.vue";
-import { REVIEW_ROUTE_NAME, reviewRoute } from "../router";
+import { reviewRoute } from "../router";
 import { State } from "ts-fsrs";
 
-const route = useRoute();
 const router = useRouter();
-
-const { result: reviewedCards } = useLiveQuery(async () => {
-  const cards = new Map<number, CardReview[]>();
-  const reviewIndex = (await db).transaction("reviews").store.index("review");
-
-  for await (const cursor of reviewIndex.iterate(
-    IDBKeyRange.lowerBound(midnight())
-  )) {
-    const review = cursor.value as CardReview;
-
-    let reviews = cards.get(review.cardId);
-    if (!reviews) {
-      reviews = [];
-      cards.set(review.cardId, reviews);
-    }
-
-    reviews.push(review);
-  }
-
-  return cards;
-});
+const reviewedCards = useReviewedCards();
 
 const newCount = computed(() => {
   if (!reviewedCards.value) {
@@ -51,12 +30,20 @@ const newCount = computed(() => {
   return sum;
 });
 
+const remainingCount = useRemainingCount();
+const doneToday = computed(() => {
+  const counts = remainingCount.value;
+
+  if (!counts) {
+    return false;
+  }
+
+  return counts.due === 0 && counts.new === 0 && counts.learning === 0;
+});
+
 function continueReview() {
   increaseReviewLimit();
-
-  if (route.name !== REVIEW_ROUTE_NAME) {
-    router.push(reviewRoute);
-  }
+  router.push(reviewRoute);
 }
 </script>
 
@@ -80,10 +67,12 @@ function continueReview() {
       </li>
     </ul>
 
-    <p>
-      Click the button below to temporarily increase your daily review limit.
-    </p>
-    <AppButton @click="continueReview()">Continue Review</AppButton>
+    <template v-if="doneToday">
+      <p>
+        Click the button below to temporarily increase your daily review limit.
+      </p>
+      <AppButton @click="continueReview()">Continue Review</AppButton>
+    </template>
   </section>
 </template>
 

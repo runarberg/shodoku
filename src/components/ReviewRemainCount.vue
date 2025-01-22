@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRemainingCount } from "../store/cards.ts";
+import { useRemainingCount } from "../store/reviews.ts";
 
 const remainingCount = useRemainingCount();
 </script>

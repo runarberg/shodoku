@@ -21,11 +21,9 @@ const props = withDefaults(
     kanji: KanjiInfo;
     autoHint?: boolean;
     practiceMode?: boolean;
-    practiceReview?: boolean;
   }>(),
   {
     autoHint: false,
-    practiceReview: false,
     practiceMode: false,
   }
 );
@@ -45,9 +43,9 @@ const animations = shallowReactive<Animation[]>([]);
 const animating = computed(() => animations.length > 0);
 const animationPaused = ref(false);
 
+const comparing = ref(false);
 const practicing = ref(false);
 const practiceStrokes = shallowReactive<string[]>([]);
-const lastPracticed = ref<number | null>(null);
 
 function strokeKeyframes(stroke: SVGPathElement): Keyframe[] {
   const l = stroke.getTotalLength();
@@ -127,7 +125,6 @@ function pushPracticeStroke(d: string) {
   practiceStrokes.push(d);
 
   if (props.practiceMode && practiceStrokes.length === strokes.value.length) {
-    lastPracticed.value = props.kanji.codepoint;
     emit("practiceDone");
   }
 
@@ -140,38 +137,45 @@ function pushPracticeStroke(d: string) {
   }
 }
 
-watch(practicing, (practiceStarted) => {
-  if (practiceStarted) {
-    // Clear any ongoing animation
-    for (const animation of animations) {
+function clearPracticeStrokes() {
+  practiceStrokes.splice(0, practiceStrokes.length);
+}
+
+function clearAnimations() {
+  for (const animation of animations) {
+    animation.cancel();
+  }
+  animations.splice(0, animations.length);
+  animationPaused.value = false;
+
+  for (const stroke of strokes.value) {
+    for (const animation of stroke.getAnimations()) {
       animation.cancel();
     }
-    animations.splice(0, animations.length);
-    animationPaused.value = false;
+  }
+}
+
+function maybeShowAnswer() {
+  if (practiceStrokes.length === 0) {
+    practicing.value = false;
+
+    return;
+  }
+
+  if (practiceStrokes.length < strokes.value.length) {
+    comparing.value = true;
+  }
+}
+
+watch(practicing, (practiceStarted) => {
+  comparing.value = false;
+
+  if (practiceStarted) {
+    clearAnimations();
   } else {
-    // Practice ended. Clear they practice strokes.
-    practiceStrokes.splice(0, practiceStrokes.length);
+    clearPracticeStrokes();
   }
 });
-
-watch(
-  () => props.practiceMode,
-  (isPracticeMode) => {
-    for (const stroke of strokes.value) {
-      for (const animation of stroke.getAnimations()) {
-        animation.cancel();
-      }
-    }
-
-    if (
-      isPracticeMode !== practicing.value &&
-      !(props.practiceReview && lastPracticed.value === props.kanji.codepoint)
-    ) {
-      practicing.value = isPracticeMode;
-    }
-  },
-  { immediate: true }
-);
 
 watch(
   () => props.autoHint,
@@ -190,11 +194,23 @@ watch(
   () => props.kanji.codepoint,
   (newValue, oldValue) => {
     if (newValue !== oldValue) {
-      // We have a new kanji. Clear the practice strokes.
-      practiceStrokes.splice(0, practiceStrokes.length);
+      // We have a new kanji.
+      clearPracticeStrokes();
+      clearAnimations();
+      comparing.value = false;
+
+      if (practicing.value !== props.practiceMode) {
+        // And maybe toggle the practice mode.
+        practicing.value = props.practiceMode;
+      }
     }
-  }
+  },
+  { immediate: true }
 );
+
+defineExpose({
+  maybeShowAnswer,
+});
 </script>
 
 <template>
@@ -225,7 +241,10 @@ watch(
           :strokes="kanjiVG"
           class="strokes"
           :class="{
-            comparing: animating || strokes.length <= practiceStrokes.length,
+            comparing:
+              animating ||
+              comparing ||
+              strokes.length <= practiceStrokes.length,
             practicing,
           }"
         />
