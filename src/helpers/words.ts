@@ -54,6 +54,7 @@ export function useWordSetenceIds(
 
 type UseWordFuriganaOptions = {
   kanji?: MaybeRefOrGetter<string | null | undefined>;
+  forceReading?: MaybeRefOrGetter<boolean>;
 };
 
 function useWordWriting(
@@ -145,7 +146,14 @@ export function useWordFurigana(
   );
 
   const knowsRuby = computed(() => {
+    const forceReading = toValue(options.forceReading);
+    const targetKanji = toValue(options.kanji);
+
     return (ruby: string): boolean => {
+      if (forceReading && targetKanji && ruby.includes(targetKanji)) {
+        return false;
+      }
+
       for (const char of ruby) {
         if (isKanji(char) && !proficientKanji.has(char)) {
           return false;

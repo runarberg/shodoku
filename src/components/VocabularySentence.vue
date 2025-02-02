@@ -24,6 +24,11 @@ const proficientKanji = useHighKanjiReadingRetrievability(
 
 const knowsRuby = computed(() => {
   return (ruby: string): boolean => {
+    if (props.hideKanji && ruby.includes(props.hideKanji)) {
+      // writing practice.
+      return false;
+    }
+
     for (const char of ruby) {
       if (isKanji(char) && !proficientKanji.has(char)) {
         return false;

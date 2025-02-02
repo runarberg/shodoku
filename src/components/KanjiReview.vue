@@ -55,6 +55,19 @@ function answer() {
     kanjiStrokesEl.value?.maybeShowAnswer();
   }
 }
+
+function handleRate(next: RecordLogItem): void {
+  if (!progress.value) {
+    return;
+  }
+
+  kanjiStrokesEl.value?.clearPracticeStrokes();
+
+  emit("rate", {
+    progress: { ...props.card, fsrs: progress.value },
+    next,
+  });
+}
 </script>
 
 <template>
@@ -82,16 +95,7 @@ function answer() {
     />
 
     <div class="advance-buttons">
-      <RateButtons
-        v-if="isRating"
-        :fsrs="progress"
-        @rate="
-          $emit('rate', {
-            progress: { ...card, fsrs: progress },
-            next: $event,
-          })
-        "
-      />
+      <RateButtons v-if="isRating" :fsrs="progress" @rate="handleRate" />
 
       <AppButton v-else @click="answer()" filled>
         Show

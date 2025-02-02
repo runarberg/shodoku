@@ -138,6 +138,7 @@ function pushPracticeStroke(d: string) {
 }
 
 function clearPracticeStrokes() {
+  comparing.value = false;
   practiceStrokes.splice(0, practiceStrokes.length);
 }
 
@@ -209,6 +210,7 @@ watch(
 );
 
 defineExpose({
+  clearPracticeStrokes,
   maybeShowAnswer,
 });
 </script>

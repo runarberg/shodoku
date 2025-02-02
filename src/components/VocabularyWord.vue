@@ -56,6 +56,8 @@ const meanings = computed(() => {
 
 const furigana = useWordFurigana(() => props.word, {
   kanji: () => props.kanji,
+  // writing practice, prevent hiding furigana for proficient reading.
+  forceReading: () => props.hideKanji,
 });
 
 const meaning = computed(() => meanings.value.at(0));
