@@ -1,4 +1,4 @@
-import{d as s,_ as i,o as t,a as d}from"./index-BciHhrDw.js";const l=`<?xml version="1.0" encoding="utf-8"?>
+import{d as s,_ as i,o as t,a as d}from"./index-chiovaS4.js";const l=`<?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
   <g data-element="日">
     <path id="s01">
