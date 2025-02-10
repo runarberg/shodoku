@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watchEffect } from "vue";
 import { useRouter } from "vue-router";
+import { State } from "ts-fsrs";
+
+import { homeRoute, reviewRoute } from "../router";
 import {
   increaseReviewLimit,
+  newLimit,
   useRemainingCount,
   useReviewedCards,
 } from "../store/reviews.ts";
 
 import AppButton from "./AppButton.vue";
 import ReviewSummaryItem from "./ReviewSummaryItem.vue";
-import { reviewRoute } from "../router";
-import { State } from "ts-fsrs";
 
 const router = useRouter();
 const reviewedCards = useReviewedCards();
@@ -45,6 +47,13 @@ function continueReview() {
   increaseReviewLimit();
   router.push(reviewRoute);
 }
+
+watchEffect(() => {
+  if (reviewedCards.value?.size === 0) {
+    // Not reviewed any cards today.
+    router.replace(homeRoute);
+  }
+});
 </script>
 
 <template>
@@ -71,7 +80,9 @@ function continueReview() {
       <p>
         Click the button below to temporarily increase your daily review limit.
       </p>
-      <AppButton @click="continueReview()">Continue Review</AppButton>
+      <AppButton @click="continueReview()">
+        Review {{ newLimit }} Extra
+      </AppButton>
     </template>
   </section>
 </template>

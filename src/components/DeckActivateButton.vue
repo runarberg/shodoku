@@ -1,47 +1,50 @@
 <script setup lang="ts">
 import AppButton from "./AppButton.vue";
-import AppIcon from "./AppIcon.vue";
 
 const props = withDefaults(
   defineProps<{
-    added?: boolean;
-    adding?: boolean;
+    isActive?: boolean;
+    toggling?: boolean;
   }>(),
   {
-    added: false,
-    adding: false,
+    isActive: false,
+    toggling: false,
   }
 );
 
 const emit = defineEmits<{
-  add: [];
-  remove: [];
+  activate: [];
+  deactivate: [];
 }>();
 
 function handleClick() {
-  if (props.added) {
-    emit("remove");
+  if (props.isActive) {
+    emit("deactivate");
   } else {
-    emit("add");
+    emit("activate");
   }
 }
 </script>
 
 <template>
   <AppButton
-    :aria-label="added ? 'Remove Deck' : 'Add Deck'"
-    class="add-button"
-    :filled="added"
-    :disabled="adding"
+    class="activate-button"
+    :filled="isActive"
+    :disabled="toggling"
+    :prefix-icon="toggling ? undefined : isActive ? 'checkmark' : 'plus'"
+    :aria-pressed="isActive"
     @click="handleClick"
   >
-    <span class="loading-icon" v-if="adding">時</span>
-    <AppIcon v-else icon="plus" />
+    <template v-if="toggling">
+      <span class="loading-icon">時</span> Loading
+    </template>
+    <template v-else-if="isActive">Active</template>
+    <template v-else>Add</template>
   </AppButton>
 </template>
 
 <style scoped>
-.add-button {
+.activate-button {
   background: none;
   border-width: 2px;
   padding: 0.5ex;

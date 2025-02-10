@@ -1,8 +1,9 @@
-import { IDBPObjectStore } from "idb";
+import { IDBPTransaction } from "idb";
 import { createEmptyCard, FSRS, generatorParameters, State } from "ts-fsrs";
 
 import { liveQueryBroadcaster } from "../helpers/channels.ts";
-import { Card, CardType, Deck, DeckTemplate } from "../types.ts";
+import { randomId } from "../helpers/random.ts";
+import { Card, CardType, Deck, DeckTemplate, Optional } from "../types.ts";
 
 import { db, DB } from "./index.ts";
 
@@ -11,40 +12,66 @@ function isNotNull<T>(thing: T | null | undefined): thing is T {
 }
 
 async function addCardToDeck(
-  cards: IDBPObjectStore<
-    DB,
-    Array<"decks" | "cards" | "progress">,
-    "cards",
-    "readwrite"
-  >,
-  progress: IDBPObjectStore<
-    DB,
-    Array<"decks" | "cards" | "progress">,
-    "progress",
-    "readwrite"
-  >,
+  tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
   id: number,
   order: number,
-  deck: Deck
+  deck: Pick<Deck, "name" | "priority">
 ) {
+  const cards = tx.objectStore("cards");
+
   const card = await cards.get(id);
+  const now = new Date();
+
   if (card) {
     if (card.decks.includes(deck.name)) {
-      return;
+      let updated = false;
+      const deckPosition = card.deckPositions.find(
+        (other) => other.deck === deck.name
+      );
+
+      if (!deckPosition) {
+        return;
+      }
+
+      if (deckPosition.priority !== deck.priority) {
+        deckPosition.priority = deck.priority;
+        updated = true;
+      }
+
+      if (deckPosition.order !== order) {
+        deckPosition.order = order;
+        updated = true;
+      }
+
+      if (!updated) {
+        return;
+      }
+    } else {
+      card.decks.push(deck.name);
+      card.deckPositions.push({
+        deck: deck.name,
+        priority: deck.priority,
+        order,
+      });
     }
 
-    card.decks.push(deck.name);
-    card.deckPositions.push({
-      deck: deck.name,
-      priority: deck.priority,
-      order,
-    });
-    if (deck.priority === card.position.priority) {
-      card.position.order = Math.min(order, card.position.order);
-    } else if (deck.priority < card.position.priority) {
-      card.position.priority = deck.priority;
-      card.position.order = order;
+    let newPriority = Number.POSITIVE_INFINITY;
+    let newOrder = Number.POSITIVE_INFINITY;
+    for (const deckPosition of card.deckPositions) {
+      if (deckPosition.priority < newPriority) {
+        newPriority = deckPosition.priority;
+        newOrder = deckPosition.order;
+      } else if (
+        deckPosition.priority === newPriority &&
+        deckPosition.order < newOrder
+      ) {
+        newOrder = deckPosition.order;
+      }
     }
+
+    card.position.priority = newPriority;
+    card.position.order = newOrder;
+    card.updatedAt = now;
 
     await cards.put(card);
   } else {
@@ -58,7 +85,10 @@ async function addCardToDeck(
         order,
       },
       deckPositions: [{ deck: deck.name, priority: deck.priority, order }],
+      createdAt: now,
     });
+
+    const progress = tx.objectStore("progress");
 
     await progress.add({
       cardId: id,
@@ -74,79 +104,39 @@ async function addCardToDeck(
   }
 }
 
-export async function browserAddDeck(deck: Deck) {
-  const tx = (await db).transaction(
-    ["cards", "decks", "progress"],
-    "readwrite"
-  );
-
-  const decks = tx.objectStore("decks");
-  await decks.add(deck);
-
-  const cards = tx.objectStore("cards");
-  const progress = tx.objectStore("progress");
-
+export async function addDeckCards(
+  tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
+  deck: Pick<Deck, "name" | "priority" | "cards">
+) {
   let order = 0;
-  for (const id of deck.cards) {
+  for (const cardId of deck.cards) {
     order += 1;
-    await addCardToDeck(cards, progress, id, order, deck);
+    await addCardToDeck(tx, cardId, order, deck);
   }
-
-  await tx.done;
-  liveQueryBroadcaster.postMessage("deck-added");
 }
 
-export async function browserAddCategory(
-  category: string,
-  deckTemplates: DeckTemplate[]
+async function updateDeckCards(
+  tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
+  previousDeck: Pick<Deck, "name" | "priority" | "cards">,
+  deck: Pick<Deck, "name" | "priority" | "cards">
 ) {
-  const storedDecks = await (
-    await db
-  ).getAllKeysFromIndex("decks", "category", category);
+  const cards = tx.objectStore("cards");
 
-  const decks = await Promise.all(
-    deckTemplates
-      .filter(({ name }) => !storedDecks.includes(name))
-      .map(async ({ name, label, priority, content }) => {
-        const response = await fetch(content);
-        const csv = await response.text();
-
-        const cards = csv
-          .split("\n")
-          .map((line) => line.codePointAt(0))
-          .filter(isNotNull);
-
-        return {
-          name,
-          label,
-          priority,
-          category,
-          cards,
-        };
-      })
-  );
-
-  const tx = (await db).transaction(
-    ["cards", "decks", "progress"],
-    "readwrite"
-  );
-
-  const decksStore = tx.objectStore("decks");
-  const cardsStore = tx.objectStore("cards");
-  const progressStore = tx.objectStore("progress");
-
-  for (const deck of decks) {
-    await decksStore.add(deck);
-
-    let order = 0;
-    for (const id of deck.cards) {
-      order += 1;
-      await addCardToDeck(cardsStore, progressStore, id, order, deck);
-    }
+  let order = 0;
+  for (const cardId of deck.cards) {
+    order += 1;
+    await addCardToDeck(tx, cardId, order, deck);
   }
 
-  await tx.done;
-  liveQueryBroadcaster.postMessage("deck-category-added");
+  for (const oldCardId of previousDeck.cards) {
+    if (!deck.cards.includes(oldCardId)) {
+      const card = await cards.get(oldCardId);
+      if (card) {
+        removeCardFromDeck(card, deck.name);
+        await cards.put(card);
+      }
+    }
+  }
 }
 
 function removeCardFromDeck(card: Card, deckName: string) {
@@ -158,52 +148,162 @@ function removeCardFromDeck(card: Card, deckName: string) {
   const positionIndex = card.deckPositions.findIndex(
     (other) => other.deck === deckName
   );
-  if (positionIndex !== -1) {
-    const [position] = card.deckPositions.splice(positionIndex, 1);
 
-    if (
-      position.priority === card.position.priority &&
-      position.order === card.position.order
-    ) {
-      // adjust the new position.
-      let priority = Number.POSITIVE_INFINITY;
-      let order = Number.POSITIVE_INFINITY;
-
-      for (const other of card.deckPositions) {
-        if (other.priority < priority) {
-          priority = other.priority;
-          order = other.order;
-        }
-      }
-
-      card.position.priority = priority;
-      card.position.order = order;
-    }
+  if (positionIndex === -1) {
+    return;
   }
+
+  const [position] = card.deckPositions.splice(positionIndex, 1);
+
+  if (
+    position.priority === card.position.priority &&
+    position.order === card.position.order
+  ) {
+    // adjust the new position.
+    let priority = Number.POSITIVE_INFINITY;
+    let order = Number.POSITIVE_INFINITY;
+
+    for (const other of card.deckPositions) {
+      if (other.priority < priority) {
+        priority = other.priority;
+        order = other.order;
+      }
+    }
+
+    card.position.priority = priority;
+    card.position.order = order;
+  }
+
+  card.updatedAt = new Date();
 }
 
-export async function browserRemoveDeck(name: string) {
-  const tx = (await db).transaction(["cards", "decks"], "readwrite");
-  const decks = tx.objectStore("decks");
-  const cards = tx.objectStore("cards");
-
-  await decks.delete(name);
-
-  const cardsInDeck = cards.index("decks").iterate(IDBKeyRange.only(name));
+async function removeDeckCards(
+  tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
+  deckName: string
+) {
+  const cardsInDeck = tx
+    .objectStore("cards")
+    .index("decks")
+    .iterate(IDBKeyRange.only(deckName));
 
   for await (const cursor of cardsInDeck) {
     const card = cursor.value;
 
-    removeCardFromDeck(cursor.value, name);
+    removeCardFromDeck(cursor.value, deckName);
 
-    cursor.update(card);
+    await cursor.update(card);
+  }
+}
+
+export async function activateDeck(
+  deckName: string,
+  tx?: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">
+): Promise<Deck> {
+  let newTransaction = false;
+  if (!tx) {
+    newTransaction = true;
+    tx = (await db).transaction(["cards", "decks", "progress"], "readwrite");
+  }
+
+  const decks = tx.objectStore("decks");
+  const deck = await decks.get(deckName);
+
+  if (!deck) {
+    throw new Error("Deck does not exist");
+  }
+
+  if (deck.active) {
+    return deck;
+  }
+
+  await decks.put({
+    ...deck,
+    active: true,
+    updatedAt: new Date(),
+  });
+
+  await addDeckCards(tx, deck);
+
+  if (newTransaction) {
+    await tx.done;
+    liveQueryBroadcaster.postMessage("deck-added");
+  }
+
+  return deck;
+}
+
+export async function activateDeckCategory(
+  category: string,
+  deckTemplates: DeckTemplate[]
+) {
+  const now = new Date();
+  const decks: Array<Omit<Deck, "createdAt"> | string> = await Promise.all(
+    deckTemplates.map(async ({ name, label, priority, content }) => {
+      const isStored = await (await db).getKey("decks", name);
+
+      if (isStored) {
+        return name;
+      }
+
+      const response = await fetch(content);
+      const csv = await response.text();
+
+      const cards = csv
+        .split("\n")
+        .map((line) => line.codePointAt(0))
+        .filter(isNotNull);
+
+      return {
+        name,
+        label,
+        priority,
+        category,
+        cards,
+        active: true,
+      };
+    })
+  );
+
+  const tx = (await db).transaction(
+    ["cards", "decks", "progress"],
+    "readwrite"
+  );
+
+  const decksStore = tx.objectStore("decks");
+
+  for (const deckOrName of decks) {
+    let deck: Deck;
+    if (typeof deckOrName === "string") {
+      deck = await activateDeck(deckOrName, tx);
+    } else {
+      deck = { ...deckOrName, createdAt: now };
+      await decksStore.add(deck);
+    }
+
+    await addDeckCards(tx, deck);
   }
 
   await tx.done;
+  liveQueryBroadcaster.postMessage("deck-category-added");
+}
+
+export async function deactivateDeck(deckName: string) {
+  const tx = (await db).transaction(["cards", "decks"], "readwrite");
+  const decks = tx.objectStore("decks");
+
+  const deck = await decks.get(deckName);
+  if (!deck || !deck.active) {
+    return;
+  }
+
+  await decks.put({ ...deck, active: false, updatedAt: new Date() });
+  await removeDeckCards(tx, deckName);
+  await tx.done;
+
   liveQueryBroadcaster.postMessage("deck-removed");
 }
 
-export async function browserRemoveCategory(category: string) {
+export async function deactivateDeckCategory(category: string) {
   const tx = (await db).transaction(["cards", "decks"], "readwrite");
   const decks = await tx
     .objectStore("decks")
@@ -211,7 +311,7 @@ export async function browserRemoveCategory(category: string) {
     .getAllKeys(category);
 
   for (const deck of decks) {
-    await browserRemoveDeck(deck);
+    await deactivateDeck(deck);
   }
 
   await tx.done;
@@ -281,4 +381,70 @@ export async function getDeckStatus(
   }
 
   return deckStatus;
+}
+
+export async function createDeck({
+  name = `custom/${randomId()}`,
+  active = true,
+  createdAt = new Date(),
+  ...deckTemplate
+}: Optional<Deck, "name" | "active" | "createdAt">): Promise<Deck> {
+  const deck: Deck = {
+    ...deckTemplate,
+    name,
+    active,
+    createdAt,
+  };
+
+  const tx = (await db).transaction(
+    ["decks", "cards", "progress"],
+    "readwrite"
+  );
+
+  await tx.objectStore("decks").add(deck);
+  await addDeckCards(tx, deck);
+  await tx.done;
+
+  liveQueryBroadcaster.postMessage("deck-created");
+
+  return deck;
+}
+
+export async function editDeck(deck: Deck): Promise<void> {
+  const tx = (await db).transaction(
+    ["decks", "cards", "progress"],
+    "readwrite"
+  );
+
+  const decks = tx.objectStore("decks");
+  const previousDeck = await decks.get(deck.name);
+
+  if (previousDeck) {
+    await decks.put({ ...deck, updatedAt: new Date() });
+  } else {
+    await decks.add(deck);
+  }
+
+  if (previousDeck?.active) {
+    if (deck.active) {
+      await updateDeckCards(tx, previousDeck, deck);
+    } else {
+      await removeDeckCards(tx, deck.name);
+    }
+  } else if (deck.active) {
+    await addDeckCards(tx, deck);
+  }
+
+  await tx.done;
+  liveQueryBroadcaster.postMessage("custom-deck-edited");
+}
+
+export async function removeDeck(name: string): Promise<void> {
+  const tx = (await db).transaction(["decks", "cards"], "readwrite");
+
+  await tx.objectStore("decks").delete(name);
+  await removeDeckCards(tx, name);
+  await tx.done;
+
+  liveQueryBroadcaster.postMessage("custom-deck-removed");
 }

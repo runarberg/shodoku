@@ -29,7 +29,7 @@
 }
 
 body {
-  background: var(--background-gradient);
+  background-image: var(--background-gradient);
   background-attachment: fixed;
   font-family: system-ui, sans-serif;
   font-size: 16px;

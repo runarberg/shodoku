@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { zip } from "@runarberg/yta/sync";
 import { computed, ref, useId } from "vue";
+import { zip } from "yta/sync";
 
 import { Furigana, Word } from "../types.ts";
 

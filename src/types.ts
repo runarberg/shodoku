@@ -1,5 +1,8 @@
 import { type Card as FSRSCard, ReviewLog } from "ts-fsrs";
 
+export type Optional<T, Keys extends keyof T> = Omit<T, Keys> &
+  Partial<Pick<T, Keys>>;
+
 export type KanjiInfo = {
   codepoint: number;
   literal: string;
@@ -107,6 +110,9 @@ export type Deck = {
   category: string;
   priority: number;
   cards: number[];
+  active: boolean;
+  createdAt: Date;
+  updatedAt?: Date;
 };
 
 export type CardType = "kanji-read" | "kanji-write";
@@ -121,6 +127,8 @@ export type Card = {
   types: CardType[];
   position: { priority: number; order: number };
   deckPositions: Array<{ deck: string; priority: number; order: number }>;
+  createdAt: Date;
+  updatedAt?: Date;
 };
 
 export type CardProgress = {

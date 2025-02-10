@@ -20,9 +20,14 @@ export function useDeck(
 }
 
 export function useDecks(): ComputedRef<Deck[] | null> {
-  return useLiveQuery(async () =>
-    (await db).transaction("decks").store.index("category+priority").getAll()
-  ).result;
+  return useLiveQuery(async () => {
+    const decks = await (await db)
+      .transaction("decks")
+      .store.index("category+priority")
+      .getAll();
+
+    return decks.filter(({ active }) => active);
+  }).result;
 }
 
 export function useDeckStatus(name: MaybeRefOrGetter<string>) {

@@ -18,6 +18,7 @@ export interface DB extends DBSchema {
       category: string;
       "category+priority": [string, number];
       cards: number[];
+      createdAt: Date;
     };
   };
 
@@ -27,6 +28,7 @@ export interface DB extends DBSchema {
     indexes: {
       decks: string[];
       position: [number, number];
+      createdAt: Date;
     };
   };
 
@@ -73,7 +75,7 @@ export interface DB extends DBSchema {
   };
 }
 
-export const db = openDB<DB>("shodoku", 4, {
+export const db = openDB<DB>("shodoku", 5, {
   async upgrade(db, oldVersion, _newVersion, tx) {
     if (oldVersion < 1) {
       const decks = db.createObjectStore("decks", { keyPath: "name" });
@@ -131,6 +133,33 @@ export const db = openDB<DB>("shodoku", 4, {
             wordId,
             bookmarkedAt: new Date(),
           });
+        }
+      }
+    }
+
+    if (oldVersion < 5) {
+      const decks = tx.objectStore("decks");
+      decks.createIndex("createdAt", "createdAt");
+
+      const cards = tx.objectStore("cards");
+      cards.createIndex("createdAt", "createdAt");
+
+      if (oldVersion >= 4) {
+        const now = new Date();
+
+        for await (const cursor of decks.iterate()) {
+          const deck = cursor.value;
+          deck.active = true;
+          deck.createdAt = now;
+
+          await cursor.update(deck);
+        }
+
+        for await (const cursor of cards.iterate()) {
+          const card = cursor.value;
+          card.createdAt = now;
+
+          await cursor.update(card);
         }
       }
     }

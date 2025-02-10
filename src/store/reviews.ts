@@ -1,9 +1,9 @@
-import { pipe } from "@runarberg/yta";
-import { filter, map, take, toArray, uniqueOn } from "@runarberg/yta/async";
 import { useLocalStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { RecordLogItem, State } from "ts-fsrs";
 import { computed, ref, watch } from "vue";
+import { pipe } from "yta";
+import { filter, map, take, toArray, uniqueOn } from "yta/async";
 
 import { db } from "../db/index.ts";
 import {

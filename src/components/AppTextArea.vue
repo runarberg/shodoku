@@ -2,30 +2,23 @@
 import { useId } from "vue";
 import AppFormField from "./AppFormField.vue";
 
-const model = defineModel<number>();
+const model = defineModel<string>();
 
 defineProps<{
   label?: string;
-  inline?: boolean;
 }>();
 
 const id = useId();
 </script>
 
 <template>
-  <AppFormField :control="id" :label="label" :inline="inline">
-    <input
-      :id="id"
-      v-model.number="model"
-      v-bind="$attrs"
-      type="number"
-      class="input"
-    />
+  <AppFormField :control="id" :label="label">
+    <textarea :id="id" v-model="model" v-bind="$attrs" class="textarea" />
   </AppFormField>
 </template>
 
 <style scoped>
-.input {
+.textarea {
   font-family: inherit;
   font-size: 0.9em;
 }

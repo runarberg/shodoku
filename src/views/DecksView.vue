@@ -10,9 +10,9 @@ import { deckBrowserRoute } from "../router";
       <h2 class="title">Your Decks</h2>
 
       <div class="actions">
-        <AppButton :to="deckBrowserRoute" prefix-icon="plus">
-          Add another deck
-        </AppButton>
+        <AppButton :to="deckBrowserRoute" prefix-icon="draw"
+          >Manage Decks</AppButton
+        >
       </div>
     </header>
 

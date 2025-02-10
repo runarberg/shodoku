@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useId } from "vue";
+
 import AppFormField from "./AppFormField.vue";
 
-const model = defineModel<number>();
+const model = defineModel<string>();
 
 defineProps<{
   label?: string;
@@ -14,13 +15,7 @@ const id = useId();
 
 <template>
   <AppFormField :control="id" :label="label" :inline="inline">
-    <input
-      :id="id"
-      v-model.number="model"
-      v-bind="$attrs"
-      type="number"
-      class="input"
-    />
+    <input :id="id" v-model="model" v-bind="$attrs" class="input" />
   </AppFormField>
 </template>
 

@@ -7,6 +7,7 @@ import {
 } from "../helpers/decks";
 
 import DeckBrowserCategory from "./DeckBrowserCategory.vue";
+import DeckBrowserCustom from "./DeckBrowserCustom.vue";
 </script>
 
 <template>
@@ -41,6 +42,10 @@ import DeckBrowserCategory from "./DeckBrowserCategory.vue";
         category="basic-kanji"
         :deck-templates="basicKanjiDecks"
       />
+    </li>
+
+    <li>
+      <DeckBrowserCustom />
     </li>
   </ul>
 </template>

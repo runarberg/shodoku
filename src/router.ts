@@ -92,7 +92,7 @@ export const router = createRouter({
           component: () => import("./views/DecksView.vue"),
         },
         {
-          path: "add",
+          path: "manage",
           name: DECK_BROWSER_ROUTE_NAME,
           component: () => import("./views/DeckBrowserView.vue"),
         },

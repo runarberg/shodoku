@@ -6,7 +6,7 @@ import { computed, ref } from "vue";
 import { db } from "../db/index.ts";
 import { useKanji, useKanjiVocab } from "../helpers/kanji.ts";
 import { provideKanjiVG } from "../helpers/kanjivg.ts";
-import { CardProgress } from "../types.ts";
+import { CardProgress, Optional } from "../types.ts";
 
 import AppButton from "./AppButton.vue";
 import KanjiComponents from "./KanjiComponents.vue";
@@ -15,8 +15,6 @@ import KanjiStrokes from "./KanjiStrokes.vue";
 import KanjiTitle from "./KanjiTitle.vue";
 import KanjiWordList from "./KanjiWordList.vue";
 import RateButtons from "./RateButtons.vue";
-
-type Optional<T, Keys extends keyof T> = Omit<T, Keys> & Partial<Pick<T, Keys>>;
 
 const props = defineProps<{
   card: Optional<CardProgress, "fsrs">;

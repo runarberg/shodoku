@@ -1,58 +1,92 @@
 <script setup lang="ts">
 import { computed, ref, useId, watch } from "vue";
 
-import { browserAddDeck, browserRemoveDeck } from "../db/decks.ts";
+import {
+  activateDeck,
+  createDeck,
+  deactivateDeck,
+  removeDeck,
+} from "../db/decks.ts";
 import { kanjiRoute } from "../router.ts";
-import { useDeck } from "../store/decks.ts";
-import { Deck } from "../types.ts";
+import { Deck, DeckTemplate } from "../types.ts";
 
-import DeckAddButton from "./DeckAddButton.vue";
+import AppButton from "./AppButton.vue";
+import CustomDeckEdit from "./CustomDeckEdit.vue";
+import DeckActivateButton from "./DeckActivateButton.vue";
 
-const props = defineProps<{
-  deck: Omit<Deck, "cards">;
-  contentPath: string;
-  addingCategory?: boolean;
-}>();
+type Props = (
+  | {
+      deck: Deck;
+      template?: null;
+      category?: null;
+    }
+  | {
+      deck?: null;
+      template: DeckTemplate;
+      category: string;
+    }
+) & {
+  togglingCategory?: boolean;
+};
 
-const adding = ref(false);
+const props = withDefaults(defineProps<Props>(), {
+  togglingCategory: false,
+});
+
+const toggling = ref(false);
+const editing = ref(false);
 const labelId = useId();
 const kanjiList = ref<string[] | null>(null);
 
-async function addDeck() {
-  if (!kanjiList.value) {
+const isActive = computed(() => props.deck?.active);
+
+async function activate() {
+  toggling.value = true;
+
+  try {
+    if (props.deck) {
+      await activateDeck(props.deck.name);
+    } else {
+      await createDeck({
+        name: props.template.name,
+        label: props.template.label,
+        priority: props.template.priority,
+        category: props.category,
+        cards:
+          kanjiList.value?.map((kanji) => kanji.codePointAt(0) ?? NaN) ?? [],
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    toggling.value = false;
+  }
+}
+
+async function deactivate() {
+  if (!props.deck) {
     return;
   }
 
-  const cards = kanjiList.value.map((kanji) => kanji.codePointAt(0) ?? NaN);
-  adding.value = true;
+  toggling.value = true;
 
   try {
-    await browserAddDeck({ ...props.deck, cards });
+    await deactivateDeck(props.deck.name);
   } catch (error) {
     console.error(error);
   } finally {
-    adding.value = false;
+    toggling.value = false;
   }
 }
-
-async function removeDeck() {
-  adding.value = true;
-
-  try {
-    await browserRemoveDeck(props.deck.name);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    adding.value = false;
-  }
-}
-
-const storedDeck = useDeck(() => props.deck.name);
-const hasAddedDeck = computed(() => storedDeck.value != null);
 
 watch(
-  () => props.contentPath,
+  () => props.template?.content,
   async (path) => {
+    if (!path) {
+      kanjiList.value = null;
+      return;
+    }
+
     const response = await fetch(path);
     const text = await response.text();
 
@@ -63,21 +97,53 @@ watch(
 </script>
 
 <template>
-  <article :aria-labelledby="labelId">
+  <CustomDeckEdit
+    v-if="editing && deck"
+    :deck="deck"
+    @cancel="editing = false"
+    @success="editing = false"
+  />
+
+  <article v-else :aria-labelledby="labelId">
     <div class="controls">
-      <strong :id="labelId">{{ deck.label }}</strong>
-      <DeckAddButton
-        :adding="adding || addingCategory"
-        :added="hasAddedDeck"
-        @add="addDeck"
-        @remove="removeDeck"
+      <strong :id="labelId">{{ deck?.label ?? template?.label }}</strong>
+      <DeckActivateButton
+        :toggling="toggling || togglingCategory"
+        :is-active="isActive"
+        @activate="activate"
+        @deactivate="deactivate"
       />
+
+      <AppButton
+        v-if="deck?.active || deck?.category === 'custom'"
+        class="edit-button"
+        @click="editing = true"
+      >
+        Edit
+      </AppButton>
+
+      <AppButton
+        v-if="deck?.category === 'custom'"
+        class="delete-button"
+        @click="removeDeck(deck.name)"
+      >
+        Delete
+      </AppButton>
     </div>
 
     <ol class="kanji-list">
-      <li v-for="kanji of kanjiList" :key="kanji" class="kanji">
-        <RouterLink :to="kanjiRoute(kanji)">{{ kanji }}</RouterLink>
-      </li>
+      <template v-if="deck">
+        <li v-for="codePoint of deck.cards" :key="codePoint" class="kanji">
+          <RouterLink :to="kanjiRoute(String.fromCodePoint(codePoint))">
+            {{ String.fromCodePoint(codePoint) }}
+          </RouterLink>
+        </li>
+      </template>
+      <template v-else-if="kanjiList">
+        <li v-for="kanji of kanjiList" :key="kanji" class="kanji">
+          <RouterLink :to="kanjiRoute(kanji)">{{ kanji }}</RouterLink>
+        </li>
+      </template>
     </ol>
   </article>
 </template>
@@ -87,6 +153,14 @@ watch(
   align-items: center;
   column-gap: 1ex;
   display: flex;
+
+  & .edit-button,
+  & .delete-button {
+    background: none;
+    border: none;
+    font-size: 0.8em;
+    padding: 0.2ex;
+  }
 }
 
 .kanji-list {

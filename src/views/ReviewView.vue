@@ -7,7 +7,7 @@ import AppLoading from "../components/AppLoading.vue";
 import KanjiReview from "../components/KanjiReview.vue";
 import ReviewRemainCount from "../components/ReviewRemainCount.vue";
 import useReviewsStore from "../store/reviews";
-import { CardProgress, isCardType } from "../types.ts";
+import { CardProgress, isCardType, Optional } from "../types.ts";
 import { reviewSummaryRoute } from "../router";
 
 const el = ref<HTMLElement | null>(null);
@@ -15,8 +15,6 @@ const route = useRoute();
 const router = useRouter();
 
 const reviewsStore = useReviewsStore();
-
-type Optional<T, Keys extends keyof T> = Omit<T, Keys> & Partial<Pick<T, Keys>>;
 
 const currentCard = computed<Optional<CardProgress, "fsrs"> | null>(() => {
   const { kanji, "card-type": cardType } = route.query;

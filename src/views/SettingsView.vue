@@ -7,8 +7,8 @@ import { dueLimit, fsrsFuzzEnabled, newLimit } from "../store/reviews.ts";
 <template>
   <article class="settings-view">
     <div class="form-body">
-      <AppNumberInput v-model="dueLimit" label="Daily review limit" />
-      <AppNumberInput v-model="newLimit" label="Daily new limit" />
+      <AppNumberInput v-model="dueLimit" label="Daily review limit" inline />
+      <AppNumberInput v-model="newLimit" label="Daily new limit" inline />
       <AppCheckbox v-model="fsrsFuzzEnabled" label="Fuzz review times" />
     </div>
   </article>
@@ -19,5 +19,9 @@ import { dueLimit, fsrsFuzzEnabled, newLimit } from "../store/reviews.ts";
   display: flex;
   flex-direction: column;
   row-gap: 1ex;
+
+  & :deep(input[type="number"]) {
+    inline-size: 6ch;
+  }
 }
 </style>

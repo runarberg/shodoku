@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRouter } from "vue-router";
+import { pipe } from "yta";
+import { count, filter, map } from "yta/async";
 
 import AppButton from "../components/AppButton.vue";
+import AppLoading from "../components/AppLoading.vue";
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
 import {
@@ -12,10 +15,10 @@ import {
 } from "../router.ts";
 import {
   increaseReviewLimit,
+  newLimit,
   useRemainingCount,
   useReviewedCards,
 } from "../store/reviews.ts";
-import AppLoading from "../components/AppLoading.vue";
 
 const router = useRouter();
 const remainingCount = useRemainingCount();
@@ -31,7 +34,12 @@ const doneToday = computed(() => {
 });
 
 const { result: deckCount } = useLiveQuery(async () =>
-  (await db).count("decks")
+  pipe(
+    (await db).transaction("decks").store.iterate(),
+    map((cursor) => cursor.value),
+    filter((deck) => deck.active),
+    count()
+  )
 );
 
 const reviewedCards = useReviewedCards();
@@ -62,8 +70,8 @@ function continueReview() {
 
     <template v-else>
       <p v-if="doneToday">
-        Finished all reviews today. Click <em>“Continue Review”</em> below to
-        temporarily increase your daily review limit.
+        Finished all reviews today. Click the buttons below to see summary or
+        review extra.
       </p>
       <p v-else-if="remainingCount" class="counts">
         You have
@@ -82,7 +90,7 @@ function continueReview() {
           Today’s Summary
         </AppButton>
         <AppButton v-if="doneToday" @click="continueReview">
-          Continue Review
+          Review {{ newLimit }} Extra
         </AppButton>
       </nav>
     </template>

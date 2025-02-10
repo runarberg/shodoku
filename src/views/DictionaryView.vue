@@ -33,7 +33,7 @@ const searchPhrase = computed<string>({
       v-model="searchPhrase"
       type="search"
       aria-label="search"
-      placeholder="Search for new words, kanji, meanings, etc."
+      placeholder="Search for words, kanji, meanings, etc."
     />
   </label>
 
