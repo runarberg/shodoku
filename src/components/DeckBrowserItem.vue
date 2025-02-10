@@ -121,6 +121,13 @@ watch(
       >
         Edit
       </AppButton>
+      <AppButton
+        v-else-if="deck && !deck.active && deck.category !== 'custom'"
+        class="edit-button"
+        @click="removeDeck(deck.name)"
+      >
+        Reset
+      </AppButton>
 
       <AppButton
         v-if="deck?.category === 'custom'"
