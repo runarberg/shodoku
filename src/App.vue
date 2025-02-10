@@ -13,7 +13,7 @@ import MainTitle from "./components/MainTitle.vue";
 
     <RouterView class="aside" name="aside" />
 
-    <main class="main">
+    <main id="app:main" class="main">
       <RouterView />
     </main>
 

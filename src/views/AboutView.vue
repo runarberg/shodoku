@@ -142,7 +142,7 @@ import { deckBrowserRoute, reviewRoute } from "../router";
       </ul>
     </section>
 
-    <section>
+    <section id="section:donations">
       <h3>Donations</h3>
 
       <p>

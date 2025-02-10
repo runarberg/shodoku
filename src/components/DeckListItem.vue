@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, useId } from "vue";
-import { LocationQueryValue, useRoute } from "vue-router";
+import { computed, onMounted, ref, useId } from "vue";
+import { useRoute } from "vue-router";
 
 import { deckLabel } from "../helpers/decks.ts";
 import { Deck } from "../types.ts";
@@ -13,35 +13,33 @@ const props = defineProps<{
   deck: Deck;
 }>();
 
+const el = ref<HTMLElement | null>(null);
 const labelId = useId();
 const route = useRoute();
 
 const label = computed(() => deckLabel(props.deck));
 
-function toArray(
-  item: LocationQueryValue | LocationQueryValue[]
-): LocationQueryValue[] {
-  if (!item) {
+const expandedDeckNames = computed(() => {
+  if (!route.query.deck) {
     return [];
   }
 
-  if (typeof item === "string") {
-    return [item];
+  if (typeof route.query.deck === "string") {
+    return [route.query.deck];
   }
 
-  return item;
-}
+  return route.query.deck;
+});
 
 const expanded = computed(() =>
-  toArray(route.query.deck).includes(props.deck.name)
+  expandedDeckNames.value.includes(props.deck.name)
 );
 
 const toggleExpanded = computed(() => {
   const { name } = props.deck;
-  const expandedDecks = toArray(route.query.deck);
   const deckQuery = expanded.value
-    ? expandedDecks.filter((other) => other !== name)
-    : [...expandedDecks, name];
+    ? expandedDeckNames.value.filter((other) => other !== name)
+    : [...expandedDeckNames.value, name];
 
   return {
     query: { ...route.query, deck: deckQuery },
@@ -63,10 +61,16 @@ const newCount = computed(() => sumStatus("new"));
 const dueCount = computed(() => sumStatus("due"));
 const reviewCount = computed(() => sumStatus("review"));
 const knowCount = computed(() => sumStatus("know"));
+
+onMounted(() => {
+  if (expanded.value && expandedDeckNames.value.length === 1) {
+    el.value?.scrollIntoView({ block: "start" });
+  }
+});
 </script>
 
 <template>
-  <article class="deck-list-item" :aria-labelledby="labelId">
+  <article ref="el" class="deck-list-item" :aria-labelledby="labelId">
     <strong :id="labelId" class="label">
       <RouterLink :to="toggleExpanded" :aria-pressed="expanded" replace>
         {{ label }}

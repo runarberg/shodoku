@@ -36,6 +36,24 @@ export function wordRoute(wordId: number): RouteLocationRaw {
 
 export const router = createRouter({
   history: createWebHistory(),
+  scrollBehavior(to, from, savedPosition) {
+    if (to.path === from.path) {
+      return;
+    }
+
+    if (savedPosition) {
+      return savedPosition;
+    }
+
+    if (to.hash) {
+      return { el: to.hash };
+    }
+
+    const appMainEl = document.getElementById("app:main");
+    if (appMainEl && appMainEl.getBoundingClientRect().top < 0) {
+      return { el: appMainEl };
+    }
+  },
   routes: [
     {
       path: "/",
