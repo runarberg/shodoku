@@ -22,19 +22,19 @@ export const jlptDecks = [
   {
     name: "jlpt-n4",
     label: "JLPT N4",
-    priority: 15,
+    priority: 20,
     content: "/data/kanji-lists/jlpt-n4.csv",
   },
   {
     name: "jlpt-n3",
     label: "JLPT N3",
-    priority: 30,
+    priority: 40,
     content: "/data/kanji-lists/jlpt-n3.csv",
   },
   {
     name: "jlpt-n2",
     label: "JLPT N2",
-    priority: 50,
+    priority: 60,
     content: "/data/kanji-lists/jlpt-n2.csv",
   },
   {
@@ -67,13 +67,13 @@ export const newsFrequencyDecks = [
   {
     name: "news-top-500",
     label: "Top 500",
-    priority: 40,
+    priority: 50,
     content: "/data/kanji-lists/news-top-500.csv",
   },
   {
     name: "news-top-1000",
     label: "Top 1000",
-    priority: 75,
+    priority: 80,
     content: "/data/kanji-lists/news-top-1000.csv",
   },
   {
