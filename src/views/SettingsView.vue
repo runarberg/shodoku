@@ -1,27 +1,20 @@
 <script setup lang="ts">
-import AppNumberInput from "../components/AppNumberInput.vue";
-import AppCheckbox from "../components/AppCheckbox.vue";
-import { dueLimit, fsrsFuzzEnabled, newLimit } from "../store/reviews.ts";
+import PreferencesForm from "../components/PreferencesForm.vue";
+import RemoteSyncSettings from "../components/RemoteSyncSettings.vue";
 </script>
 
 <template>
   <article class="settings-view">
-    <div class="form-body">
-      <AppNumberInput v-model="dueLimit" label="Daily review limit" inline />
-      <AppNumberInput v-model="newLimit" label="Daily new limit" inline />
-      <AppCheckbox v-model="fsrsFuzzEnabled" label="Fuzz review times" />
-    </div>
+    <section>
+      <h2>Preferences</h2>
+
+      <PreferencesForm />
+    </section>
+
+    <section>
+      <h2>Remote Sync</h2>
+
+      <RemoteSyncSettings />
+    </section>
   </article>
 </template>
-
-<style scoped>
-.form-body {
-  display: flex;
-  flex-direction: column;
-  row-gap: 1ex;
-
-  & :deep(input[type="number"]) {
-    inline-size: 6ch;
-  }
-}
-</style>

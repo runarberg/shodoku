@@ -3,195 +3,60 @@ import { createEmptyCard, FSRS, generatorParameters, State } from "ts-fsrs";
 
 import { liveQueryBroadcaster } from "../helpers/channels.ts";
 import { randomId } from "../helpers/random.ts";
-import { Card, CardType, Deck, DeckTemplate, Optional } from "../types.ts";
+import {
+  Card,
+  CardProgress,
+  CardType,
+  Deck,
+  DeckTemplate,
+  Optional,
+} from "../types.ts";
 
-import { db, DB } from "./index.ts";
+import { db } from "./index.ts";
+import { DB } from "./schema.ts";
+import { addToSyncStaging } from "./sync";
 
 function isNotNull<T>(thing: T | null | undefined): thing is T {
   return thing != null;
 }
 
-async function addCardToDeck(
+async function maybeCreateCard(
   tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
-  id: number,
-  order: number,
-  deck: Pick<Deck, "name" | "priority">
+  id: number
 ) {
   const cards = tx.objectStore("cards");
-
-  const card = await cards.get(id);
+  const progress = tx.objectStore("progress");
   const now = new Date();
 
-  if (card) {
-    if (card.decks.includes(deck.name)) {
-      let updated = false;
-      const deckPosition = card.deckPositions.find(
-        (other) => other.deck === deck.name
-      );
-
-      if (!deckPosition) {
-        return;
-      }
-
-      if (deckPosition.priority !== deck.priority) {
-        deckPosition.priority = deck.priority;
-        updated = true;
-      }
-
-      if (deckPosition.order !== order) {
-        deckPosition.order = order;
-        updated = true;
-      }
-
-      if (!updated) {
-        return;
-      }
-    } else {
-      card.decks.push(deck.name);
-      card.deckPositions.push({
-        deck: deck.name,
-        priority: deck.priority,
-        order,
-      });
-    }
-
-    let newPriority = Number.POSITIVE_INFINITY;
-    let newOrder = Number.POSITIVE_INFINITY;
-    for (const deckPosition of card.deckPositions) {
-      if (deckPosition.priority < newPriority) {
-        newPriority = deckPosition.priority;
-        newOrder = deckPosition.order;
-      } else if (
-        deckPosition.priority === newPriority &&
-        deckPosition.order < newOrder
-      ) {
-        newOrder = deckPosition.order;
-      }
-    }
-
-    card.position.priority = newPriority;
-    card.position.order = newOrder;
-    card.updatedAt = now;
-
-    await cards.put(card);
-  } else {
-    await cards.add({
+  if (!(await cards.getKey(id))) {
+    const card: Card = {
       id,
       value: String.fromCodePoint(id),
       types: ["kanji-read", "kanji-write"],
-      decks: [deck.name],
-      position: {
-        priority: deck.priority,
-        order,
-      },
-      deckPositions: [{ deck: deck.name, priority: deck.priority, order }],
       createdAt: now,
-    });
+    };
 
-    const progress = tx.objectStore("progress");
-
-    await progress.add({
+    const writeProgress: CardProgress = {
       cardId: id,
       cardType: "kanji-write",
       fsrs: createEmptyCard(),
-    });
+    };
 
-    await progress.add({
+    const readProgress: CardProgress = {
       cardId: id,
       cardType: "kanji-read",
       fsrs: createEmptyCard(),
-    });
-  }
-}
+    };
 
-export async function addDeckCards(
-  tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
-  deck: Pick<Deck, "name" | "priority" | "cards">
-) {
-  let order = 0;
-  for (const cardId of deck.cards) {
-    order += 1;
-    await addCardToDeck(tx, cardId, order, deck);
-  }
-}
+    cards.add(card);
+    progress.add(writeProgress);
+    progress.add(readProgress);
 
-async function updateDeckCards(
-  tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
-  previousDeck: Pick<Deck, "name" | "priority" | "cards">,
-  deck: Pick<Deck, "name" | "priority" | "cards">
-) {
-  const cards = tx.objectStore("cards");
-
-  let order = 0;
-  for (const cardId of deck.cards) {
-    order += 1;
-    await addCardToDeck(tx, cardId, order, deck);
-  }
-
-  for (const oldCardId of previousDeck.cards) {
-    if (!deck.cards.includes(oldCardId)) {
-      const card = await cards.get(oldCardId);
-      if (card) {
-        removeCardFromDeck(card, deck.name);
-        await cards.put(card);
-      }
-    }
-  }
-}
-
-function removeCardFromDeck(card: Card, deckName: string) {
-  const deckIndex = card.decks.indexOf(deckName);
-  if (deckIndex !== -1) {
-    card.decks.splice(deckIndex, 1);
-  }
-
-  const positionIndex = card.deckPositions.findIndex(
-    (other) => other.deck === deckName
-  );
-
-  if (positionIndex === -1) {
-    return;
-  }
-
-  const [position] = card.deckPositions.splice(positionIndex, 1);
-
-  if (
-    position.priority === card.position.priority &&
-    position.order === card.position.order
-  ) {
-    // adjust the new position.
-    let priority = Number.POSITIVE_INFINITY;
-    let order = Number.POSITIVE_INFINITY;
-
-    for (const other of card.deckPositions) {
-      if (other.priority < priority) {
-        priority = other.priority;
-        order = other.order;
-      }
-    }
-
-    card.position.priority = priority;
-    card.position.order = order;
-  }
-
-  card.updatedAt = new Date();
-}
-
-async function removeDeckCards(
-  tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
-  deckName: string
-) {
-  const cardsInDeck = tx
-    .objectStore("cards")
-    .index("decks")
-    .iterate(IDBKeyRange.only(deckName));
-
-  for await (const cursor of cardsInDeck) {
-    const card = cursor.value;
-
-    removeCardFromDeck(cursor.value, deckName);
-
-    await cursor.update(card);
+    addToSyncStaging([
+      { store: "cards", op: "add", key: id },
+      { store: "progress", op: "add", key: [id, "kanji-write"] },
+      { store: "progress", op: "add", key: [id, "kanji-read"] },
+    ]);
   }
 }
 
@@ -216,13 +81,18 @@ export async function activateDeck(
     return deck;
   }
 
+  const updatedAt = new Date();
   await decks.put({
     ...deck,
     active: true,
-    updatedAt: new Date(),
+    updatedAt,
   });
 
-  await addDeckCards(tx, deck);
+  for (const cardId of deck.cards) {
+    maybeCreateCard(tx, cardId);
+  }
+
+  addToSyncStaging([{ store: "decks", key: deck.name, op: "put" }]);
 
   if (newTransaction) {
     await tx.done;
@@ -272,15 +142,18 @@ export async function activateDeckCategory(
   const decksStore = tx.objectStore("decks");
 
   for (const deckOrName of decks) {
-    let deck: Deck;
     if (typeof deckOrName === "string") {
-      deck = await activateDeck(deckOrName, tx);
+      activateDeck(deckOrName, tx);
     } else {
-      deck = { ...deckOrName, createdAt: now };
+      const deck = { ...deckOrName, createdAt: now };
       await decksStore.add(deck);
-    }
 
-    await addDeckCards(tx, deck);
+      addToSyncStaging([{ store: "decks", op: "add", key: deck.name }]);
+
+      for (const card of deck.cards) {
+        maybeCreateCard(tx, card);
+      }
+    }
   }
 
   await tx.done;
@@ -296,8 +169,11 @@ export async function deactivateDeck(deckName: string) {
     return;
   }
 
-  await decks.put({ ...deck, active: false, updatedAt: new Date() });
-  await removeDeckCards(tx, deckName);
+  const updatedAt = new Date();
+
+  await decks.put({ ...deck, active: false, updatedAt });
+  addToSyncStaging([{ store: "decks", op: "put", key: deck.name }]);
+
   await tx.done;
 
   liveQueryBroadcaster.postMessage("deck-removed");
@@ -330,8 +206,7 @@ export async function getDeckStatus(
   name: string,
   fsrs = new FSRS(generatorParameters())
 ) {
-  const tx = (await db).transaction(["cards", "progress"]);
-  const cardsStore = tx.objectStore("cards");
+  const tx = (await db).transaction(["decks", "progress"]);
   const progressStore = tx.objectStore("progress");
 
   const deckStatus: DeckStatus = {
@@ -351,14 +226,17 @@ export async function getDeckStatus(
   };
 
   const now = new Date();
-  const cards = cardsStore.index("decks").iterate(IDBKeyRange.only(name));
+  const deck = await tx.objectStore("decks").get(name);
 
-  for await (const card of cards) {
-    for (const [type, counts] of Object.entries(deckStatus) as [
-      CardType,
-      DeckStatusCount
-    ][]) {
-      const progress = await progressStore.get([card.primaryKey, type]);
+  if (!deck) {
+    return deckStatus;
+  }
+
+  for await (const cardId of deck.cards) {
+    for (const [cardType, counts] of Object.entries(deckStatus) as Array<
+      [type: CardType, count: DeckStatusCount]
+    >) {
+      const progress = await progressStore.get([cardId, cardType]);
 
       if (!progress) {
         continue;
@@ -402,9 +280,13 @@ export async function createDeck({
   );
 
   await tx.objectStore("decks").add(deck);
-  await addDeckCards(tx, deck);
-  await tx.done;
+  addToSyncStaging([{ store: "decks", op: "add", key: deck.name }]);
 
+  for (const card of deck.cards) {
+    maybeCreateCard(tx, card);
+  }
+
+  await tx.done;
   liveQueryBroadcaster.postMessage("deck-created");
 
   return deck;
@@ -419,20 +301,24 @@ export async function editDeck(deck: Deck): Promise<void> {
   const decks = tx.objectStore("decks");
   const previousDeck = await decks.get(deck.name);
 
-  if (previousDeck) {
-    await decks.put({ ...deck, updatedAt: new Date() });
-  } else {
+  if (!previousDeck) {
     await decks.add(deck);
+
+    addToSyncStaging([{ store: "decks", op: "add", key: deck.name }]);
+    liveQueryBroadcaster.postMessage("deck-created");
+
+    return;
   }
 
-  if (previousDeck?.active) {
-    if (deck.active) {
-      await updateDeckCards(tx, previousDeck, deck);
-    } else {
-      await removeDeckCards(tx, deck.name);
+  const updatedAt = new Date();
+  await decks.put({ ...deck, updatedAt });
+
+  addToSyncStaging([{ store: "decks", op: "put", key: deck.name }]);
+
+  for (const card of deck.cards) {
+    if (!previousDeck.cards.includes(card)) {
+      maybeCreateCard(tx, card);
     }
-  } else if (deck.active) {
-    await addDeckCards(tx, deck);
   }
 
   await tx.done;
@@ -443,8 +329,7 @@ export async function removeDeck(name: string): Promise<void> {
   const tx = (await db).transaction(["decks", "cards"], "readwrite");
 
   await tx.objectStore("decks").delete(name);
-  await removeDeckCards(tx, name);
-  await tx.done;
 
+  addToSyncStaging([{ store: "decks", op: "delete", key: name }]);
   liveQueryBroadcaster.postMessage("custom-deck-removed");
 }

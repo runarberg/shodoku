@@ -13,6 +13,9 @@ const id = useId();
 
 <template>
   <AppFormField :control="id" :label="label">
+    <template v-if="$slots.label" #label><slot name="label" /></template>
+    <template v-if="$slots.info" #info><slot name="info" /></template>
+
     <textarea :id="id" v-model="model" v-bind="$attrs" class="textarea" />
   </AppFormField>
 </template>

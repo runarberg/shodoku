@@ -1,4 +1,7 @@
 import { type Card as FSRSCard, ReviewLog } from "ts-fsrs";
+import { StoreNames } from "idb";
+
+import { DB } from "./db/schema.ts";
 
 export type Optional<T, Keys extends keyof T> = Omit<T, Keys> &
   Partial<Pick<T, Keys>>;
@@ -123,10 +126,7 @@ export function isCardType(thing: string): thing is CardType {
 export type Card = {
   id: number;
   value: string;
-  decks: string[];
   types: CardType[];
-  position: { priority: number; order: number };
-  deckPositions: Array<{ deck: string; priority: number; order: number }>;
   createdAt: Date;
   updatedAt?: Date;
 };
@@ -142,4 +142,38 @@ export type CardReview = {
   cardId: number;
   cardType: CardType;
   log: ReviewLog;
+};
+
+export type SyncPatchStore = {
+  name: StoreNames<DB>;
+  add?: string[];
+  put?: string[];
+  delete?: string[];
+};
+
+type SyncPatchPreference = [name: string, value: string | null];
+
+export type SyncPatch = {
+  hash: string;
+  parent: string | null;
+  syncedAt: Date;
+  dbVersion: number;
+  patchVersion: number;
+  stores: SyncPatchStore[];
+  preferences: SyncPatchPreference[];
+};
+
+export type SyncStagingStore<
+  StoreName extends StoreNames<DB> = StoreNames<DB>
+> = {
+  id?: number;
+  store: StoreName;
+  key: DB[StoreName]["key"];
+  op: "add" | "put" | "delete";
+};
+
+export type SyncStagingPreference = {
+  id?: number;
+  name: string;
+  value: string | null;
 };

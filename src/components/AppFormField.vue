@@ -12,6 +12,8 @@ defineProps<{
       <slot name="label">{{ label }}</slot>
     </label>
 
+    <div v-if="$slots.info" class="info"><slot name="info" /></div>
+
     <slot />
   </div>
 </template>
@@ -30,5 +32,10 @@ defineProps<{
 
 .label {
   font-weight: 500;
+}
+
+.info {
+  font-size: 0.9em;
+  color: var(--text-light);
 }
 </style>

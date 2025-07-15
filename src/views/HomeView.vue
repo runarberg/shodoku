@@ -6,6 +6,7 @@ import { count, filter, map } from "yta/async";
 
 import AppButton from "../components/AppButton.vue";
 import AppLoading from "../components/AppLoading.vue";
+import RemoteSyncSyncButton from "../components/RemoteSyncSyncButton.vue";
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
 import {
@@ -86,9 +87,13 @@ function continueReview() {
         <AppButton v-if="!doneToday" :to="reviewRoute" filled>
           Start Review
         </AppButton>
+
+        <RemoteSyncSyncButton conditional />
+
         <AppButton v-if="reviewedCardsCount > 0" :to="reviewSummaryRoute">
           Today’s Summary
         </AppButton>
+
         <AppButton v-if="doneToday" @click="continueReview">
           Review {{ newLimit }} Extra
         </AppButton>

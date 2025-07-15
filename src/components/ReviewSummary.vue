@@ -13,6 +13,7 @@ import {
 
 import AppButton from "./AppButton.vue";
 import ReviewSummaryItem from "./ReviewSummaryItem.vue";
+import RemoteSyncSyncButton from "./RemoteSyncSyncButton.vue";
 
 const router = useRouter();
 const reviewedCards = useReviewedCards();
@@ -76,14 +77,17 @@ watchEffect(() => {
       </li>
     </ul>
 
-    <template v-if="doneToday">
-      <p>
-        Click the button below to temporarily increase your daily review limit.
-      </p>
-      <AppButton @click="continueReview()">
+    <p v-if="doneToday">
+      Click the button below to temporarily increase your daily review limit.
+    </p>
+
+    <div class="buttons">
+      <AppButton v-if="doneToday" @click="continueReview()">
         Review {{ newLimit }} Extra
       </AppButton>
-    </template>
+
+      <RemoteSyncSyncButton conditional />
+    </div>
   </section>
 </template>
 
@@ -106,5 +110,10 @@ watchEffect(() => {
   &.new-count {
     color: var(--green);
   }
+}
+
+.buttons {
+  column-gap: 1ex;
+  display: flex;
 }
 </style>

@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { RecordLogItem, State } from "ts-fsrs";
 import { computed, ref, watch } from "vue";
 import { pipe } from "yta";
-import { filter, map, take, toArray, uniqueOn } from "yta/async";
+import { filter, map, take, toArray } from "yta/async";
 
 import { db } from "../db/index.ts";
 import {
@@ -197,7 +197,6 @@ const useReviewsStore = defineStore("reviews", () => {
 
       dueQueue.value = await pipe(
         getDueCards(),
-        uniqueOn(({ primaryKey: [cardId] }) => cardId),
         filter(({ primaryKey: [cardId] }) => !learningQueueIncludes(cardId)),
         take(
           Math.max(0, dueLimit.value + extraLimits.due - dueDoneCount.value)
@@ -208,15 +207,13 @@ const useReviewsStore = defineStore("reviews", () => {
 
       newQueue.value = await pipe(
         getNewCards(),
-        uniqueOn((cursor) => cursor.primaryKey[0]),
         filter(
-          ({ primaryKey: [cardId] }) =>
+          ({ cardId }) =>
             !learningQueueIncludes(cardId) && !dueQueueIncludes(cardId)
         ),
         take(
           Math.max(0, newLimit.value + extraLimits.new - newDoneCount.value)
         ),
-        map((cursor) => cursor.value),
         toArray()
       );
     } finally {

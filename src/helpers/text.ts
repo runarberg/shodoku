@@ -1,3 +1,6 @@
+import "core-js/actual/typed-array/from-base64.js";
+import "core-js/actual/typed-array/to-base64.js";
+
 export const hasKanjiRE = /\p{Script=Han}/u;
 export const isKanjiRE = /^\p{Script=Han}$/u;
 export const kanaOrKanjiRE =
@@ -20,4 +23,15 @@ export function toKatakana(str: string): string {
   return str.replaceAll(allHiraganaRE, (char) =>
     String.fromCodePoint((char.codePointAt(0) ?? 0) + 0x60)
   );
+}
+
+export function fromBase64(base64: string): string {
+  // https://github.com/microsoft/TypeScript/issues/61695
+  // @ts-ignore
+  return new TextDecoder().decode(Uint8Array.fromBase64(base64))
+}
+
+export function toBase64(str: string): string {
+  // @ts-ignore
+  return new TextEncoder().encode(str).toBase64();
 }

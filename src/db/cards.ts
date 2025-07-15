@@ -1,9 +1,10 @@
 import { RecordLogItem, State } from "ts-fsrs";
 
 import { EPOC, midnight } from "../helpers/time.ts";
-import { CardProgress } from "../types.ts";
+import { CardProgress, CardType } from "../types.ts";
 
 import { db } from "./index.ts";
+import { addToSyncStaging } from "./sync";
 
 export async function* getLearningCards(dueBefore?: Date) {
   const cardIds = new Set<number>();
@@ -66,48 +67,30 @@ export async function getNewDoneCount() {
 export async function* getNewCards() {
   const reviewed = await getReviewedToday();
 
-  const tx = (await db).transaction(["cards", "progress"], "readwrite");
-  const cardsStore = tx.objectStore("cards");
-  const progressStateIndex = tx
-    .objectStore("progress")
-    .index("cardId+cardType+state");
+  const tx = (await db).transaction(["decks", "progress"]);
+  const progressStore = tx.objectStore("progress");
 
-  let cardsCursor = await cardsStore
-    .index("position")
-    .openKeyCursor(
-      IDBKeyRange.bound(
-        [0, 0],
-        [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY],
-        false,
-        true
-      )
-    );
-
-  while (cardsCursor) {
-    if (reviewed.has(cardsCursor.primaryKey)) {
-      cardsCursor = await cardsCursor.continue();
+  const yielded = new Set<number>();
+  for await (const { value: deck } of tx
+    .objectStore("decks")
+    .index("priority")) {
+    if (!deck.active) {
       continue;
     }
 
-    let progressCursor = await progressStateIndex.openCursor([
-      cardsCursor.primaryKey,
-      "kanji-write",
-      State.New,
-    ]);
+    for (const cardId of deck.cards) {
+      if (yielded.has(cardId) || reviewed.has(cardId)) {
+        continue;
+      }
 
-    if (!progressCursor) {
-      progressCursor = await progressStateIndex.openCursor([
-        cardsCursor.primaryKey,
-        "kanji-read",
-        State.New,
-      ]);
+      for (const cardType of ["kanji-write", "kanji-read"] as CardType[]) {
+        const progress = await progressStore.get([cardId, cardType]);
+        if (progress?.fsrs.state === State.New) {
+          yield progress;
+          break;
+        }
+      }
     }
-
-    if (progressCursor) {
-      yield progressCursor;
-    }
-
-    cardsCursor = await cardsCursor.continue();
   }
 }
 
@@ -131,10 +114,11 @@ export async function* getDueCards() {
   const reviewed = await getReviewedToday();
 
   const tx = (await db).transaction(
-    ["cards", "progress", "reviews"],
+    ["decks", "progress", "reviews"],
     "readonly"
   );
-  const cardsStore = tx.objectStore("cards");
+  const decksStore = tx.objectStore("decks");
+  const decksStoreCardsIndex = decksStore.index("cards");
   const progressStore = tx.objectStore("progress");
 
   const reviewRange = IDBKeyRange.bound(
@@ -144,14 +128,20 @@ export async function* getDueCards() {
     true
   );
 
+  const yielded = new Set<number>();
   let cursor = await progressStore.index("state+due").openCursor(reviewRange);
 
   while (cursor) {
     const [cardId] = cursor.primaryKey;
 
-    if (!reviewed.has(cardId)) {
-      const card = await cardsStore.get(cardId);
-      if (card && card.position.priority < Number.POSITIVE_INFINITY) {
+    if (!yielded.has(cardId) && !reviewed.has(cardId)) {
+      // See if this card belongs to at least one deck.
+      const deckId = await decksStoreCardsIndex.getKey(
+        IDBKeyRange.only(cardId)
+      );
+
+      if (deckId) {
+        // Orphaned cards are suspended from review.
         yield cursor;
       }
     }
@@ -188,5 +178,21 @@ export async function rateCard(
   const reviews = tx.objectStore("reviews");
 
   await progress.put({ cardId, cardType, fsrs: next.card });
-  await reviews.add({ cardId, cardType, log: next.log });
+  const reviewId = await reviews.add({ cardId, cardType, log: next.log });
+
+  addToSyncStaging([
+    {
+      store: "progress",
+      op: "put",
+      key: [cardId, cardType],
+    },
+
+    {
+      store: "reviews",
+      op: "add",
+      key: reviewId,
+    },
+  ]);
+
+  await tx.done;
 }
