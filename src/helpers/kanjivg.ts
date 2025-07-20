@@ -112,6 +112,7 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
         original: el.dataset.original ?? null,
         position: gatherPositions(el),
         radical: el.dataset.radical ?? null,
+        phon: el.dataset.phon ?? null,
       };
 
       let found = map.get(literal);

@@ -11,7 +11,7 @@ import tar from "tar-fs";
 const JMDICT_URL = "http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz";
 const KANJIDIC2_URL = "http://www.edrdg.org/kanjidic/kanjidic2.xml.gz";
 const KANJIVG_URL =
-  "https://github.com/KanjiVG/kanjivg/releases/download/r20240807/kanjivg-20240807-main.zip";
+  "https://github.com/KanjiVG/kanjivg/releases/download/r20250422/kanjivg-20250422-main.zip";
 const JMDICT_FURIGANA_URL =
   "https://github.com/Doublevil/JmdictFurigana/releases/download/2.3.1%2B2024-08-25/JmdictFurigana.json.zip";
 const TATOEBA_ENG_URL =

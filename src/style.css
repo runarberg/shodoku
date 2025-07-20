@@ -3,6 +3,7 @@
   --orange: oklch(from var(--pink) l c 78);
   --gold: oklch(from var(--pink) l c 93);
   --green: oklch(from var(--pink) l c 143);
+  --bluegreen: oklch(from var(--pink) l c 193);
   --blue: oklch(from var(--pink) l c 243);
   --purple: oklch(from var(--pink) l c 303);
 

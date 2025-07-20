@@ -25,6 +25,14 @@ const radical = computed(() => {
   return null;
 });
 
+const phonetic = computed(() => {
+  for (const part of props.parts) {
+    if (part.phon) {
+      return part.phon;
+    }
+  }
+});
+
 const componentInfo = useRadical(() => props.literal);
 
 function accentColorOffset(deg: number): string {
@@ -44,8 +52,10 @@ watchEffect(() => {
       strokes.dataset.radical === "tradit"
     ) {
       strokes.style.color = "var(--green)";
-    } else if (strokes.dataset.radical === "nelson") {
-      strokes.style.color = "var(--orange)";
+    } else if (strokes.dataset.radical === "nelson" || strokes.dataset.radical === "jis") {
+      strokes.style.color = "var(--bluegreen)";
+    } else if (strokes.dataset.phon === props.literal) {
+      strokes.style.color = "var(--gold)";
     } else {
       strokes.style.color = accentColorOffset(180);
     }
@@ -63,8 +73,13 @@ watchEffect(() => {
       continue;
     }
 
-    if (group.dataset.radical === "nelson") {
-      group.style.color = "var(--orange)";
+    if (group.dataset.radical === "nelson" || group.dataset.radical === "jis") {
+      group.style.color = "var(--bluegreen)";
+      continue;
+    }
+
+    if (group.dataset.phon) {
+      group.style.color = "var(--gold)";
       continue;
     }
 
@@ -95,14 +110,19 @@ watchEffect(() => {
         >
       </p>
 
-      <span
-        v-if="radical"
-        class="is-radical"
-        :class="{ 'is-nelson': radical === 'nelson' }"
-      >
-        <template v-if="radical === 'nelson'">Nelson radical</template>
-        <template v-else>Radical</template>
-      </span>
+      <div class="tags">
+        <span
+          v-if="radical"
+          class="is-radical"
+          :class="{ 'is-nelson': radical === 'nelson', 'is-jis': radical === 'jis' }"
+        >
+          <template v-if="radical === 'nelson'">Nelson radical</template>
+          <template v-else-if="radical === 'jis'">JIS radical</template>
+          <template v-else>Radical</template>
+        </span>
+
+        <span v-if="phonetic" class="is-phonetic">Phonetic</span>
+      </div>
     </div>
   </div>
 </template>
@@ -130,7 +150,7 @@ watchEffect(() => {
   column-gap: 1em;
   display: grid;
   grid-template:
-    "literal radical" min-content
+    "literal tags" min-content
     "literal meaning" 1fr;
   justify-content: start;
 }
@@ -151,17 +171,32 @@ watchEffect(() => {
   }
 }
 
-.is-radical {
-  background: var(--green);
+.tags {
+  column-gap: 0.5ex;
+  display: flex;
+  grid-area: tags;
+}
+
+.is-radical,
+.is-phonetic {
   border-radius: 1ex;
   color: var(--background-strong);
   font-size: 0.6em;
   font-weight: 600;
   padding: 0.5ex 1ex;
   justify-self: start;
+}
 
-  &.is-nelson {
-    background-color: var(--orange);
+.is-radical {
+  background: var(--green);
+
+  &.is-nelson,
+  &.is-jis {
+    background-color: var(--bluegreen);
   }
+}
+
+.is-phonetic {
+  background: var(--gold);
 }
 </style>

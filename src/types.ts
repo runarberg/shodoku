@@ -23,6 +23,7 @@ export type KanjiComponent = {
   original: string | null;
   position: string[];
   radical: string | null;
+  phon: string | null;
 };
 
 export type WordWriting = {
