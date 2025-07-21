@@ -8,14 +8,14 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
-dist-ssr
-assets/
-assets.db
-public/data/*
-!public/data/radicals.csv
-!public/data/kanji-lists/
-public/kanjivg
+/dist
+/dist-ssr
+/assets/
+/assets.db
+/public/data/*
+!/public/data/radicals.csv
+!/public/data/kanji-lists/
+/public/kanjivg
 *.local
 
 # Editor directories and files

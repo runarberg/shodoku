@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <path
+    d="
+      M 0,0
+      h 6
+      v 16
+      h -6
+      Z
+
+      M 10,0
+      h 6
+      v 16
+      h -6
+      Z
+    "
+  />
+</svg>

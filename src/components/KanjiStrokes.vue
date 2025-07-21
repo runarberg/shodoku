@@ -100,6 +100,16 @@ function resumeAnimation() {
   animationPaused.value = false;
 }
 
+function skipForward() {
+  const path = strokes.value[practiceStrokes.length]?.getAttribute("d");
+
+  if (!path) {
+    return;
+  }
+
+  practiceStrokes.push(path);
+}
+
 function showHint(n = practiceStrokes.length) {
   const stroke = strokes.value[n];
 
@@ -283,6 +293,7 @@ defineExpose({
           >
             <AppIcon icon="help-circle" />
           </AppButton>
+
           <AppButton
             v-else
             aria-label="Animate Stroke Order"
@@ -305,8 +316,28 @@ defineExpose({
         <template v-if="practicing">
           <hr class="rule" />
 
-          <AppButton aria-label="Undo" @click="practiceStrokes.pop()">
+          <AppButton
+            aria-label="Start Over"
+            :disabled="practiceStrokes.length === 0"
+            @click="practiceStrokes.splice(0, practiceStrokes.length)"
+          >
             <AppIcon icon="rotate-left" />
+          </AppButton>
+
+          <AppButton
+            aria-label="Skip Backward"
+            :disabled="practiceStrokes.length === 0"
+            @click="practiceStrokes.pop()"
+          >
+            <AppIcon icon="skip-backward" />
+          </AppButton>
+
+          <AppButton
+            aria-label="Skip Backward"
+            :disabled="practiceStrokes.length === strokes.length"
+            @click="skipForward()"
+          >
+            <AppIcon icon="skip-forward" />
           </AppButton>
         </template>
       </figcaption>

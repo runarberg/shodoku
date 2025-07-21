@@ -28,15 +28,15 @@ function addHeader() {
       <li v-for="([key, value], i) of model" :key="i" class="header-list-item">
         <AppInput
           :model-value="key"
+          class="key-field"
           label="Key"
-          inline
           @input="setHeader(i, [$event.target.value.toUpperCase(), value])"
         />
 
         <AppInput
           :model-value="value"
+          class="value-field"
           label="Value"
-          inline
           @input="setHeader(i, [key, $event.target.value])"
         />
 
@@ -69,18 +69,38 @@ function addHeader() {
 }
 
 .header-list-item {
+  align-items: end;
   column-gap: 1ex;
-  display: flex;
+  display: grid;
+  grid-template:
+    "key value delete"
+    / minmax(12ch, 1fr) minmax(15ch, 3fr) auto;
+  margin-block-end: 1ex;
+
 
   & .app-form-field,
   & :deep(.input) {
     flex-grow: 1;
+  }
+
+  & .key-field {
+    grid-area: key;
+  }
+
+  & .value-field {
+    grid-area: value;
+  }
+
+  & .remove-header-button {
+    grid-area: delete;
+    margin-block-end: 0.45ex;
   }
 }
 
 .remove-header-button {
   background: none;
   border: 0;
+  padding: 0;
 }
 
 .add-header-button {
