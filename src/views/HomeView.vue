@@ -88,8 +88,6 @@ function continueReview() {
           Start Review
         </AppButton>
 
-        <RemoteSyncSyncButton conditional />
-
         <AppButton v-if="reviewedCardsCount > 0" :to="reviewSummaryRoute">
           Today’s Summary
         </AppButton>
@@ -97,6 +95,8 @@ function continueReview() {
         <AppButton v-if="doneToday" @click="continueReview">
           Review {{ newLimit }} Extra
         </AppButton>
+
+        <RemoteSyncSyncButton conditional />
       </nav>
     </template>
   </article>
@@ -132,8 +132,13 @@ function continueReview() {
 }
 
 .home-nav {
-  align-items: center;
-  column-gap: 1ex;
+  align-items: start;
   display: flex;
+  gap: 1ex;
+
+  @media screen and (max-width: 60ch) {
+    align-items: center;
+    flex-direction: column;
+  }
 }
 </style>

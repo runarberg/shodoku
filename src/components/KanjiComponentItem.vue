@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 
-import { useKanjiVG, useKanjiVGViewBox } from "../helpers/kanjivg";
-import { useRadical } from "../store/radicals";
-import { KanjiComponent } from "../types";
+import { useKanjiVG, useKanjiVGViewBox } from "../helpers/kanjivg.ts";
+import { kanjiComponentRoute } from "../router.ts";
+import { useRadical } from "../store/radicals.ts";
+import { KanjiComponent } from "../types.ts";
 
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";
 
@@ -93,29 +94,23 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="kanji-component-item">
+  <RouterLink :to="kanjiComponentRoute(literal)" class="kanji-component-item">
     <svg v-if="kanjiVG" :viewBox="viewBox" class="kanji-component-strokes">
       <KanjiStrokesGroup class="strokes-group" :strokes="kanjiVG" />
     </svg>
 
     <div class="component-info">
-      <span class="literal">
-        {{ literal }}
-      </span>
+      <span class="literal">{{ literal }}</span>
 
       <p class="meaning">
         <strong>{{ componentInfo?.meaning }}</strong>
         <span v-if="componentInfo?.reading" lang="ja">
-          ({{ componentInfo.reading }})</span
-        >
+          ({{ componentInfo.reading }})</span>
       </p>
 
       <div class="tags">
-        <span
-          v-if="radical"
-          class="is-radical"
-          :class="{ 'is-nelson': radical === 'nelson', 'is-jis': radical === 'jis' }"
-        >
+        <span v-if="radical" class="is-radical"
+          :class="{ 'is-nelson': radical === 'nelson', 'is-jis': radical === 'jis' }">
           <template v-if="radical === 'nelson'">Nelson radical</template>
           <template v-else-if="radical === 'jis'">JIS radical</template>
           <template v-else>Radical</template>
@@ -124,13 +119,15 @@ watchEffect(() => {
         <span v-if="phonetic" class="is-phonetic">Phonetic</span>
       </div>
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <style scoped>
 .kanji-component-item {
+  color: inherit;
   column-gap: 1em;
   display: flex;
+  text-decoration: none;
 }
 
 .kanji-component-strokes {

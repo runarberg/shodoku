@@ -113,7 +113,13 @@ watchEffect(() => {
 }
 
 .buttons {
-  column-gap: 1ex;
+  align-items: start;
   display: flex;
+  gap: 1ex;
+
+  @media screen and (max-width: 60ch) {
+    align-items: center;
+    flex-direction: column;
+  }
 }
 </style>

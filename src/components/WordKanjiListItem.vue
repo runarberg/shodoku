@@ -25,21 +25,23 @@ const meaning = computed(() => kanjiInfo.value?.meanings.at(0));
 </script>
 
 <template>
-  <div class="kanji-info">
-    <RouterLink :to="kanjiRoute(kanji)" class="literal">{{ kanji }}</RouterLink>
+  <RouterLink :to="kanjiRoute(kanji)" class="kanji-info">
+    <span class=literal>{{ kanji }}</span>
 
     <p class="meaning">
       <strong v-if="meaning">{{ meaning }}</strong>
       <span v-if="reading" lang="ja"> ({{ reading }})</span>
     </p>
-  </div>
+  </RouterLink>
 </template>
 
 <style scoped>
 .kanji-info {
   align-items: center;
+  color: inherit;
   column-gap: 1ex;
   display: flex;
+  text-decoration: none;
 }
 
 .literal {
@@ -56,7 +58,6 @@ const meaning = computed(() => kanjiInfo.value?.meanings.at(0));
   font-weight: 600;
   justify-content: center;
   padding: 0.5ex;
-  text-decoration: none;
 }
 
 .meaning {

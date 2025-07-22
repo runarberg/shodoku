@@ -4,6 +4,7 @@ export const HOME_ROUTE_NAME = Symbol("home-route-name");
 export const REVIEW_ROUTE_NAME = Symbol("review-route-name");
 export const REVIEW_SUMMARY_ROUTE_NAME = Symbol("review-summary-route-name");
 export const KANJI_ROUTE_NAME = Symbol("kanji-route-name");
+export const KANJI_COMPONENT_ROUTE_NAME = Symbol("kanji-component-route-name");
 export const WORD_ROUTE_NAME = Symbol("word-route-name");
 export const DECKS_ROUTE_NAME = Symbol("decks-route-name");
 export const DECK_BROWSER_ROUTE_NAME = Symbol("deck-browser-route-name");
@@ -28,6 +29,10 @@ export const aboutRoute: RouteLocationRaw = { name: ABOUT_ROUTE_NAME };
 
 export function kanjiRoute(kanji: string): RouteLocationRaw {
   return { name: KANJI_ROUTE_NAME, params: { kanji } };
+}
+
+export function kanjiComponentRoute(kanjiComponent: string): RouteLocationRaw {
+  return { name: KANJI_COMPONENT_ROUTE_NAME, params: { kanjiComponent } };
 }
 
 export function wordRoute(wordId: number): RouteLocationRaw {
@@ -76,6 +81,13 @@ export const router = createRouter({
       components: {
         default: () => import("./views/KanjiView.vue"),
         aside: () => import("./views/KanjiAsideView.vue"),
+      },
+    },
+    {
+      path: "/kanji-component/:kanjiComponent",
+      name: KANJI_COMPONENT_ROUTE_NAME,
+      components: {
+        default: () => import("./views/KanjiComponentView.vue"),
       },
     },
     {

@@ -34,6 +34,7 @@
     "@types/core-js": "^2.5.8",
     "@types/node": "^24.0.13",
     "@vitejs/plugin-vue": "^6.0.0",
+    "@xmldom/xmldom": "^0.9.8",
     "better-sqlite3": "^11.10.0",
     "sax": "^1.4.1",
     "stream-chain": "^3.4.0",
