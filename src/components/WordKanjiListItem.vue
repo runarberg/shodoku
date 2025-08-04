@@ -8,7 +8,7 @@ const props = defineProps<{
   kanji: string;
 }>();
 
-const kanjiInfo = useKanji(() => props.kanji.charCodeAt(0));
+const kanjiInfo = useKanji(() => props.kanji.codePointAt(0));
 
 const reading = computed(() => {
   if (!kanjiInfo.value) {

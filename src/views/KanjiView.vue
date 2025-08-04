@@ -15,7 +15,7 @@ const route = useRoute();
 const codepoint = computed(() => {
   const value = route.params.kanji;
 
-  if (typeof value !== "string" || value.length !== 1) {
+  if (typeof value !== "string" || [...value].length !== 1) {
     return null;
   }
 
