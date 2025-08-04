@@ -1,9 +1,17 @@
 <script setup lang="ts">
-import { useKanjiVGComponents } from "../helpers/kanjivg";
+import { pipe } from "yta";
+import { groupBy } from "yta/sync";
+
+import { useKanjiVGComponents } from "../helpers/kanjivg.ts";
+import { KanjiComponent } from "../types.ts";
 
 import KanjiComponentItem from "./KanjiComponentItem.vue";
 
 const components = useKanjiVGComponents();
+
+function originals(parts: KanjiComponent[]): Map<string | null, KanjiComponent[]> {
+  return pipe(parts, groupBy((part) => part.original || null))
+}
 </script>
 
 <template>
@@ -14,9 +22,15 @@ const components = useKanjiVGComponents();
     </h2>
 
     <ul class="component-list">
-      <li v-for="[literal, parts] of components" :key="literal">
-        <KanjiComponentItem :literal="literal" :parts="parts" />
-      </li>
+      <template v-for="[literal, partss] of components" :key="literal">
+        <li v-for="[original, parts] of originals(partss)" :key="original ?? 0">
+          <KanjiComponentItem
+            :literal="literal"
+            :parts="parts"
+            :original="original"
+          />
+        </li>
+      </template>
     </ul>
   </section>
 </template>

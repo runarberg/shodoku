@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+import { useKanjiSearch } from "../helpers/search.ts";
+import { isKanji } from "../helpers/text.ts";
+
 import WordKanjiListItem from "./WordKanjiListItem.vue";
-import { isKanji } from "../helpers/text";
-import { useKanjiSearch } from "../helpers/search";
 
 const props = defineProps<{
   phrase: string;

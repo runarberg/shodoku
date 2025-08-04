@@ -3,8 +3,8 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import KanjiComponentKanjiList from "../components/KanjiComponentKanjiList.vue";
-import { useKanjiComponent } from "../store/kanji-components.ts";
-import { useRadical } from "../store/radicals.ts";
+import { useKanjiComponent } from "../helpers/kanji-components.ts";
+import KanjiComponentVariationList from "../components/KanjiComponentVariationList.vue";
 
 const route = useRoute();
 const kanjiComponentLiteral = computed(() => {
@@ -15,8 +15,9 @@ const kanjiComponentLiteral = computed(() => {
   return route.params.kanjiComponent;
 });
 
-const kanjiLiterals = useKanjiComponent(kanjiComponentLiteral);
-const componentInfo = useRadical(kanjiComponentLiteral);
+const componentInfo = useKanjiComponent(kanjiComponentLiteral);
+const radical = computed(() => componentInfo.value?.radical);
+const kanjiLiterals = computed(() => Object.values(componentInfo.value?.kanji ?? {}).flat())
 </script>
 
 <template>
@@ -27,13 +28,38 @@ const componentInfo = useRadical(kanjiComponentLiteral);
       </h1>
 
       <p class="info">
-        <span class="info-title">Radical / Component</span>
-        <strong class="meaning">{{ componentInfo?.meaning }}</strong>
+        <span class="info-title">
+          <template v-if="radical">Radical no. {{radical.number}}</template>
+          <template v-else>Kanji Component</template>
+        </span>
+        <strong class="meaning">{{ radical?.en ?? componentInfo?.meaning }}</strong>
         <span v-if="componentInfo?.reading" class="reading" lang="ja">
-          {{ componentInfo.reading }}</span
+          {{ radical?.jp ?? componentInfo.reading }}</span
         >
       </p>
     </header>
+
+    <section v-if="componentInfo?.variationOf">
+      <h2>
+        Original
+        <template v-if="componentInfo.variationOf.length > 1">
+          &nbsp;({{componentInfo.variationOf.length}})
+        </template>
+      </h2>
+
+      <KanjiComponentVariationList :literals="componentInfo.variationOf" />
+    </section>
+
+    <section v-if="componentInfo?.variations">
+      <h2>
+        Variation
+        <template v-if="componentInfo.variations.length > 1">
+          &nbsp;({{componentInfo.variations.length}})
+        </template>
+      </h2>
+
+      <KanjiComponentVariationList :literals="componentInfo.variations" />
+    </section>
 
     <KanjiComponentKanjiList :kanji-literals="kanjiLiterals" />
   </article>

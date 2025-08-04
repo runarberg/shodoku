@@ -26,6 +26,17 @@ export type KanjiComponent = {
   phon: string | null;
 };
 
+export type KanjiComponentInfo = {
+  literal: string;
+  radical?: { original: string, number: number; en: string; jp: string };
+  meaning?: string;
+  reading?: string;
+  strokeCount: number;
+  variations?: string[];
+  variationOf?: string[];
+  kanji: Record<number, string[]>;
+};
+
 export type WordWriting = {
   text: string;
   priority?: { freq?: number };

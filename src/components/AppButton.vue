@@ -73,10 +73,13 @@ function handleTouchStart(event: TouchEvent) {
   }
 
   &:disabled {
-    background: var(--background-light);
-    border-color: var(--accent-color-light);
     cursor: default;
     color: var(--accent-color-light);
+
+    &:not(.inline) {
+      background: var(--background-light);
+      border-color: var(--accent-color-light);
+    }
 
     &.filled {
       background: var(--accent-color-light);

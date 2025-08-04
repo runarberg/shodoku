@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, useId } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import BookmarkedWords from "../components/BookmarkedWords.vue";
-import WordSearchResults from "../components/WordSearchResults.vue";
-import KanjiSearchResults from "../components/KanjiSearchResults.vue";
+import AppButton from "../components/AppButton.vue";
 import AppIcon from "../components/AppIcon.vue";
+import BookmarkedWords from "../components/BookmarkedWords.vue";
+import ComponentPicker from "../components/ComponentPicker.vue";
+import KanjiSearchResults from "../components/KanjiSearchResults.vue";
+import WordSearchResults from "../components/WordSearchResults.vue";
 
 const route = useRoute();
 const router = useRouter();
+
+const componentPickerId = useId();
+const componentPickerExpanded = ref(false);
 
 const searchPhrase = computed<string>({
   get() {
@@ -26,8 +31,10 @@ const searchPhrase = computed<string>({
 </script>
 
 <template>
-  <label class="search-field">
-    <AppIcon icon="search" class="icon" />
+  <div class="search-field">
+    <label class="label">
+      <AppIcon icon="search" class="icon" />
+    </label>
 
     <input
       v-model="searchPhrase"
@@ -35,7 +42,19 @@ const searchPhrase = computed<string>({
       aria-label="search"
       placeholder="Search for words, kanji, meanings, etc."
     />
-  </label>
+
+    <AppButton
+      :filled="componentPickerExpanded"
+      :aria-pressed="componentPickerExpanded"
+      :aria-controls="componentPickerId"
+      aria-label="Component Picker"
+      @click="componentPickerExpanded = !componentPickerExpanded"
+    >
+      部
+    </AppButton>
+  </div>
+
+  <ComponentPicker v-if="componentPickerExpanded" :id="componentPickerId" @select="searchPhrase += $event" />
 
   <template v-if="searchPhrase">
     <KanjiSearchResults class="kanji-results" :phrase="searchPhrase" />

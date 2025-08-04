@@ -71,8 +71,10 @@ import { deckBrowserRoute, reviewRoute } from "../router";
 
       <ul>
         <li>
-          Kanji strokes and components are from
+          Kanji strokes and radical/component info are from
           <a href="https://kanjivg.tagaini.net/" target="_blank">KanjiVG</a>.
+          This includes mappings between components and kanji, e.g. used in the
+          component picker.
         </li>
 
         <li>

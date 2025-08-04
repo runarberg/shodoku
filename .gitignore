@@ -10,10 +10,10 @@ lerna-debug.log*
 node_modules
 /dist
 /dist-ssr
-/assets/
+/assets/*
 /assets.db
+!/assets/radicals.csv
 /public/data/*
-!/public/data/radicals.csv
 !/public/data/kanji-lists/
 /public/kanjivg
 *.local

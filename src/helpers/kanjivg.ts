@@ -23,6 +23,8 @@ type KanjiVGStore = {
 const KANJIVG_NAMESPACE = "http://kanjivg.tagaini.net";
 const KANJIVG_KEY: InjectionKey<KanjiVGStore> = Symbol("kanjivg");
 
+const RADICAL_TYPES = ["general", "tradit", "nelson"];
+
 const parser = new DOMParser();
 
 function gatherPositions(el: SVGElement): string[] {
@@ -137,10 +139,24 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
     }
 
     const sorted = new Map<string, KanjiComponent[]>();
-    for (const type of ["general", "tradit", "nelson"]) {
+    for (const type of RADICAL_TYPES) {
       const literal = radicals[type];
       const component = map.get(literal);
       if (component) {
+        component.sort((a, b) => {
+          if (a.radical) {
+            if (b.radical) {
+              return RADICAL_TYPES.indexOf(a.radical) - RADICAL_TYPES.indexOf(b.radical);
+            }
+
+            return -1;
+          } else if (b.radical) {
+            return -1;
+          }
+
+          return 0;
+        });
+
         sorted.set(literal, component);
         map.delete(literal);
       }

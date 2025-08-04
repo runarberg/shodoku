@@ -40,6 +40,7 @@ fast.
    node scripts/build-assets-kanji.js
    node scripts/build-assets-words.js
    node scripts/build-assets-sentences.js
+   node scripts/build-assets-components.js
    node scripts/build-assets-kanji-vocab.js  ## This takes an hour
    node scripts/build-assets-words-sentences.js
    node scripts/build-assets-kanji-index.js

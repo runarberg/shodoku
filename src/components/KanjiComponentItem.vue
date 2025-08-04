@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 
+import { useKanjiComponent } from "../helpers/kanji-components.ts";
 import { useKanjiVG, useKanjiVGViewBox } from "../helpers/kanjivg.ts";
 import { kanjiComponentRoute } from "../router.ts";
-import { useRadical } from "../store/radicals.ts";
 import { KanjiComponent } from "../types.ts";
 
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";
 
 const props = defineProps<{
   literal: string;
+  original?: string | null;
   parts: KanjiComponent[];
 }>();
 
@@ -34,7 +35,50 @@ const phonetic = computed(() => {
   }
 });
 
-const componentInfo = useRadical(() => props.literal);
+const componentInfo = useKanjiComponent(() => props.literal);
+const original = computed(() => props.parts.at(0)?.original);
+const originalComponentInfo = useKanjiComponent(original);
+
+const meaning = computed(() =>
+  originalComponentInfo.value?.radical?.en
+    ?? originalComponentInfo.value?.meaning
+    ?? componentInfo.value?.radical?.en
+    ?? componentInfo?.value?.meaning,
+);
+
+const reading = computed(() =>
+  originalComponentInfo.value?.radical?.jp
+    ?? originalComponentInfo.value?.reading
+    ?? componentInfo.value?.radical?.jp
+    ?? componentInfo?.value?.reading,
+);
+
+const radicalNumber = computed(() =>
+  originalComponentInfo.value?.radical?.number
+    ?? componentInfo.value?.radical?.number,
+);
+
+// These are exceptions from the kanjivg dataset. These are using the
+// characters from the radical unicode block instead of the CJK
+// codeblock as is usual. In these cases, the whole character is the
+// only one denoted with the CJK block while the parts are all from
+// the radical block.
+//
+// See: https://kanjivg.tagaini.net/radicals.html#other-radicals
+const rogueCJKRadicalPairs = [
+  ["\u{5f50}", "\u{2e95}"],
+  ["\u{72ad}", "\u{2ea8}"],
+  ["\u{961d}", "\u{2ed6}"],
+];
+function replaceCJKRadical(literal: string): string {
+  for (const [cjkBlock, radicalBlock] of rogueCJKRadicalPairs) {
+    if (literal === cjkBlock) {
+      return radicalBlock;
+    }
+  }
+
+  return literal;
+}
 
 function accentColorOffset(deg: number): string {
   return `oklch(from var(--accent-color) l c ${deg + 3})`;
@@ -47,7 +91,10 @@ watchEffect(() => {
     return;
   }
 
-  if (strokes.dataset.element === props.literal) {
+  if (
+    strokes.dataset.element === props.literal &&
+    (!props.original || props.original === strokes.dataset.original)
+  ) {
     if (
       strokes.dataset.radical === "general" ||
       strokes.dataset.radical === "tradit"
@@ -66,6 +113,10 @@ watchEffect(() => {
   for (const group of strokes.querySelectorAll<SVGGElement>(
     `g[data-element="${props.literal}"]`
   )) {
+    if (props.original && props.original !== group.dataset.original) {
+      continue;
+    }
+
     if (
       group.dataset.radical === "general" ||
       group.dataset.radical === "tradit"
@@ -94,7 +145,10 @@ watchEffect(() => {
 </script>
 
 <template>
-  <RouterLink :to="kanjiComponentRoute(literal)" class="kanji-component-item">
+  <RouterLink
+    :to="kanjiComponentRoute(replaceCJKRadical(literal))"
+    class="kanji-component-item"
+  >
     <svg v-if="kanjiVG" :viewBox="viewBox" class="kanji-component-strokes">
       <KanjiStrokesGroup class="strokes-group" :strokes="kanjiVG" />
     </svg>
@@ -103,9 +157,10 @@ watchEffect(() => {
       <span class="literal">{{ literal }}</span>
 
       <p class="meaning">
-        <strong>{{ componentInfo?.meaning }}</strong>
-        <span v-if="componentInfo?.reading" lang="ja">
-          ({{ componentInfo.reading }})</span>
+        <strong>{{ meaning }}</strong>
+        <span v-if="original" class="original" lang="ja"> {{original}}</span>
+        <span v-if="reading" lang="ja">
+          ({{ reading }})</span>
       </p>
 
       <div class="tags">
@@ -114,6 +169,8 @@ watchEffect(() => {
           <template v-if="radical === 'nelson'">Nelson radical</template>
           <template v-else-if="radical === 'jis'">JIS radical</template>
           <template v-else>Radical</template>
+
+          <template v-if="radicalNumber">&nbsp;{{ radicalNumber }}</template>
         </span>
 
         <span v-if="phonetic" class="is-phonetic">Phonetic</span>
@@ -165,6 +222,10 @@ watchEffect(() => {
 
   & strong {
     text-transform: capitalize;
+  }
+
+  & .original {
+    padding-inline-start: 1ex;
   }
 }
 
