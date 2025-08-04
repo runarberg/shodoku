@@ -3,9 +3,11 @@ import { useId } from "vue";
 
 import { useComponentPicker } from "../helpers/component-picker.ts";
 import AppButton from "./AppButton.vue";
+import AppIcon from "./AppIcon.vue";
 
 defineEmits<{
   select: [literal: string];
+  close: [];
 }>()
 
 const { allRadicals, filteredRadicals, kanjiSelection, selectedRadicals } = useComponentPicker();
@@ -22,6 +24,25 @@ function toggleRadical(literal: string) {
 
 <template>
   <div class="component-picker">
+    <div class="control-buttons">
+      <AppButton
+        class="clear-button"
+        inline
+        :disabled="selectedRadicals.size === 0"
+        @click="selectedRadicals.clear()"
+      >
+        Clear
+      </AppButton>
+
+      <AppButton
+        class="close-button"
+        inline
+        @click="$emit('close')"
+      >
+        <AppIcon icon="x-mark" />
+      </AppButton>
+    </div>
+
     <p v-if="selectedRadicals.size === 0" class="empty-message">
       Select one or more components below. Pick any of the resulting kanji.
     </p>
@@ -60,15 +81,6 @@ function toggleRadical(literal: string) {
         </ol>
       </li>
     </ol>
-
-    <AppButton
-      class="clear-button"
-      inline
-      :disabled="selectedRadicals.size === 0"
-      @click="selectedRadicals.clear()"
-    >
-      Clear
-    </AppButton>
   </div>
 </template>
 
@@ -100,7 +112,7 @@ function toggleRadical(literal: string) {
 
 .kanji-list {
   block-size: 8em;
-  overflow-block: auto;
+  overflow-y: auto;
 }
 
 .kanji-list,
@@ -157,7 +169,10 @@ function toggleRadical(literal: string) {
   }
 }
 
-.clear-button {
+.control-buttons {
   align-self: end;
+  column-gap: 1ex;
+  display: flex;
+  justify-content: end;
 }
 </style>

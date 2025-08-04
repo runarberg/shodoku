@@ -54,7 +54,12 @@ const searchPhrase = computed<string>({
     </AppButton>
   </div>
 
-  <ComponentPicker v-if="componentPickerExpanded" :id="componentPickerId" @select="searchPhrase += $event" />
+  <ComponentPicker
+    v-if="componentPickerExpanded"
+    :id="componentPickerId"
+    @close="componentPickerExpanded = false"
+    @select="searchPhrase += $event"
+  />
 
   <template v-if="searchPhrase">
     <KanjiSearchResults class="kanji-results" :phrase="searchPhrase" />
