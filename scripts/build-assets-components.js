@@ -150,6 +150,8 @@ const rogueCJKRadicalPairs = [
   ["\u{5f50}", "\u{2e95}"],
   ["\u{72ad}", "\u{2ea8}"],
   ["\u{961d}", "\u{2ed6}"],
+  // from variation to original
+  ["\u{201a2}", "\u{4eba}"],
 ];
 for (const [cjkBlock, radBlock] of rogueCJKRadicalPairs) {
   const components = kanjiComponentMap.get(cjkBlock);
