@@ -1,0 +1,1 @@
+import{m as s,y as r,B as i}from"./index-Q1_umh3Q.js";function l(a){const t=s(null);return r(()=>i(a),async n=>{if(!n){t.value=null;return}if(n===t.value?.literal)return;const e=n.codePointAt(0)?.toString(16).padStart(5,"0"),o=await(await fetch(`/data/components-v1/${e}.json`)).json();t.value=o},{immediate:!0}),t}export{l as u};
