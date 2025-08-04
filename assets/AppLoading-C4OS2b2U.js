@@ -1,4 +1,4 @@
-import{d as s,_ as i,a as t,o as d}from"./index-Q1_umh3Q.js";const l=`<?xml version="1.0" encoding="utf-8"?>
+import{d as s,_ as i,a as t,o as d}from"./index-DjqtGQe7.js";const l=`<?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
   <g data-element="日">
     <path id="s01">
