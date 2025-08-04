@@ -57,6 +57,14 @@ function isKanji(codepoint) {
   return (
     (codepoint >= 0x4e00 && codepoint <= 0x9fc3)
       || (codepoint >= 0x3400 && codepoint <= 0x4dbf)
+      || (codepoint >= 0x20000 && codepoint <= 0x2a6df)
+      || (codepoint >= 0x2a700 && codepoint <= 0x2b73f)
+      || (codepoint >= 0x2b740 && codepoint <= 0x2b81f)
+      || (codepoint >= 0x2b820 && codepoint <= 0x2ceaf)
+      || (codepoint >= 0x2ceb0 && codepoint <= 0x2ebef)
+      || (codepoint >= 0x30000 && codepoint <= 0x3134f)
+      || (codepoint >= 0x31350 && codepoint <= 0x323af)
+      || (codepoint >= 0x2ebf0 && codepoint <= 0x2ee5f)
   );
 }
 
