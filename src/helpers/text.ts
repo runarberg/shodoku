@@ -21,17 +21,19 @@ export function isKanji(char: string): boolean {
 export const allHiraganaRE = /\p{Script=Hiragana}/gu;
 export function toKatakana(str: string): string {
   return str.replaceAll(allHiraganaRE, (char) =>
-    String.fromCodePoint((char.codePointAt(0) ?? 0) + 0x60)
+    String.fromCodePoint((char.codePointAt(0) ?? 0) + 0x60),
   );
 }
 
 export function fromBase64(base64: string): string {
   // https://github.com/microsoft/TypeScript/issues/61695
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  return new TextDecoder().decode(Uint8Array.fromBase64(base64))
+  return new TextDecoder().decode(Uint8Array.fromBase64(base64));
 }
 
 export function toBase64(str: string): string {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return new TextEncoder().encode(str).toBase64();
 }

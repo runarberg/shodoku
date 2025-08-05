@@ -7,10 +7,10 @@ import {
   CardProgress,
   CardReview,
   CardType,
+  Deck,
   SyncPatch,
   SyncStagingPreference,
   SyncStagingStore,
-  Deck,
 } from "../types.ts";
 
 export interface DB extends DBSchema {

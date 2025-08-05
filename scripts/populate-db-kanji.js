@@ -89,12 +89,12 @@ const insertCharacter = db.transaction(
     for (const [seq, meaning] of enumerate(meanings)) {
       insertKanjiMeaning.run({ codepoint: kanji.codepoint, meaning, seq });
     }
-  }
+  },
 );
 
 const readStream = createReadStream(
   new URL("../assets/kanjidic2.xml", import.meta.url),
-  { encoding: "utf8" }
+  { encoding: "utf8" },
 );
 
 const xmlStream = sax.createStream(true);

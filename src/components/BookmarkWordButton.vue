@@ -2,12 +2,11 @@
 import { computed } from "vue";
 
 import { db as openingDb } from "../db/index.ts";
+import { addToSyncStaging } from "../db/sync.ts";
+import { liveQueryBroadcaster } from "../helpers/channels.ts";
 import { useLiveQuery } from "../helpers/db.ts";
-
 import AppButton from "./AppButton.vue";
 import AppIcon from "./AppIcon.vue";
-import { liveQueryBroadcaster } from "../helpers/channels";
-import { addToSyncStaging } from "../db/sync";
 
 const props = defineProps<{
   wordId: number;
@@ -24,7 +23,7 @@ const { result: isBookmarked } = useLiveQuery(
 
       return count > 0;
     };
-  })
+  }),
 );
 
 async function toggleBookmark() {

@@ -12,7 +12,9 @@ defineProps<{
       <slot name="label">{{ label }}</slot>
     </label>
 
-    <div v-if="$slots.info" class="info"><slot name="info" /></div>
+    <div v-if="$slots.info" class="info">
+      <slot name="info" />
+    </div>
 
     <slot />
   </div>

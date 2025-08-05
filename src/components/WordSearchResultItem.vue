@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { useWord } from "../helpers/words.ts";
 import { hasKanaOrKanji, hasKanji } from "../helpers/text.ts";
+import { useWord } from "../helpers/words.ts";
 import { wordRoute } from "../router.ts";
 import { Furigana, WordMeaning } from "../types.ts";
 import type { WordSearchResult } from "../workers/search-words.worker.ts";
-
 import BookmarkWordButton from "./BookmarkWordButton.vue";
 import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
 import VocabularyWordMeaning from "./VocabularyWordMeaning.vue";
@@ -66,12 +65,12 @@ const furigana = computed<Furigana | string>(() => {
     return match;
   }
 
-  const [reading] = readings;
-  if (writing && reading) {
-    return [{ ruby: reading, rt: reading }];
+  const [firstReading] = readings;
+  if (writing && firstReading) {
+    return [{ ruby: firstReading, rt: firstReading }];
   }
 
-  return writing ?? reading ?? match;
+  return writing ?? firstReading ?? match;
 });
 
 const meaning = computed<WordMeaning | string>(() => {
@@ -83,7 +82,7 @@ const meaning = computed<WordMeaning | string>(() => {
     }
 
     const found = word.value.meanings?.find((other) =>
-      other.glossary?.includes(match)
+      other.glossary?.includes(match),
     );
 
     if (found) {
@@ -108,7 +107,9 @@ const meaning = computed<WordMeaning | string>(() => {
     />
 
     <RouterLink :to="wordRoute(result.id)" class="word">
-      <template v-if="typeof furigana === 'string'">{{ furigana }}</template>
+      <template v-if="typeof furigana === 'string'">
+        {{ furigana }}
+      </template>
       <VocabularyWordFurigana v-else :furigana="furigana" />
     </RouterLink>
 

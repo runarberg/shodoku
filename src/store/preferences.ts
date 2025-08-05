@@ -1,10 +1,9 @@
 import { useLocalStorage } from "@vueuse/core";
 import { watchEffect } from "vue";
 
-export const colorModePreference = useLocalStorage<"light" | "dark" | "light dark">(
-  "shodoku.app.preferences.appearance.color-mode",
-  "light dark"
-);
+export const colorModePreference = useLocalStorage<
+  "light" | "dark" | "light dark"
+>("shodoku.app.preferences.appearance.color-mode", "light dark");
 
 export function setupGlobalPreferences() {
   watchEffect(() => {

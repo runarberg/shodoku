@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 
+import { hasKanjiRE } from "../helpers/text.ts";
 import { useWordFurigana } from "../helpers/words.ts";
 import { wordRoute } from "../router.ts";
 import { Furigana, Word } from "../types.ts";
-
-import VocabularyWordMeaning from "./VocabularyWordMeaning.vue";
 import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
-import { hasKanjiRE } from "../helpers/text";
+import VocabularyWordMeaning from "./VocabularyWordMeaning.vue";
 import WordWritingSelect from "./WordWritingSelect.vue";
 
 const props = withDefaults(
@@ -23,7 +22,7 @@ const props = withDefaults(
     hideKanji: false,
     hideReading: false,
     hideMeaning: false,
-  }
+  },
 );
 
 const meanings = computed(() => {
@@ -71,7 +70,7 @@ watch(
     if (newId !== oldId) {
       selectedFurigana.value = null;
     }
-  }
+  },
 );
 </script>
 
@@ -93,7 +92,7 @@ watch(
       </RouterLink>
     </p>
 
-    <div class="meaning" v-show="!hideMeaning">
+    <div v-show="!hideMeaning" class="meaning">
       <VocabularyWordMeaning v-if="meaning" :meaning="meaning" />
 
       <details
@@ -104,7 +103,8 @@ watch(
 
         <ul class="additional-meanings">
           <li
-            v-for="additionalMeaning of additionalMeanings"
+            v-for="(additionalMeaning, i) of additionalMeanings"
+            :key="i"
             class="additional-meaning-item"
           >
             <VocabularyWordMeaning :meaning="additionalMeaning" />
@@ -118,7 +118,7 @@ watch(
         v-if="!hideKanji && !hideReading"
         v-model="selectedFurigana"
         :word="word"
-        :default="furigana"
+        :default-furigana="furigana"
       />
     </div>
   </div>

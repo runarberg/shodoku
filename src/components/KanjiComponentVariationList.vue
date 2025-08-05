@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { kanjiComponentRoute } from '../router.ts';
+import { kanjiComponentRoute } from "../router.ts";
 
 defineProps<{
   literals: string[];

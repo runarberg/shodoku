@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
+import { PLACEHOLDER } from "../helpers/sync.ts";
+import AppButton from "./AppButton.vue";
+import AppIcon from "./AppIcon.vue";
 import AppInput from "./AppInput.vue";
 import AppSelect from "./AppSelect.vue";
 import AppTextArea from "./AppTextArea.vue";
 import RemoteSyncSettingsFormHeadersField from "./RemoteSyncSettingsFormHeadersField.vue";
-import { PLACEHOLDER } from "../helpers/sync.ts";
-import AppIcon from "./AppIcon.vue";
-import AppButton from "./AppButton.vue";
 
 const method = defineModel<string>("method", { default: "" });
 const url = defineModel<string>("url", { default: "" });
@@ -16,7 +16,7 @@ const body = defineModel<string>("body");
 
 const HTTP_METHODS = ["GET", "POST", "PATCH", "PUT"];
 const hasRequestBody = computed(() =>
-  ["POST", "PATCH", "PUT"].includes(method.value)
+  ["POST", "PATCH", "PUT"].includes(method.value),
 );
 
 const exampleRequestBody = `{

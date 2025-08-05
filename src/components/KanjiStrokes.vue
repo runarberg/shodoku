@@ -1,20 +1,19 @@
 <script setup lang="ts">
+import { until } from "@vueuse/core";
 import { computed, ref, shallowReactive, watch } from "vue";
 
 import {
   useKanjiVG,
   useKanjiVGSyncing,
   useKanjiVGViewBox,
-} from "../helpers/kanjivg";
-import { KanjiInfo } from "../types";
-
+} from "../helpers/kanjivg.ts";
+import { sleep } from "../helpers/time.ts";
+import { KanjiInfo } from "../types.ts";
 import AppButton from "./AppButton.vue";
 import AppIcon from "./AppIcon.vue";
 import KanjiStrokesBackground from "./KanjiStrokesBackground.vue";
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";
 import KanjiStrokesPracticeCanvas from "./KanjiStrokesPracticeCanvas.vue";
-import { sleep } from "../helpers/time";
-import { until } from "@vueuse/core";
 
 const props = withDefaults(
   defineProps<{
@@ -25,7 +24,7 @@ const props = withDefaults(
   {
     autoHint: false,
     practiceMode: false,
-  }
+  },
 );
 
 const emit = defineEmits<{
@@ -65,7 +64,7 @@ function animate() {
   for (const stroke of strokes.value) {
     const animation = stroke.animate(
       strokeKeyframes(stroke),
-      strokeAnimationOptions
+      strokeAnimationOptions,
     );
 
     animation.pause();
@@ -121,7 +120,7 @@ function showHint(n = practiceStrokes.length) {
 
   const animation = stroke.animate(
     strokeKeyframes(stroke),
-    strokeAnimationOptions
+    strokeAnimationOptions,
   );
 
   animation.play();
@@ -198,7 +197,7 @@ watch(
       });
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 watch(
@@ -216,7 +215,7 @@ watch(
       }
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 defineExpose({

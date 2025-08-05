@@ -15,8 +15,12 @@ const id = useId();
 
 <template>
   <AppFormField :control="id" :label="label" :inline="inline">
-    <template v-if="$slots.label" #label><slot name="label" /></template>
-    <template v-if="$slots.info" #info><slot name="info" /></template>
+    <template v-if="$slots.label" #label>
+      <slot name="label" />
+    </template>
+    <template v-if="$slots.info" #info>
+      <slot name="info" />
+    </template>
 
     <input :id="id" v-model="model" v-bind="$attrs" class="input" />
   </AppFormField>

@@ -10,8 +10,15 @@ import {
   postSyncPatches as pushSyncPatches,
   STORE_NAMES,
 } from "../helpers/sync.ts";
-import { BookmarkedWord, CardProgress, CardReview, Deck, SyncPatch, SyncPatchStore, SyncStagingStore } from "../types.ts";
-
+import {
+  BookmarkedWord,
+  CardProgress,
+  CardReview,
+  Deck,
+  SyncPatch,
+  SyncPatchStore,
+  SyncStagingStore,
+} from "../types.ts";
 import { db as openingDb } from "./index.ts";
 import { DB } from "./schema.ts";
 
@@ -19,7 +26,7 @@ const SYNC_LATEST_HASH_KEY = "shodoku.app.sync.latest";
 const SYNC_PATCH_VERSION = 1;
 
 async function createHash(
-  syncRecordPartial: Omit<SyncPatch, "hash">
+  syncRecordPartial: Omit<SyncPatch, "hash">,
 ): Promise<string> {
   const message = JSON.stringify(syncRecordPartial);
   const msgUint8 = new TextEncoder().encode(message);
@@ -88,7 +95,10 @@ async function createFirstSyncPatch(): Promise<PartialSyncPatch | null> {
 async function createSyncPatch(): Promise<PartialSyncPatch | null> {
   const db = await openingDb;
 
-  if (await db.count("syncs") === 0 && localStorage.getItem(SYNC_LATEST_HASH_KEY)) {
+  if (
+    (await db.count("syncs")) === 0 &&
+    localStorage.getItem(SYNC_LATEST_HASH_KEY)
+  ) {
     // This hash key is old and is preventing any future syncing.
     localStorage.removeItem(SYNC_LATEST_HASH_KEY);
   }
@@ -102,7 +112,7 @@ async function createSyncPatch(): Promise<PartialSyncPatch | null> {
   const stagedStores = await pipe(
     tx.objectStore("sync.staging.stores").iterate(),
     map((cursor) => cursor.value),
-    groupBy((item) => item.store)
+    groupBy((item) => item.store),
   );
 
   if (stagedStores.size === 0) {
@@ -164,17 +174,22 @@ async function createSyncPatch(): Promise<PartialSyncPatch | null> {
   };
 }
 
-function getKey(keyPath: string | string[], record: any): any {
+function getKey<T>(keyPath: string | string[] | null, record: T): unknown {
+  if (!keyPath) {
+    return record;
+  }
+
   if (Array.isArray(keyPath)) {
     return keyPath.map((path) => getKey(path, record));
   }
 
-  let obj = record;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let obj: any = record;
   for (const seg of keyPath.split(".")) {
     obj = obj[seg];
   }
 
-  return obj;
+  return obj as unknown;
 }
 
 function shouldKeepMineDecks(mine: Deck, other: Deck): boolean {
@@ -193,29 +208,35 @@ function shouldKeepMineDecks(mine: Deck, other: Deck): boolean {
   return mine.updatedAt > other.updatedAt;
 }
 
-function shouldKeepMineProgress(mine: CardProgress, other: CardProgress): boolean {
-      if (!mine.fsrs.last_review) {
-      return false;
-    }
+function shouldKeepMineProgress(
+  mine: CardProgress,
+  other: CardProgress,
+): boolean {
+  if (!mine.fsrs.last_review) {
+    return false;
+  }
 
-    if (!other.fsrs.last_review) {
-      return true;
-    }
+  if (!other.fsrs.last_review) {
+    return true;
+  }
 
-    return mine.fsrs.last_review > other.fsrs.last_review;
+  return mine.fsrs.last_review > other.fsrs.last_review;
 }
 
 function shouldKeepMineReviews(mine: CardReview, other: CardReview): boolean {
   return mine.log.review > other.log.review;
 }
 
-function shouldKeepMineBookmarkedWords(mine: BookmarkedWord, other: BookmarkedWord): boolean {
+function shouldKeepMineBookmarkedWords(
+  mine: BookmarkedWord,
+  other: BookmarkedWord,
+): boolean {
   return mine.bookmarkedAt > other.bookmarkedAt;
 }
 
 function shouldKeepMine<
   StoreName extends StoreNames<DB>,
-  T extends DB[StoreName]["value"]
+  T extends DB[StoreName]["value"],
 >(storeName: StoreName, mine: T, other: T): boolean {
   if (storeName === "decks") {
     return shouldKeepMineDecks(mine as Deck, other as Deck);
@@ -230,7 +251,10 @@ function shouldKeepMine<
   }
 
   if (storeName === "bookmarked-words") {
-    return shouldKeepMineBookmarkedWords(mine as BookmarkedWord, other as BookmarkedWord);
+    return shouldKeepMineBookmarkedWords(
+      mine as BookmarkedWord,
+      other as BookmarkedWord,
+    );
   }
 
   return true;
@@ -239,7 +263,7 @@ function shouldKeepMine<
 function stagedRemoveRecord(
   storeName: StoreNames<DB>,
   record: string,
-  staged?: PartialSyncPatch | null
+  staged?: PartialSyncPatch | null,
 ) {
   if (!staged) {
     return;
@@ -259,7 +283,7 @@ function stagedRemoveRecord(
 function stagedPutRecord(
   storeName: StoreNames<DB>,
   record: string,
-  staged?: PartialSyncPatch | null
+  staged?: PartialSyncPatch | null,
 ) {
   if (!staged) {
     return;
@@ -270,7 +294,7 @@ function stagedPutRecord(
     return;
   }
 
-  let put = store.put;
+  let { put } = store;
   if (!put) {
     put = [];
     store.put = put;
@@ -285,7 +309,7 @@ function isConstraintError(error: unknown) {
 
 async function applySyncPatches(
   patches: SyncPatch[],
-  staged?: PartialSyncPatch | null
+  staged?: PartialSyncPatch | null,
 ) {
   const db = await openingDb;
   const tx = db.transaction(db.objectStoreNames, "readwrite");
@@ -295,7 +319,7 @@ async function applySyncPatches(
 
   for (const patch of pipe(
     patches,
-    dropWhile(({ parent }) => parent !== latest)
+    dropWhile(({ parent }) => parent !== latest),
   )) {
     for (const patchStore of patch.stores) {
       const store = tx.objectStore(patchStore.name);
@@ -318,7 +342,8 @@ async function applySyncPatches(
         } catch (error) {
           if (isConstraintError(error)) {
             // Collision. Determine whether to keep mine or other.
-            const mine = await store.get(getKey(store.keyPath, record));
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const mine = await store.get(getKey(store.keyPath, record) as any);
 
             if (mine) {
               const mineStr = stringify(mine);
@@ -338,7 +363,10 @@ async function applySyncPatches(
 
       for (const recordStr of patchStore.put ?? []) {
         const record = parse(recordStr);
-        const cursor = await store.openCursor(getKey(store.keyPath, record));
+        const cursor = await store.openCursor(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          getKey(store.keyPath, record) as any,
+        );
         if (cursor) {
           cursor.update(record);
         } else {
@@ -348,6 +376,7 @@ async function applySyncPatches(
 
       for (const keyStr of patchStore.delete ?? []) {
         const key = parse(keyStr);
+        // eslint-disable-next-line no-console
         console.log(key);
         store.delete(key);
       }
@@ -379,7 +408,7 @@ export async function syncRemote() {
   const db = await openingDb;
   const tx = db.transaction(
     ["sync.staging.preferences", "sync.staging.stores", "syncs"],
-    "readwrite"
+    "readwrite",
   );
 
   tx.objectStore("sync.staging.stores").clear();
@@ -402,7 +431,7 @@ export async function disableSync() {
   const db = await openingDb;
   const tx = db.transaction(
     ["sync.staging.preferences", "sync.staging.stores", "syncs"],
-    "readwrite"
+    "readwrite",
   );
 
   tx.objectStore("sync.staging.stores").clear();

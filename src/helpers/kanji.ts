@@ -1,10 +1,15 @@
-import { MaybeRefOrGetter, ref, Ref, toValue, watch } from "vue";
-import { KanjiInfo, KanjiVocab } from "../types";
+import { MaybeRefOrGetter, Ref, ref, toValue, watch } from "vue";
+
+import { KanjiInfo, KanjiVocab } from "../types.ts";
 
 export function useKanji(
-  codepoint: MaybeRefOrGetter<number | null | undefined>
+  codepoint: MaybeRefOrGetter<number | null | undefined>,
 ): Ref<KanjiInfo | null> {
   const kanji = ref<KanjiInfo | null>(null);
+
+  function setKanji(kanjiInfo: KanjiInfo) {
+    kanji.value = kanjiInfo;
+  }
 
   watch(
     () => toValue(codepoint),
@@ -22,16 +27,16 @@ export function useKanji(
       const response = await fetch(`/data/kanji-v1/${hex}.json`);
       const data = await response.json();
 
-      kanji.value = data;
+      setKanji(data);
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return kanji;
 }
 
 export function useKanjiVocab(
-  codepoint: MaybeRefOrGetter<number | null | undefined>
+  codepoint: MaybeRefOrGetter<number | null | undefined>,
 ): Ref<KanjiVocab | null> {
   const kanjiVocab = ref<KanjiVocab | null>(null);
 
@@ -49,7 +54,7 @@ export function useKanjiVocab(
 
       kanjiVocab.value = data;
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return kanjiVocab;

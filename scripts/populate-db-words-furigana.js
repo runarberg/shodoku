@@ -37,7 +37,7 @@ pipeline.on("data", ({ value }) => {
   insertWordFurigana.run(
     value.text,
     value.reading,
-    JSON.stringify(value.furigana)
+    JSON.stringify(value.furigana),
   );
 });
 

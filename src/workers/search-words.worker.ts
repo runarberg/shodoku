@@ -7,7 +7,7 @@ const RECORD_SEP = "\u{241e}";
 const GROUP_SEP = "\u{241d}";
 
 const fetchingIndex = fetch("/data/index/words-v1.usv").then((response) =>
-  response.text()
+  response.text(),
 );
 
 function isInParams(heystack: string, needle: string): boolean {
@@ -40,9 +40,7 @@ async function findWords(search: {
   let foundCount = 0;
 
   let i = 0;
-  let unit = 0;
   let record = 0;
-  let group = 0;
   let unitStart = 0;
   let groupStart = 0;
   let matchContent = null;
@@ -80,10 +78,8 @@ async function findWords(search: {
         }
       }
 
-      unit += 1;
       unitStart = i + len;
     } else if (char === RECORD_SEP) {
-      unit = 0;
       record += 1;
 
       unitStart = i + len;
@@ -91,7 +87,7 @@ async function findWords(search: {
       if (matchContent) {
         const group = index.slice(groupStart, i).trim();
         const [idStr, readingRec, writingRec, glossaryRec] = group.split(
-          `${UNIT_SEP}${RECORD_SEP}`
+          `${UNIT_SEP}${RECORD_SEP}`,
         );
         const id = Number.parseInt(idStr);
 
@@ -114,9 +110,7 @@ async function findWords(search: {
         }
       }
 
-      unit = 0;
       record = 0;
-      group += 1;
 
       unitStart = i + len;
       groupStart = i + len;

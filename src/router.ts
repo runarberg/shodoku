@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter, RouteLocationRaw } from "vue-router";
+import { createRouter, createWebHistory, RouteLocationRaw } from "vue-router";
 
 export const HOME_ROUTE_NAME = Symbol("home-route-name");
 export const REVIEW_ROUTE_NAME = Symbol("review-route-name");

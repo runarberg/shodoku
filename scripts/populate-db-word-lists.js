@@ -25,7 +25,7 @@ db.exec(`
 `);
 
 const insertWordList = db.prepare(
-  "INSERT INTO word_lists (name, priority) VALUES (?, ?)"
+  "INSERT INTO word_lists (name, priority) VALUES (?, ?)",
 );
 const insertWord = db.prepare(`
   INSERT INTO word_list_words (list, writing, reading) VALUES (?, ?, ?)
@@ -42,7 +42,7 @@ const lists = [
 for (const [listName, priority] of lists) {
   const fileURL = new URL(
     `../assets/word-lists/${listName}.csv`,
-    import.meta.url
+    import.meta.url,
   );
 
   db.exec("BEGIN");

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Furigana } from "../types.ts";
-
 import MaybeHideKanji from "./MaybeHideKanji.vue";
 
 const props = defineProps<{
@@ -25,7 +24,7 @@ function hideAnnotation(ruby: string, index: number) {
 </script>
 
 <template>
-  <template v-for="({ ruby, rt }, i) of furigana">
+  <template v-for="({ ruby, rt }, i) of furigana" :key="i">
     <template v-if="rt">
       <ruby
         ><MaybeHideKanji

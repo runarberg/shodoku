@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { deckBrowserRoute, reviewRoute } from "../router";
+import { deckBrowserRoute, reviewRoute } from "../router.ts";
 </script>
 
 <template>
@@ -18,18 +18,18 @@ import { deckBrowserRoute, reviewRoute } from "../router";
 
       <p>
         Start by
-        <RouterLink :to="deckBrowserRoute">selecting a deck</RouterLink> to
+        <RouterLink :to="deckBrowserRoute"> selecting a deck </RouterLink> to
         study. This will put all the kanji in that deck in your review queue, in
         the same order as they appear in the deck. You can have several decks.
       </p>
 
       <p>
         After you have selected a deck you can
-        <RouterLink :to="reviewRoute">start reviewing</RouterLink>. We start by
-        teaching you how to write the kanji. If you don’t know the stroke order,
-        you can click the hint button next to the drawing pad to see the next
-        stroke. When you are done the correct strokes will appear under your
-        drawing. Click the play button to compare your stoke orders.
+        <RouterLink :to="reviewRoute"> start reviewing </RouterLink>. We start
+        by teaching you how to write the kanji. If you don’t know the stroke
+        order, you can click the hint button next to the drawing pad to see the
+        next stroke. When you are done the correct strokes will appear under
+        your drawing. Click the play button to compare your stoke orders.
       </p>
 
       <p>

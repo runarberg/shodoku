@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useId } from "vue";
+
 import AppFormField from "./AppFormField.vue";
 
 const model = defineModel<number>();
@@ -14,8 +15,12 @@ const id = useId();
 
 <template>
   <AppFormField :control="id" :label="label" :inline="inline">
-    <template v-if="$slots.label" #label><slot name="label" /></template>
-    <template v-if="$slots.info" #info><slot name="info" /></template>
+    <template v-if="$slots.label" #label>
+      <slot name="label" />
+    </template>
+    <template v-if="$slots.info" #info>
+      <slot name="info" />
+    </template>
 
     <input
       :id="id"

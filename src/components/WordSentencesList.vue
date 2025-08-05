@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useWordSetenceIds } from "../helpers/words.ts";
-
 import VocabularySentence from "./VocabularySentence.vue";
 
 const props = defineProps<{
@@ -15,7 +14,11 @@ const sentenceIds = useWordSetenceIds(() => props.wordId);
     <h3 class="title">Sentences ({{ sentenceIds.length }})</h3>
 
     <ul class="sentence-list">
-      <li v-for="sentenceId of sentenceIds" class="sentence-item">
+      <li
+        v-for="sentenceId of sentenceIds"
+        :key="sentenceId"
+        class="sentence-item"
+      >
         <VocabularySentence :sentence-id="sentenceId" />
       </li>
     </ul>

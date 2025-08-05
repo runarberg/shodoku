@@ -39,8 +39,8 @@ const { result: deckCount } = useLiveQuery(async () =>
     (await db).transaction("decks").store.iterate(),
     map((cursor) => cursor.value),
     filter((deck) => deck.active),
-    count()
-  )
+    count(),
+  ),
 );
 
 const reviewedCards = useReviewedCards();
@@ -65,7 +65,7 @@ function continueReview() {
       </p>
 
       <nav class="home-nav">
-        <AppButton :to="deckBrowserRoute" filled>Select Decks</AppButton>
+        <AppButton :to="deckBrowserRoute" filled> Select Decks </AppButton>
       </nav>
     </template>
 

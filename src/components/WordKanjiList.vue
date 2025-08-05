@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+import { isKanji } from "../helpers/text.ts";
 import { Word } from "../types.ts";
-import { isKanji } from "../helpers/text";
 import WordKanjiListItem from "./WordKanjiListItem.vue";
 
 const props = defineProps<{
@@ -37,7 +37,7 @@ const kanjiInWord = computed<Set<string>>(() => {
     <h3>Kanji ({{ kanjiInWord.size }})</h3>
 
     <ul class="kanji-list">
-      <li v-for="kanji of kanjiInWord">
+      <li v-for="kanji of kanjiInWord" :key="kanji">
         <WordKanjiListItem :kanji="kanji" />
       </li>
     </ul>

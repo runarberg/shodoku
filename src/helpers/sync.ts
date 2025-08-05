@@ -8,7 +8,6 @@ import {
   remoteSyncPushURL,
 } from "../store/sync.ts";
 import { SyncPatch, SyncPatchStore } from "../types.ts";
-
 import {
   AssertionError,
   assertIsArray,
@@ -29,11 +28,12 @@ export const STORE_NAMES = [
   "reviews",
 ] as const;
 
+// eslint-disable-next-line no-template-curly-in-string
 export const PLACEHOLDER = "${PLACEHOLDER}";
 
 function assertIsStoreName(
-  str: string
-): asserts str is typeof STORE_NAMES[number] {
+  str: string,
+): asserts str is (typeof STORE_NAMES)[number] {
   if (!(STORE_NAMES as readonly string[]).includes(str)) {
     throw new AssertionError({
       actual: str,
@@ -44,7 +44,7 @@ function assertIsStoreName(
 
 function assertKeyIsSyncPatchStoreArray<
   T extends object,
-  Key extends PropertyKey
+  Key extends PropertyKey,
 >(key: Key, thing: T): asserts thing is T & { [P in Key]: SyncPatchStore[] } {
   assertKeyIsArray(key, thing);
 
@@ -90,10 +90,10 @@ function assertKeyIsSyncPatchStoreArray<
 
 function assertKeyIsSyncPatchPreferencesArray<
   T extends object,
-  Key extends PropertyKey
+  Key extends PropertyKey,
 >(
   key: Key,
-  thing: T
+  thing: T,
 ): asserts thing is T & { [P in Key]: Array<[string, string | null]> } {
   assertKeyIsArray(key, thing);
 
@@ -170,7 +170,7 @@ export async function postSyncPatches(patches: SyncPatch[]) {
 
   if (!response.ok) {
     throw new Error(
-      `Error ${response.status} pushing sync: ${await response.text()}`
+      `Error ${response.status} pushing sync: ${await response.text()}`,
     );
   }
 }

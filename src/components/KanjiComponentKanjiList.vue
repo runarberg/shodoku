@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-
 import { vIntersectionObserver } from "@vueuse/components";
-import { watch } from 'vue';
+import { ref, watch } from "vue";
 
-import WordKanjiListItem from './WordKanjiListItem.vue';
+import WordKanjiListItem from "./WordKanjiListItem.vue";
 
 const props = defineProps<{
   kanjiLiterals: string[];
@@ -32,7 +30,7 @@ watch(
     if (newValue !== oldValue) {
       pageLimit.value = PAGE_SIZE;
     }
-  }
+  },
 );
 </script>
 
@@ -40,7 +38,9 @@ watch(
   <section>
     <h2>
       Found in Kanji
-      <template v-if="kanjiLiterals.length > 0"> ({{ kanjiLiterals.length }})</template>
+      <template v-if="kanjiLiterals.length > 0">
+        ({{ kanjiLiterals.length }})
+      </template>
     </h2>
 
     <ul v-if="kanjiLiterals.length > 0" class="component-list">
@@ -57,7 +57,6 @@ watch(
     >
       Load More
     </button>
-
   </section>
 </template>
 

@@ -13,26 +13,32 @@ withDefaults(
     kanji: null,
     hide: false,
     link: false,
-  }
+  },
 );
 </script>
 
 <template>
   <template v-if="link">
-    <template v-for="char of str">
-      <RouterLink v-if="isKanji(char)" :to="kanjiRoute(char)" class="link">{{
-        char
-      }}</RouterLink>
-      <template v-else>{{ char }}</template>
+    <template v-for="char of str" :key="char">
+      <RouterLink v-if="isKanji(char)" :to="kanjiRoute(char)" class="link">
+        {{ char }}
+      </RouterLink>
+      <template v-else>
+        {{ char }}
+      </template>
     </template>
   </template>
 
-  <template v-else-if="!kanji || !hide">{{ str }}</template>
+  <template v-else-if="!kanji || !hide">
+    {{ str }}
+  </template>
 
   <template v-else>
-    <template v-for="char of str">
+    <template v-for="char of str" :key="char">
       <span v-if="char === kanji" class="placeholder">◌</span>
-      <template v-else>{{ char }}</template>
+      <template v-else>
+        {{ char }}
+      </template>
     </template>
   </template>
 </template>

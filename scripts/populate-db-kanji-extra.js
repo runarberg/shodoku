@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+
 import Database from "better-sqlite3";
 
 const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));

@@ -3,11 +3,10 @@ import { computed, onMounted, ref, useId } from "vue";
 import { useRoute } from "vue-router";
 
 import { deckLabel } from "../helpers/decks.ts";
+import { formatPercent } from "../helpers/formats.ts";
+import { useDeckStatus } from "../store/decks.ts";
 import { Deck } from "../types.ts";
-
 import DeckKanjiCards from "./DeckKanjiCards.vue";
-import { useDeckStatus } from "../store/decks";
-import { formatPercent } from "../helpers/formats";
 
 const props = defineProps<{
   deck: Deck;
@@ -32,7 +31,7 @@ const expandedDeckNames = computed(() => {
 });
 
 const expanded = computed(() =>
-  expandedDeckNames.value.includes(props.deck.name)
+  expandedDeckNames.value.includes(props.deck.name),
 );
 
 const toggleExpanded = computed(() => {

@@ -2,10 +2,10 @@ import { watchDebounced } from "@vueuse/core";
 import {
   MaybeRefOrGetter,
   onScopeDispose,
-  ref,
   Ref,
-  shallowReactive,
+  ref,
   ShallowReactive,
+  shallowReactive,
   toValue,
 } from "vue";
 
@@ -19,7 +19,7 @@ const searchKanjiWorker = new SearchKanjiWorker();
 const searchWordsWorker = new SearchWordsWorker();
 
 export function useWordSearch(
-  searchPhrase: MaybeRefOrGetter<string>
+  searchPhrase: MaybeRefOrGetter<string>,
 ): ShallowReactive<WordSearchResult[]> {
   const wordResults = shallowReactive<WordSearchResult[]>([]);
 
@@ -32,7 +32,7 @@ export function useWordSearch(
         searchWordsWorker.postMessage(phrase);
       }
     },
-    { debounce: 300, immediate: true }
+    { debounce: 300, immediate: true },
   );
 
   function handleMessage(event: MessageEvent<WordSearchResult>) {
@@ -53,7 +53,7 @@ export function useWordSearch(
 }
 
 export function useKanjiSearch(
-  searchPhrase: MaybeRefOrGetter<string>
+  searchPhrase: MaybeRefOrGetter<string>,
 ): Ref<KanjiSearchResult[]> {
   const results = ref<KanjiSearchResult[]>([]);
 
@@ -66,7 +66,7 @@ export function useKanjiSearch(
         searchKanjiWorker.postMessage(phrase);
       }
     },
-    { debounce: 300, immediate: true }
+    { debounce: 300, immediate: true },
   );
 
   function handleMessage(event: MessageEvent<KanjiSearchResult[]>) {

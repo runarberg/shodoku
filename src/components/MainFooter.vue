@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ABOUT_ROUTE_NAME, aboutRoute } from "../router";
+import { ABOUT_ROUTE_NAME, aboutRoute } from "../router.ts";
 
 const currentYear = new Date().getFullYear();
 </script>
@@ -9,7 +9,7 @@ const currentYear = new Date().getFullYear();
     <nav class="footer-nav">
       <ul>
         <li>
-          <RouterLink class="link" :to="aboutRoute">About</RouterLink>
+          <RouterLink class="link" :to="aboutRoute"> About </RouterLink>
         </li>
 
         <li>

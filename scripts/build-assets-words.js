@@ -32,8 +32,8 @@ function stripNull(obj) {
           value !== null &&
           value !== false &&
           value !== "" &&
-          !(Array.isArray(value) && value.length === 0)
-      )
+          !(Array.isArray(value) && value.length === 0),
+      ),
   );
 }
 
@@ -176,7 +176,7 @@ const selectWords = db.prepare(`
 for (const row of selectWords.iterate()) {
   const path = new URL(
     `../public/data/words-v1/${row.id}.json`,
-    import.meta.url
+    import.meta.url,
   );
 
   fs.writeFile(
@@ -187,6 +187,6 @@ for (const row of selectWords.iterate()) {
       readings: JSON.parse(row.readings).map(stripNull),
       furigana: JSON.parse(row.furigana),
       meanings: JSON.parse(row.meanings).map(stripNull),
-    })
+    }),
   );
 }

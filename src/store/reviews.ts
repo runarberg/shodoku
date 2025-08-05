@@ -5,7 +5,6 @@ import { computed, ref, watch } from "vue";
 import { pipe } from "yta";
 import { filter, map, take, toArray } from "yta/async";
 
-import { db } from "../db/index.ts";
 import {
   getDueCards,
   getDueDoneCount,
@@ -15,28 +14,29 @@ import {
   getNewDoneCount,
   rateCard as rateCardDb,
 } from "../db/cards.ts";
-import { useLiveQuery } from "../helpers/db.ts";
+import { db } from "../db/index.ts";
 import { liveQueryBroadcaster } from "../helpers/channels.ts";
+import { useLiveQuery } from "../helpers/db.ts";
 import { HOUR, midnight } from "../helpers/time.ts";
 import { CardProgress, CardReview } from "../types.ts";
 
 export const dueLimit = useLocalStorage(
   "shodoku.app.preferences.limit.due",
-  50
+  50,
 );
 
 export const newLimit = useLocalStorage(
   "shodoku.app.preferences.limit.new",
-  10
+  10,
 );
 
 export const fsrsFuzzEnabled = useLocalStorage(
   "shodoku.app.preferences.fsrs.fuzz-enabled",
-  true
+  true,
 );
 
 export async function increaseReviewLimit(
-  count = { new: newLimit.value, due: dueLimit.value }
+  count = { new: newLimit.value, due: dueLimit.value },
 ) {
   await (
     await db
@@ -78,7 +78,7 @@ const useReviewsStore = defineStore("reviews", () => {
     const totalNewCount = newCount + newDoneCount.value;
 
     const newCardInterval = Math.ceil(
-      (totalNewCount + totalDueCount) / totalNewCount
+      (totalNewCount + totalDueCount) / totalNewCount,
     );
 
     const newCardOffset = Math.floor(newCardInterval / 2);
@@ -128,21 +128,21 @@ const useReviewsStore = defineStore("reviews", () => {
 
   async function rateCard(
     { cardId, cardType, fsrs }: CardProgress,
-    next: RecordLogItem
+    next: RecordLogItem,
   ) {
     if (fsrs.state === State.New) {
       newQueue.value = newQueue.value.filter(
-        (other) => other.cardId !== cardId
+        (other) => other.cardId !== cardId,
       );
       newDoneCount.value += 1;
     } else if (fsrs.state === State.Review) {
       dueQueue.value = dueQueue.value.filter(
-        (other) => other.cardId !== cardId
+        (other) => other.cardId !== cardId,
       );
       dueDoneCount.value += 1;
     } else {
       learningQueue.value = learningQueue.value.filter(
-        (other) => other.cardId !== cardId
+        (other) => other.cardId !== cardId,
       );
     }
 
@@ -155,15 +155,15 @@ const useReviewsStore = defineStore("reviews", () => {
         cardType,
         fsrs: next.card,
       };
-      const due = next.card.due;
+      const { due } = next.card;
       const index = learningQueue.value.findIndex(
-        (other) => due < other.fsrs.due
+        (other) => due < other.fsrs.due,
       );
 
       learningQueue.value = learningQueue.value.toSpliced(
         index === -1 ? learningQueue.value.length : index,
         0,
-        card
+        card,
       );
     }
 
@@ -192,29 +192,29 @@ const useReviewsStore = defineStore("reviews", () => {
       learningQueue.value = await pipe(
         getLearningCards(),
         map((cursor) => cursor.value),
-        toArray()
+        toArray(),
       );
 
       dueQueue.value = await pipe(
         getDueCards(),
         filter(({ primaryKey: [cardId] }) => !learningQueueIncludes(cardId)),
         take(
-          Math.max(0, dueLimit.value + extraLimits.due - dueDoneCount.value)
+          Math.max(0, dueLimit.value + extraLimits.due - dueDoneCount.value),
         ),
         map((cursor) => cursor.value),
-        toArray()
+        toArray(),
       );
 
       newQueue.value = await pipe(
         getNewCards(),
         filter(
           ({ cardId }) =>
-            !learningQueueIncludes(cardId) && !dueQueueIncludes(cardId)
+            !learningQueueIncludes(cardId) && !dueQueueIncludes(cardId),
         ),
         take(
-          Math.max(0, newLimit.value + extraLimits.new - newDoneCount.value)
+          Math.max(0, newLimit.value + extraLimits.new - newDoneCount.value),
         ),
-        toArray()
+        toArray(),
       );
     } finally {
       refreshing.value = false;
@@ -252,7 +252,7 @@ export function useReviewedCards() {
     const reviewIndex = (await db).transaction("reviews").store.index("review");
 
     for await (const cursor of reviewIndex.iterate(
-      IDBKeyRange.lowerBound(midnight())
+      IDBKeyRange.lowerBound(midnight()),
     )) {
       const review = cursor.value as CardReview;
 

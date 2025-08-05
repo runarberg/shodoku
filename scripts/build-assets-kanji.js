@@ -58,6 +58,6 @@ for (const row of selectKanji.iterate()) {
       strokeCount: row.stroke_count ?? undefined,
       freq: row.freq ?? undefined,
       grade: row.grade ?? undefined,
-    })
+    }),
   );
 }

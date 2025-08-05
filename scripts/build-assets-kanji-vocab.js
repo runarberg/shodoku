@@ -59,7 +59,7 @@ for (const row of selectKanji.iterate()) {
   const hex = row.codepoint.toString(16).padStart(5, "0");
   const fileURL = new URL(
     `../public/data/kanji-vocab-v1/${hex}.json`,
-    import.meta.url
+    import.meta.url,
   );
 
   const data = {
@@ -72,6 +72,7 @@ for (const row of selectKanji.iterate()) {
 
   i += 1;
   if (i % 100 === 0) {
+    // eslint-disable-next-line no-console
     console.log(i, fileURL.pathname);
   }
 }

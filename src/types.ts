@@ -1,5 +1,5 @@
-import { type Card as FSRSCard, ReviewLog } from "ts-fsrs";
 import { StoreNames } from "idb";
+import { type Card as FSRSCard, ReviewLog } from "ts-fsrs";
 
 import { DB } from "./db/schema.ts";
 
@@ -28,7 +28,7 @@ export type KanjiComponent = {
 
 export type KanjiComponentInfo = {
   literal: string;
-  radical?: { original: string, number: number; en: string; jp: string };
+  radical?: { original: string; number: number; en: string; jp: string };
   meaning?: string;
   reading?: string;
   strokeCount: number;
@@ -176,7 +176,7 @@ export type SyncPatch = {
 };
 
 export type SyncStagingStore<
-  StoreName extends StoreNames<DB> = StoreNames<DB>
+  StoreName extends StoreNames<DB> = StoreNames<DB>,
 > = {
   id?: number;
   store: StoreName;

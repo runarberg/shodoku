@@ -1,19 +1,18 @@
 <script setup lang="ts">
+import { State } from "ts-fsrs";
 import { computed, watchEffect } from "vue";
 import { useRouter } from "vue-router";
-import { State } from "ts-fsrs";
 
-import { homeRoute, reviewRoute } from "../router";
+import { homeRoute, reviewRoute } from "../router.ts";
 import {
   increaseReviewLimit,
   newLimit,
   useRemainingCount,
   useReviewedCards,
 } from "../store/reviews.ts";
-
 import AppButton from "./AppButton.vue";
-import ReviewSummaryItem from "./ReviewSummaryItem.vue";
 import RemoteSyncSyncButton from "./RemoteSyncSyncButton.vue";
+import ReviewSummaryItem from "./ReviewSummaryItem.vue";
 
 const router = useRouter();
 const reviewedCards = useReviewedCards();
@@ -72,7 +71,7 @@ watchEffect(() => {
     </p>
 
     <ul v-if="reviewedCards" class="review-summary-list">
-      <li v-for="[cardId, reviews] of reviewedCards">
+      <li v-for="[cardId, reviews] of reviewedCards" :key="cardId">
         <ReviewSummaryItem :card-id="cardId" :reviews="reviews" />
       </li>
     </ul>

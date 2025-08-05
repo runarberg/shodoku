@@ -7,7 +7,7 @@ const RECORD_SEP = "\u{241e}";
 const GROUP_SEP = "\u{241d}";
 
 const fetchingIndex = fetch("/data/index/kanji-v1.usv").then((response) =>
-  response.text()
+  response.text(),
 );
 
 export type KanjiSearchResult = {
@@ -27,9 +27,7 @@ async function findWords(search: {
 
   const found: KanjiSearchResult[] = [];
   let i = 0;
-  let unit = 0;
-  let record = 0;
-  let group = 0;
+  let recordNumber = 0;
   let unitStart = 0;
   let groupStart = 0;
   let foundInGroup = null;
@@ -43,15 +41,15 @@ async function findWords(search: {
         let haystack;
         let needle;
 
-        if (search.hiragana && record === 1) {
+        if (search.hiragana && recordNumber === 1) {
           unitContent = index.slice(unitStart + len, i);
           haystack = unitContent.replaceAll(".", "");
           needle = search.hiragana;
-        } else if (search.katakana && record === 2) {
+        } else if (search.katakana && recordNumber === 2) {
           unitContent = index.slice(unitStart + len, i);
           haystack = unitContent;
           needle = search.katakana;
-        } else if (search.en && record === 3) {
+        } else if (search.en && recordNumber === 3) {
           unitContent = index.slice(unitStart + len, i);
           haystack = unitContent.toLowerCase();
           needle = search.en;
@@ -62,18 +60,16 @@ async function findWords(search: {
         }
       }
 
-      unit += 1;
       unitStart = i;
     } else if (char === RECORD_SEP) {
-      unit = 0;
-      record += 1;
+      recordNumber += 1;
 
       unitStart = i;
     } else if (char === GROUP_SEP) {
       if (foundInGroup) {
         const group = index.slice(groupStart + len, i).trim();
         const [literal, kunYomiRec, onYomiRec, meaningRec] = group.split(
-          `${UNIT_SEP}${RECORD_SEP}`
+          `${UNIT_SEP}${RECORD_SEP}`,
         );
         const id = literal.codePointAt(0) ?? -1;
 
@@ -91,9 +87,7 @@ async function findWords(search: {
         }
       }
 
-      unit = 0;
-      record = 0;
-      group += 1;
+      recordNumber = 0;
 
       unitStart = i;
       groupStart = i;

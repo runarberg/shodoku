@@ -4,7 +4,6 @@ import { pipe } from "yta";
 import { filter, map, toArray, unique } from "yta/sync";
 
 import { isKanji } from "../helpers/text.ts";
-
 import AppButton from "./AppButton.vue";
 import AppInput from "./AppInput.vue";
 import AppNumberInput from "./AppNumberInput.vue";
@@ -18,14 +17,15 @@ withDefaults(
   defineProps<{
     labelFieldDisabled?: boolean;
     priorityFieldDisabled?: boolean;
-    confirmIcon?: string;
+    confirmIcon?: string | null;
     confirmLabel?: string;
   }>(),
   {
     labelFieldDisabled: false,
     priorityFieldDisabled: false,
     confirmLabel: "confirm",
-  }
+    confirmIcon: null,
+  },
 );
 
 defineEmits<{
@@ -50,7 +50,7 @@ const kanji = computed({
       filter(isKanji),
       map((char) => char.codePointAt(0) as number),
       unique(),
-      toArray()
+      toArray(),
     );
   },
 });
@@ -89,7 +89,7 @@ const kanji = computed({
     </div>
 
     <div class="buttons">
-      <AppButton type="reset">Cancel</AppButton>
+      <AppButton type="reset"> Cancel </AppButton>
       <AppButton type="submit" :prefix-icon="confirmIcon" filled>
         {{ confirmLabel }}
       </AppButton>

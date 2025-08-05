@@ -24,7 +24,7 @@ const { result: decks } = useLiveQuery(
         .transaction("decks")
         .store.index("cards")
         .getAll(IDBKeyRange.only(id));
-  })
+  }),
 );
 </script>
 

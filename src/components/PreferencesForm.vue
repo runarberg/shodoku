@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AppNumberInput from "../components/AppNumberInput.vue";
 import AppCheckbox from "../components/AppCheckbox.vue";
+import AppNumberInput from "../components/AppNumberInput.vue";
 import { dueLimit, fsrsFuzzEnabled, newLimit } from "../store/reviews.ts";
 </script>
 

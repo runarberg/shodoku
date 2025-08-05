@@ -5,7 +5,6 @@ import {
   reviewRoute,
   settingsRoute,
 } from "../router";
-
 import AppButton from "./AppButton.vue";
 </script>
 

@@ -3,10 +3,9 @@ import { onMounted, reactive, toRaw } from "vue";
 import { pipe } from "yta";
 import { map, reduce } from "yta/async";
 
-import { db } from "../db/index.ts";
 import { createDeck } from "../db/decks.ts";
+import { db } from "../db/index.ts";
 import { Deck } from "../types.ts";
-
 import CustomDeckForm from "./CustomDeckForm.vue";
 
 const emit = defineEmits<{
@@ -30,7 +29,7 @@ async function setDefaultPriority() {
   const customDeckCardCount = await pipe(
     (await db).transaction("decks").store.index("category").iterate("custom"),
     map((cursor) => cursor.value.cards.length),
-    reduce((sum, length) => sum + length, 0)
+    reduce((sum, length) => sum + length, 0),
   );
 
   if (customDeckCardCount) {

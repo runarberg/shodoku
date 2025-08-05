@@ -7,7 +7,6 @@ import { db } from "../db/index.ts";
 import { useKanji, useKanjiVocab } from "../helpers/kanji.ts";
 import { provideKanjiVG } from "../helpers/kanjivg.ts";
 import { CardProgress, Optional } from "../types.ts";
-
 import AppButton from "./AppButton.vue";
 import KanjiComponents from "./KanjiComponents.vue";
 import KanjiReadings from "./KanjiReadings.vue";
@@ -93,12 +92,12 @@ function handleRate(next: RecordLogItem): void {
     />
 
     <div class="advance-buttons">
-      <RateButtons v-if="isRating" :fsrs="progress" @rate="handleRate" />
+      <RateButtons v-if="isRating" :progress="progress" @rate="handleRate" />
 
-      <AppButton v-else @click="answer()" filled>
+      <AppButton v-else filled @click="answer()">
         Show
-        <template v-if="card.cardType === 'kanji-read'"> Reading</template>
-        <template v-else> Writing</template>
+        <template v-if="card.cardType === 'kanji-read'"> Reading </template>
+        <template v-else> Writing </template>
       </AppButton>
     </div>
 
@@ -108,8 +107,8 @@ function handleRate(next: RecordLogItem): void {
     />
 
     <KanjiWordList
-      class="words"
       v-if="kanjiVocab"
+      class="words"
       :kanji-vocab="kanjiVocab"
       :hide-kanji="!isRating && card.cardType === 'kanji-write' && !isNewCard"
       :hide-reading="!isRating && card.cardType === 'kanji-read'"

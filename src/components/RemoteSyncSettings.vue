@@ -3,7 +3,6 @@ import { ref } from "vue";
 
 import { disableSync } from "../db/sync.ts";
 import { useRemoteSyncEnabled } from "../store/sync.ts";
-
 import AppButton from "./AppButton.vue";
 import AppLoading from "./AppLoading.vue";
 import RemoteSyncSettingsForm from "./RemoteSyncSettingsForm.vue";
@@ -27,7 +26,7 @@ function enableRemoteSync() {
     @success="remoteFormEnabled = false"
   />
 
-  <div class="buttons" v-else>
+  <div v-else class="buttons">
     <template v-if="remoteSyncEnabled">
       <RemoteSyncSyncButton filled />
 

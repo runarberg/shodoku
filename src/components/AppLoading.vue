@@ -1,7 +1,7 @@
 <script lang="ts">
-import { defineComponent } from "vue";
-
 import "../custom-elements/app-loading.ts";
+
+import { defineComponent } from "vue";
 
 export default defineComponent({});
 </script>

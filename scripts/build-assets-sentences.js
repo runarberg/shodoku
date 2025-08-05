@@ -54,7 +54,7 @@ let i = 0;
 for (const row of selectSentences.iterate()) {
   const fileURL = new URL(
     `../public/data/sentences-v1/${row.id}.json`,
-    import.meta.url
+    import.meta.url,
   );
 
   const words = JSON.parse(row.words);
@@ -66,11 +66,12 @@ for (const row of selectSentences.iterate()) {
       sentence: row.sentence,
       meaning: row.meaning,
       words: annotateSentenceFurigana(row.sentence, words),
-    })
+    }),
   );
 
   i += 1;
   if (i % 10000 === 0) {
+    // eslint-disable-next-line no-console
     console.log(i, fileURL.pathname);
   }
 }

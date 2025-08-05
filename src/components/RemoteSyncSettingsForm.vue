@@ -10,9 +10,7 @@ import {
   remoteSyncPushMethod,
   remoteSyncPushURL,
 } from "../store/sync.ts";
-
 import AppButton from "./AppButton.vue";
-
 import RemoteSyncSettingsFormSection from "./RemoteSyncSettingsFormSection.vue";
 import RemoteSyncSyncButton from "./RemoteSyncSyncButton.vue";
 
@@ -94,8 +92,13 @@ function resetValues() {
     </section>
 
     <div class="form-buttons">
-      <AppButton type="reset" @click="$emit('cancel')">Cancel</AppButton>
-      <RemoteSyncSyncButton ref="syncButton" filled @syncing="saveValues" @success="$emit('success')" />
+      <AppButton type="reset" @click="$emit('cancel')"> Cancel </AppButton>
+      <RemoteSyncSyncButton
+        ref="syncButton"
+        filled
+        @syncing="saveValues"
+        @success="$emit('success')"
+      />
     </div>
   </form>
 </template>

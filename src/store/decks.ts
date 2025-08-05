@@ -1,13 +1,13 @@
 import { computed, ComputedRef, MaybeRefOrGetter, toValue } from "vue";
 
+import { getDeckStatus } from "../db/decks.ts";
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
-import { Deck } from "../types";
-import { getDeckStatus } from "../db/decks";
-import { useFsrs } from "../helpers/fsrs";
+import { useFsrs } from "../helpers/fsrs.ts";
+import { Deck } from "../types.ts";
 
 export function useDeck(
-  name: MaybeRefOrGetter<string>
+  name: MaybeRefOrGetter<string>,
 ): ComputedRef<Deck | undefined | null> {
   const query = computed(() => {
     const nameValue = toValue(name);

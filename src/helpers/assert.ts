@@ -22,10 +22,10 @@ function expectedTypeMessage(expectedType: string, actual: unknown): string {
 function expectedKeyTypeMessage(
   key: string,
   expectedType: string,
-  actual: unknown
+  actual: unknown,
 ): string {
   return `Expected key "${key}" to be "${expectedType}" but is "${actualType(
-    actual
+    actual,
   )}"`;
 }
 
@@ -79,7 +79,7 @@ export function assertIsNumber<T>(thing: T): asserts thing is T & number {
 }
 
 export function assertIsArray<T>(
-  thing: T
+  thing: T,
 ): asserts thing is T & Array<unknown> {
   if (!Array.isArray(thing)) {
     throw new AssertionError({
@@ -90,7 +90,7 @@ export function assertIsArray<T>(
 }
 
 export function assertIsObject<T>(
-  thing: T
+  thing: T,
 ): asserts thing is T & Record<PropertyKey, unknown> {
   if (typeof thing !== "object" || thing == null) {
     throw new AssertionError({
@@ -101,7 +101,7 @@ export function assertIsObject<T>(
 }
 
 export function assertIsNullableObject<T>(
-  thing: T
+  thing: T,
 ): asserts thing is T & (Record<PropertyKey, unknown> | null) {
   if (typeof thing !== "object") {
     throw new AssertionError({
@@ -113,7 +113,7 @@ export function assertIsNullableObject<T>(
 
 export function assertIsIn<Key extends PropertyKey, T extends object>(
   key: Key,
-  thing: T
+  thing: T,
 ): asserts thing is T & { [P in Key]: unknown } {
   if (!(key in thing)) {
     throw new AssertionError({
@@ -126,27 +126,27 @@ export function assertIsIn<Key extends PropertyKey, T extends object>(
 export function assertKeyIsString<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options?: { optional?: false; nullable?: false }
+  options?: { optional?: false; nullable?: false },
 ): asserts thing is T & { [P in Key]: string };
 export function assertKeyIsString<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable?: false }
+  options: { optional: boolean; nullable?: false },
 ): asserts thing is T & { [P in Key]?: string };
 export function assertKeyIsString<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional?: false; nullable: boolean }
+  options: { optional?: false; nullable: boolean },
 ): asserts thing is T & { [P in Key]: string | null };
 export function assertKeyIsString<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable: boolean }
+  options: { optional: boolean; nullable: boolean },
 ): asserts thing is T & { [P in Key]?: string | null };
 export function assertKeyIsString<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  { optional = false, nullable = false } = {}
+  { optional = false, nullable = false } = {},
 ): asserts thing is T & { [P in Key]?: string | null } {
   if (optional) {
     if (!(key in thing)) {
@@ -175,27 +175,27 @@ export function assertKeyIsString<Key extends PropertyKey, T extends object>(
 export function assertKeyIsNumber<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options?: { optional?: false; nullable?: false }
+  options?: { optional?: false; nullable?: false },
 ): asserts thing is T & { [P in Key]: number };
 export function assertKeyIsNumber<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable?: false }
+  options: { optional: boolean; nullable?: false },
 ): asserts thing is T & { [P in Key]?: number };
 export function assertKeyIsNumber<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional?: false; nullable: boolean }
+  options: { optional?: false; nullable: boolean },
 ): asserts thing is T & { [P in Key]: number | null };
 export function assertKeyIsNumber<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable: boolean }
+  options: { optional: boolean; nullable: boolean },
 ): asserts thing is T & { [P in Key]?: number | null };
 export function assertKeyIsNumber<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  { optional = false, nullable = false } = {}
+  { optional = false, nullable = false } = {},
 ): asserts thing is T & { [P in Key]?: number | null } {
   if (optional && !(key in thing)) {
     return;
@@ -222,27 +222,27 @@ export function assertKeyIsNumber<Key extends PropertyKey, T extends object>(
 export function assertKeyIsBoolean<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options?: { optional?: false; nullable?: false }
+  options?: { optional?: false; nullable?: false },
 ): asserts thing is T & { [P in Key]: boolean };
 export function assertKeyIsBoolean<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable?: false }
+  options: { optional: boolean; nullable?: false },
 ): asserts thing is T & { [P in Key]?: boolean };
 export function assertKeyIsBoolean<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional?: false; nullable: boolean }
+  options: { optional?: false; nullable: boolean },
 ): asserts thing is T & { [P in Key]: boolean | null };
 export function assertKeyIsBoolean<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable: boolean }
+  options: { optional: boolean; nullable: boolean },
 ): asserts thing is T & { [P in Key]?: boolean | null };
 export function assertKeyIsBoolean<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  { optional = false, nullable = false } = {}
+  { optional = false, nullable = false } = {},
 ): asserts thing is T & { [P in Key]?: boolean | null } {
   if (optional && !(key in thing)) {
     return;
@@ -269,27 +269,27 @@ export function assertKeyIsBoolean<Key extends PropertyKey, T extends object>(
 export function assertKeyIsArray<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options?: { optional?: false; nullable?: false }
+  options?: { optional?: false; nullable?: false },
 ): asserts thing is T & { [P in Key]: Array<unknown> };
 export function assertKeyIsArray<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable?: false }
+  options: { optional: boolean; nullable?: false },
 ): asserts thing is T & { [P in Key]?: Array<unknown> };
 export function assertKeyIsArray<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional?: false; nullable: boolean }
+  options: { optional?: false; nullable: boolean },
 ): asserts thing is T & { [P in Key]: Array<unknown> | null };
 export function assertKeyIsArray<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable: boolean }
+  options: { optional: boolean; nullable: boolean },
 ): asserts thing is T & { [P in Key]?: Array<unknown> | null };
 export function assertKeyIsArray<Key extends PropertyKey, T extends object>(
   key: Key,
   thing: T,
-  { optional = false, nullable = false } = {}
+  { optional = false, nullable = false } = {},
 ): asserts thing is T & { [P in Key]?: Array<unknown> | null } {
   if (optional && !(key in thing)) {
     return;
@@ -315,43 +315,43 @@ export function assertKeyIsArray<Key extends PropertyKey, T extends object>(
 
 export function assertKeyIsNumberArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  options?: { optional?: false; nullable?: false }
+  options?: { optional?: false; nullable?: false },
 ): asserts thing is T & { [P in Key]: Array<number> };
 export function assertKeyIsNumberArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable?: false }
+  options: { optional: boolean; nullable?: false },
 ): asserts thing is T & { [P in Key]?: Array<number> };
 export function assertKeyIsNumberArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  options: { optional?: false; nullable: boolean }
+  options: { optional?: false; nullable: boolean },
 ): asserts thing is T & { [P in Key]: Array<number> | null };
 export function assertKeyIsNumberArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable: boolean }
+  options: { optional: boolean; nullable: boolean },
 ): asserts thing is T & { [P in Key]?: Array<number> | null };
 export function assertKeyIsNumberArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  { optional = false, nullable = false } = {}
+  { optional = false, nullable = false } = {},
 ): asserts thing is T & { [P in Key]: Array<number> } {
   assertKeyIsArray(key, thing, { optional, nullable });
 
@@ -367,43 +367,43 @@ export function assertKeyIsNumberArray<
 
 export function assertKeyIsStringArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  options?: { optional?: false; nullable?: false }
+  options?: { optional?: false; nullable?: false },
 ): asserts thing is T & { [P in Key]: Array<string> };
 export function assertKeyIsStringArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable?: false }
+  options: { optional: boolean; nullable?: false },
 ): asserts thing is T & { [P in Key]?: Array<string> };
 export function assertKeyIsStringArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  options: { optional?: false; nullable: boolean }
+  options: { optional?: false; nullable: boolean },
 ): asserts thing is T & { [P in Key]: Array<string> | null };
 export function assertKeyIsStringArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  options: { optional: boolean; nullable: boolean }
+  options: { optional: boolean; nullable: boolean },
 ): asserts thing is T & { [P in Key]?: Array<string> | null };
 export function assertKeyIsStringArray<
   Key extends PropertyKey,
-  T extends object
+  T extends object,
 >(
   key: Key,
   thing: T,
-  { optional = false, nullable = false } = {}
+  { optional = false, nullable = false } = {},
 ): asserts thing is T & { [P in Key]: Array<string> } {
   assertKeyIsArray(key, thing, { optional, nullable });
 

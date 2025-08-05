@@ -1,20 +1,25 @@
-import { MaybeRefOrGetter, ref, Ref, toValue, watch } from "vue";
-import { KanjiComponentInfo } from "../types";
+import { MaybeRefOrGetter, Ref, ref, toValue, watch } from "vue";
+
+import { KanjiComponentInfo } from "../types.ts";
 
 export function useKanjiComponent(
-  literal: MaybeRefOrGetter<string | null | undefined>
+  literal: MaybeRefOrGetter<string | null | undefined>,
 ): Ref<KanjiComponentInfo | null> {
-  const kanjComponent = ref<KanjiComponentInfo | null>(null);
+  const kanjiComponent = ref<KanjiComponentInfo | null>(null);
+
+  function setKanjiComponent(kanjiComponentInfo: KanjiComponentInfo) {
+    kanjiComponent.value = kanjiComponentInfo;
+  }
 
   watch(
     () => toValue(literal),
     async (value) => {
       if (!value) {
-        kanjComponent.value = null;
+        kanjiComponent.value = null;
         return;
       }
 
-      if (value === kanjComponent.value?.literal) {
+      if (value === kanjiComponent.value?.literal) {
         return;
       }
 
@@ -22,10 +27,10 @@ export function useKanjiComponent(
       const response = await fetch(`/data/components-v1/${hex}.json`);
       const data = await response.json();
 
-      kanjComponent.value = data;
+      setKanjiComponent(data);
     },
-    { immediate: true }
+    { immediate: true },
   );
 
-  return kanjComponent;
+  return kanjiComponent;
 }

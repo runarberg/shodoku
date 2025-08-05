@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { KanjiInfo } from "../types";
-import { useLiveQuery } from "../helpers/db";
-import { db } from "../db";
-import { deckLabel } from "../helpers/decks";
-import { DECKS_ROUTE_NAME } from "../router";
-import { useKanjiRetrievability } from "../helpers/fsrs";
-import { formatPercent } from "../helpers/formats";
+import { db } from "../db/index.ts";
+import { useLiveQuery } from "../helpers/db.ts";
+import { deckLabel } from "../helpers/decks.ts";
+import { formatPercent } from "../helpers/formats.ts";
+import { useKanjiRetrievability } from "../helpers/fsrs.ts";
+import { DECKS_ROUTE_NAME } from "../router.ts";
+import { KanjiInfo } from "../types.ts";
 
 const props = defineProps<{
   kanji: KanjiInfo;
@@ -41,6 +41,8 @@ const freq = computed(() => {
   if (n <= 1000) {
     return 1000;
   }
+
+  return null;
 });
 
 const { result: decks } = useLiveQuery(
@@ -52,7 +54,7 @@ const { result: decks } = useLiveQuery(
         .transaction("decks")
         .store.index("cards")
         .getAll(IDBKeyRange.only(cardId));
-  })
+  }),
 );
 
 const retrievability = useKanjiRetrievability(() => props.kanji.codepoint);
@@ -72,11 +74,11 @@ function rGrade(p: number): "good" | "fair" | "poor" {
 
 <template>
   <header class="kanji-title">
-    <h2 class="literal" lang="ja" v-show="!hideLiteral">
+    <h2 v-show="!hideLiteral" class="literal" lang="ja">
       {{ kanji.literal }}
     </h2>
 
-    <p class="main-meaning meaning" v-show="!hideMeaning">
+    <p v-show="!hideMeaning" class="main-meaning meaning">
       <strong>{{ kanji.meanings?.at(0) }}</strong>
     </p>
 
@@ -89,9 +91,9 @@ function rGrade(p: number): "good" | "fair" | "poor" {
       </span>
       <template v-if="decks">
         <RouterLink
-          :to="{ name: DECKS_ROUTE_NAME, query: { deck: deck.name } }"
           v-for="deck of decks"
           :key="deck.name"
+          :to="{ name: DECKS_ROUTE_NAME, query: { deck: deck.name } }"
           class="label deck"
         >
           {{ deckLabel(deck) }}
@@ -121,7 +123,11 @@ function rGrade(p: number): "good" | "fair" | "poor" {
       v-show="!hideMeaning"
       class="additional-meanings"
     >
-      <li v-for="meaning of kanji.meanings.slice(1)" class="meaning">
+      <li
+        v-for="meaning of kanji.meanings.slice(1)"
+        :key="meaning"
+        class="meaning"
+      >
         {{ meaning }}
       </li>
     </ul>

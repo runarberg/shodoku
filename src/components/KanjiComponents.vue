@@ -4,13 +4,17 @@ import { groupBy } from "yta/sync";
 
 import { useKanjiVGComponents } from "../helpers/kanjivg.ts";
 import { KanjiComponent } from "../types.ts";
-
 import KanjiComponentItem from "./KanjiComponentItem.vue";
 
 const components = useKanjiVGComponents();
 
-function originals(parts: KanjiComponent[]): Map<string | null, KanjiComponent[]> {
-  return pipe(parts, groupBy((part) => part.original || null))
+function originals(
+  parts: KanjiComponent[],
+): Map<string | null, KanjiComponent[]> {
+  return pipe(
+    parts,
+    groupBy((part) => part.original || null),
+  );
 }
 </script>
 
@@ -18,7 +22,7 @@ function originals(parts: KanjiComponent[]): Map<string | null, KanjiComponent[]
   <section>
     <h2>
       Components
-      <template v-if="components.size > 0"> ({{ components.size }})</template>
+      <template v-if="components.size > 0"> ({{ components.size }}) </template>
     </h2>
 
     <ul class="component-list">

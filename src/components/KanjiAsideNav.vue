@@ -4,7 +4,6 @@ import { computed, ref } from "vue";
 import { deckLabel } from "../helpers/decks.ts";
 import { kanjiRoute } from "../router.ts";
 import { Deck } from "../types.ts";
-
 import AppIcon from "./AppIcon.vue";
 
 const props = defineProps<{
@@ -53,7 +52,7 @@ const expanded = ref(true);
       </summary>
 
       <ol v-if="expanded" class="kanji-deck-index">
-        <li v-for="id of cards">
+        <li v-for="id of cards" :key="id">
           <RouterLink
             :to="kanjiRoute(String.fromCodePoint(id))"
             :class="{ 'kanji-link-active': id === cardId }"

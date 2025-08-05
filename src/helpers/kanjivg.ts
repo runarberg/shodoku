@@ -1,17 +1,17 @@
 import {
   computed,
   ComputedRef,
-  InjectionKey,
   inject,
+  InjectionKey,
   MaybeRefOrGetter,
   provide,
-  toValue,
   Ref,
   ref,
+  toValue,
   watch,
 } from "vue";
 
-import { KanjiComponent } from "../types";
+import { KanjiComponent } from "../types.ts";
 
 type KanjiVGStore = {
   strokesEl: Ref<SVGGElement | null>;
@@ -65,11 +65,11 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
         }
 
         const strokes = svg.getElementById(
-          `kvg:${hexValue}`
+          `kvg:${hexValue}`,
         ) as SVGGElement | null;
 
         if (strokes) {
-          for (const el of [...strokes?.querySelectorAll("*"), strokes]) {
+          for (const el of [...strokes.querySelectorAll("*"), strokes]) {
             if (!(el instanceof SVGElement)) {
               continue;
             }
@@ -90,7 +90,7 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
         syncing.value = false;
       }
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   const components = computed(() => {
@@ -146,11 +146,15 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
         component.sort((a, b) => {
           if (a.radical) {
             if (b.radical) {
-              return RADICAL_TYPES.indexOf(a.radical) - RADICAL_TYPES.indexOf(b.radical);
+              return (
+                RADICAL_TYPES.indexOf(a.radical) -
+                RADICAL_TYPES.indexOf(b.radical)
+              );
             }
 
             return -1;
-          } else if (b.radical) {
+          }
+          if (b.radical) {
             return -1;
           }
 

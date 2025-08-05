@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { deckBrowserRoute } from "../router";
-import { useDecks } from "../store/decks";
-
+import { deckBrowserRoute } from "../router.ts";
+import { useDecks } from "../store/decks.ts";
 import AppButton from "./AppButton.vue";
 import DeckListItem from "./DeckListItem.vue";
 
@@ -27,11 +26,13 @@ const decks = useDecks();
     <template v-else-if="decks">
       <p>
         You don‘t have any decks.
-        <RouterLink :to="deckBrowserRoute">Add your first deck</RouterLink> by
+        <RouterLink :to="deckBrowserRoute"> Add your first deck </RouterLink> by
         clicking the button below.
       </p>
 
-      <AppButton :to="deckBrowserRoute" prefix-icon="plus">Add Deck</AppButton>
+      <AppButton :to="deckBrowserRoute" prefix-icon="plus">
+        Add Deck
+      </AppButton>
     </template>
   </section>
 </template>

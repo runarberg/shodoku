@@ -2,7 +2,7 @@ import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Config as SvgoConfig } from "svgo";
-import { Plugin, ResolvedConfig, createFilter } from "vite";
+import { createFilter, Plugin, ResolvedConfig } from "vite";
 
 import { generate, hexDigest } from "./generate";
 import { hmrListener } from "./hmr";

@@ -66,7 +66,7 @@ db.exec(`
 
 db.exec("DROP INDEX IF EXISTS word_meaning_glossary_index");
 db.exec(
-  "CREATE INDEX word_meaning_glossary_index ON word_meaning_glossary (word, text ASC)"
+  "CREATE INDEX word_meaning_glossary_index ON word_meaning_glossary (word, text ASC)",
 );
 
 db.exec("DROP TABLE IF EXISTS word_priority");
@@ -312,7 +312,7 @@ async function saveEntryToDb(entry) {
 
 const readStream = createReadStream(
   new URL("../assets/JMdict_e.xml", import.meta.url),
-  { encoding: "utf8" }
+  { encoding: "utf8" },
 );
 
 const xmlStream = sax.createStream(false, {

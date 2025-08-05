@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, shallowReactive, watch } from "vue";
 import simplifySvgPath from "@luncheon/simplify-svg-path";
-import { sleep } from "../helpers/time";
+import { computed, ref, shallowReactive, watch } from "vue";
+
+import { sleep } from "../helpers/time.ts";
 
 const props = defineProps<{
   practiceStrokes: string[];
@@ -83,17 +84,17 @@ const strokeAnimationOptions = {
 
 const animations: Animation[] = [];
 
-function animate() {
+function startAnimation() {
   if (!el.value) {
     return;
   }
 
-  for (const stroke of el.value?.querySelectorAll<SVGPathElement>(
-    "path.stroke"
+  for (const stroke of el.value.querySelectorAll<SVGPathElement>(
+    "path.stroke",
   )) {
     const animation = stroke.animate(
       strokeKeyframes(stroke),
-      strokeAnimationOptions
+      strokeAnimationOptions,
     );
 
     animation.pause();
@@ -122,9 +123,9 @@ watch(
   () => props.animate,
   (shouldAnimate) => {
     if (shouldAnimate) {
-      animate();
+      startAnimation();
     }
-  }
+  },
 );
 
 watch(
@@ -135,7 +136,7 @@ watch(
     } else {
       animations.at(0)?.play();
     }
-  }
+  },
 );
 </script>
 
@@ -158,8 +159,8 @@ watch(
     <g class="practice-strokes">
       <path
         v-for="(stroke, i) of practiceStrokes"
-        class="stroke practice-stroke"
         :key="i"
+        class="stroke practice-stroke"
         :d="stroke"
       />
     </g>

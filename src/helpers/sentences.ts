@@ -1,9 +1,9 @@
-import { MaybeRefOrGetter, ref, Ref, toValue, watch } from "vue";
+import { MaybeRefOrGetter, Ref, ref, toValue, watch } from "vue";
 
-import { Sentence } from "../types";
+import { Sentence } from "../types.ts";
 
 export function useSentence(
-  id: MaybeRefOrGetter<number>
+  id: MaybeRefOrGetter<number>,
 ): Ref<Sentence | null> {
   const sentenceInfo = ref(null);
 
@@ -15,7 +15,7 @@ export function useSentence(
 
       sentenceInfo.value = data;
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return sentenceInfo;

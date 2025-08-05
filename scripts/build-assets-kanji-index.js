@@ -40,13 +40,13 @@ const RECORD_SEP = "\u{241e}";
 const GROUP_SEP = "\u{241d}";
 
 for (const row of selectKanji.iterate()) {
-  const literal = row.literal;
+  const { literal } = row;
   const kunYomi = JSON.parse(row.kun_yomi).join(UNIT_SEP);
   const onYomi = JSON.parse(row.on_yomi).join(UNIT_SEP);
   const meanings = JSON.parse(row.meanings).join(UNIT_SEP);
 
   const line = [literal, kunYomi, onYomi, meanings].join(
-    `${UNIT_SEP}${RECORD_SEP}`
+    `${UNIT_SEP}${RECORD_SEP}`,
   );
 
   fileStream.write(`${line}${UNIT_SEP}${RECORD_SEP}${GROUP_SEP}\n`);

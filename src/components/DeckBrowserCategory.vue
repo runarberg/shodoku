@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { computed, ref, useId } from "vue";
 
-import { db } from "../db/index.ts";
 import { activateDeckCategory, deactivateDeckCategory } from "../db/decks.ts";
+import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
 import { Deck, DeckTemplate } from "../types.ts";
-
 import AppButton from "./AppButton.vue";
-import DeckBrowserItem from "./DeckBrowserItem.vue";
-import DeckAcativateButton from "./DeckActivateButton.vue";
 import CustomDeckCreate from "./CustomDeckCreate.vue";
+import DeckAcativateButton from "./DeckActivateButton.vue";
+import DeckBrowserItem from "./DeckBrowserItem.vue";
 
 const props = defineProps<{
   title: string;
@@ -36,8 +35,8 @@ const { result: storedDecks } = useLiveQuery(
             [category, 0],
             [category, Number.POSITIVE_INFINITY],
             true,
-            true
-          )
+            true,
+          ),
         );
 
       for await (const item of items) {
@@ -46,7 +45,7 @@ const { result: storedDecks } = useLiveQuery(
 
       return map;
     };
-  })
+  }),
 );
 
 const deckCount = computed(() => {
@@ -87,6 +86,7 @@ async function activate(deckTemplates: DeckTemplate[]) {
   try {
     await activateDeckCategory(props.category, deckTemplates);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
   } finally {
     toggling.value = false;
@@ -99,6 +99,7 @@ async function deactivate() {
   try {
     await deactivateDeckCategory(props.category);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
   } finally {
     toggling.value = false;
@@ -140,8 +141,8 @@ function handleDeckCreated() {
       :aria-pressed="expanded"
       @click="expanded = !expanded"
     >
-      <template v-if="expanded">Hide </template>
-      <template v-else>Show </template>
+      <template v-if="expanded"> Hide </template>
+      <template v-else> Show </template>
       ({{ deckCount }} decks)
     </AppButton>
 

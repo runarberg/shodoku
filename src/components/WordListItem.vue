@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useWord, useWordSetenceIds } from "../helpers/words.ts";
-
 import BookmarkWordButton from "./BookmarkWordButton.vue";
 import VocabularySentence from "./VocabularySentence.vue";
 import VocabularyWord from "./VocabularyWord.vue";
@@ -86,7 +85,8 @@ const sentences = useWordSetenceIds(() => props.word);
 }
 
 .sentences {
-  border-inline-start: 2px solid light-dark(var(--light-gray), var(--medium-gray));
+  border-inline-start: 2px solid
+    light-dark(var(--light-gray), var(--medium-gray));
   grid-area: sentences;
   list-style: none;
   padding-inline: 1ex;

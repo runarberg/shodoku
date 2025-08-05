@@ -17,12 +17,12 @@ type KanjiSelectionMessage = {
 
 export type ComponentPickerMessage = AllRadicalsMessage | KanjiSelectionMessage;
 
-const fetchingKanjiRadicals = fetch("/data/index/kanji-radicals-v1.usv").then((response) =>
-  response.text(),
+const fetchingKanjiRadicals = fetch("/data/index/kanji-radicals-v1.usv").then(
+  (response) => response.text(),
 );
 
-const fetchingRadicalsKanji = fetch("/data/index/radicals-kanji-v1.usv").then((response) =>
-  response.text(),
+const fetchingRadicalsKanji = fetch("/data/index/radicals-kanji-v1.usv").then(
+  (response) => response.text(),
 );
 
 function* readUSVRecords(source: string): Iterable<Iterable<string>> {
@@ -30,6 +30,10 @@ function* readUSVRecords(source: string): Iterable<Iterable<string>> {
 
   let pos = 0;
   let result = charIter.next();
+
+  function advanceCharIter() {
+    result = charIter.next();
+  }
 
   function* unitIter() {
     let unitStart = pos;
@@ -57,14 +61,14 @@ function* readUSVRecords(source: string): Iterable<Iterable<string>> {
       }
 
       pos += char.length;
-      result = charIter.next();
+      advanceCharIter();
     }
   }
 
   while (!result.done) {
     yield unitIter();
 
-    result = charIter.next();
+    advanceCharIter();
   }
 }
 
@@ -104,8 +108,9 @@ async function findKanji(radicals: Set<string>): Promise<Set<string>> {
   let foundCount = 0;
   let literal = null;
 
-  recordLoop:
-  for (const record of readUSVRecords(await fetchingRadicalsKanji)) {
+  recordLoop: for (const record of readUSVRecords(
+    await fetchingRadicalsKanji,
+  )) {
     for (const [unitNumber, unit] of pipe(record, enumerate())) {
       switch (unitNumber) {
         case 0:
@@ -122,16 +127,16 @@ async function findKanji(radicals: Set<string>): Promise<Set<string>> {
           if (literal) {
             if (found) {
               const intersection = new Set<string>();
-              for (const literal of unit) {
-                if (found.has(literal)) {
-                  intersection.add(literal);
+              for (const char of unit) {
+                if (found.has(char)) {
+                  intersection.add(char);
                 }
               }
               found = intersection;
             } else {
               found = new Set();
-              for (const literal of unit) {
-                found.add(literal);
+              for (const char of unit) {
+                found.add(char);
               }
             }
 
@@ -146,15 +151,18 @@ async function findKanji(radicals: Set<string>): Promise<Set<string>> {
   return found ?? new Set();
 }
 
-async function getStrokesAndRadicals(kanji: Set<string>): Promise<[Map<string, number>, Set<string>]> {
+async function getStrokesAndRadicals(
+  kanji: Set<string>,
+): Promise<[Map<string, number>, Set<string>]> {
   const strokeCounts = new Map<string, number>();
   const radicals = new Set<string>();
 
   let foundCount = 0;
   let literal = null;
 
-  recordLoop:
-  for (const record of readUSVRecords(await fetchingKanjiRadicals)) {
+  recordLoop: for (const record of readUSVRecords(
+    await fetchingKanjiRadicals,
+  )) {
     for (const [unitNumber, unit] of pipe(record, enumerate())) {
       switch (unitNumber) {
         case 0:
@@ -169,15 +177,15 @@ async function getStrokesAndRadicals(kanji: Set<string>): Promise<[Map<string, n
 
         case 1:
           if (literal) {
-            strokeCounts.set(literal, Number.parseInt(unit))
+            strokeCounts.set(literal, Number.parseInt(unit));
           }
 
           break;
 
         case 2:
           if (literal) {
-            for (const literal of unit) {
-              radicals.add(literal);
+            for (const char of unit) {
+              radicals.add(char);
             }
 
             if (foundCount === kanji.size) {
@@ -191,34 +199,38 @@ async function getStrokesAndRadicals(kanji: Set<string>): Promise<[Map<string, n
   return [strokeCounts, radicals];
 }
 
-addEventListener("message", async (event: MessageEvent<"init" | Set<string>>) => {
-  if (event.data === "init") {
-    const allRadicals = await createRadicalSelection();
-    const message: AllRadicalsMessage = {
-      type: "all-radicals",
-      allRadicals,
+addEventListener(
+  "message",
+  async (event: MessageEvent<"init" | Set<string>>) => {
+    if (event.data === "init") {
+      const allRadicals = await createRadicalSelection();
+      const message: AllRadicalsMessage = {
+        type: "all-radicals",
+        allRadicals,
+      };
+
+      self.postMessage(message);
+
+      return;
+    }
+
+    const foundKanji = await findKanji(event.data);
+    const [kanjiStrokeCounts, filteredRadicals] =
+      await getStrokesAndRadicals(foundKanji);
+
+    const kanjiSelection = pipe(
+      foundKanji,
+      groupBy((literal) => kanjiStrokeCounts.get(literal) ?? NaN),
+      toArray(),
+      (array) => new Map(array.sort(([a], [b]) => a - b)),
+    );
+
+    const message: KanjiSelectionMessage = {
+      type: "kanji-selection",
+      kanjiSelection,
+      filteredRadicals,
     };
 
-    self.postMessage(message)
-
-    return;
-  }
-
-  const foundKanji = await findKanji(event.data);
-  const [kanjiStrokeCounts, filteredRadicals] = await getStrokesAndRadicals(foundKanji);
-
-  const kanjiSelection = pipe(
-    foundKanji,
-    groupBy((literal) => kanjiStrokeCounts.get(literal) ?? NaN),
-    toArray(),
-    (array) => new Map(array.sort(([a], [b]) => a - b)),
-  );
-
-  const message: KanjiSelectionMessage = {
-    type: "kanji-selection",
-    kanjiSelection,
-    filteredRadicals,
-  };
-
-  self.postMessage(message);
-});
+    self.postMessage(message);
+  },
+);

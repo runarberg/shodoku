@@ -11,10 +11,9 @@ import {
   DeckTemplate,
   Optional,
 } from "../types.ts";
-
 import { db } from "./index.ts";
 import { DB } from "./schema.ts";
-import { addToSyncStaging } from "./sync";
+import { addToSyncStaging } from "./sync.ts";
 
 function isNotNull<T>(thing: T | null | undefined): thing is T {
   return thing != null;
@@ -22,7 +21,7 @@ function isNotNull<T>(thing: T | null | undefined): thing is T {
 
 async function maybeCreateCard(
   tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
-  id: number
+  id: number,
 ) {
   const cards = tx.objectStore("cards");
   const progress = tx.objectStore("progress");
@@ -62,9 +61,15 @@ async function maybeCreateCard(
 
 export async function activateDeck(
   deckName: string,
-  tx?: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">
+  transaction?: IDBPTransaction<
+    DB,
+    Array<"cards" | "progress" | "decks">,
+    "readwrite"
+  >,
 ): Promise<Deck> {
+  let tx = transaction;
   let newTransaction = false;
+
   if (!tx) {
     newTransaction = true;
     tx = (await db).transaction(["cards", "decks", "progress"], "readwrite");
@@ -104,7 +109,7 @@ export async function activateDeck(
 
 export async function activateDeckCategory(
   category: string,
-  deckTemplates: DeckTemplate[]
+  deckTemplates: DeckTemplate[],
 ) {
   const now = new Date();
   const decks: Array<Omit<Deck, "createdAt"> | string> = await Promise.all(
@@ -131,12 +136,12 @@ export async function activateDeckCategory(
         cards,
         active: true,
       };
-    })
+    }),
   );
 
   const tx = (await db).transaction(
     ["cards", "decks", "progress"],
-    "readwrite"
+    "readwrite",
   );
 
   const decksStore = tx.objectStore("decks");
@@ -204,7 +209,7 @@ type DeckStatus = { [Property in CardType]: DeckStatusCount };
 
 export async function getDeckStatus(
   name: string,
-  fsrs = new FSRS(generatorParameters())
+  fsrs = new FSRS(generatorParameters()),
 ) {
   const tx = (await db).transaction(["decks", "progress"]);
   const progressStore = tx.objectStore("progress");
@@ -276,7 +281,7 @@ export async function createDeck({
 
   const tx = (await db).transaction(
     ["decks", "cards", "progress"],
-    "readwrite"
+    "readwrite",
   );
 
   await tx.objectStore("decks").add(deck);
@@ -295,7 +300,7 @@ export async function createDeck({
 export async function editDeck(deck: Deck): Promise<void> {
   const tx = (await db).transaction(
     ["decks", "cards", "progress"],
-    "readwrite"
+    "readwrite",
   );
 
   const decks = tx.objectStore("decks");

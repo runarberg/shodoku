@@ -8,9 +8,10 @@ import AppIcon from "./AppIcon.vue";
 defineEmits<{
   select: [literal: string];
   close: [];
-}>()
+}>();
 
-const { allRadicals, filteredRadicals, kanjiSelection, selectedRadicals } = useComponentPicker();
+const { allRadicals, filteredRadicals, kanjiSelection, selectedRadicals } =
+  useComponentPicker();
 const id = useId();
 
 function toggleRadical(literal: string) {
@@ -34,11 +35,7 @@ function toggleRadical(literal: string) {
         Clear
       </AppButton>
 
-      <AppButton
-        class="close-button"
-        inline
-        @click="$emit('close')"
-      >
+      <AppButton class="close-button" inline @click="$emit('close')">
         <AppIcon icon="x-mark" />
       </AppButton>
     </div>
@@ -48,15 +45,29 @@ function toggleRadical(literal: string) {
     </p>
 
     <ol v-else class="list kanji-list">
-      <li v-for="[strokeCount, kanji] of kanjiSelection" :key="strokeCount"
-        :aria-labelledby="`${id}/kanji-list/${strokeCount}`" class="kanji-list-item">
-        <strong :id="`${id}/kanji-list/${strokeCount}`" class="stroke-count-label">
+      <li
+        v-for="[strokeCount, kanji] of kanjiSelection"
+        :key="strokeCount"
+        :aria-labelledby="`${id}/kanji-list/${strokeCount}`"
+        class="kanji-list-item"
+      >
+        <strong
+          :id="`${id}/kanji-list/${strokeCount}`"
+          class="stroke-count-label"
+        >
           {{ strokeCount }}
         </strong>
 
         <ol class="list kanji-literal-list">
-          <li v-for="literal of kanji" :key="literal" class="kanji-literal-list-item">
-            <button class="kanji-select-button" @click="$emit('select', literal)">
+          <li
+            v-for="literal of kanji"
+            :key="literal"
+            class="kanji-literal-list-item"
+          >
+            <button
+              class="kanji-select-button"
+              @click="$emit('select', literal)"
+            >
               {{ literal }}
             </button>
           </li>
@@ -65,16 +76,33 @@ function toggleRadical(literal: string) {
     </ol>
 
     <ol class="list radical-list">
-      <li v-for="[strokeCount, radicals] of allRadicals" :key="strokeCount"
-        :aria-labelledby="`${id}/radical-list/${strokeCount}`" class="radical-list-item">
-        <strong :id="`${id}/radical-list/${strokeCount}`" class="stroke-count-label">
+      <li
+        v-for="[strokeCount, radicals] of allRadicals"
+        :key="strokeCount"
+        :aria-labelledby="`${id}/radical-list/${strokeCount}`"
+        class="radical-list-item"
+      >
+        <strong
+          :id="`${id}/radical-list/${strokeCount}`"
+          class="stroke-count-label"
+        >
           {{ strokeCount }}
         </strong>
 
         <ol class="list radical-literal-list">
-          <li v-for="literal of radicals" :key="literal" class="radical-literal-list-item">
-            <button class="radical-toggle-button" :aria-pressed="selectedRadicals.has(literal)"
-              :disabled="filteredRadicals.size > 0 && !filteredRadicals.has(literal)" @click="toggleRadical(literal)">
+          <li
+            v-for="literal of radicals"
+            :key="literal"
+            class="radical-literal-list-item"
+          >
+            <button
+              class="radical-toggle-button"
+              :aria-pressed="selectedRadicals.has(literal)"
+              :disabled="
+                filteredRadicals.size > 0 && !filteredRadicals.has(literal)
+              "
+              @click="toggleRadical(literal)"
+            >
               {{ literal }}
             </button>
           </li>

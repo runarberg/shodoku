@@ -25,7 +25,7 @@ const groups = [
 for (const { name, range } of groups) {
   const fileURL = new URL(
     `../public/data/kanji-lists/news-${name}.csv`,
-    import.meta.url
+    import.meta.url,
   );
 
   let content = "";

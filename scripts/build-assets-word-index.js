@@ -55,13 +55,13 @@ const RECORD_SEP = "\u{241e}";
 const GROUP_SEP = "\u{241d}";
 
 for (const row of selectWords.iterate()) {
-  const id = row.id;
+  const { id } = row;
   const readings = JSON.parse(row.readings).join(UNIT_SEP);
   const writings = JSON.parse(row.writings).join(UNIT_SEP);
   const glossary = JSON.parse(row.glossary).join(UNIT_SEP);
 
   const line = [id, readings, writings, glossary].join(
-    `${UNIT_SEP}${RECORD_SEP}`
+    `${UNIT_SEP}${RECORD_SEP}`,
   );
 
   fileStream.write(`${line}${UNIT_SEP}${RECORD_SEP}${GROUP_SEP}\n`);

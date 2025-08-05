@@ -8,7 +8,7 @@ const props = defineProps<{
   to?: RouteLocationRaw;
   filled?: boolean;
   inline?: boolean;
-  prefixIcon?: string;
+  prefixIcon?: string | null;
 }>();
 
 const tag = computed(() => (props.to ? "RouterLink" : "button"));

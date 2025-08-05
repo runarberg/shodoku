@@ -9,7 +9,7 @@ const props = withDefaults(
   {
     isActive: false,
     toggling: false,
-  }
+  },
 );
 
 const emit = defineEmits<{
@@ -38,8 +38,8 @@ function handleClick() {
     <template v-if="toggling">
       <span class="loading-icon">時</span> Loading
     </template>
-    <template v-else-if="isActive">Active</template>
-    <template v-else>Add</template>
+    <template v-else-if="isActive"> Active </template>
+    <template v-else> Add </template>
   </AppButton>
 </template>
 

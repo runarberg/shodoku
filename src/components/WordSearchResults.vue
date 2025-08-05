@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useWordSearch } from "../helpers/search";
+import { useWordSearch } from "../helpers/search.ts";
 import WordSearchResultItem from "./WordSearchResultItem.vue";
 
 const props = defineProps<{

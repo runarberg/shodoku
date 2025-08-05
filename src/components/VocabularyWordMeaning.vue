@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { WordMeaning } from "../types";
-
+import { WordMeaning } from "../types.ts";
 import PartOfSpeechTag from "./PartOfSpeechTag.vue";
 
 defineProps<{
@@ -11,11 +10,11 @@ defineProps<{
 <template>
   <div class="vocabulary-word-meaning">
     <div class="meaning-pos">
-      <PartOfSpeechTag v-for="pos of meaning.pos" :tag="pos" />
+      <PartOfSpeechTag v-for="pos of meaning.pos" :key="pos" :tag="pos" />
       <PartOfSpeechTag v-if="meaning.kanaPreferred" tag="uk" />
     </div>
     <div class="glossary">
-      <span v-for="word of meaning.glossary" class="glossary-word">
+      <span v-for="word of meaning.glossary" :key="word" class="glossary-word">
         {{ word }}</span
       >
     </div>

@@ -3,14 +3,13 @@ import { computed, ref, useId } from "vue";
 import { zip } from "yta/sync";
 
 import { Furigana, Word } from "../types.ts";
-
 import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
 
 type ModelValue = Furigana | string | null;
 
 const props = defineProps<{
   word: Word;
-  default: Furigana;
+  defaultFurigana: Furigana;
   modelValue: ModelValue;
 }>();
 
@@ -25,17 +24,19 @@ const noopWritings = computed(
   () =>
     props.word.writings
       ?.filter(
-        (writing) => writing.irregular || writing.outdated || writing.searchOnly
+        (writing) =>
+          writing.irregular || writing.outdated || writing.searchOnly,
       )
-      .map(({ text }) => text) ?? []
+      .map(({ text }) => text) ?? [],
 );
 const noopReadings = computed(
   () =>
     props.word.readings
       ?.filter(
-        (reading) => reading.irregular || reading.outdated || reading.searchOnly
+        (reading) =>
+          reading.irregular || reading.outdated || reading.searchOnly,
       )
-      .map(({ text }) => text) ?? []
+      .map(({ text }) => text) ?? [],
 );
 
 function furiganaEquals(aFurigana: Furigana, bFurigana: Furigana): boolean {
@@ -56,10 +57,10 @@ const additionalFurigana = computed(
   () =>
     props.word.furigana?.filter(
       (other) =>
-        !furiganaEquals(props.default, other.furigana) &&
+        !furiganaEquals(props.defaultFurigana, other.furigana) &&
         !noopWritings.value.includes(other.writing) &&
-        !noopReadings.value.includes(other.reading)
-    ) ?? []
+        !noopReadings.value.includes(other.reading),
+    ) ?? [],
 );
 
 const additionalReadings = computed(
@@ -69,8 +70,8 @@ const additionalReadings = computed(
         !reading.irregular &&
         !reading.outdated &&
         !reading.searchOnly &&
-        !props.word.furigana?.some((other) => reading.text === other.reading)
-    ) ?? []
+        !props.word.furigana?.some((other) => reading.text === other.reading),
+    ) ?? [],
 );
 
 const toggleButton = ref<HTMLButtonElement | null>(null);
@@ -134,11 +135,15 @@ function handleBeforeToggle(event: ToggleEvent) {
           :disabled="modelValue === null"
           @click="$emit('update:modelValue', null)"
         >
-          <VocabularyWordFurigana :furigana="default" />
+          <VocabularyWordFurigana :furigana="defaultFurigana" />
         </button>
       </li>
 
-      <li v-for="furigana of additionalFurigana" class="additional-writing">
+      <li
+        v-for="(furigana, i) of additionalFurigana"
+        :key="i"
+        class="additional-writing"
+      >
         <button
           class="select-button"
           :disabled="modelValue === furigana.furigana"
@@ -148,7 +153,7 @@ function handleBeforeToggle(event: ToggleEvent) {
         </button>
       </li>
 
-      <li v-for="reading of additionalReadings">
+      <li v-for="(reading, i) of additionalReadings" :key="i">
         <button
           class="select-button"
           :disabled="modelValue === reading.text"
@@ -228,7 +233,10 @@ function handleBeforeToggle(event: ToggleEvent) {
   .popover {
     position-anchor: v-bind(anchorName);
     position-area: block-end span-inline-start;
-    position-try: flip-block, flip-inline, flip-block flip-inline;
+    position-try:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
   }
 }
 </style>

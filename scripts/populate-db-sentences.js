@@ -173,13 +173,13 @@ const insertSentenceWord = db.prepare(
     @meaning,
     @goodExample
   )
-`
+`,
 );
 
 db.exec("BEGIN");
 const sentencesJpnPath = new URL(
   "../assets/jpn_sentences.tsv",
-  import.meta.url
+  import.meta.url,
 );
 for await (const line of (await fs.open(sentencesJpnPath)).readLines()) {
   const [id, lang, text] = line.split("\t");
@@ -191,7 +191,7 @@ db.exec("COMMIT");
 db.exec("BEGIN");
 const sentencesEngPath = new URL(
   "../assets/eng_sentences.tsv",
-  import.meta.url
+  import.meta.url,
 );
 for await (const line of (await fs.open(sentencesEngPath)).readLines()) {
   const [id, lang, text] = line.split("\t");
@@ -203,7 +203,7 @@ db.exec("COMMIT");
 db.exec("BEGIN");
 const sentenceJpnIndicesPath = new URL(
   "../assets/jpn_indices.csv",
-  import.meta.url
+  import.meta.url,
 );
 let i = 0;
 for await (const line of (await fs.open(sentenceJpnIndicesPath)).readLines()) {
@@ -211,7 +211,8 @@ for await (const line of (await fs.open(sentenceJpnIndicesPath)).readLines()) {
 
   try {
     insertSentenceMeaning.run(sentenceId, meaningId);
-  } catch (error) {
+  } catch {
+    // eslint-disable-next-line no-console
     console.error("Failed sentence meaning", sentenceId, meaningId);
     continue;
   }
@@ -229,20 +230,23 @@ for await (const line of (await fs.open(sentenceJpnIndicesPath)).readLines()) {
       } else {
         insertSentenceWordWriting.run(entry);
       }
-    } catch (error) {
+    } catch {
       // Word not found. Write the entry as a standalone text.
       entry.text = entry.text || entry.writing || entry.reading;
+      // eslint-disable-next-line no-console
       console.error("Failed sentence word", sentenceId, entry);
 
       try {
         insertSentenceWord.run(entry);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
       }
     }
   }
   i += 1;
   if (i % 1000 === 0) {
+    // eslint-disable-next-line no-console
     console.log(i, sentenceId);
   }
 }

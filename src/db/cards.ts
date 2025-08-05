@@ -2,9 +2,8 @@ import { RecordLogItem, State } from "ts-fsrs";
 
 import { EPOC, midnight } from "../helpers/time.ts";
 import { CardProgress, CardType } from "../types.ts";
-
 import { db } from "./index.ts";
-import { addToSyncStaging } from "./sync";
+import { addToSyncStaging } from "./sync.ts";
 
 export async function* getLearningCards(dueBefore?: Date) {
   const cardIds = new Set<number>();
@@ -60,7 +59,7 @@ export async function getNewDoneCount() {
     .transaction("reviews")
     .store.index("state+review")
     .count(
-      IDBKeyRange.bound([State.New, midnight()], [State.New, now], true, true)
+      IDBKeyRange.bound([State.New, midnight()], [State.New, now], true, true),
     );
 }
 
@@ -104,8 +103,8 @@ export async function getDueDoneCount() {
         [State.Review, midnight()],
         [State.Review, now],
         false,
-        true
-      )
+        true,
+      ),
     );
 }
 
@@ -115,7 +114,7 @@ export async function* getDueCards() {
 
   const tx = (await db).transaction(
     ["decks", "progress", "reviews"],
-    "readonly"
+    "readonly",
   );
   const decksStore = tx.objectStore("decks");
   const decksStoreCardsIndex = decksStore.index("cards");
@@ -125,7 +124,7 @@ export async function* getDueCards() {
     [State.Review, EPOC],
     [State.Review, now],
     false,
-    true
+    true,
   );
 
   const yielded = new Set<number>();
@@ -137,7 +136,7 @@ export async function* getDueCards() {
     if (!yielded.has(cardId) && !reviewed.has(cardId)) {
       // See if this card belongs to at least one deck.
       const deckId = await decksStoreCardsIndex.getKey(
-        IDBKeyRange.only(cardId)
+        IDBKeyRange.only(cardId),
       );
 
       if (deckId) {
@@ -157,7 +156,7 @@ export async function getExtraLimits(): Promise<ExtraLimit> {
   ).getAllFromIndex(
     "review-limits",
     "time",
-    IDBKeyRange.lowerBound(midnight())
+    IDBKeyRange.lowerBound(midnight()),
   );
 
   const sum = { due: 0, new: 0 };
@@ -171,7 +170,7 @@ export async function getExtraLimits(): Promise<ExtraLimit> {
 
 export async function rateCard(
   { cardId, cardType }: Omit<CardProgress, "fsrs">,
-  next: RecordLogItem
+  next: RecordLogItem,
 ) {
   const tx = (await db).transaction(["progress", "reviews"], "readwrite");
   const progress = tx.objectStore("progress");

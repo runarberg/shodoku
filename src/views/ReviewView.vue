@@ -6,9 +6,9 @@ import { useRoute, useRouter } from "vue-router";
 import AppLoading from "../components/AppLoading.vue";
 import KanjiReview from "../components/KanjiReview.vue";
 import ReviewRemainCount from "../components/ReviewRemainCount.vue";
-import useReviewsStore from "../store/reviews";
+import { reviewSummaryRoute } from "../router.ts";
+import useReviewsStore from "../store/reviews.ts";
 import { CardProgress, isCardType, Optional } from "../types.ts";
-import { reviewSummaryRoute } from "../router";
 
 const el = ref<HTMLElement | null>(null);
 const route = useRoute();
@@ -30,7 +30,7 @@ const currentCard = computed<Optional<CardProgress, "fsrs"> | null>(() => {
   }
 
   const found = reviewsStore.queue.find(
-    (other) => other.cardId === cardId && other.cardType === cardType
+    (other) => other.cardId === cardId && other.cardType === cardType,
   );
 
   return found ?? { cardId, cardType };

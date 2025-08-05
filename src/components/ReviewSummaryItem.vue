@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { State } from "ts-fsrs";
 import { computed } from "vue";
 
-import { kanjiRoute } from "../router";
-import { CardReview } from "../types";
-import { State } from "ts-fsrs";
+import { kanjiRoute } from "../router.ts";
+import { CardReview } from "../types.ts";
 
 const props = defineProps<{
   cardId: number;

@@ -17,7 +17,7 @@ export type LiveQueryResult<T> = {
 };
 
 export function useLiveQuery<T>(
-  query: MaybeRef<() => T | Promise<T>>
+  query: MaybeRef<() => T | Promise<T>>,
 ): LiveQueryResult<T> {
   const loading = ref(true);
   const result = ref<T | null>(null);

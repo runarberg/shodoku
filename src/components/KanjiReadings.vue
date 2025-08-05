@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { KanjiInfo } from "../types";
+import { KanjiInfo } from "../types.ts";
 
 defineProps<{
   kanji: KanjiInfo;
@@ -13,12 +13,16 @@ defineProps<{
     <dl class="kanji-readings">
       <dt>Kun</dt>
       <div class="dd-items">
-        <dd v-for="reading of kanji.kunYomi">{{ reading }}</dd>
+        <dd v-for="reading of kanji.kunYomi" :key="reading">
+          {{ reading }}
+        </dd>
       </div>
 
       <dt>On</dt>
       <div class="dd-items">
-        <dd v-for="reading of kanji.onYomi">{{ reading }}</dd>
+        <dd v-for="reading of kanji.onYomi" :key="reading">
+          {{ reading }}
+        </dd>
       </div>
     </dl>
   </section>

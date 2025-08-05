@@ -5,7 +5,6 @@ import { useKanjiComponent } from "../helpers/kanji-components.ts";
 import { useKanjiVG, useKanjiVGViewBox } from "../helpers/kanjivg.ts";
 import { kanjiComponentRoute } from "../router.ts";
 import { KanjiComponent } from "../types.ts";
-
 import KanjiStrokesGroup from "./KanjiStrokesGroup.vue";
 
 const props = defineProps<{
@@ -33,29 +32,34 @@ const phonetic = computed(() => {
       return part.phon;
     }
   }
+
+  return null;
 });
 
 const componentInfo = useKanjiComponent(() => props.literal);
 const original = computed(() => props.parts.at(0)?.original);
 const originalComponentInfo = useKanjiComponent(original);
 
-const meaning = computed(() =>
-  originalComponentInfo.value?.radical?.en
-    ?? originalComponentInfo.value?.meaning
-    ?? componentInfo.value?.radical?.en
-    ?? componentInfo?.value?.meaning,
+const meaning = computed(
+  () =>
+    originalComponentInfo.value?.radical?.en ??
+    originalComponentInfo.value?.meaning ??
+    componentInfo.value?.radical?.en ??
+    componentInfo?.value?.meaning,
 );
 
-const reading = computed(() =>
-  originalComponentInfo.value?.radical?.jp
-    ?? originalComponentInfo.value?.reading
-    ?? componentInfo.value?.radical?.jp
-    ?? componentInfo?.value?.reading,
+const reading = computed(
+  () =>
+    originalComponentInfo.value?.radical?.jp ??
+    originalComponentInfo.value?.reading ??
+    componentInfo.value?.radical?.jp ??
+    componentInfo?.value?.reading,
 );
 
-const radicalNumber = computed(() =>
-  originalComponentInfo.value?.radical?.number
-    ?? componentInfo.value?.radical?.number,
+const radicalNumber = computed(
+  () =>
+    originalComponentInfo.value?.radical?.number ??
+    componentInfo.value?.radical?.number,
 );
 
 // These are exceptions from the kanjivg dataset. These are using the
@@ -100,7 +104,10 @@ watchEffect(() => {
       strokes.dataset.radical === "tradit"
     ) {
       strokes.style.color = "var(--green)";
-    } else if (strokes.dataset.radical === "nelson" || strokes.dataset.radical === "jis") {
+    } else if (
+      strokes.dataset.radical === "nelson" ||
+      strokes.dataset.radical === "jis"
+    ) {
       strokes.style.color = "var(--bluegreen)";
     } else if (strokes.dataset.phon === props.literal) {
       strokes.style.color = "var(--gold)";
@@ -111,7 +118,7 @@ watchEffect(() => {
 
   let i = -1;
   for (const group of strokes.querySelectorAll<SVGGElement>(
-    `g[data-element="${props.literal}"]`
+    `g[data-element="${props.literal}"]`,
   )) {
     if (props.original && props.original !== group.dataset.original) {
       continue;
@@ -158,14 +165,19 @@ watchEffect(() => {
 
       <p class="meaning">
         <strong>{{ meaning }}</strong>
-        <span v-if="original" class="original" lang="ja"> {{original}}</span>
-        <span v-if="reading" lang="ja">
-          ({{ reading }})</span>
+        <span v-if="original" class="original" lang="ja"> {{ original }}</span>
+        <span v-if="reading" lang="ja"> ({{ reading }})</span>
       </p>
 
       <div class="tags">
-        <span v-if="radical" class="is-radical"
-          :class="{ 'is-nelson': radical === 'nelson', 'is-jis': radical === 'jis' }">
+        <span
+          v-if="radical"
+          class="is-radical"
+          :class="{
+            'is-nelson': radical === 'nelson',
+            'is-jis': radical === 'jis',
+          }"
+        >
           <template v-if="radical === 'nelson'">Nelson radical</template>
           <template v-else-if="radical === 'jis'">JIS radical</template>
           <template v-else>Radical</template>

@@ -42,9 +42,12 @@ const selectKanji = db.prepare(`
 
 const radicalInfo = new Map();
 {
-  const csvFile = await fs.open(new URL("../assets/radicals.csv", import.meta.url));
-  for await (const line of csvFile.readLines({ encoding:  "utf-8" })) {
-    const [number, literals,, en, jp] = line.split(/\s*,\s*/);
+  const csvFile = await fs.open(
+    new URL("../assets/radicals.csv", import.meta.url),
+  );
+
+  for await (const line of csvFile.readLines({ encoding: "utf-8" })) {
+    const [number, literals, , en, jp] = line.split(/\s*,\s*/);
     const info = { number: Number.parseInt(number), en, jp };
 
     for (const literal of literals) {
@@ -55,16 +58,16 @@ const radicalInfo = new Map();
 
 function isKanji(codepoint) {
   return (
-    (codepoint >= 0x4e00 && codepoint <= 0x9fc3)
-      || (codepoint >= 0x3400 && codepoint <= 0x4dbf)
-      || (codepoint >= 0x20000 && codepoint <= 0x2a6df)
-      || (codepoint >= 0x2a700 && codepoint <= 0x2b73f)
-      || (codepoint >= 0x2b740 && codepoint <= 0x2b81f)
-      || (codepoint >= 0x2b820 && codepoint <= 0x2ceaf)
-      || (codepoint >= 0x2ceb0 && codepoint <= 0x2ebef)
-      || (codepoint >= 0x30000 && codepoint <= 0x3134f)
-      || (codepoint >= 0x31350 && codepoint <= 0x323af)
-      || (codepoint >= 0x2ebf0 && codepoint <= 0x2ee5f)
+    (codepoint >= 0x4e00 && codepoint <= 0x9fc3) ||
+    (codepoint >= 0x3400 && codepoint <= 0x4dbf) ||
+    (codepoint >= 0x20000 && codepoint <= 0x2a6df) ||
+    (codepoint >= 0x2a700 && codepoint <= 0x2b73f) ||
+    (codepoint >= 0x2b740 && codepoint <= 0x2b81f) ||
+    (codepoint >= 0x2b820 && codepoint <= 0x2ceaf) ||
+    (codepoint >= 0x2ceb0 && codepoint <= 0x2ebef) ||
+    (codepoint >= 0x30000 && codepoint <= 0x3134f) ||
+    (codepoint >= 0x31350 && codepoint <= 0x323af) ||
+    (codepoint >= 0x2ebf0 && codepoint <= 0x2ee5f)
   );
 }
 
@@ -76,8 +79,10 @@ const componentVariations = new Map();
 const componentVariationOf = new Map();
 
 const radicalMap = new Map();
-let kanjiComponentMap = new Map();
-for await (const filename of fs.glob("*.svg", { cwd: kanjivgDirURL.pathname })) {
+const kanjiComponentMap = new Map();
+for await (const filename of fs.glob("*.svg", {
+  cwd: kanjivgDirURL.pathname,
+})) {
   const codepoint = Number.parseInt(filename.slice(0, 5), 16);
   const kanji = String.fromCodePoint(codepoint);
 
@@ -125,10 +130,9 @@ for await (const filename of fs.glob("*.svg", { cwd: kanjivgDirURL.pathname })) 
       // 士 can either be original or a variant or of 土.
       const isOriginal = radicalInfo.has(element);
 
-      radicalMap.set(
-        element,
-        { original: isOriginal ? element : original ?? element },
-      );
+      radicalMap.set(element, {
+        original: isOriginal ? element : (original ?? element),
+      });
     }
   }
 
@@ -176,7 +180,7 @@ for (const [cjkBlock, radBlock] of rogueCJKRadicalPairs) {
   componentVariationOf.delete(cjkBlock);
 }
 
-let componentKanjiMap = new Map();
+const componentKanjiMap = new Map();
 for (const [kanji, components] of kanjiComponentMap) {
   for (const component of components) {
     let kanjiSet = componentKanjiMap.get(component);
@@ -217,8 +221,9 @@ async function countStrokes(literal) {
   let count = 0;
   for (const g of dom.getElementsByTagName("g")) {
     if (
-      g.getAttribute("kvg:element") === literal
-        && (!g.hasAttribute("number") || Number.parseInt(g.getAttribute("number")) === 1)
+      g.getAttribute("kvg:element") === literal &&
+      (!g.hasAttribute("number") ||
+        Number.parseInt(g.getAttribute("number")) === 1)
     ) {
       count += g.getElementsByTagName("path").length;
     }
@@ -239,7 +244,10 @@ for (const [literal, info] of radicalMap) {
 // All strokesCounts should be in the Map now.
 
 function strokeCountSort(a, b) {
-  return (kanjiStrokeCounts.get(a) ?? Number.POSITIVE_INFINITY) - (kanjiStrokeCounts.get(b) ?? Number.POSITIVE_INFINITY)
+  return (
+    (kanjiStrokeCounts.get(a) ?? Number.POSITIVE_INFINITY) -
+    (kanjiStrokeCounts.get(b) ?? Number.POSITIVE_INFINITY)
+  );
 }
 
 await fs.mkdir(new URL("../public/data/components-v1", import.meta.url), {
@@ -248,11 +256,17 @@ await fs.mkdir(new URL("../public/data/components-v1", import.meta.url), {
 
 for (const [literal, kanji] of componentKanjiMap) {
   const hex = literal.codePointAt(0).toString(16).padStart(5, "0");
-  const path = new URL(`../public/data/components-v1/${hex}.json`, import.meta.url);
+  const path = new URL(
+    `../public/data/components-v1/${hex}.json`,
+    import.meta.url,
+  );
   const radical = radicalMap.get(literal);
   const variations = componentVariations.get(literal);
   const variationOf = componentVariationOf.get(literal);
-  const kanjiByStrokeCount = pipe(kanji, groupBy((literal) => kanjiStrokeCounts.get(literal)));
+  const kanjiByStrokeCount = pipe(
+    kanji,
+    groupBy((char) => kanjiStrokeCounts.get(char)),
+  );
   const foundKanji = selectKanji.get(literal);
 
   await fs.writeFile(
@@ -262,10 +276,16 @@ for (const [literal, kanji] of componentKanjiMap) {
       radical,
       meaning: foundKanji?.meaning,
       reading: foundKanji?.kun_yomi ?? foundKanji?.on_yomi,
-      strokeCount: await countStrokes(literal) ?? undefined,
-      variations: variations ? [...variations].sort(strokeCountSort) : undefined,
-      variationOf: variationOf ? [...variationOf].sort(strokeCountSort) : undefined,
-      kanji: Object.fromEntries([...kanjiByStrokeCount].sort(([a], [b]) => a - b)),
+      strokeCount: (await countStrokes(literal)) ?? undefined,
+      variations: variations
+        ? [...variations].sort(strokeCountSort)
+        : undefined,
+      variationOf: variationOf
+        ? [...variationOf].sort(strokeCountSort)
+        : undefined,
+      kanji: Object.fromEntries(
+        [...kanjiByStrokeCount].sort(([a], [b]) => a - b),
+      ),
     }),
   );
 }
@@ -291,7 +311,10 @@ function radicalSort([a, aInfo], [b, bInfo]) {
 }
 
 {
-  const fileURL = new URL(`../public/data/index/radicals-kanji-v1.usv`, import.meta.url);
+  const fileURL = new URL(
+    `../public/data/index/radicals-kanji-v1.usv`,
+    import.meta.url,
+  );
   const file = await fs.open(fileURL, "w");
   const fileStream = file.createWriteStream();
 
@@ -305,18 +328,19 @@ function radicalSort([a, aInfo], [b, bInfo]) {
 }
 
 {
-  const fileURL = new URL(`../public/data/index/kanji-radicals-v1.usv`, import.meta.url);
+  const fileURL = new URL(
+    `../public/data/index/kanji-radicals-v1.usv`,
+    import.meta.url,
+  );
   const file = await fs.open(fileURL, "w");
   const fileStream = file.createWriteStream();
 
-  for (
-    const [strokeCount, entries] of pipe(
-      kanjiComponentMap,
-      groupBy(([literal]) => kanjiStrokeCounts.get(literal)),
-      toArray(),
-      (array) => array.sort(([a], [b]) => a - b),
-    )
-  ) {
+  for (const [strokeCount, entries] of pipe(
+    kanjiComponentMap,
+    groupBy(([literal]) => kanjiStrokeCounts.get(literal)),
+    toArray(),
+    (array) => array.sort(([a], [b]) => a - b),
+  )) {
     for (const [literal, components] of entries) {
       const radicals = [];
       for (const component of components) {
@@ -326,7 +350,10 @@ function radicalSort([a, aInfo], [b, bInfo]) {
         }
       }
 
-      const radicalLiterals = radicals.sort(radicalSort).map(([literal]) => literal).join("");
+      const radicalLiterals = radicals
+        .sort(radicalSort)
+        .map(([char]) => char)
+        .join("");
       fileStream.write(`${literal}␟${strokeCount}␟${radicalLiterals}␟␞\n`);
     }
   }

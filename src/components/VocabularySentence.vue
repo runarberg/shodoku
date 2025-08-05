@@ -3,11 +3,10 @@ import { computed } from "vue";
 
 import { useHighKanjiReadingRetrievability } from "../helpers/fsrs.ts";
 import { useSentence } from "../helpers/sentences.ts";
+import { isKanji } from "../helpers/text.ts";
 import { wordRoute } from "../router.ts";
-
+import { Furigana, SentenceWord } from "../types.ts";
 import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
-import { isKanji } from "../helpers/text";
-import { Furigana, SentenceWord } from "../types";
 
 const props = defineProps<{
   sentenceId: number;
@@ -19,7 +18,7 @@ const props = defineProps<{
 const sentence = useSentence(() => props.sentenceId);
 
 const proficientKanji = useHighKanjiReadingRetrievability(
-  () => sentence.value?.sentence
+  () => sentence.value?.sentence,
 );
 
 const knowsRuby = computed(() => {

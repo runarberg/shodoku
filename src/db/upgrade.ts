@@ -1,14 +1,14 @@
 import { IDBPDatabase, IDBPTransaction, StoreNames } from "idb";
 
+import { Card } from "../types.ts";
 import { DB } from "./schema.ts";
-import { Card } from "../types";
 
 export default async function upgrade(
   db: IDBPDatabase<DB>,
   oldVersion: number,
   _newVersion: number | null,
   tx: IDBPTransaction<DB, StoreNames<DB>[], "versionchange">,
-  _event: IDBVersionChangeEvent
+  _event: IDBVersionChangeEvent,
 ): Promise<void> {
   if (oldVersion < 1) {
     const decks = db.createObjectStore("decks", { keyPath: "name" });
@@ -115,10 +115,12 @@ export default async function upgrade(
   if (oldVersion >= 1) {
     const cards = tx.objectStore("cards");
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (cards.indexNames.contains("decks" as any)) {
       cards.deleteIndex("decks");
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (cards.indexNames.contains("position" as any)) {
       cards.deleteIndex("position");
     }

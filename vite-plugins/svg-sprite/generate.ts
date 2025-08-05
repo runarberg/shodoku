@@ -1,5 +1,5 @@
 import { webcrypto as crypto } from "node:crypto";
-import { readFile, readdir } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { basename, resolve } from "node:path";
 
 import { Config as SvgoConfig, optimize } from "svgo";
@@ -11,7 +11,7 @@ type GenerateOptions = {
 
 export async function generate(
   source: string,
-  { filter, svgoConfig = {} }: GenerateOptions
+  { filter, svgoConfig = {} }: GenerateOptions,
 ): Promise<string> {
   let svg = `<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg">`;
 

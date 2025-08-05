@@ -18,7 +18,7 @@ watch(
 
     kanjiList.value = text.split("\n").filter((char) => char);
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 
@@ -27,8 +27,10 @@ watch(
     <summary>{{ listLabel }}</summary>
 
     <ol v-if="kanjiList">
-      <li v-for="kanji of kanjiList">
-        <RouterLink :to="kanjiRoute(kanji)">{{ kanji }}</RouterLink>
+      <li v-for="kanji of kanjiList" :key="kanji">
+        <RouterLink :to="kanjiRoute(kanji)">
+          {{ kanji }}
+        </RouterLink>
       </li>
     </ol>
   </details>

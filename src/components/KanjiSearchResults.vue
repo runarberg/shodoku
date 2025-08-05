@@ -3,7 +3,6 @@ import { computed } from "vue";
 
 import { useKanjiSearch } from "../helpers/search.ts";
 import { isKanji } from "../helpers/text.ts";
-
 import WordKanjiListItem from "./WordKanjiListItem.vue";
 
 const props = defineProps<{
@@ -27,8 +26,8 @@ const kanjiResults = useKanjiSearch(() => props.phrase);
 
 <template>
   <section
-    class="kanji-search-results"
     v-if="kanjiLiterals.size > 0 || kanjiResults.length > 0"
+    class="kanji-search-results"
   >
     <h3>Kanji</h3>
 

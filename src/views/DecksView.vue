@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppButton from "../components/AppButton.vue";
 import DeckList from "../components/DeckList.vue";
-import { deckBrowserRoute } from "../router";
+import { deckBrowserRoute } from "../router.ts";
 </script>
 
 <template>
@@ -10,9 +10,9 @@ import { deckBrowserRoute } from "../router";
       <h2 class="title">Your Decks</h2>
 
       <div class="actions">
-        <AppButton :to="deckBrowserRoute" prefix-icon="draw"
-          >Manage Decks</AppButton
-        >
+        <AppButton :to="deckBrowserRoute" prefix-icon="draw">
+          Manage Decks
+        </AppButton>
       </div>
     </header>
 

@@ -7,9 +7,8 @@ import KanjiReadings from "../components/KanjiReadings.vue";
 import KanjiStrokes from "../components/KanjiStrokes.vue";
 import KanjiTitle from "../components/KanjiTitle.vue";
 import KanjiWordList from "../components/KanjiWordList.vue";
-import { provideKanjiVG } from "../helpers/kanjivg";
-import { useKanji } from "../helpers/kanji";
-import { useKanjiVocab } from "../helpers/kanji";
+import { useKanji, useKanjiVocab } from "../helpers/kanji.ts";
+import { provideKanjiVG } from "../helpers/kanjivg.ts";
 
 const route = useRoute();
 const codepoint = computed(() => {
@@ -37,6 +36,6 @@ provideKanjiVG(hex);
     <KanjiReadings class="readings" :kanji="kanji" />
     <KanjiStrokes class="strokes" :kanji="kanji" />
     <KanjiComponents class="components" />
-    <KanjiWordList class="words" v-if="kanjiVocab" :kanji-vocab="kanjiVocab" />
+    <KanjiWordList v-if="kanjiVocab" class="words" :kanji-vocab="kanjiVocab" />
   </article>
 </template>

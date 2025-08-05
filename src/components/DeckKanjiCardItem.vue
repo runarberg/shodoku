@@ -4,8 +4,8 @@ import { computed } from "vue";
 
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
+import { useFsrs } from "../helpers/fsrs.ts";
 import { kanjiRoute } from "../router.ts";
-import { useFsrs } from "../helpers/fsrs";
 
 const props = defineProps<{
   codepoint: number;
@@ -26,7 +26,7 @@ const { result: progress } = useLiveQuery(async () => {
 const fsrs = useFsrs();
 
 function getStatus(
-  fsrsCard: FSRSCard | undefined
+  fsrsCard: FSRSCard | undefined,
 ): "know" | "review" | "due" | "new" | null {
   if (!fsrsCard) {
     return null;

@@ -9,7 +9,6 @@ import {
 } from "../db/decks.ts";
 import { kanjiRoute } from "../router.ts";
 import { Deck, DeckTemplate } from "../types.ts";
-
 import AppButton from "./AppButton.vue";
 import CustomDeckEdit from "./CustomDeckEdit.vue";
 import DeckActivateButton from "./DeckActivateButton.vue";
@@ -17,11 +16,11 @@ import DeckActivateButton from "./DeckActivateButton.vue";
 type Props = (
   | {
       deck: Deck;
-      template?: null;
-      category?: null;
+      template: null;
+      category: null;
     }
   | {
-      deck?: null;
+      deck: null;
       template: DeckTemplate;
       category: string;
     }
@@ -57,6 +56,7 @@ async function activate() {
       });
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
   } finally {
     toggling.value = false;
@@ -73,6 +73,7 @@ async function deactivate() {
   try {
     await deactivateDeck(props.deck.name);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(error);
   } finally {
     toggling.value = false;
@@ -92,7 +93,7 @@ watch(
 
     kanjiList.value = text.split("\n").filter((char) => char);
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 
@@ -148,7 +149,9 @@ watch(
       </template>
       <template v-else-if="kanjiList">
         <li v-for="kanji of kanjiList" :key="kanji" class="kanji">
-          <RouterLink :to="kanjiRoute(kanji)">{{ kanji }}</RouterLink>
+          <RouterLink :to="kanjiRoute(kanji)">
+            {{ kanji }}
+          </RouterLink>
         </li>
       </template>
     </ol>

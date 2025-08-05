@@ -1,6 +1,6 @@
 <script lang="ts" setup="setup">
-import { useId } from "vue";
 import sprite from "virtual:svg-sprite";
+import { useId } from "vue";
 
 withDefaults(
   defineProps<{
@@ -11,7 +11,7 @@ withDefaults(
   {
     title: "",
     description: "",
-  }
+  },
 );
 
 const id = useId();

@@ -5,7 +5,6 @@ import {
   jlptDecks,
   newsFrequencyDecks,
 } from "../helpers/decks";
-
 import DeckBrowserCategory from "./DeckBrowserCategory.vue";
 import DeckBrowserCustom from "./DeckBrowserCustom.vue";
 </script>

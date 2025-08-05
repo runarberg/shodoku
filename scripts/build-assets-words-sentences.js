@@ -23,7 +23,7 @@ const selectWords = db.prepare(`
 for (const row of selectWords.iterate()) {
   const fileURL = new URL(
     `../public/data/words-sentences-v1/${row.id}.json`,
-    import.meta.url
+    import.meta.url,
   );
 
   fs.writeFile(fileURL, row.sentences);

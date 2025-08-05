@@ -26,7 +26,7 @@ const meaning = computed(() => kanjiInfo.value?.meanings.at(0));
 
 <template>
   <RouterLink :to="kanjiRoute(kanji)" class="kanji-info">
-    <span class=literal>{{ kanji }}</span>
+    <span class="literal">{{ kanji }}</span>
 
     <p class="meaning">
       <strong v-if="meaning">{{ meaning }}</strong>

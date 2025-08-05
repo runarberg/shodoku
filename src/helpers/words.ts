@@ -1,11 +1,11 @@
-import { computed, MaybeRefOrGetter, ref, Ref, toValue, watch } from "vue";
+import { computed, MaybeRefOrGetter, Ref, ref, toValue, watch } from "vue";
 
 import { Word, WordReading, WordWriting } from "../types.ts";
-import { isKanji } from "./text";
-import { useHighKanjiReadingRetrievability } from "./fsrs";
+import { useHighKanjiReadingRetrievability } from "./fsrs.ts";
+import { isKanji } from "./text.ts";
 
 export function useWord(
-  wordId: MaybeRefOrGetter<number | null>
+  wordId: MaybeRefOrGetter<number | null>,
 ): Ref<Word | null> {
   const wordInfo = ref<Word | null>(null);
 
@@ -22,14 +22,14 @@ export function useWord(
 
       wordInfo.value = data;
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return wordInfo;
 }
 
 export function useWordSetenceIds(
-  wordId: MaybeRefOrGetter<number | null>
+  wordId: MaybeRefOrGetter<number | null>,
 ): Ref<number[]> {
   const sentenceIds = ref<number[]>([]);
 
@@ -46,7 +46,7 @@ export function useWordSetenceIds(
 
       sentenceIds.value = data;
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return sentenceIds;
@@ -59,7 +59,7 @@ type UseWordFuriganaOptions = {
 
 function useWordWriting(
   word: MaybeRefOrGetter<Word | null | undefined>,
-  options: UseWordFuriganaOptions = {}
+  options: UseWordFuriganaOptions = {},
 ) {
   return computed(() => {
     const kanji = toValue(options.kanji);
@@ -134,7 +134,7 @@ function useWordReading(word: MaybeRefOrGetter<Word | null | undefined>) {
 
 export function useWordFurigana(
   word: MaybeRefOrGetter<Word | null | undefined>,
-  options: UseWordFuriganaOptions = {}
+  options: UseWordFuriganaOptions = {},
 ) {
   const writing = useWordWriting(word, options);
   const reading = useWordReading(word);
@@ -142,7 +142,7 @@ export function useWordFurigana(
   const proficientKanji = useHighKanjiReadingRetrievability(() =>
     toValue(word)
       ?.writings?.map(({ text }) => text)
-      .join("")
+      .join(""),
   );
 
   const knowsRuby = computed(() => {
@@ -174,7 +174,7 @@ export function useWordFurigana(
     } else {
       found = furigana?.find(
         (other) =>
-          other.writing === writing.value && other.reading === reading.value
+          other.writing === writing.value && other.reading === reading.value,
       );
     }
 

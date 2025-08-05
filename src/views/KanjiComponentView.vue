@@ -3,8 +3,8 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import KanjiComponentKanjiList from "../components/KanjiComponentKanjiList.vue";
-import { useKanjiComponent } from "../helpers/kanji-components.ts";
 import KanjiComponentVariationList from "../components/KanjiComponentVariationList.vue";
+import { useKanjiComponent } from "../helpers/kanji-components.ts";
 
 const route = useRoute();
 const kanjiComponentLiteral = computed(() => {
@@ -17,22 +17,26 @@ const kanjiComponentLiteral = computed(() => {
 
 const componentInfo = useKanjiComponent(kanjiComponentLiteral);
 const radical = computed(() => componentInfo.value?.radical);
-const kanjiLiterals = computed(() => Object.values(componentInfo.value?.kanji ?? {}).flat())
+const kanjiLiterals = computed(() =>
+  Object.values(componentInfo.value?.kanji ?? {}).flat(),
+);
 </script>
 
 <template>
   <article>
     <header class="header">
       <h1 class="title literal">
-        <span lang="ja">{{kanjiComponentLiteral}}</span>
+        <span lang="ja">{{ kanjiComponentLiteral }}</span>
       </h1>
 
       <p class="info">
         <span class="info-title">
-          <template v-if="radical">Radical no. {{radical.number}}</template>
+          <template v-if="radical">Radical no. {{ radical.number }}</template>
           <template v-else>Kanji Component</template>
         </span>
-        <strong class="meaning">{{ radical?.en ?? componentInfo?.meaning }}</strong>
+        <strong class="meaning">{{
+          radical?.en ?? componentInfo?.meaning
+        }}</strong>
         <span v-if="componentInfo?.reading" class="reading" lang="ja">
           {{ radical?.jp ?? componentInfo.reading }}</span
         >
@@ -43,7 +47,7 @@ const kanjiLiterals = computed(() => Object.values(componentInfo.value?.kanji ??
       <h2>
         Original
         <template v-if="componentInfo.variationOf.length > 1">
-          &nbsp;({{componentInfo.variationOf.length}})
+          &nbsp;({{ componentInfo.variationOf.length }})
         </template>
       </h2>
 
@@ -54,7 +58,7 @@ const kanjiLiterals = computed(() => Object.values(componentInfo.value?.kanji ??
       <h2>
         Variation
         <template v-if="componentInfo.variations.length > 1">
-          &nbsp;({{componentInfo.variations.length}})
+          &nbsp;({{ componentInfo.variations.length }})
         </template>
       </h2>
 

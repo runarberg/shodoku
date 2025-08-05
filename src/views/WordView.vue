@@ -2,14 +2,14 @@
 import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
+import BookmarkWordButton from "../components/BookmarkWordButton.vue";
 import VocabularyWordFurigana from "../components/VocabularyWordFurigana.vue";
 import VocabularyWordMeaning from "../components/VocabularyWordMeaning.vue";
-import WordSentencesList from "../components/WordSentencesList.vue";
 import WordKanjiList from "../components/WordKanjiList.vue";
+import WordSentencesList from "../components/WordSentencesList.vue";
 import WordWritingSelect from "../components/WordWritingSelect.vue";
 import { useWord, useWordFurigana } from "../helpers/words.ts";
 import { Furigana } from "../types.ts";
-import BookmarkWordButton from "../components/BookmarkWordButton.vue";
 
 const route = useRoute();
 const wordId = computed(() => {
@@ -63,7 +63,7 @@ watch(wordId, (newId, oldId) => {
         <WordWritingSelect
           v-model="selectedFurigana"
           :word="word"
-          :default="preferredFurigana"
+          :default-furigana="preferredFurigana"
           class="section"
         />
       </div>
@@ -71,7 +71,7 @@ watch(wordId, (newId, oldId) => {
 
     <section v-if="word.meanings && word.meanings.length > 0" class="section">
       <ul class="meaning-list">
-        <li v-for="meaning of word.meanings">
+        <li v-for="(meaning, i) of word.meanings" :key="i">
           <VocabularyWordMeaning :meaning="meaning" />
         </li>
       </ul>

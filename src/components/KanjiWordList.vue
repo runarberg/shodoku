@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
 import { vIntersectionObserver } from "@vueuse/components";
 import { asyncComputed } from "@vueuse/core";
+import { computed, ref, watch } from "vue";
 
 import { db } from "../db/index.ts";
 import { KanjiVocab } from "../types.ts";
-
 import WordListItem from "./WordListItem.vue";
 
 const props = defineProps<{
@@ -61,7 +60,7 @@ watch(
     if (newValue !== oldValue) {
       pageLimit.value = 20;
     }
-  }
+  },
 );
 </script>
 

@@ -77,7 +77,6 @@ function addHeader() {
     / minmax(12ch, 1fr) minmax(15ch, 3fr) auto;
   margin-block-end: 1ex;
 
-
   & .app-form-field,
   & :deep(.input) {
     flex-grow: 1;

@@ -4,18 +4,18 @@ import { computed } from "vue";
 
 import { useFsrs } from "../helpers/fsrs.ts";
 import { formatRelativeTime } from "../helpers/time.ts";
-
 import AppButton from "./AppButton.vue";
 
 const props = defineProps<{
-  fsrs: FSRSCard;
+  progress: FSRSCard;
 }>();
 
 const emit = defineEmits<{
   rate: [next: RecordLogItem];
 }>();
 
-const ratings = computed(() => fsrs.value.repeat(props.fsrs, new Date()));
+const fsrs = useFsrs();
+const ratings = computed(() => fsrs.value.repeat(props.progress, new Date()));
 
 function nextReview(next: FSRSCard): string {
   const currentReviewTime = next.last_review?.getTime() ?? Date.now();
@@ -24,14 +24,13 @@ function nextReview(next: FSRSCard): string {
   return formatRelativeTime(nextReviewTime - currentReviewTime);
 }
 
-const fsrs = useFsrs();
 function rateCard(rating: Rating) {
   if (rating === Rating.Manual) {
     // Not implemented
     return;
   }
 
-  emit("rate", fsrs.value.next(props.fsrs, new Date(), rating));
+  emit("rate", fsrs.value.next(props.progress, new Date(), rating));
 }
 </script>
 
@@ -39,8 +38,8 @@ function rateCard(rating: Rating) {
   <div class="rate-buttons">
     <AppButton
       v-for="{ log, card: next } of ratings"
-      class="rating-button"
       :key="log.rating"
+      class="rating-button"
       :data-rating="Rating[log.rating]"
       @click="rateCard(log.rating)"
     >

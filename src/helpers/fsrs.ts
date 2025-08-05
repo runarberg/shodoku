@@ -1,19 +1,18 @@
-import { fsrs, generatorParameters, State } from "ts-fsrs";
+import { fsrs as createFsrs, generatorParameters, State } from "ts-fsrs";
 import {
-  ComputedRef,
   computed,
+  ComputedRef,
   MaybeRefOrGetter,
-  shallowReactive,
   ShallowReactive,
+  shallowReactive,
   toValue,
   watch,
 } from "vue";
 
-import { fsrsFuzzEnabled } from "../store/reviews.ts";
 import { db } from "../db/index.ts";
-
+import { fsrsFuzzEnabled } from "../store/reviews.ts";
 import { useLiveQuery } from "./db.ts";
-import { isKanji } from "./text";
+import { isKanji } from "./text.ts";
 
 export function useFsrs() {
   return computed(() => {
@@ -21,7 +20,7 @@ export function useFsrs() {
       enable_fuzz: fsrsFuzzEnabled.value,
     });
 
-    return fsrs(params);
+    return createFsrs(params);
   });
 }
 
@@ -31,7 +30,7 @@ type KanjiRetrievability = {
 };
 
 export function useKanjiRetrievability(
-  codepoint: MaybeRefOrGetter
+  codepoint: MaybeRefOrGetter,
 ): ComputedRef<KanjiRetrievability | null> {
   const fsrs = useFsrs();
   const { result } = useLiveQuery(
@@ -56,14 +55,14 @@ export function useKanjiRetrievability(
             : null,
         };
       };
-    })
+    }),
   );
 
   return result;
 }
 
 export function useHighKanjiReadingRetrievability(
-  writing: MaybeRefOrGetter<string | null | undefined>
+  writing: MaybeRefOrGetter<string | null | undefined>,
 ): ShallowReactive<Set<string>> {
   const fsrs = useFsrs();
   const knowsReading = shallowReactive(new Set<string>());
@@ -97,7 +96,7 @@ export function useHighKanjiReadingRetrievability(
         }
       }
     },
-    { immediate: true }
+    { immediate: true },
   );
 
   return knowsReading;
