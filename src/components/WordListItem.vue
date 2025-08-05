@@ -86,7 +86,7 @@ const sentences = useWordSetenceIds(() => props.word);
 }
 
 .sentences {
-  border-inline-start: 2px solid var(--light-gray);
+  border-inline-start: 2px solid light-dark(var(--light-gray), var(--medium-gray));
   grid-area: sentences;
   list-style: none;
   padding-inline: 1ex;

@@ -117,13 +117,14 @@ const expanded = ref(true);
 .kanji-link {
   border-radius: 0.4ex;
   color: var(--accent-color);
-  font-weight: 500;
+  font-weight: 400;
   text-decoration: none;
   padding: 0.25ex;
   border: 1px solid transparent;
 
   &.kanji-link-active {
-    background: oklch(100% none none / 0.75);
+    font-weight: 600;
+    background: var(--background-light);
     border-color: currentColor;
   }
 }

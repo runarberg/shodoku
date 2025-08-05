@@ -194,7 +194,7 @@ watchEffect(() => {
   flex-shrink: 0;
 
   & .strokes-group {
-    color: var(--light-gray);
+    color: light-dark(var(--light-gray), var(--medium-dark-gray));
   }
 }
 

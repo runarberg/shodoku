@@ -1,5 +1,5 @@
 :root {
-  --pink: oklch(66.5% 0.226 3);
+  --pink: light-dark(oklch(66.5% 0.226 3), oklch(77.5% 0.226 3));
   --orange: oklch(from var(--pink) l c 78);
   --gold: oklch(from var(--pink) l c 93);
   --green: oklch(from var(--pink) l c 143);
@@ -8,25 +8,34 @@
   --purple: oklch(from var(--pink) l c 303);
 
   --accent-color: var(--pink);
-  --accent-color-light: oklch(from var(--accent-color) 92.5% c h);
+  --accent-color-light: light-dark(
+    oklch(from var(--accent-color) 92.5% c h),
+    oklch(from var(--accent-color) 40% c h)
+  );
 
   --light-gray: oklch(90% none none);
   --medium-gray: oklch(70% none none);
-  --text-color: oklch(0% none none);
-  --text-light: oklch(50% none none);
+  --medium-dark-gray: oklch(50% none none);
+  --dark-gray: oklch(30% none none);
+  --text-color: light-dark(oklch(0% none none), oklch(100% none none));
+  --text-light: light-dark(oklch(50% none none), oklch(80% none none));
 
-  --background-gradient-color: oklch(90% 0.05 180);
+  --background-gradient-color: light-dark(oklch(90% 0.05 180), oklch(25% 0.5 0));
   --background-gradient: linear-gradient(
     66deg,
     var(--background-gradient-color) 0%,
-    oklch(from var(--background-gradient-color) l c 360) 65%,
+    oklch(from var(--background-gradient-color) l c calc(h + 180)) 65%,
     var(--background-gradient-color) 100%
   );
-  --background-light: oklch(from var(--accent-color-light) l 0.02 h);
-  --background-strong: white;
+  --background-light: light-dark(
+    oklch(from var(--accent-color-light) l 0.02 h),
+    oklch(from var(--accent-color) 15% c h)
+  );
+  --background-strong: light-dark(white, black);
 
   accent-color: var(--accent-color);
   color: var(--text-color);
+  color-scheme: light dark;
 }
 
 body {

@@ -66,7 +66,7 @@ const id = useId();
 }
 
 .input:disabled {
-  background: var(--light-gray);
+  background: light-dark(var(--light-gray), var(--dark-gray));
   border-color: var(--medium-gray);
 }
 

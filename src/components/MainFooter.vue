@@ -9,12 +9,12 @@ const currentYear = new Date().getFullYear();
     <nav class="footer-nav">
       <ul>
         <li>
-          <RouterLink class="footer-link" :to="aboutRoute">About</RouterLink>
+          <RouterLink class="link" :to="aboutRoute">About</RouterLink>
         </li>
 
         <li>
           <RouterLink
-            class="footer-link"
+            class="link"
             :to="{ name: ABOUT_ROUTE_NAME, hash: '#section:data-sources' }"
           >
             Data Sources
@@ -28,6 +28,7 @@ const currentYear = new Date().getFullYear();
       <a
         href="https://github.com/runarberg/shodoku/blob/main/LICENSE.txt"
         target="_blank"
+        class="link"
         >MIT License</a
       ></small
     >
@@ -56,7 +57,7 @@ const currentYear = new Date().getFullYear();
   }
 }
 
-.footer-nav .footer-link {
+.link {
   color: var(--accent-color);
   text-decoration: none;
 }

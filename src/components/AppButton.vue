@@ -63,7 +63,7 @@ function handleTouchStart(event: TouchEvent) {
 
   &.filled {
     background: var(--accent-color);
-    color: var(--background-light);
+    color: light-dark(var(--background-light), var(--background-strong));
   }
 
   & .content,

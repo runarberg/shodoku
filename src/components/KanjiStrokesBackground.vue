@@ -97,7 +97,7 @@ const midLineY = computed(() => {
 
 .midline,
 .quartline {
-  stroke: var(--light-gray);
+  stroke: light-dark(var(--light-gray), var(--dark-gray));
 }
 
 .midline {

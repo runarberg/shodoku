@@ -2,6 +2,9 @@
 import MainFooter from "./components/MainFooter.vue";
 import MainNav from "./components/MainNav.vue";
 import MainTitle from "./components/MainTitle.vue";
+import { setupGlobalPreferences } from "./store/preferences.ts";
+
+setupGlobalPreferences();
 </script>
 
 <template>
@@ -59,7 +62,10 @@ import MainTitle from "./components/MainTitle.vue";
 .aside,
 .main,
 .footer {
-  background: oklch(100% none none / 0.4);
+  background: light-dark(
+    oklch(100% none none / 0.4),
+    oklch(0% none none / 0.7)
+  );
   border-radius: 1ex;
   padding: 1em;
 }

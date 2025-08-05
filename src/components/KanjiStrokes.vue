@@ -363,7 +363,7 @@ defineExpose({
     }
 
     & .strokes.practicing :deep(path) {
-      color: var(--light-gray);
+      color: light-dark(var(--light-gray), var(--dark-gray));
       display: none;
     }
 
