@@ -62,6 +62,8 @@ const radicalNumber = computed(
     componentInfo.value?.radical?.number,
 );
 
+const isCDPCodePoint = computed(() => props.literal.startsWith("CDP-"));
+
 // These are exceptions from the kanjivg dataset. These are using the
 // characters from the radical unicode block instead of the CJK
 // codeblock as is usual. In these cases, the whole character is the
@@ -161,7 +163,7 @@ watchEffect(() => {
     </svg>
 
     <div class="component-info">
-      <span class="literal">{{ literal }}</span>
+      <span v-if="!isCDPCodePoint" class="literal">{{ literal }}</span>
 
       <p class="meaning">
         <strong>{{ meaning }}</strong>

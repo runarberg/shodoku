@@ -71,6 +71,19 @@ function isKanji(codepoint) {
   );
 }
 
+/**
+ * @param {string} literal
+ * @returns {string}
+ */
+function toHex(literal) {
+  if (literal.startsWith("CDP-")) {
+    return literal;
+  }
+
+  const codePoint = literal.codePointAt(0) ?? 0;
+  return codePoint.toString(16).padStart(5, "0");
+}
+
 const kanjivgDirURL = new URL("../public/kanjivg/kanji/", import.meta.url);
 const domParser = new DOMParser();
 
@@ -255,7 +268,7 @@ await fs.mkdir(new URL("../public/data/components-v1", import.meta.url), {
 });
 
 for (const [literal, kanji] of componentKanjiMap) {
-  const hex = literal.codePointAt(0).toString(16).padStart(5, "0");
+  const hex = toHex(literal);
   const path = new URL(
     `../public/data/components-v1/${hex}.json`,
     import.meta.url,
