@@ -26,12 +26,14 @@ const { result: decks } = useLiveQuery(
         .getAll(IDBKeyRange.only(id));
   }),
 );
+
+const activeDecks = computed(() => decks.value?.filter(({ active }) => active));
 </script>
 
 <template>
-  <aside v-if="kanjiId && decks && decks.length > 0">
+  <aside v-if="kanjiId && activeDecks && activeDecks.length > 0">
     <KanjiAsideNav
-      v-for="deck of decks"
+      v-for="deck of activeDecks"
       :key="deck.name"
       :deck="deck"
       :card-id="kanjiId"

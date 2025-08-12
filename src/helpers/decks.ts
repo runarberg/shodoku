@@ -99,3 +99,48 @@ export const basicKanjiDecks = Array.from({ length: 45 }, (_, i) => ({
     .toString()
     .padStart(2, "0")}.csv`,
 }));
+
+export const jouyouDecks = [
+  {
+    name: "jouyou-grade-01",
+    label: "Grade 1",
+    priority: 5,
+    content: "/data/kanji-lists/jouyou-grade-01.csv",
+  },
+  {
+    name: "jouyou-grade-02",
+    label: "Grade 2",
+    priority: 15,
+    content: "/data/kanji-lists/jouyou-grade-02.csv",
+  },
+  {
+    name: "jouyou-grade-03",
+    label: "Grade 3",
+    priority: 25,
+    content: "/data/kanji-lists/jouyou-grade-03.csv",
+  },
+  {
+    name: "jouyou-grade-04",
+    label: "Grade 4",
+    priority: 35,
+    content: "/data/kanji-lists/jouyou-grade-04.csv",
+  },
+  {
+    name: "jouyou-grade-05",
+    label: "Grade 5",
+    priority: 45,
+    content: "/data/kanji-lists/jouyou-grade-05.csv",
+  },
+  {
+    name: "jouyou-grade-06",
+    label: "Grade 6",
+    priority: 55,
+    content: "/data/kanji-lists/jouyou-grade-06.csv",
+  },
+  {
+    name: "jouyou-grade-s",
+    label: "Grade 7-9",
+    priority: 100,
+    content: "/data/kanji-lists/jouyou-grade-s.csv",
+  },
+];

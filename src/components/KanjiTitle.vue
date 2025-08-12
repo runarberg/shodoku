@@ -57,6 +57,8 @@ const { result: decks } = useLiveQuery(
   }),
 );
 
+const activeDecks = computed(() => decks.value?.filter(({ active }) => active));
+
 const retrievability = useKanjiRetrievability(() => props.kanji.codepoint);
 
 function rGrade(p: number | string): "good" | "fair" | "poor" {
@@ -88,14 +90,16 @@ function rGrade(p: number | string): "good" | "fair" | "poor" {
 
     <aside class="labels">
       <span
-        v-if="freq && !decks?.some(({ name }) => name === `news-top-${freq}`)"
+        v-if="
+          freq && !activeDecks?.some(({ name }) => name === `news-top-${freq}`)
+        "
         class="label freq"
       >
         Top {{ freq }}
       </span>
-      <template v-if="decks">
+      <template v-if="activeDecks">
         <RouterLink
-          v-for="deck of decks"
+          v-for="deck of activeDecks"
           :key="deck.name"
           :to="{ name: DECKS_ROUTE_NAME, query: { deck: deck.name } }"
           class="label deck"

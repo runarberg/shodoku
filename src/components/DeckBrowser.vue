@@ -3,8 +3,9 @@ import {
   basicKanjiDecks,
   genkiDecks,
   jlptDecks,
+  jouyouDecks,
   newsFrequencyDecks,
-} from "../helpers/decks";
+} from "../helpers/decks.ts";
 import DeckBrowserCategory from "./DeckBrowserCategory.vue";
 import DeckBrowserCustom from "./DeckBrowserCustom.vue";
 </script>
@@ -16,6 +17,14 @@ import DeckBrowserCustom from "./DeckBrowserCustom.vue";
         title="JLPT"
         category="jlpt"
         :deck-templates="jlptDecks"
+      />
+    </li>
+
+    <li>
+      <DeckBrowserCategory
+        title="Jōyō Kanji"
+        category="jouyou"
+        :deck-templates="jouyouDecks"
       />
     </li>
 
