@@ -1,1 +1,0 @@
-import{m as r,z as i,C as u}from"./index-C4O8d0Wk.js";function p(o){const n=r(null);function e(t){n.value=t}return i(()=>u(o),async t=>{if(!t){n.value=null;return}if(t===n.value?.literal)return;const a=t.codePointAt(0)?.toString(16).padStart(5,"0"),s=await(await fetch(`/data/components-v1/${a}.json`)).json();e(s)},{immediate:!0}),n}export{p as u};
