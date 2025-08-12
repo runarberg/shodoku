@@ -3,6 +3,8 @@ import { createEmptyCard, FSRS, generatorParameters, State } from "ts-fsrs";
 
 import { liveQueryBroadcaster } from "../helpers/channels.ts";
 import { randomId } from "../helpers/random.ts";
+import { WEEK } from "../helpers/time.ts";
+import { knownMinDueWeeks, knownMinRetention } from "../store/reviews.ts";
 import {
   Card,
   CardProgress,
@@ -237,6 +239,9 @@ export async function getDeckStatus(
     return deckStatus;
   }
 
+  const minRetentionProb = knownMinRetention.value / 100;
+  const minDueDate = new Date(Date.now() + knownMinDueWeeks.value * WEEK);
+
   for await (const cardId of deck.cards) {
     for (const [cardType, counts] of Object.entries(deckStatus) as Array<
       [type: CardType, count: DeckStatusCount]
@@ -255,7 +260,10 @@ export async function getDeckStatus(
         progress.fsrs.due < now
       ) {
         counts.due += 1;
-      } else if (fsrs.get_retrievability(progress.fsrs, now, false) > 0.99) {
+      } else if (
+        progress.fsrs.due > minDueDate &&
+        fsrs.get_retrievability(progress.fsrs, now, false) > minRetentionProb
+      ) {
         counts.know += 1;
       } else {
         counts.review += 1;

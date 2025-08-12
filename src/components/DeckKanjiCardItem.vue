@@ -5,7 +5,9 @@ import { computed } from "vue";
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
 import { useFsrs } from "../helpers/fsrs.ts";
+import { WEEK } from "../helpers/time.ts";
 import { kanjiRoute } from "../router.ts";
+import { knownMinDueWeeks, knownMinRetention } from "../store/reviews.ts";
 
 const props = defineProps<{
   codepoint: number;
@@ -24,6 +26,15 @@ const { result: progress } = useLiveQuery(async () => {
 });
 
 const fsrs = useFsrs();
+
+function isProficient(fsrsCard: FSRSCard) {
+  const now = new Date();
+  const minRetentionProb = knownMinRetention.value / 100;
+  const minDueDate = new Date(Date.now() + knownMinDueWeeks.value * WEEK);
+  const r = fsrs.value.get_retrievability(fsrsCard, now, false);
+
+  return r > minRetentionProb && fsrsCard.due > minDueDate;
+}
 
 function getStatus(
   fsrsCard: FSRSCard | undefined,
@@ -44,7 +55,7 @@ function getStatus(
     return "due";
   }
 
-  if (fsrs.value.get_retrievability(fsrsCard, new Date(), false) > 0.99) {
+  if (isProficient(fsrsCard)) {
     return "know";
   }
 

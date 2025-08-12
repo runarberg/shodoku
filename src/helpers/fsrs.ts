@@ -1,4 +1,4 @@
-import { fsrs as createFsrs, generatorParameters, State } from "ts-fsrs";
+import { FSRS, fsrs as createFsrs, generatorParameters, State } from "ts-fsrs";
 import {
   computed,
   ComputedRef,
@@ -10,9 +10,15 @@ import {
 } from "vue";
 
 import { db } from "../db/index.ts";
-import { fsrsFuzzEnabled } from "../store/reviews.ts";
+import {
+  fsrsFuzzEnabled,
+  knownMinDueWeeks,
+  knownMinRetention,
+} from "../store/reviews.ts";
+import { CardProgress } from "../types.ts";
 import { useLiveQuery } from "./db.ts";
 import { isKanji } from "./text.ts";
+import { WEEK } from "./time.ts";
 
 export function useFsrs() {
   return computed(() => {
@@ -24,14 +30,34 @@ export function useFsrs() {
   });
 }
 
-type KanjiRetrievability = {
-  read: number | null;
-  write: number | null;
-};
+type KanjiRetrievability = number | "learning" | "relearning" | null;
+
+function getRetrievability(
+  progress: CardProgress | undefined,
+  fsrs: FSRS,
+  now = new Date(),
+): KanjiRetrievability {
+  if (!progress) {
+    return null;
+  }
+
+  if (progress.fsrs.state === 1) {
+    return "learning";
+  }
+
+  if (progress.fsrs.state === 3) {
+    return "relearning";
+  }
+
+  return fsrs.get_retrievability(progress.fsrs, now, false);
+}
 
 export function useKanjiRetrievability(
   codepoint: MaybeRefOrGetter,
-): ComputedRef<KanjiRetrievability | null> {
+): ComputedRef<{
+  read: KanjiRetrievability;
+  write: KanjiRetrievability;
+} | null> {
   const fsrs = useFsrs();
   const { result } = useLiveQuery(
     computed(() => {
@@ -46,13 +72,8 @@ export function useKanjiRetrievability(
         const now = new Date();
 
         return {
-          read: read
-            ? fsrs.value.get_retrievability(read.fsrs, now, false)
-            : null,
-
-          write: write
-            ? fsrs.value.get_retrievability(write.fsrs, now, false)
-            : null,
+          read: getRetrievability(read, fsrs.value, now),
+          write: getRetrievability(write, fsrs.value, now),
         };
       };
     }),
@@ -61,20 +82,22 @@ export function useKanjiRetrievability(
   return result;
 }
 
-export function useHighKanjiReadingRetrievability(
+export function useHighKanjiReadingProficiency(
   writing: MaybeRefOrGetter<string | null | undefined>,
 ): ShallowReactive<Set<string>> {
   const fsrs = useFsrs();
   const knowsReading = shallowReactive(new Set<string>());
 
   watch(
-    () => toValue(writing),
-    async (value) => {
+    [() => toValue(writing), knownMinDueWeeks, knownMinRetention],
+    async ([value, minDueWeeks, minRetention]) => {
       if (!value) {
         return;
       }
 
       const now = new Date();
+      const minRetentionProb = minRetention / 100;
+      const minDueDate = new Date(Date.now() + minDueWeeks * WEEK);
 
       for (const char of value) {
         if (isKanji(char)) {
@@ -89,7 +112,7 @@ export function useHighKanjiReadingRetrievability(
 
             const r = fsrs.value.get_retrievability(result.fsrs, now, false);
 
-            if (r > 0.99) {
+            if (r > minRetentionProb && result.fsrs.due > minDueDate) {
               knowsReading.add(char);
             }
           }

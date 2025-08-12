@@ -4,7 +4,7 @@ import {
   dictionaryRoute,
   reviewRoute,
   settingsRoute,
-} from "../router";
+} from "../router.ts";
 import AppButton from "./AppButton.vue";
 </script>
 

@@ -59,7 +59,11 @@ const { result: decks } = useLiveQuery(
 
 const retrievability = useKanjiRetrievability(() => props.kanji.codepoint);
 
-function rGrade(p: number): "good" | "fair" | "poor" {
+function rGrade(p: number | string): "good" | "fair" | "poor" {
+  if (typeof p === "string") {
+    return "poor";
+  }
+
   if (p > 0.9) {
     return "good";
   }
@@ -105,7 +109,11 @@ function rGrade(p: number): "good" | "fair" | "poor" {
         title="Writing Retrievability"
         :data-r="rGrade(retrievability.write)"
       >
-        書 {{ formatPercent(retrievability.write) }}
+        書
+        <template v-if="typeof retrievability.write === 'string'">
+          {{ retrievability.write }}
+        </template>
+        <template v-else> {{ formatPercent(retrievability.write) }} </template>
       </span>
 
       <span
@@ -114,7 +122,11 @@ function rGrade(p: number): "good" | "fair" | "poor" {
         title="Reading Retrievability"
         :data-r="rGrade(retrievability.read)"
       >
-        読 {{ formatPercent(retrievability.read) }}
+        読
+        <template v-if="typeof retrievability.read === 'string'">
+          {{ retrievability.read }}
+        </template>
+        <template v-else> {{ formatPercent(retrievability.read) }} </template>
       </span>
     </aside>
 

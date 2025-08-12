@@ -20,19 +20,23 @@ import { useLiveQuery } from "../helpers/db.ts";
 import { HOUR, midnight } from "../helpers/time.ts";
 import { CardProgress, CardReview } from "../types.ts";
 
-export const dueLimit = useLocalStorage(
-  "shodoku.app.preferences.limit.due",
-  50,
-);
+const PREFIX = "shodoku.app.preferences";
 
-export const newLimit = useLocalStorage(
-  "shodoku.app.preferences.limit.new",
-  10,
-);
-
+export const dueLimit = useLocalStorage(`${PREFIX}.limit.due`, 50);
+export const newLimit = useLocalStorage(`${PREFIX}.limit.new`, 10);
 export const fsrsFuzzEnabled = useLocalStorage(
-  "shodoku.app.preferences.fsrs.fuzz-enabled",
+  `${PREFIX}.fsrs.fuzz-enabled`,
   true,
+);
+
+export const knownMinDueWeeks = useLocalStorage(
+  `${PREFIX}.known.min-due-weeks`,
+  8,
+);
+
+export const knownMinRetention = useLocalStorage(
+  `${PREFIX}.known.min-retention`,
+  90,
 );
 
 export async function increaseReviewLimit(

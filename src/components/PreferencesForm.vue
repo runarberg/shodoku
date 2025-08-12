@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import AppCheckbox from "../components/AppCheckbox.vue";
-import AppNumberInput from "../components/AppNumberInput.vue";
-import { dueLimit, fsrsFuzzEnabled, newLimit } from "../store/reviews.ts";
+import {
+  dueLimit,
+  fsrsFuzzEnabled,
+  knownMinDueWeeks,
+  knownMinRetention,
+  newLimit,
+} from "../store/reviews.ts";
+import AppCheckbox from "./AppCheckbox.vue";
+import AppNumberInput from "./AppNumberInput.vue";
 </script>
 
 <template>
@@ -9,6 +15,27 @@ import { dueLimit, fsrsFuzzEnabled, newLimit } from "../store/reviews.ts";
     <AppNumberInput v-model="dueLimit" label="Daily review limit" inline />
     <AppNumberInput v-model="newLimit" label="Daily new limit" inline />
     <AppCheckbox v-model="fsrsFuzzEnabled" label="Fuzz review times" />
+    <fieldset>
+      <legend>Consider Kanji <em>known</em> when…</legend>
+
+      <AppNumberInput
+        v-model="knownMinRetention"
+        label="Retention above (%)"
+        min="50"
+        max="100"
+        inline
+      />
+
+      <span class="and">and</span>
+
+      <AppNumberInput
+        v-model="knownMinDueWeeks"
+        label="Not due within (weeks)"
+        min="0"
+        max="52"
+        inline
+      />
+    </fieldset>
   </form>
 </template>
 

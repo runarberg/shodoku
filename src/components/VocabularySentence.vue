@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { useHighKanjiReadingRetrievability } from "../helpers/fsrs.ts";
+import { useHighKanjiReadingProficiency } from "../helpers/fsrs.ts";
 import { useSentence } from "../helpers/sentences.ts";
 import { isKanji } from "../helpers/text.ts";
 import { wordRoute } from "../router.ts";
@@ -17,7 +17,7 @@ const props = defineProps<{
 
 const sentence = useSentence(() => props.sentenceId);
 
-const proficientKanji = useHighKanjiReadingRetrievability(
+const proficientKanji = useHighKanjiReadingProficiency(
   () => sentence.value?.sentence,
 );
 

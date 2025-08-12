@@ -1,7 +1,7 @@
 import { computed, MaybeRefOrGetter, Ref, ref, toValue, watch } from "vue";
 
 import { Word, WordReading, WordWriting } from "../types.ts";
-import { useHighKanjiReadingRetrievability } from "./fsrs.ts";
+import { useHighKanjiReadingProficiency } from "./fsrs.ts";
 import { isKanji } from "./text.ts";
 
 export function useWord(
@@ -139,7 +139,7 @@ export function useWordFurigana(
   const writing = useWordWriting(word, options);
   const reading = useWordReading(word);
 
-  const proficientKanji = useHighKanjiReadingRetrievability(() =>
+  const proficientKanji = useHighKanjiReadingProficiency(() =>
     toValue(word)
       ?.writings?.map(({ text }) => text)
       .join(""),
