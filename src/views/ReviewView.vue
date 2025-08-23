@@ -6,7 +6,7 @@ import { useRoute, useRouter } from "vue-router";
 import AppLoading from "../components/AppLoading.vue";
 import KanjiReview from "../components/KanjiReview.vue";
 import ReviewRemainCount from "../components/ReviewRemainCount.vue";
-import { reviewSummaryRoute } from "../router.ts";
+import { kanjiRoute, reviewSummaryRoute } from "../router.ts";
 import useReviewsStore from "../store/reviews.ts";
 import { CardProgress, isCardType, Optional } from "../types.ts";
 
@@ -73,6 +73,11 @@ type HandleRateParams = {
 function handleRate({ progress, next }: HandleRateParams) {
   reviewsStore.rateCard(progress, next);
 
+  if ("singleton" in route.query && typeof route.query.kanji === "string") {
+    router.replace(kanjiRoute(route.query.kanji));
+    return;
+  }
+
   const [nextCard] = reviewsStore.queue;
   if (nextCard) {
     router.replace({
@@ -114,6 +119,7 @@ function handleRate({ progress, next }: HandleRateParams) {
       v-else-if="currentCard"
       :card="currentCard"
       :is-rating="isRating"
+      :singleton="'singleton' in $route.query"
       @answer="$router.replace({ query: { ...$route.query, rating: '' } })"
       @rate="handleRate($event)"
     />

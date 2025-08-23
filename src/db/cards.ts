@@ -63,16 +63,54 @@ export async function getNewDoneCount() {
     );
 }
 
-export async function* getNewCards() {
+export async function* getNewCards(): AsyncGenerator<
+  CardProgress,
+  void,
+  never
+> {
   const reviewed = await getReviewedToday();
 
   const tx = (await db).transaction(["decks", "progress"]);
   const progressStore = tx.objectStore("progress");
 
   const yielded = new Set<number>();
-  for await (const { value: deck } of tx
-    .objectStore("decks")
-    .index("priority")) {
+
+  // Start by seeing if we have started reviewing one side of the
+  // card, and now it is type to start reviewing the other side.
+  let lastCardId: number | null = null;
+  let lastCardType: CardType | null = null;
+  let lastState: State | null = null;
+  for await (const cursor of progressStore.index("cardId+cardType+state")) {
+    const [cardId, cardType, state] = cursor.key;
+
+    if (reviewed.has(cardId) || yielded.has(cardId)) {
+      continue;
+    }
+
+    if (lastCardId === cardId && lastState !== null && lastCardType !== null) {
+      if (lastState !== State.New && state === State.New) {
+        // We started reviewing the other side already, now start
+        // reviewing this side.
+        yield cursor.value;
+        yielded.add(cardId);
+      } else if (lastState === 0 && state !== State.New) {
+        // We started reviewing this side already, now start reviewing
+        // the other side.
+        const progress = await progressStore.get([lastCardId, lastCardType]);
+        if (progress) {
+          yield progress;
+          yielded.add(lastCardId);
+        }
+      }
+    } else {
+      lastCardId = cardId;
+      lastCardType = cardType;
+      lastState = state;
+    }
+  }
+
+  const deckPriorityIndex = tx.objectStore("decks").index("priority");
+  for await (const { value: deck } of deckPriorityIndex) {
     if (!deck.active) {
       continue;
     }

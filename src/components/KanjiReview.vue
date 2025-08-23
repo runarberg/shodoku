@@ -6,6 +6,7 @@ import { computed, ref } from "vue";
 import { db } from "../db/index.ts";
 import { useKanji, useKanjiVocab } from "../helpers/kanji.ts";
 import { provideKanjiVG } from "../helpers/kanjivg.ts";
+import { kanjiRoute } from "../router.ts";
 import { CardProgress, Optional } from "../types.ts";
 import AppButton from "./AppButton.vue";
 import KanjiComponents from "./KanjiComponents.vue";
@@ -18,6 +19,7 @@ import RateButtons from "./RateButtons.vue";
 const props = defineProps<{
   card: Optional<CardProgress, "fsrs">;
   isRating?: boolean;
+  singleton?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -94,11 +96,17 @@ function handleRate(next: RecordLogItem): void {
     <div class="advance-buttons">
       <RateButtons v-if="isRating" :progress="progress" @rate="handleRate" />
 
-      <AppButton v-else filled @click="answer()">
-        Show
-        <template v-if="card.cardType === 'kanji-read'"> Reading </template>
-        <template v-else> Writing </template>
-      </AppButton>
+      <template v-else>
+        <AppButton filled @click="answer()">
+          Show
+          <template v-if="card.cardType === 'kanji-read'"> Reading </template>
+          <template v-else> Writing </template>
+        </AppButton>
+
+        <AppButton v-if="singleton" :to="kanjiRoute(kanji.literal)" replace>
+          Cancel
+        </AppButton>
+      </template>
     </div>
 
     <KanjiComponents
@@ -120,6 +128,8 @@ function handleRate(next: RecordLogItem): void {
 <style scoped>
 .advance-buttons {
   backdrop-filter: blur(2em);
+  display: flex;
+  column-gap: 1ex;
   inline-size: max-content;
   inset-block-start: 0;
   padding-block: 1em 1ex;

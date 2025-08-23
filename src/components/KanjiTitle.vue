@@ -1,19 +1,26 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { db } from "../db/index.ts";
-import { useLiveQuery } from "../helpers/db.ts";
 import { deckLabel } from "../helpers/decks.ts";
 import { formatPercent } from "../helpers/formats.ts";
 import { useKanjiRetrievability } from "../helpers/fsrs.ts";
 import { DECKS_ROUTE_NAME } from "../router.ts";
+import { useDecksContainingCard } from "../store/decks.ts";
 import { KanjiInfo } from "../types.ts";
 
-const props = defineProps<{
-  kanji: KanjiInfo;
-  hideLiteral?: boolean;
-  hideMeaning?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    kanji: KanjiInfo;
+    hideLiteral?: boolean;
+    hideMeaning?: boolean;
+    actions?: "explore" | "review";
+  }>(),
+  {
+    hideLiteral: false,
+    hideMeaning: false,
+    actions: "explore",
+  },
+);
 
 const freq = computed(() => {
   const { freq: n } = props.kanji;
@@ -45,20 +52,7 @@ const freq = computed(() => {
   return null;
 });
 
-const { result: decks } = useLiveQuery(
-  computed(() => {
-    const cardId = props.kanji.codepoint;
-
-    return async () =>
-      (await db)
-        .transaction("decks")
-        .store.index("cards")
-        .getAll(IDBKeyRange.only(cardId));
-  }),
-);
-
-const activeDecks = computed(() => decks.value?.filter(({ active }) => active));
-
+const decks = useDecksContainingCard(() => props.kanji.codepoint);
 const retrievability = useKanjiRetrievability(() => props.kanji.codepoint);
 
 function rGrade(p: number | string): "good" | "fair" | "poor" {
@@ -90,23 +84,21 @@ function rGrade(p: number | string): "good" | "fair" | "poor" {
 
     <aside class="labels">
       <span
-        v-if="
-          freq && !activeDecks?.some(({ name }) => name === `news-top-${freq}`)
-        "
+        v-if="freq && !decks.some(({ name }) => name === `news-top-${freq}`)"
         class="label freq"
       >
         Top {{ freq }}
       </span>
-      <template v-if="activeDecks">
-        <RouterLink
-          v-for="deck of activeDecks"
-          :key="deck.name"
-          :to="{ name: DECKS_ROUTE_NAME, query: { deck: deck.name } }"
-          class="label deck"
-        >
-          {{ deckLabel(deck) }}
-        </RouterLink>
-      </template>
+
+      <RouterLink
+        v-for="deck of decks"
+        :key="deck.name"
+        :to="{ name: DECKS_ROUTE_NAME, query: { deck: deck.name } }"
+        class="label deck"
+      >
+        {{ deckLabel(deck) }}
+      </RouterLink>
+
       <span
         v-if="retrievability?.write"
         class="label retrievability"
@@ -147,6 +139,10 @@ function rGrade(p: number | string): "good" | "fair" | "poor" {
         {{ meaning }}
       </li>
     </ul>
+
+    <nav v-if="$slots.actions" class="actions">
+      <slot name="actions" />
+    </nav>
   </header>
 </template>
 
@@ -155,15 +151,15 @@ function rGrade(p: number | string): "good" | "fair" | "poor" {
   column-gap: 1em;
   display: grid;
   grid-template:
-    "literal meaning labels"
-    "literal additional additional" 1fr
-    / min-content auto 1fr;
+    "literal meaning    labels     actions"
+    "literal additional additional .      " 1fr
+    / min-content auto 1fr auto;
 
   @media screen and (max-width: 75ch) {
     grid-template:
-      "literal labels"
-      "literal meaning"
-      "literal additional"
+      "literal labels     actions"
+      "literal meaning    .      "
+      "literal additional .      "
       / min-content 1fr;
   }
 }
@@ -197,15 +193,18 @@ function rGrade(p: number | string): "good" | "fair" | "poor" {
 }
 
 .labels {
-  align-items: start;
+  align-content: start;
+  align-items: stretch;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5ex;
   grid-area: labels;
 
   & .label {
+    align-items: center;
     border-radius: 1ex;
-    font-size: 0.6em;
+    display: flex;
+    font-size: 0.65em;
     font-weight: 600;
     padding: 0.5ex 1ex;
   }
@@ -236,5 +235,9 @@ function rGrade(p: number | string): "good" | "fair" | "poor" {
       background: var(--orange);
     }
   }
+}
+
+.actions {
+  grid-area: actions;
 }
 </style>

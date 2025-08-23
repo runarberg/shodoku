@@ -4,12 +4,22 @@ import { RouteLocationRaw } from "vue-router";
 
 import AppIcon from "./AppIcon.vue";
 
-const props = defineProps<{
-  to?: RouteLocationRaw;
-  filled?: boolean;
-  inline?: boolean;
-  prefixIcon?: string | null;
-}>();
+const props = withDefaults(
+  defineProps<{
+    filled?: boolean;
+    inline?: boolean;
+    prefixIcon?: string | null;
+    to?: RouteLocationRaw | null;
+    replace?: boolean;
+  }>(),
+  {
+    filled: false,
+    inline: false,
+    prefixIcon: null,
+    to: null,
+    replace: false,
+  },
+);
 
 const tag = computed(() => (props.to ? "RouterLink" : "button"));
 
@@ -27,12 +37,16 @@ function handleTouchStart(event: TouchEvent) {
 <template>
   <component
     :is="tag"
-    :to="to"
     class="app-button"
+    :to="to"
+    :replace="replace"
     :class="{ filled, inline }"
     @touchstart="handleTouchStart"
   >
-    <AppIcon v-if="prefixIcon" :icon="prefixIcon" class="prefix-icon" />
+    <slot name="prefix">
+      <AppIcon v-if="prefixIcon" :icon="prefixIcon" class="prefix-icon" />
+    </slot>
+
     <span class="content"><slot /></span>
   </component>
 </template>

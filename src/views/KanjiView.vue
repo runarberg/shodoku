@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 
 import KanjiComponents from "../components/KanjiComponents.vue";
+import KanjiExploreActions from "../components/KanjiExploreActions.vue";
 import KanjiReadings from "../components/KanjiReadings.vue";
 import KanjiStrokes from "../components/KanjiStrokes.vue";
 import KanjiTitle from "../components/KanjiTitle.vue";
@@ -32,7 +33,12 @@ provideKanjiVG(hex);
 
 <template>
   <article v-if="kanji" class="kanji-card">
-    <KanjiTitle class="title" :kanji="kanji" />
+    <KanjiTitle class="title" :kanji="kanji">
+      <template #actions>
+        <KanjiExploreActions :kanji="kanji" />
+      </template>
+    </KanjiTitle>
+
     <KanjiReadings class="readings" :kanji="kanji" />
     <KanjiStrokes class="strokes" :kanji="kanji" />
     <KanjiComponents class="components" />

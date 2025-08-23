@@ -1,6 +1,6 @@
 import { Deck } from "../types.ts";
 
-export function deckLabel(deck: Deck) {
+export function deckLabel(deck: Deck): string {
   if (deck.category === "genki") {
     return `Genki ${deck.label}`;
   }
@@ -10,6 +10,14 @@ export function deckLabel(deck: Deck) {
   }
 
   return deck.label;
+}
+
+export function categoryLabel(name: string): string {
+  if (name === "jouyou") {
+    return "Jōyō";
+  }
+
+  return name;
 }
 
 export const jlptDecks = [

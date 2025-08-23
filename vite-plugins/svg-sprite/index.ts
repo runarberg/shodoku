@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url";
 import { Config as SvgoConfig } from "svgo";
 import { createFilter, Plugin, ResolvedConfig } from "vite";
 
-import { generate, hexDigest } from "./generate";
-import { hmrListener } from "./hmr";
+import { generate, hexDigest } from "./generate.ts";
+import { hmrListener } from "./hmr.ts";
 
 const _dirname =
   typeof __dirname !== "undefined"

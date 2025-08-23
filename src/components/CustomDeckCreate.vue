@@ -39,7 +39,6 @@ async function setDefaultPriority() {
 
 async function handleSubmit() {
   const deck = await createDeck({
-    category: "custom",
     label: model.label,
     priority: model.priority,
     cards: toRaw(model.cards),

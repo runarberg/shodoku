@@ -277,13 +277,18 @@ export async function getDeckStatus(
 export async function createDeck({
   name = `custom/${randomId()}`,
   active = true,
+  category = "custom",
   createdAt = new Date(),
   ...deckTemplate
-}: Optional<Deck, "name" | "active" | "createdAt">): Promise<Deck> {
+}: Optional<
+  Deck,
+  "name" | "active" | "category" | "createdAt"
+>): Promise<Deck> {
   const deck: Deck = {
     ...deckTemplate,
     name,
     active,
+    category,
     createdAt,
   };
 

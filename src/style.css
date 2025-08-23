@@ -31,7 +31,7 @@
     var(--background-gradient-color) 100%
   );
   --background-light: light-dark(
-    oklch(from var(--accent-color-light) l 0.02 h),
+    oklch(from var(--accent-color) 97% 0.02 h),
     oklch(from var(--accent-color) 15% c h)
   );
   --background-strong: light-dark(white, black);

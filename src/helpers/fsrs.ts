@@ -30,35 +30,12 @@ export function useFsrs() {
   });
 }
 
-type KanjiRetrievability = number | "learning" | "relearning" | null;
-
-function getRetrievability(
-  progress: CardProgress | undefined,
-  fsrs: FSRS,
-  now = new Date(),
-): KanjiRetrievability {
-  if (!progress) {
-    return null;
-  }
-
-  if (progress.fsrs.state === 1) {
-    return "learning";
-  }
-
-  if (progress.fsrs.state === 3) {
-    return "relearning";
-  }
-
-  return fsrs.get_retrievability(progress.fsrs, now, false);
-}
-
-export function useKanjiRetrievability(
-  codepoint: MaybeRefOrGetter,
+export function useKanjiProgress(
+  codepoint: MaybeRefOrGetter<number>,
 ): ComputedRef<{
-  read: KanjiRetrievability;
-  write: KanjiRetrievability;
-} | null> {
-  const fsrs = useFsrs();
+  read: CardProgress | null;
+  write: CardProgress | null;
+}> {
   const { result } = useLiveQuery(
     computed(() => {
       const cardId = toValue(codepoint);
@@ -69,14 +46,65 @@ export function useKanjiRetrievability(
         const read = await progressStore.get([cardId, "kanji-read"]);
         const write = await progressStore.get([cardId, "kanji-write"]);
 
-        const now = new Date();
-
         return {
-          read: getRetrievability(read, fsrs.value, now),
-          write: getRetrievability(write, fsrs.value, now),
+          read: read ?? null,
+          write: write ?? null,
         };
       };
     }),
+
+    { read: null, write: null },
+  );
+
+  return result;
+}
+
+type KanjiRetrievability = number | "learning" | "relearning" | null;
+
+function getRetrievability(
+  progress: CardProgress | null,
+  fsrs: FSRS,
+  now = new Date(),
+): KanjiRetrievability {
+  if (!progress) {
+    return null;
+  }
+
+  if (progress.fsrs.state === State.Learning) {
+    return "learning";
+  }
+
+  if (progress.fsrs.state === State.Relearning) {
+    return "relearning";
+  }
+
+  return fsrs.get_retrievability(progress.fsrs, now, false);
+}
+
+export function useKanjiRetrievability(
+  codepoint: MaybeRefOrGetter<number>,
+): ComputedRef<{
+  read: KanjiRetrievability;
+  write: KanjiRetrievability;
+} | null> {
+  const fsrs = useFsrs();
+  const progress = useKanjiProgress(codepoint);
+
+  const { result } = useLiveQuery(
+    computed(() => {
+      const fsrsValue = fsrs.value;
+      const { read, write } = progress.value;
+
+      return async () => {
+        const now = new Date();
+        return {
+          read: getRetrievability(read, fsrsValue, now),
+          write: getRetrievability(write, fsrsValue, now),
+        };
+      };
+    }),
+
+    { read: null, write: null },
   );
 
   return result;

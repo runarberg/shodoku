@@ -10,17 +10,18 @@ import {
 
 import { liveQueryChannel } from "./channels.ts";
 
-export type LiveQueryResult<T> = {
-  result: ComputedRef<T | null>;
+export type LiveQueryResult<T, Init = null> = {
+  result: ComputedRef<T | Init>;
   error: ComputedRef<unknown>;
   loading: ComputedRef<boolean>;
 };
 
-export function useLiveQuery<T>(
+export function useLiveQuery<T, Init = null>(
   query: MaybeRef<() => T | Promise<T>>,
-): LiveQueryResult<T> {
+  init: Init = null as Init,
+): LiveQueryResult<T, Init> {
   const loading = ref(true);
-  const result = ref<T | null>(null);
+  const result = ref<T | Init>(init);
   const errorRef = ref<unknown>(null);
 
   async function runQuery() {
@@ -32,7 +33,7 @@ export function useLiveQuery<T>(
       result.value = await run();
     } catch (error) {
       errorRef.value = error;
-      result.value = null;
+      result.value = init;
     } finally {
       loading.value = false;
     }
