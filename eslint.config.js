@@ -188,5 +188,13 @@ export default ts.config(
     },
   },
 
+  {
+    files: ["public/sw.js"],
+
+    languageOptions: {
+      globals: globals.serviceworker,
+    },
+  },
+
   prettier,
 );

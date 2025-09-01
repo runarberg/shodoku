@@ -2,6 +2,7 @@
 import MainFooter from "./components/MainFooter.vue";
 import MainNav from "./components/MainNav.vue";
 import MainTitle from "./components/MainTitle.vue";
+import ReloadPrompt from "./components/ReloadPrompt.vue";
 import { setupGlobalPreferences } from "./store/preferences.ts";
 
 setupGlobalPreferences();
@@ -21,6 +22,8 @@ setupGlobalPreferences();
     </main>
 
     <MainFooter class="footer" />
+
+    <ReloadPrompt />
   </div>
 </template>
 
