@@ -2,11 +2,12 @@
 import { computed } from "vue";
 
 import { deckLabel } from "../helpers/decks.ts";
-import { formatPercent } from "../helpers/formats.ts";
-import { useKanjiRetrievability } from "../helpers/fsrs.ts";
+import { useCardRetrievability } from "../helpers/fsrs.ts";
 import { DECKS_ROUTE_NAME } from "../router.ts";
 import { useDecksContainingCard } from "../store/decks.ts";
 import { KanjiInfo } from "../types.ts";
+import AppLabel from "./AppLabel.vue";
+import CardRetrievabilityLabel from "./CardRetrievabilityLabel.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -53,23 +54,10 @@ const freq = computed(() => {
 });
 
 const decks = useDecksContainingCard(() => props.kanji.codepoint);
-const retrievability = useKanjiRetrievability(() => props.kanji.codepoint);
-
-function rGrade(p: number | string): "good" | "fair" | "poor" {
-  if (typeof p === "string") {
-    return "poor";
-  }
-
-  if (p > 0.9) {
-    return "good";
-  }
-
-  if (p > 0.7) {
-    return "fair";
-  }
-
-  return "poor";
-}
+const retrievability = useCardRetrievability(
+  () => props.kanji.codepoint,
+  ["kanji-write", "kanji-read"],
+);
 </script>
 
 <template>
@@ -83,47 +71,31 @@ function rGrade(p: number | string): "good" | "fair" | "poor" {
     </p>
 
     <aside class="labels">
-      <span
+      <AppLabel
         v-if="freq && !decks.some(({ name }) => name === `news-top-${freq}`)"
-        class="label freq"
+        class="freq-label"
       >
         Top {{ freq }}
-      </span>
+      </AppLabel>
 
       <RouterLink
         v-for="deck of decks"
         :key="deck.name"
         :to="{ name: DECKS_ROUTE_NAME, query: { deck: deck.name } }"
-        class="label deck"
+        class="deck-label"
       >
-        {{ deckLabel(deck) }}
+        <AppLabel>{{ deckLabel(deck) }}</AppLabel>
       </RouterLink>
 
-      <span
-        v-if="retrievability?.write"
-        class="label retrievability"
-        title="Writing Retrievability"
-        :data-r="rGrade(retrievability.write)"
-      >
-        書
-        <template v-if="typeof retrievability.write === 'string'">
-          {{ retrievability.write }}
-        </template>
-        <template v-else> {{ formatPercent(retrievability.write) }} </template>
-      </span>
+      <CardRetrievabilityLabel
+        :r="retrievability.get('kanji-write')"
+        label="書"
+      />
 
-      <span
-        v-if="retrievability?.read"
-        class="label retrievability"
-        title="Reading Retrievability"
-        :data-r="rGrade(retrievability.read)"
-      >
-        読
-        <template v-if="typeof retrievability.read === 'string'">
-          {{ retrievability.read }}
-        </template>
-        <template v-else> {{ formatPercent(retrievability.read) }} </template>
-      </span>
+      <CardRetrievabilityLabel
+        :r="retrievability.get('kanji-read')"
+        label="読"
+      />
     </aside>
 
     <ul
@@ -200,40 +172,15 @@ function rGrade(p: number | string): "good" | "fair" | "poor" {
   gap: 0.5ex;
   grid-area: labels;
 
-  & .label {
-    align-items: center;
-    border-radius: 1ex;
-    display: flex;
-    font-size: 0.65em;
-    font-weight: 600;
-    padding: 0.5ex 1ex;
-  }
-
-  & .freq {
+  & .freq-label {
     background: var(--green);
     color: var(--background-strong);
   }
 
-  & .deck {
+  & .deck-label {
     background: var(--blue);
     color: var(--background-strong);
     text-decoration: none;
-  }
-
-  & .retrievability {
-    color: var(--background-strong);
-
-    &[data-r="good"] {
-      background: var(--green);
-    }
-
-    &[data-r="fair"] {
-      background: var(--gold);
-    }
-
-    &[data-r="poor"] {
-      background: var(--orange);
-    }
   }
 }
 

@@ -1,0 +1,20 @@
+{
+  "literal": "みゃ",
+  "reading": "mya",
+  "base": ["み", "や"],
+  "katakana": "ミャ",
+  "vocab": [
+    {
+      "kana": "ぶんみゃく",
+      "romaji": "bunmyaku",
+      "en": "context",
+      "wordId": 1505630
+    },
+    {
+      "kana": "みゃくみゃくと",
+      "romaji": "myakumyakuto",
+      "en": "continuously",
+      "wordId": 1753330
+    }
+  ]
+}

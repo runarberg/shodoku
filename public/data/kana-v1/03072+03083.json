@@ -1,0 +1,11 @@
+{
+  "literal": "ひゃ",
+  "reading": "hya",
+  "base": ["ひ", "や"],
+  "dakuten": "びゃ",
+  "handakuten": "ぴゃ",
+  "katakana": "ヒャ",
+  "vocab": [
+    { "kana": "ひゃく", "romaji": "hyaku", "en": "hundred", "wordId": 1488000 }
+  ]
+}

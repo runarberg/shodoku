@@ -2,10 +2,12 @@
 import { computed, onMounted, ref, useId } from "vue";
 import { useRoute } from "vue-router";
 
+import { type DeckStatusCount } from "../db/decks.ts";
 import { deckLabel } from "../helpers/decks.ts";
 import { formatPercent } from "../helpers/formats.ts";
 import { useDeckStatus } from "../store/decks.ts";
 import { Deck } from "../types.ts";
+import DeckKanaCards from "./DeckKanaCards.vue";
 import DeckKanjiCards from "./DeckKanjiCards.vue";
 
 const props = defineProps<{
@@ -46,14 +48,20 @@ const toggleExpanded = computed(() => {
 });
 
 const deckStatus = useDeckStatus(() => props.deck.name);
-function sumStatus(status: "new" | "due" | "review" | "know") {
+
+function sumStatus(statusKey: keyof DeckStatusCount) {
   if (!deckStatus.value) {
     return 0;
   }
 
-  const { "kanji-read": read, "kanji-write": write } = deckStatus.value;
+  let sum = 0;
+  let n = 0;
+  for (const [, counts] of deckStatus.value) {
+    sum += counts[statusKey];
+    n += 1;
+  }
 
-  return (read[status] + write[status]) / 2;
+  return sum / n;
 }
 
 const newCount = computed(() => sumStatus("new"));
@@ -94,7 +102,16 @@ onMounted(() => {
       </template>
     </div>
 
-    <DeckKanjiCards v-if="expanded" :kanji="deck.cards" class="cards" />
+    <template v-if="expanded">
+      <DeckKanaCards
+        v-if="deck.category === 'kana'"
+        :name="deck.name"
+        :kana="deck.cards"
+        class="cards"
+      />
+
+      <DeckKanjiCards v-else :kanji="deck.cards" class="cards" />
+    </template>
   </article>
 </template>
 

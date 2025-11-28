@@ -1,0 +1,19 @@
+{
+  "literal": "ヴォ",
+  "reading": "vo",
+  "base": ["ヴ", "オ", "ウォ"],
+  "vocab": [
+    {
+      "kana": "ヴォールト",
+      "romaji": "vōruto",
+      "en": "vault",
+      "wordId": 2416050
+    },
+    {
+      "kana": "ヴォクシー",
+      "romaji": "vokushī",
+      "en": "Voxy (Toyota van)",
+      "wordId": 5741315
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "literal": "ル",
+  "reading": "ru",
+  "hiragana": "る",
+  "vocab": [
+    { "kana": "ルビー", "romaji": "rubī", "en": "ruby", "wordId": 1144130 },
+    { "kana": "ルール", "romaji": "rūru", "en": "rule", "wordId": 1143920 },
+    {
+      "kana": "ルンルン",
+      "romaji": "run-run",
+      "en": "very happy",
+      "wordId": 2018710
+    },
+    {
+      "kana": "ルナー・ベルグ",
+      "romaji": "runā berugu",
+      "en": "Rúnar Berg (app developer)"
+    }
+  ]
+}

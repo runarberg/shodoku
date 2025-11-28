@@ -1,0 +1,16 @@
+{
+  "literal": "チェ",
+  "reading": "che",
+  "base": ["チ", "エ"],
+  "vocab": [
+    {
+      "kana": "チェック",
+      "romaji": "chekku",
+      "en": "check",
+      "wordId": 1077550
+    },
+    { "kana": "チェーン", "romaji": "chēn", "en": "chain", "wordId": 1077420 },
+    { "kana": "チェス", "romaji": "chesu", "en": "chess", "wordId": 1077480 },
+    { "kana": "チェコ", "romaji": "cheko", "en": "Czechia", "wordId": 1077470 }
+  ]
+}

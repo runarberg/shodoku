@@ -1,0 +1,33 @@
+{
+  "literal": "べ",
+  "reading": "be",
+  "base": "へ",
+  "handakuten": "ぺ",
+  "katakana": "ベ",
+  "vocab": [
+    {
+      "kana": "べつに",
+      "romaji": "betsuni",
+      "en": "separately",
+      "wordId": 1509480
+    },
+    {
+      "kana": "べんり",
+      "romaji": "benri",
+      "en": "convenient",
+      "wordId": 1512610
+    },
+    {
+      "kana": "べんとう",
+      "romaji": "bentō",
+      "en": "Bento box (meal)",
+      "wordId": 1513060
+    },
+    {
+      "kana": "べんごし",
+      "romaji": "bengoshi",
+      "en": "lawyer",
+      "wordId": 1512850
+    }
+  ]
+}

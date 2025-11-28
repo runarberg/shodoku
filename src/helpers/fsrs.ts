@@ -15,7 +15,7 @@ import {
   knownMinDueWeeks,
   knownMinRetention,
 } from "../store/reviews.ts";
-import { CardProgress } from "../types.ts";
+import { CardProgress, CardType } from "../types.ts";
 import { useLiveQuery } from "./db.ts";
 import { isKanji } from "./text.ts";
 import { WEEK } from "./time.ts";
@@ -30,42 +30,47 @@ export function useFsrs() {
   });
 }
 
-export function useKanjiProgress(
-  codepoint: MaybeRefOrGetter<number>,
-): ComputedRef<{
-  read: CardProgress | null;
-  write: CardProgress | null;
-}> {
+export function useCardProgress(
+  cardId: MaybeRefOrGetter<number | undefined>,
+  cardTypes: CardType[],
+): ComputedRef<Map<CardType, CardProgress>> {
   const { result } = useLiveQuery(
     computed(() => {
-      const cardId = toValue(codepoint);
+      const id = toValue(cardId);
 
       return async () => {
+        const progressMap = new Map<CardType, CardProgress>();
+
+        if (!id) {
+          return progressMap;
+        }
+
         const progressStore = (await db).transaction("progress").store;
 
-        const read = await progressStore.get([cardId, "kanji-read"]);
-        const write = await progressStore.get([cardId, "kanji-write"]);
+        for (const cardType of cardTypes) {
+          const progress = await progressStore.get([id, cardType]);
+          if (progress) {
+            progressMap.set(cardType, progress);
+          }
+        }
 
-        return {
-          read: read ?? null,
-          write: write ?? null,
-        };
+        return progressMap;
       };
     }),
 
-    { read: null, write: null },
+    new Map<CardType, CardProgress>(),
   );
 
   return result;
 }
 
-type KanjiRetrievability = number | "learning" | "relearning" | null;
+export type CardRetrievability = number | "learning" | "relearning" | null;
 
 function getRetrievability(
   progress: CardProgress | null,
   fsrs: FSRS,
   now = new Date(),
-): KanjiRetrievability {
+): CardRetrievability {
   if (!progress) {
     return null;
   }
@@ -81,33 +86,24 @@ function getRetrievability(
   return fsrs.get_retrievability(progress.fsrs, now, false);
 }
 
-export function useKanjiRetrievability(
-  codepoint: MaybeRefOrGetter<number>,
-): ComputedRef<{
-  read: KanjiRetrievability;
-  write: KanjiRetrievability;
-} | null> {
+export function useCardRetrievability(
+  codepoint: MaybeRefOrGetter<number | undefined>,
+  cardTypes: CardType[],
+): ComputedRef<Map<CardType, CardRetrievability>> {
   const fsrs = useFsrs();
-  const progress = useKanjiProgress(codepoint);
+  const progresses = useCardProgress(codepoint, cardTypes);
 
-  const { result } = useLiveQuery(
-    computed(() => {
-      const fsrsValue = fsrs.value;
-      const { read, write } = progress.value;
+  return computed(() => {
+    const now = new Date();
+    const fsrsValue = fsrs.value;
+    const result = new Map<CardType, CardRetrievability>();
 
-      return async () => {
-        const now = new Date();
-        return {
-          read: getRetrievability(read, fsrsValue, now),
-          write: getRetrievability(write, fsrsValue, now),
-        };
-      };
-    }),
+    for (const [cardType, cardProgress] of progresses.value) {
+      result.set(cardType, getRetrievability(cardProgress, fsrsValue, now));
+    }
 
-    { read: null, write: null },
-  );
-
-  return result;
+    return result;
+  });
 }
 
 export function useHighKanjiReadingProficiency(

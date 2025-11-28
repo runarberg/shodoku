@@ -1,0 +1,16 @@
+{
+  "literal": "リ",
+  "reading": "ri",
+  "youon": ["リャ", "リュ", "リョ"],
+  "hiragana": "り",
+  "vocab": [
+    { "kana": "リンス", "romaji": "rinsu", "en": "rinse", "wordId": 1143490 },
+    { "kana": "リース", "romaji": "rīsu", "en": "wreath", "wordId": 2846538 },
+    {
+      "kana": "リンリン",
+      "romaji": "rin-rin",
+      "en": "bell ringing",
+      "wordId": 1648230
+    }
+  ]
+}

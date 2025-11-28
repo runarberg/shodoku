@@ -1,0 +1,21 @@
+{
+  "literal": "ケ",
+  "reading": "ke",
+  "dakuten": "ゲ",
+  "hiragana": "け",
+  "vocab": [
+    { "kana": "ケーキ", "romaji": "kēki", "en": "cake", "wordId": 1047860 },
+    {
+      "kana": "ケータイ",
+      "romaji": "kētai",
+      "en": "cell phone",
+      "wordId": 1250680
+    },
+    {
+      "kana": "ケチャップ",
+      "romaji": "kechappu",
+      "en": "ketchup",
+      "wordId": 1048100
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "literal": "ツ",
+  "reading": "tsu",
+  "hiragana": "つ",
+  "youon": ["ツァ", "ツィ", "ツェ", "ツォ"],
+  "vocab": [
+    {
+      "kana": "ツーリスト",
+      "romaji": "tsūrisuto",
+      "en": "tourist",
+      "wordId": 1078390
+    },
+    {
+      "kana": "ツイン",
+      "romaji": "tsuin",
+      "en": "twin (hotel room)",
+      "wordId": 1078440
+    },
+    { "kana": "ツアー", "romaji": "tsuā", "en": "tour", "wordId": 1078420 },
+    {
+      "kana": "ツイスト",
+      "romaji": "tsuisuto",
+      "en": "twist",
+      "wordId": 2072330
+    },
+    {
+      "kana": "ツヤツヤ",
+      "romaji": "tsuya-tsuya",
+      "en": "glossy",
+      "wordId": 1598100
+    },
+    {
+      "kana": "ツルツル",
+      "romaji": "tsuru-tsuru",
+      "en": "slippery",
+      "wordId": 1008220
+    }
+  ]
+}

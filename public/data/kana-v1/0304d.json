@@ -1,0 +1,29 @@
+{
+  "literal": "き",
+  "reading": "ki",
+  "dakuten": "ぎ",
+  "youon": ["きゃ", "きゅ", "きょ"],
+  "katakana": "キ",
+  "vocab": [
+    { "kana": "きく", "romaji": "kiku", "en": "to listen", "wordId": 1591110 },
+    {
+      "kana": "きのう",
+      "romaji": "kinō",
+      "en": "yesterday",
+      "wordId": 1579260
+    },
+    {
+      "kana": "きっさてん",
+      "romaji": "kissaten",
+      "en": "café",
+      "wordId": 1226440
+    },
+    { "kana": "きもの", "romaji": "kimono", "en": "kimono", "wordId": 1423240 },
+    {
+      "kana": "きんようび",
+      "romaji": "kinyōbi",
+      "en": "friday",
+      "wordId": 1243320
+    }
+  ]
+}

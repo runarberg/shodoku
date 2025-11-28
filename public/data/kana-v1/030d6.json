@@ -1,0 +1,16 @@
+{
+  "literal": "ブ",
+  "reading": "bu",
+  "base": "フ",
+  "handakuten": "プ",
+  "hiragana": "ぶ",
+  "vocab": [
+    { "kana": "ブーツ", "romaji": "būtsu", "en": "boots", "wordId": 1113130 },
+    {
+      "kana": "ブラジル",
+      "romaji": "burajiru",
+      "en": "Brazil",
+      "wordId": 1113730
+    }
+  ]
+}

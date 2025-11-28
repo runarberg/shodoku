@@ -1,0 +1,27 @@
+{
+  "literal": "コ",
+  "reading": "ko",
+  "dakuten": "ゴ",
+  "hiragana": "こ",
+  "vocab": [
+    {
+      "kana": "コンビニ",
+      "romaji": "konbini",
+      "en": "convenience store",
+      "wordId": 1053280
+    },
+    { "kana": "コーヒー", "romaji": "kōhī", "en": "coffee", "wordId": 1049180 },
+    {
+      "kana": "コケコッコー",
+      "romaji": "kokekokkō",
+      "en": "cock-a-doddle-doo (sound made by roosters)",
+      "wordId": 2039590
+    },
+    {
+      "kana": "コロコロ",
+      "romaji": "koro-koro",
+      "en": "lightly rolling",
+      "wordId": 1004840
+    }
+  ]
+}

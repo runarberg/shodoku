@@ -1,0 +1,16 @@
+{
+  "literal": "ぜ",
+  "reading": "ze",
+  "base": "せ",
+  "katakana": "ゼ",
+  "vocab": [
+    { "kana": "ぜひ", "romaji": "zehi", "en": "certainly", "wordId": 1374530 },
+    {
+      "kana": "ぜんぜん",
+      "romaji": "zenzen",
+      "en": "not at all",
+      "wordId": 1395620
+    },
+    { "kana": "ぜん", "romaji": "zen", "en": "Zen", "wordId": 1396420 }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "literal": "シェ",
+  "reading": "she",
+  "base": ["シ", "エ"],
+  "dakuten": "ジェ",
+  "vocab": [
+    { "kana": "シェフ", "romaji": "shefu", "en": "chef", "wordId": 1060000 },
+    { "kana": "シェア", "romaji": "shea", "en": "share", "wordId": 1059930 },
+    {
+      "kana": "シェルフ",
+      "romaji": "sherufu",
+      "en": "shelf",
+      "wordId": 2300220
+    },
+    { "kana": "シェイプ", "romaji": "sheipu", "en": "shape", "wordId": 2073470 }
+  ]
+}

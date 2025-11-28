@@ -1,0 +1,18 @@
+{
+  "literal": "え",
+  "reading": "e",
+  "katakana": "エ",
+  "vocab": [
+    { "kana": "えき", "romaji": "eki", "en": "station", "wordId": 1175140 },
+    { "kana": "え", "romaji": "e", "en": "picture", "wordId": 1202270 },
+    { "kana": "えいが", "romaji": "eiga", "en": "movie", "wordId": 1173720 },
+    { "kana": "えもじ", "romaji": "emoji", "en": "emoji", "wordId": 1202360 },
+    { "kana": "えん", "romaji": "en", "en": "yen", "wordId": 1175570 },
+    {
+      "kana": "えんぴつ",
+      "romaji": "enpitsu",
+      "en": "pencil",
+      "wordId": 1178590
+    }
+  ]
+}

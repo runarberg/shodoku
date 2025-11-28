@@ -1,0 +1,28 @@
+{
+  "literal": "ボ",
+  "reading": "bo",
+  "base": "ホ",
+  "handakuten": "ポ",
+  "hiragana": "ぼ",
+  "vocab": [
+    { "kana": "ボール", "romaji": "bōru", "en": "bowl", "wordId": 1123550 },
+    {
+      "kana": "ボーナス",
+      "romaji": "bōnasu",
+      "en": "bonus",
+      "wordId": 1123520
+    },
+    {
+      "kana": "ボランティア",
+      "romaji": "borantia",
+      "en": "volunteer",
+      "wordId": 1124300
+    },
+    {
+      "kana": "ボサノバ",
+      "romaji": "bosanoba",
+      "en": "bossa nova",
+      "wordId": 1123830
+    }
+  ]
+}

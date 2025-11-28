@@ -1,0 +1,15 @@
+{
+  "literal": "ゲ",
+  "reading": "ge",
+  "base": "ケ",
+  "hiragana": "げ",
+  "vocab": [
+    { "kana": "ゲーム", "romaji": "gēmu", "en": "game", "wordId": 1048400 },
+    {
+      "kana": "ゲラゲラ",
+      "romaji": "gera-gera",
+      "en": "roaring with laughter",
+      "wordId": 1629790
+    }
+  ]
+}

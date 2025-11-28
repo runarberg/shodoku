@@ -1,0 +1,48 @@
+{
+  "literal": "バ",
+  "reading": "ba",
+  "base": "ハ",
+  "handakuten": "パ",
+  "hiragana": "ば",
+  "vocab": [
+    { "kana": "バス", "romaji": "basu", "en": "bus", "wordId": 1098390 },
+    {
+      "kana": "バイク",
+      "romaji": "baiku",
+      "en": "(motor) bike",
+      "wordId": 1097810
+    },
+    { "kana": "バナナ", "romaji": "banana", "en": "banana", "wordId": 1099420 },
+    { "kana": "バンド", "romaji": "bando", "en": "band", "wordId": 1100240 },
+    {
+      "kana": "バスケットボール",
+      "romaji": "basukettobōru",
+      "en": "basketball",
+      "wordId": 1098440
+    },
+    {
+      "kana": "バイキング",
+      "romaji": "baikingu",
+      "en": "buffet",
+      "wordId": 1097800
+    },
+    {
+      "kana": "バラバラ",
+      "romaji": "bara-bara",
+      "en": "scattered",
+      "wordId": 1010320
+    },
+    {
+      "kana": "バシャバシャ",
+      "romaji": "basha-basha",
+      "en": "splash-splash",
+      "wordId": 2755540
+    },
+    {
+      "kana": "バヌアツ",
+      "romaji": "banuatsu",
+      "en": "Vanuatu",
+      "wordId": 2746700
+    }
+  ]
+}

@@ -50,6 +50,7 @@ function maybeCreateDeck() {
     label: createDeckModel.label,
     priority: createDeckModel.priority,
     cards: [props.kanji.codepoint],
+    cardTypes: ["kanji-write", "kanji-read"],
   });
 }
 

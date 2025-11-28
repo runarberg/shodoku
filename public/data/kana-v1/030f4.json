@@ -1,0 +1,14 @@
+{
+  "literal": "ヴ",
+  "reading": "u",
+  "base": "ウ",
+  "youon": ["ヴァ", "ヴィ", "ヴェ", "ヴォ"],
+  "vocab": [
+    {
+      "kana": "ヴルーテ",
+      "romaji": "vurūte",
+      "en": "velouté (sauce)",
+      "wordId": 2852277
+    }
+  ]
+}

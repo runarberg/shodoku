@@ -1,0 +1,33 @@
+{
+  "literal": "ゴ",
+  "reading": "go",
+  "base": "コ",
+  "hiragana": "ご",
+  "vocab": [
+    { "kana": "ゴルフ", "romaji": "gorufu", "en": "golf", "wordId": 1054620 },
+    {
+      "kana": "ゴキブリ",
+      "romaji": "gokiburi",
+      "en": "cockroach",
+      "wordId": 1054400
+    },
+    {
+      "kana": "ゴーカート",
+      "romaji": "gōkāto",
+      "en": "go-kart",
+      "wordId": 1054100
+    },
+    {
+      "kana": "ゴジラ",
+      "romaji": "gojira",
+      "en": "Godzilla",
+      "wordId": 5033980
+    },
+    {
+      "kana": "ゴシゴシ",
+      "romaji": "goshi-goshi",
+      "en": "scrubbing hard",
+      "wordId": 2008230
+    }
+  ]
+}

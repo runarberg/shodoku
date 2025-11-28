@@ -1,0 +1,39 @@
+{
+  "literal": "シ",
+  "reading": "shi",
+  "dakuten": "ジ",
+  "youon": ["シャ", "シュ", "ショ"],
+  "hiragana": "し",
+  "vocab": [
+    {
+      "kana": "シングル",
+      "romaji": "shinguru",
+      "en": "single (hotel room)",
+      "wordId": 1063530
+    },
+    {
+      "kana": "シルバー",
+      "romaji": "shirubē",
+      "en": "silver",
+      "wordId": 1063200
+    },
+    {
+      "kana": "シアトル",
+      "romaji": "shiatoru",
+      "en": "Seattle (city)",
+      "wordId": 1059750
+    },
+    {
+      "kana": "シーソー",
+      "romaji": "shīsō",
+      "en": "seesaw",
+      "wordId": 1059350
+    },
+    {
+      "kana": "シートベルト",
+      "romaji": "shīto beruto",
+      "en": "seat belt",
+      "wordId": 1059520
+    }
+  ]
+}

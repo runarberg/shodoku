@@ -42,6 +42,7 @@ async function handleSubmit() {
     label: model.label,
     priority: model.priority,
     cards: toRaw(model.cards),
+    cardTypes: ["kanji-write", "kanji-read"],
   });
 
   emit("success", deck);

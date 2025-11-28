@@ -1,0 +1,22 @@
+{
+  "literal": "ギ",
+  "reading": "gi",
+  "base": "キ",
+  "youon": ["ギャ", "ギュ", "ギョ"],
+  "hiragana": "ぎ",
+  "vocab": [
+    { "kana": "ギター", "romaji": "gitā", "en": "guitar", "wordId": 1042820 },
+    {
+      "kana": "ギクッと",
+      "romaji": "gikutto",
+      "en": "cracking",
+      "wordId": 2237260
+    },
+    {
+      "kana": "ギリシャ",
+      "romaji": "girisha",
+      "en": "Greece",
+      "wordId": 1043190
+    }
+  ]
+}

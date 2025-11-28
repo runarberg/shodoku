@@ -5,13 +5,11 @@ import { computed, ref, shallowReactive, watch } from "vue";
 import { sleep } from "../helpers/time.ts";
 
 const props = defineProps<{
-  practiceStrokes: string[];
-  animate?: boolean;
   animatePause?: boolean;
 }>();
 
 const emit = defineEmits<{
-  stroke: [value: string];
+  stroke: [];
 }>();
 
 type Point = { x: number; y: number };
@@ -19,7 +17,10 @@ type Point = { x: number; y: number };
 const el = ref<SVGGElement | null>(null);
 const svg = computed(() => el.value?.closest("svg"));
 const viewBox = computed(() => svg.value?.viewBox.baseVal);
+const strokes = shallowReactive<string[]>([]);
 const points = shallowReactive<Point[]>([]);
+const hinting = ref<string | null>(null);
+const preAnimation = ref(false);
 
 function toSVGCoords(event: PointerEvent): Point {
   if (!svg.value) {
@@ -59,7 +60,8 @@ function handlePointerUp(event: PointerEvent) {
   }
 
   if (points.length > 1) {
-    emit("stroke", simplifySvgPath(points));
+    strokes.push(simplifySvgPath(points));
+    emit("stroke");
   }
 
   el.value?.releasePointerCapture(event.pointerId);
@@ -84,13 +86,13 @@ const strokeAnimationOptions = {
 
 const animations: Animation[] = [];
 
-function startAnimation() {
+async function startAnimation(): Promise<void> {
   if (!el.value) {
     return;
   }
 
   for (const stroke of el.value.querySelectorAll<SVGPathElement>(
-    "path.stroke",
+    ".practice-strokes .stroke",
   )) {
     const animation = stroke.animate(
       strokeKeyframes(stroke),
@@ -101,10 +103,11 @@ function startAnimation() {
     animations.push(animation);
   }
 
-  playAnimations();
+  preAnimation.value = false;
+  await playAnimations();
 }
 
-async function playAnimations() {
+async function playAnimations(): Promise<void> {
   let animation = animations.at(0);
   while (animation) {
     animation.play();
@@ -120,15 +123,6 @@ async function playAnimations() {
 }
 
 watch(
-  () => props.animate,
-  (shouldAnimate) => {
-    if (shouldAnimate) {
-      startAnimation();
-    }
-  },
-);
-
-watch(
   () => props.animatePause,
   (shouldPause) => {
     if (shouldPause) {
@@ -138,6 +132,47 @@ watch(
     }
   },
 );
+
+const hintPath = ref<SVGPathElement | null>(null);
+watch(hintPath, (stroke) => {
+  if (stroke) {
+    const animation = stroke.animate(
+      strokeKeyframes(stroke),
+      strokeAnimationOptions,
+    );
+
+    animation.finished.then(() => {
+      hinting.value = null;
+    });
+  }
+});
+
+function clear() {
+  strokes.splice(0, strokes.length);
+}
+
+function pop() {
+  strokes.pop();
+}
+
+function push(d: string) {
+  strokes.push(d);
+}
+
+function hint(d: string) {
+  hinting.value = d;
+}
+
+defineExpose({
+  clear,
+  pop,
+  push,
+  hint,
+  animate: startAnimation,
+  prepareForAnimation() {
+    preAnimation.value = true;
+  },
+});
 </script>
 
 <template>
@@ -156,14 +191,17 @@ watch(
       :width="viewBox.width"
       :height="viewBox.height"
     />
-    <g class="practice-strokes">
+    <g v-show="!preAnimation" class="practice-strokes">
       <path
-        v-for="(stroke, i) of practiceStrokes"
+        v-for="(stroke, i) of strokes"
         :key="i"
         class="stroke practice-stroke"
         :d="stroke"
       />
     </g>
+
+    <path v-if="hinting" ref="hintPath" class="stroke hint" :d="hinting" />
+
     <polyline
       class="stroke current-stroke"
       :points="points.map(({ x, y }) => `${x},${y}`).join(' ')"
@@ -188,5 +226,9 @@ watch(
   stroke-width: 3px;
   stroke-linecap: round;
   stroke-linejoin: round;
+
+  &.hint {
+    color: light-dark(var(--light-gray), var(--dark-gray));
+  }
 }
 </style>

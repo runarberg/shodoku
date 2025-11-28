@@ -1,0 +1,34 @@
+{
+  "literal": "しょ",
+  "reading": "sho",
+  "base": ["し", "よ"],
+  "dakuten": "じょ",
+  "katakana": "ショ",
+  "vocab": [
+    {
+      "kana": "しょくどう",
+      "romaji": "shokudō",
+      "en": "cafeteria",
+      "wordId": 1358550
+    },
+    {
+      "kana": "しょうゆ",
+      "romaji": "shōyu",
+      "en": "soy sauce",
+      "wordId": 1595020
+    },
+    {
+      "kana": "しょうがつ",
+      "romaji": "shōgatsu",
+      "en": "New Year",
+      "wordId": 1377030
+    },
+    {
+      "kana": "しょうらい",
+      "romaji": "shōrai",
+      "en": "future",
+      "wordId": 1347710
+    },
+    { "kana": "しょどく", "romaji": "shodoku", "en": "Shodoku (this app)" }
+  ]
+}

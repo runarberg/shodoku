@@ -1,0 +1,19 @@
+{
+  "literal": "ま",
+  "reading": "ma",
+  "katakana": "マ",
+  "vocab": [
+    { "kana": "まあまあ", "romaji": "māmā", "en": "so-so", "wordId": 1012070 },
+    { "kana": "まる", "romaji": "maru", "en": "circle", "wordId": 1216250 },
+    {
+      "kana": "まいにち",
+      "romaji": "mai nichi",
+      "en": "every day",
+      "wordId": 1524720
+    },
+    { "kana": "まんが", "romaji": "manga", "en": "manga", "wordId": 1526920 },
+    { "kana": "まつ", "romaji": "matsu", "en": "to wait", "wordId": 1410590 },
+    { "kana": "まど", "romaji": "mado", "en": "window", "wordId": 1401400 },
+    { "kana": "まち", "romaji": "machi", "en": "town", "wordId": 1603990 }
+  ]
+}

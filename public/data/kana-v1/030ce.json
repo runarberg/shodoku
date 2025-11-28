@@ -1,0 +1,20 @@
+{
+  "literal": "ノ",
+  "reading": "no",
+  "hiragana": "の",
+  "vocab": [
+    { "kana": "ノート", "romaji": "nōto", "en": "notebook", "wordId": 1093450 },
+    {
+      "kana": "ノウサギ",
+      "romaji": "nousagi",
+      "en": "Japanese hare",
+      "wordId": 1643310
+    },
+    {
+      "kana": "ノルウェー",
+      "romaji": "noruwē",
+      "en": "Norway",
+      "wordId": 1094140
+    }
+  ]
+}

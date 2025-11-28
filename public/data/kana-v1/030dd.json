@@ -1,0 +1,45 @@
+{
+  "literal": "ポ",
+  "reading": "po",
+  "base": "ホ",
+  "dakuten": "ボ",
+  "hiragana": "ぽ",
+  "vocab": [
+    {
+      "kana": "ポケット",
+      "romaji": "poketto",
+      "en": "pocket",
+      "wordId": 1124970
+    },
+    {
+      "kana": "ポップコーン",
+      "romaji": "poppukōn",
+      "en": "popcorn",
+      "wordId": 2074740
+    },
+    {
+      "kana": "ポルトガル",
+      "romaji": "porutogaru",
+      "en": "Portugal",
+      "wordId": 1125940
+    },
+    {
+      "kana": "ポーランド",
+      "romaji": "pōrando",
+      "en": "Poland",
+      "wordId": 1124770
+    },
+    {
+      "kana": "ポツポツ",
+      "romaji": "potsu-potsu",
+      "en": "dotted",
+      "wordId": 2454650
+    },
+    {
+      "kana": "ポカポカ",
+      "romaji": "poka-poka",
+      "en": "nice and warm",
+      "wordId": 1011930
+    }
+  ]
+}

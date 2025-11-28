@@ -1,0 +1,22 @@
+{
+  "literal": "じょ",
+  "reading": "jo",
+  "base": ["じ", "よ", "しょ"],
+  "katakana": "ジョ",
+  "vocab": [
+    {
+      "kana": "じょうず",
+      "romaji": "jōzu",
+      "en": "skillful",
+      "wordId": 1353320
+    },
+    { "kana": "じょし", "romaji": "joshi", "en": "girl", "wordId": 1345140 },
+    { "kana": "じょうぶ", "romaji": "jōbu", "en": "healty", "wordId": 1580480 },
+    {
+      "kana": "じょうほう",
+      "romaji": "jōhō",
+      "en": "information",
+      "wordId": 1356370
+    }
+  ]
+}

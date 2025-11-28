@@ -1,0 +1,28 @@
+{
+  "literal": "プ",
+  "reading": "pu",
+  "base": "フ",
+  "dakuten": "ブ",
+  "hiragana": "ぷ",
+  "vocab": [
+    { "kana": "プロ", "romaji": "puro", "en": "pro", "wordId": 1117030 },
+    {
+      "kana": "プール",
+      "romaji": "pūru",
+      "en": "swimming pool",
+      "wordId": 1115150
+    },
+    {
+      "kana": "プレゼント",
+      "romaji": "purezento",
+      "en": "present",
+      "wordId": 1116840
+    },
+    {
+      "kana": "プロポーズ",
+      "romaji": "puropōsu",
+      "en": "(marriage) proposal",
+      "wordId": 1117900
+    }
+  ]
+}

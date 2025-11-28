@@ -1,0 +1,39 @@
+{
+  "literal": "も",
+  "reading": "mo",
+  "katakana": "モ",
+  "vocab": [
+    { "kana": "もの", "romaji": "mono", "en": "thing", "wordId": 1502390 },
+    {
+      "kana": "もち",
+      "romaji": "mochi",
+      "en": "mochi (sweets)",
+      "wordId": 1535790
+    },
+    {
+      "kana": "もくてき",
+      "romaji": "mokuteki",
+      "en": "purpose",
+      "wordId": 1535560
+    },
+    { "kana": "もつ", "romaji": "motsu", "en": "to carry", "wordId": 1315720 },
+    {
+      "kana": "もうすこし",
+      "romaji": "mō sukoshi",
+      "en": "a bit more",
+      "wordId": 2005870
+    },
+    {
+      "kana": "もしもし",
+      "romaji": "moshi moshi",
+      "en": "hello (a the phone)",
+      "wordId": 1012550
+    },
+    {
+      "kana": "もういちど",
+      "romaji": "mō ichidō",
+      "en": "once more",
+      "wordId": 2005860
+    }
+  ]
+}

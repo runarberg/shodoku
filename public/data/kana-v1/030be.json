@@ -1,0 +1,15 @@
+{
+  "literal": "ゾ",
+  "reading": "zo",
+  "base": "ソ",
+  "hiragana": "ぞ",
+  "vocab": [
+    { "kana": "ゾウ", "romaji": "zou", "en": "elephant", "wordId": 1351830 },
+    {
+      "kana": "ゾクゾク",
+      "romaji": "zoku-zoku",
+      "en": "shivering",
+      "wordId": 1007140
+    }
+  ]
+}

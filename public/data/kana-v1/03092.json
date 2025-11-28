@@ -1,0 +1,31 @@
+{
+  "literal": "を",
+  "reading": "(w)o",
+  "katakana": "ヲ",
+  "vocab": [
+    {
+      "kana": "きをつけて",
+      "romaji": "ki o tsukete",
+      "en": "be careful",
+      "wordId": 1591990
+    },
+    {
+      "kana": "かぜをひく",
+      "romaji": "kaze o hiku",
+      "en": "to catch a cold",
+      "wordId": 1499880
+    },
+    {
+      "kana": "うそをつく",
+      "romaji": "uso o tsuku",
+      "en": "to tell a lie",
+      "wordId": 1172440
+    },
+    {
+      "kana": "かみをとかす",
+      "romaji": "tami o takasu",
+      "en": "to comb hair",
+      "wordId": 1866740
+    }
+  ]
+}

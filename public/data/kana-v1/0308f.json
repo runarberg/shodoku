@@ -1,0 +1,29 @@
+{
+  "literal": "わ",
+  "reading": "wa",
+  "katakana": "ワ",
+  "vocab": [
+    { "kana": "わたし", "romaji": "watashi", "en": "me", "wordId": 1311110 },
+    { "kana": "わあ", "romaji": "wā", "en": "wow!", "wordId": 2087950 },
+    {
+      "kana": "わかった",
+      "romaji": "wakatta",
+      "en": "understood",
+      "wordId": 1606560
+    },
+    {
+      "kana": "われわれ",
+      "romaji": "ware ware",
+      "en": "we",
+      "wordId": 1607050
+    },
+    {
+      "kana": "わすれない",
+      "romaji": "wasurenai",
+      "en": "will not forget",
+      "wordId": 1519210
+    },
+    { "kana": "わるい", "romaji": "warui", "en": "bad", "wordId": 1151260 },
+    { "kana": "わらい", "romaji": "warai", "en": "laugh", "wordId": 1351280 }
+  ]
+}

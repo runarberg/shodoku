@@ -1,0 +1,16 @@
+{
+  "literal": "ヒャ",
+  "reading": "hya",
+  "base": ["ヒ", "ヤ"],
+  "dakuten": "ビャ",
+  "handakuten": "ピャ",
+  "hiragana": "ひゃ",
+  "vocab": [
+    {
+      "kana": "ヒャッホー",
+      "romaji": "hya'-hō",
+      "en": "yee-haw",
+      "wordId": 2857771
+    }
+  ]
+}

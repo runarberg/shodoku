@@ -18,6 +18,14 @@ export function isKanji(char: string): boolean {
   return isKanjiRE.test(char);
 }
 
+export function isHiragana(str: string): boolean {
+  return /^\p{Script=Hiragana}+$/u.test(str);
+}
+
+export function isKatakana(str: string): boolean {
+  return /^\p{Script=Katakana}+$/u.test(str);
+}
+
 export const allHiraganaRE = /\p{Script=Hiragana}/gu;
 export function toKatakana(str: string): string {
   return str.replaceAll(allHiraganaRE, (char) =>

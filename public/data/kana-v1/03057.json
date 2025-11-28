@@ -1,0 +1,30 @@
+{
+  "literal": "し",
+  "reading": "shi",
+  "dakuten": "じ",
+  "youon": ["しゃ", "しゅ", "しょ"],
+  "katakana": "シ",
+  "vocab": [
+    { "kana": "しろい", "romaji": "shiroi", "en": "white", "wordId": 1474910 },
+    { "kana": "しごと", "romaji": "shigoto", "en": "job", "wordId": 1304970 },
+    {
+      "kana": "しんかんせん",
+      "romaji": "shinkansen",
+      "en": "Shinkansen",
+      "wordId": 1361590
+    },
+    { "kana": "した", "romaji": "shita", "en": "down", "wordId": 1184140 },
+    {
+      "kana": "しつれい",
+      "romaji": "shitsurei",
+      "en": "discourtesy",
+      "wordId": 1320230
+    },
+    {
+      "kana": "しこく",
+      "romaji": "shikoku",
+      "en": "Shikoku (island)",
+      "wordId": 1307200
+    }
+  ]
+}

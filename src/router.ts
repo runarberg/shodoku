@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, RouteLocationRaw } from "vue-router";
 export const HOME_ROUTE_NAME = Symbol("home-route-name");
 export const REVIEW_ROUTE_NAME = Symbol("review-route-name");
 export const REVIEW_SUMMARY_ROUTE_NAME = Symbol("review-summary-route-name");
+export const KANA_ROUTE_NAME = Symbol("kana-route-name");
 export const KANJI_ROUTE_NAME = Symbol("kanji-route-name");
 export const KANJI_COMPONENT_ROUTE_NAME = Symbol("kanji-component-route-name");
 export const WORD_ROUTE_NAME = Symbol("word-route-name");
@@ -26,6 +27,10 @@ export const dictionaryRoute: RouteLocationRaw = {
 };
 export const settingsRoute: RouteLocationRaw = { name: SETTINGS_ROUTE_NAME };
 export const aboutRoute: RouteLocationRaw = { name: ABOUT_ROUTE_NAME };
+
+export function kanaRoute(kana: string): RouteLocationRaw {
+  return { name: KANA_ROUTE_NAME, params: { kana } };
+}
 
 export function kanjiRoute(kanji: string): RouteLocationRaw {
   return { name: KANJI_ROUTE_NAME, params: { kanji } };
@@ -74,6 +79,14 @@ export const router = createRouter({
       path: "/review/summary",
       name: REVIEW_SUMMARY_ROUTE_NAME,
       component: () => import("./views/ReviewSummaryView.vue"),
+    },
+    {
+      path: "/kana/:kana",
+      name: KANA_ROUTE_NAME,
+      components: {
+        default: () => import("./views/KanaView.vue"),
+        aside: () => import("./views/KanaAsideView.vue"),
+      },
     },
     {
       path: "/kanji/:kanji",

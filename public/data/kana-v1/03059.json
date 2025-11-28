@@ -1,0 +1,30 @@
+{
+  "literal": "す",
+  "reading": "su",
+  "dakuten": "ず",
+  "katakana": "ス",
+  "vocab": [
+    { "kana": "すし", "romaji": "sushi", "en": "sushi", "wordId": 1595650 },
+    {
+      "kana": "すこし",
+      "romaji": "sukoshi",
+      "en": "a little",
+      "wordId": 1348870
+    },
+    {
+      "kana": "すみません",
+      "romaji": "sumimasen",
+      "en": "excuse me",
+      "wordId": 1295060
+    },
+    { "kana": "すき", "romaji": "suki", "en": "liking", "wordId": 1277450 },
+    { "kana": "すてき", "romaji": "suteki", "en": "lovely", "wordId": 1397350 },
+    {
+      "kana": "すばらしい",
+      "romaji": "subarashī",
+      "en": "wonderful",
+      "wordId": 1397300
+    },
+    { "kana": "すぐ", "romaji": "sugu", "en": "at once", "wordId": 1430610 }
+  ]
+}

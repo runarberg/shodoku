@@ -1,0 +1,21 @@
+{
+  "literal": "だ",
+  "reading": "da",
+  "base": "た",
+  "katakana": "ダ",
+  "vocab": [
+    { "kana": "だれ", "romaji": "dare", "en": "who", "wordId": 1416830 },
+    {
+      "kana": "だいすき",
+      "romaji": "daisuki",
+      "en": "like very much",
+      "wordId": 1413660
+    },
+    {
+      "kana": "だいじょうぶ",
+      "romaji": "daijōbu",
+      "en": "okay",
+      "wordId": 1414150
+    }
+  ]
+}

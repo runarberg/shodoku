@@ -1,0 +1,29 @@
+{
+  "literal": "ば",
+  "reading": "ba",
+  "base": "は",
+  "handakuten": "ぱ",
+  "katakana": "バ",
+  "vocab": [
+    { "kana": "ばしょ", "romaji": "basho", "en": "place", "wordId": 1355850 },
+    {
+      "kana": "ばんごう",
+      "romaji": "bangō",
+      "en": "number",
+      "wordId": 1482290
+    },
+    { "kana": "ばか", "romaji": "baka", "en": "fool", "wordId": 1601260 },
+    {
+      "kana": "ばいばい",
+      "romaji": "baibai",
+      "en": "buying and selling",
+      "wordId": 1474050
+    },
+    {
+      "kana": "ばんぐみ",
+      "romaji": "bangumi",
+      "en": "program",
+      "wordId": 1482340
+    }
+  ]
+}

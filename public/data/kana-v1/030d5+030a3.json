@@ -1,0 +1,25 @@
+{
+  "literal": "フィ",
+  "base": ["フ", "イ"],
+  "reading": "fi",
+  "vocab": [
+    {
+      "kana": "フィクション",
+      "romaji": "fikushon",
+      "en": "fiction",
+      "wordId": 1109040
+    },
+    {
+      "kana": "フィリピン",
+      "romaji": "firipin",
+      "en": "Philippines",
+      "wordId": 1109290
+    },
+    {
+      "kana": "フィンランド",
+      "romaji": "finrando",
+      "en": "Finland",
+      "wordId": 1109460
+    }
+  ]
+}

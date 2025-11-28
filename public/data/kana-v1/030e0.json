@@ -1,0 +1,25 @@
+{
+  "literal": "ム",
+  "reading": "mu",
+  "hiragana": "む",
+  "vocab": [
+    {
+      "kana": "ムラサキ",
+      "romaji": "muraseki",
+      "en": "purple",
+      "wordId": 1311640
+    },
+    {
+      "kana": "ムカデ",
+      "romaji": "mukade",
+      "en": "centipede",
+      "wordId": 1488310
+    },
+    {
+      "kana": "けしゴム",
+      "romaji": "keshi gomu",
+      "en": "eraser",
+      "wordId": 1350080
+    }
+  ]
+}

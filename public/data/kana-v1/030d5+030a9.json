@@ -1,0 +1,9 @@
+{
+  "literal": "フォ",
+  "base": ["フ", "オ"],
+  "reading": "fo",
+  "vocab": [
+    { "kana": "フォーム", "romaji": "fōmu", "en": "form", "wordId": 1110340 },
+    { "kana": "フォント", "romaji": "fonto", "en": "font", "wordId": 1110890 }
+  ]
+}

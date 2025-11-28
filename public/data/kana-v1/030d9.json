@@ -1,0 +1,29 @@
+{
+  "literal": "ベ",
+  "reading": "be",
+  "base": "ヘ",
+  "handakuten": "ペ",
+  "hiragana": "べ",
+  "vocab": [
+    { "kana": "ベッド", "romaji": "beddo", "en": "bed", "wordId": 1119650 },
+    { "kana": "ベル", "romaji": "beru", "en": "bell", "wordId": 1120010 },
+    {
+      "kana": "ベビーカー",
+      "romaji": "bebīkā",
+      "en": "stroller",
+      "wordId": 1119840
+    },
+    {
+      "kana": "ベトナム",
+      "romaji": "betonamu",
+      "en": "Vietnam",
+      "wordId": 1119720
+    },
+    {
+      "kana": "ベタベタ",
+      "romaji": "beta-beta",
+      "en": "sticky",
+      "wordId": 1011440
+    }
+  ]
+}

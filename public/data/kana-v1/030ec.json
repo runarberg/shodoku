@@ -1,0 +1,37 @@
+{
+  "literal": "レ",
+  "reading": "re",
+  "hiragana": "れ",
+  "vocab": [
+    {
+      "kana": "レストラン",
+      "romaji": "resutoran",
+      "en": "restaurant",
+      "wordId": 1145310
+    },
+    {
+      "kana": "レジ",
+      "romaji": "reji",
+      "en": "cash register",
+      "wordId": 1145130
+    },
+    {
+      "kana": "レインコート",
+      "romaji": "reinkōto",
+      "en": "raincoat",
+      "wordId": 1144700
+    },
+    {
+      "kana": "レコード",
+      "romaji": "rekōdo",
+      "en": "(vinyl) record",
+      "wordId": 1144940
+    },
+    {
+      "kana": "レインボーフラッグ",
+      "romaji": "reinbō furaggu",
+      "en": "rainbow flag 🏳️‍🌈",
+      "wordId": 2858733
+    }
+  ]
+}

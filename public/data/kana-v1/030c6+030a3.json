@@ -1,0 +1,27 @@
+{
+  "literal": "ティ",
+  "reading": "ti",
+  "base": ["テ", "イ"],
+  "dakuten": "ディ",
+  "vocab": [
+    {
+      "kana": "ティーシャツ",
+      "romaji": "tī-shatsu",
+      "en": "T-shirt",
+      "wordId": 1000160
+    },
+    {
+      "kana": "ティッシュ",
+      "romaji": "tisshu",
+      "en": "Tissue",
+      "wordId": 1079090
+    },
+    { "kana": "ティラー", "romaji": "tirā", "en": "tiller", "wordId": 2499350 },
+    {
+      "kana": "ティラナ",
+      "romaji": "tirana",
+      "en": "Tirana (Albania)",
+      "wordId": 2834181
+    }
+  ]
+}

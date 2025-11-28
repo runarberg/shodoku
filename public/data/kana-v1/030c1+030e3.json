@@ -1,0 +1,39 @@
+{
+  "literal": "チャ",
+  "reading": "cha",
+  "base": ["チ", "ヤ"],
+  "hiragana": "ちゃ",
+  "vocab": [
+    {
+      "kana": "チャレンジ",
+      "romaji": "charenji",
+      "en": "challenge",
+      "wordId": 1078020
+    },
+    {
+      "kana": "チャンス",
+      "romaji": "chansu",
+      "en": "chance",
+      "wordId": 1078040
+    },
+    { "kana": "チャット", "romaji": "chatto", "en": "chat", "wordId": 1077940 },
+    {
+      "kana": "チャンプルー",
+      "romaji": "chanpurū",
+      "en": "champuru (Okinawan dish)",
+      "wordId": 2105720
+    },
+    {
+      "kana": "チャチャチャ",
+      "romaji": "cha-cha-cha",
+      "en": "cha-cha (dance)",
+      "wordId": 2151630
+    },
+    {
+      "kana": "チャウチャウ",
+      "romaji": "chau-chau",
+      "en": "chow-chow (dog)",
+      "wordId": 2113530
+    }
+  ]
+}

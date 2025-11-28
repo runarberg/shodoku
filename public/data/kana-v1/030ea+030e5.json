@@ -1,0 +1,21 @@
+{
+  "literal": "リュ",
+  "reading": "ryu",
+  "base": ["リ", "ユ"],
+  "hiragana": "りゅ",
+  "vocab": [
+    {
+      "kana": "リュック",
+      "romaji": "ryukku",
+      "en": "backpack",
+      "wordId": 1925310
+    },
+    { "kana": "リュート", "romaji": "ryūtp", "en": "lute", "wordId": 1143140 },
+    {
+      "kana": "リュブリャナ",
+      "romaji": "ryuburyana",
+      "en": "Ljubljana (Slovenia)",
+      "wordId": 2839320
+    }
+  ]
+}

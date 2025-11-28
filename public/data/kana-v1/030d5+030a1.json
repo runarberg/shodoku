@@ -1,0 +1,15 @@
+{
+  "literal": "ファ",
+  "base": ["フ", "ア"],
+  "reading": "fa",
+  "vocab": [
+    { "kana": "ファイル", "romaji": "fairu", "en": "file", "wordId": 1107800 },
+    {
+      "kana": "ファッション",
+      "romaji": "fasshon",
+      "en": "fashon",
+      "wordId": 1108210
+    },
+    { "kana": "ファイト", "romaji": "faito", "en": "fight!", "wordId": 1107700 }
+  ]
+}

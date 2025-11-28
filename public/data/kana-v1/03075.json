@@ -1,0 +1,24 @@
+{
+  "literal": "ふ",
+  "reading": "fu",
+  "dakuten": "ぶ",
+  "handakuten": "ぷ",
+  "katakana": "フ",
+  "vocab": [
+    { "kana": "ふね", "romaji": "fune", "en": "boat", "wordId": 1602800 },
+    { "kana": "ふく", "romaji": "fuku", "en": "clouths", "wordId": 1500940 },
+    { "kana": "ふゆ", "romaji": "fuyu", "en": "winter", "wordId": 1446070 },
+    {
+      "kana": "ふりがな",
+      "romaji": "furigana",
+      "en": "Furigana (phonetic annotations)",
+      "wordId": 1361150
+    },
+    {
+      "kana": "ふくおか",
+      "romaji": "fukuoka",
+      "en": "Fukuoka (city)",
+      "wordId": 2164640
+    }
+  ]
+}

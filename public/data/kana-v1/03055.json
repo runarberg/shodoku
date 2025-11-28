@@ -1,0 +1,18 @@
+{
+  "literal": "さ",
+  "reading": "sa",
+  "dakuten": "ざ",
+  "katakana": "サ",
+  "vocab": [
+    {
+      "kana": "さようなら",
+      "romaji": "sayōnara",
+      "en": "farewell",
+      "wordId": 1291050
+    },
+    { "kana": "さいこう", "romaji": "saikō", "en": "best", "wordId": 1293850 },
+    { "kana": "さけ", "romaji": "sake", "en": "sake", "wordId": 1329010 },
+    { "kana": "さかな", "romaji": "sakana", "en": "fish", "wordId": 1578010 },
+    { "kana": "さん", "romaji": "san", "en": "three", "wordId": 1579350 }
+  ]
+}

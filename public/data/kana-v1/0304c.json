@@ -1,0 +1,32 @@
+{
+  "literal": "が",
+  "reading": "ga",
+  "base": "か",
+  "katakana": "ガ",
+  "vocab": [
+    {
+      "kana": "がくせい",
+      "romaji": "gakusei",
+      "en": "student",
+      "wordId": 1206900
+    },
+    {
+      "kana": "がっこう",
+      "romaji": "gakkō",
+      "en": "school",
+      "wordId": 1206730
+    },
+    {
+      "kana": "がいこくじん",
+      "romaji": "gaikokujin",
+      "en": "foreigner",
+      "wordId": 1203650
+    },
+    {
+      "kana": "がまん",
+      "romaji": "gaman",
+      "en": "self-control",
+      "wordId": 1196970
+    }
+  ]
+}

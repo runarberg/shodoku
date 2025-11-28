@@ -8,10 +8,15 @@ import {
 } from "../helpers/decks.ts";
 import DeckBrowserCategory from "./DeckBrowserCategory.vue";
 import DeckBrowserCustom from "./DeckBrowserCustom.vue";
+import DeckBrowserKana from "./DeckBrowserKana.vue";
 </script>
 
 <template>
   <ul class="categories">
+    <li>
+      <DeckBrowserKana />
+    </li>
+
     <li>
       <DeckBrowserCategory
         title="JLPT"

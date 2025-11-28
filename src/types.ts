@@ -6,6 +6,28 @@ import { DB } from "./db/schema.ts";
 export type Optional<T, Keys extends keyof T> = Omit<T, Keys> &
   Partial<Pick<T, Keys>>;
 
+export type KanaInfo = {
+  literal: string;
+  reading: string;
+  base?: string | string[];
+  dakuten?: string;
+  handakuten?: string;
+  youon?: string[];
+  hiragana?: string;
+  katakana?: string;
+  vocab?: KanaInfoVocabularyWord[];
+};
+
+export type KanaInfoVocabularyWord = {
+  kana: string;
+  romaji: string;
+  en: string;
+  wordId?: number;
+};
+
+export type HiraganaInfo = KanaInfo & { katakana: string };
+export type KatakanaInfo = KanaInfo & { hiragana: string };
+
 export type KanjiInfo = {
   codepoint: number;
   literal: string;
@@ -125,14 +147,25 @@ export type Deck = {
   category: string;
   priority: number;
   cards: number[];
+  cardTypes: CardType[];
   active: boolean;
   createdAt: Date;
   updatedAt?: Date;
 };
 
-export type CardType = "kanji-read" | "kanji-write";
+export type CardType =
+  | "kanji-read"
+  | "kanji-write"
+  | "kana-read"
+  | "kana-write";
+
 export function isCardType(thing: string): thing is CardType {
-  return thing === "kanji-read" || thing === "kanji-write";
+  return (
+    thing === "kanji-read" ||
+    thing === "kanji-write" ||
+    thing === "kana-read" ||
+    thing === "kana-write"
+  );
 }
 
 export type Card = {

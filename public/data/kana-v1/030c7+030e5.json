@@ -1,0 +1,15 @@
+{
+  "literal": "デュ",
+  "reading": "dyu",
+  "base": ["デ", "ユ"],
+  "vocab": [
+    { "kana": "デュアル", "romaji": "dyuaru", "en": "dual", "wordId": 1084150 },
+    { "kana": "デュエル", "romaji": "dyueru", "en": "duel", "wordId": 1919840 },
+    {
+      "kana": "デューティーフリー",
+      "romaji": "dyūtī furī",
+      "en": "duty-free",
+      "wordId": 1084100
+    }
+  ]
+}

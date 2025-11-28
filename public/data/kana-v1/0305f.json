@@ -1,0 +1,40 @@
+{
+  "literal": "た",
+  "reading": "ta",
+  "dakuten": "だ",
+  "katakana": "タ",
+  "vocab": [
+    {
+      "kana": "ただいま",
+      "romaji": "tadaima",
+      "en": "I’m back",
+      "wordId": 1538960
+    },
+    {
+      "kana": "たんじょうび",
+      "romaji": "tanjōbi",
+      "en": "birthday",
+      "wordId": 1419110
+    },
+    { "kana": "たべる", "romaji": "taberu", "en": "to eat", "wordId": 1358280 },
+    {
+      "kana": "たかい",
+      "romaji": "takai",
+      "en": "expensive",
+      "wordId": 1283190
+    },
+    { "kana": "たまご", "romaji": "tamago", "en": "egg", "wordId": 1549140 },
+    {
+      "kana": "たいこ",
+      "romaji": "taiko",
+      "en": "Taiko (drum)",
+      "wordId": 1408280
+    },
+    {
+      "kana": "たとえば",
+      "romaji": "tatoeba",
+      "en": "for example",
+      "wordId": 1556370
+    }
+  ]
+}

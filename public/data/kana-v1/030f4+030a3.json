@@ -1,0 +1,25 @@
+{
+  "literal": "ヴィ",
+  "reading": "vi",
+  "base": ["ヴ", "イ", "ウィ"],
+  "vocab": [
+    {
+      "kana": "ヴィーガン",
+      "romaji": "vīgan",
+      "en": "vegan",
+      "wordId": 2137660
+    },
+    {
+      "kana": "ヴィエンチャン",
+      "romaji": "vienchan",
+      "en": "Vientiane (Laos)",
+      "wordId": 2830170
+    },
+    {
+      "kana": "ヴィシュヌ",
+      "romaji": "Vishunu",
+      "en": "Vishnu (Hindu god)",
+      "wordId": 2828259
+    }
+  ]
+}

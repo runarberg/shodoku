@@ -1,0 +1,23 @@
+{
+  "literal": "ひょ",
+  "reading": "hyo",
+  "base": ["ひ", "よ"],
+  "dakuten": "びょ",
+  "handakuten": "ぴょ",
+  "katakana": "ヒョ",
+  "vocab": [
+    { "kana": "ひょう", "romaji": "hyō", "en": "hail", "wordId": 1574070 },
+    {
+      "kana": "ひょうおん",
+      "romaji": "hyōon",
+      "en": "phonetic",
+      "wordId": 1797300
+    },
+    {
+      "kana": "ひょうご",
+      "romaji": "hyōgo",
+      "en": "Hyogo (prefecture)",
+      "wordId": 2845011
+    }
+  ]
+}

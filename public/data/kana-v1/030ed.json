@@ -1,0 +1,44 @@
+{
+  "literal": "ロ",
+  "reading": "ro",
+  "hiragana": "ろ",
+  "vocab": [
+    { "kana": "ローズ", "romaji": "rōsu", "en": "rose", "wordId": 1146470 },
+    {
+      "kana": "ロボット",
+      "romaji": "robotto",
+      "en": "robot",
+      "wordId": 1147870
+    },
+    {
+      "kana": "ロケット",
+      "romaji": "roketto",
+      "en": "rocket",
+      "wordId": 1147220
+    },
+    {
+      "kana": "ロック",
+      "romaji": "rokku",
+      "en": "rock music",
+      "wordId": 2846323
+    },
+    {
+      "kana": "ローマじ",
+      "romaji": "rōmaji",
+      "en": "romaji",
+      "wordId": 1146810
+    },
+    {
+      "kana": "ローラースケート",
+      "romaji": "rōrūsukēto",
+      "en": "roller skates",
+      "wordId": 1146880
+    },
+    {
+      "kana": "ロンドン",
+      "romaji": "rondon",
+      "en": "London (UK)",
+      "wordId": 1148230
+    }
+  ]
+}

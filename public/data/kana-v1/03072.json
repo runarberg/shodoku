@@ -1,0 +1,36 @@
+{
+  "literal": "ひ",
+  "reading": "hi",
+  "dakuten": "び",
+  "handakuten": "ぴ",
+  "youon": ["ひゃ", "ひゅ", "ひょ"],
+  "katakana": "ヒ",
+  "vocab": [
+    {
+      "kana": "ひらがな",
+      "romaji": "hiragana",
+      "en": "Hiragana",
+      "wordId": 1507090
+    },
+    { "kana": "ひだり", "romaji": "hidari", "en": "left", "wordId": 1290800 },
+    { "kana": "ひと", "romaji": "hito", "en": "person", "wordId": 1580640 },
+    {
+      "kana": "ひっこし",
+      "romaji": "kikkoshi",
+      "en": "moving",
+      "wordId": 1601880
+    },
+    {
+      "kana": "ひるごはん",
+      "romaji": "hirugohan",
+      "en": "lunch",
+      "wordId": 1602340
+    },
+    {
+      "kana": "ひろしま",
+      "romaji": "hiroshima",
+      "en": "Hiroshima (city)",
+      "wordId": 2164670
+    }
+  ]
+}

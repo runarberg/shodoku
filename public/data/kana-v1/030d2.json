@@ -1,0 +1,24 @@
+{
+  "literal": "ヒ",
+  "reading": "hi",
+  "dakuten": "ビ",
+  "handakuten": "ピ",
+  "youon": ["ヒャ", "ヒュ", "ヒョ"],
+  "hiragana": "ひ",
+  "vocab": [
+    { "kana": "ヒーター", "romaji": "hītā", "en": "heater", "wordId": 1103540 },
+    { "kana": "ヒット", "romaji": "hitto", "en": "hit", "wordId": 1103800 },
+    {
+      "kana": "ヒンヤリ",
+      "romaji": "hinyari",
+      "en": "chilly",
+      "wordId": 1010700
+    },
+    {
+      "kana": "ヒヒーン",
+      "romaji": "hihīn",
+      "en": "a horse neigh",
+      "wordId": 2762280
+    }
+  ]
+}

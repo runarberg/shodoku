@@ -4,11 +4,11 @@ import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import AppLoading from "../components/AppLoading.vue";
-import KanjiReview from "../components/KanjiReview.vue";
+import ReviewCard from "../components/ReviewCard.vue";
 import ReviewRemainCount from "../components/ReviewRemainCount.vue";
-import { kanjiRoute, reviewSummaryRoute } from "../router.ts";
+import { kanaRoute, kanjiRoute, reviewSummaryRoute } from "../router.ts";
 import useReviewsStore from "../store/reviews.ts";
-import { CardProgress, isCardType, Optional } from "../types.ts";
+import { CardProgress, CardType, isCardType, Optional } from "../types.ts";
 
 const el = ref<HTMLElement | null>(null);
 const route = useRoute();
@@ -16,24 +16,43 @@ const router = useRouter();
 
 const reviewsStore = useReviewsStore();
 
-const currentCard = computed<Optional<CardProgress, "fsrs"> | null>(() => {
-  const { kanji, "card-type": cardType } = route.query;
+const cardType = computed<CardType | null>(() => {
+  const { "card-type": queryValue } = route.query;
 
-  if (typeof kanji !== "string" || typeof cardType !== "string") {
+  if (typeof queryValue !== "string" || !isCardType(queryValue)) {
     return null;
   }
 
-  const cardId = kanji.codePointAt(0);
+  return queryValue;
+});
 
-  if (!cardId || !isCardType(cardType)) {
+const cardId = computed(() => {
+  const { "card-id": queryValue } = route.query;
+
+  if (typeof queryValue !== "string") {
+    return null;
+  }
+
+  const id = Number.parseInt(queryValue);
+
+  if (!Number.isFinite(id)) {
+    return null;
+  }
+
+  return id;
+});
+
+const currentCard = computed<Optional<CardProgress, "fsrs"> | null>(() => {
+  if (!cardId.value || !cardType.value) {
     return null;
   }
 
   const found = reviewsStore.queue.find(
-    (other) => other.cardId === cardId && other.cardType === cardType,
+    (other) =>
+      other.cardId === cardId.value && other.cardType === cardType.value,
   );
 
-  return found ?? { cardId, cardType };
+  return found ?? { cardId: cardId.value, cardType: cardType.value };
 });
 
 const isRating = computed(() => "rating" in route.query);
@@ -42,7 +61,12 @@ const loading = computed(() => !currentCard.value && reviewsStore.refreshing);
 reviewsStore.refreshQueues();
 
 watchEffect(() => {
-  if (reviewsStore.queue.length === 0 && !reviewsStore.refreshing) {
+  if (
+    reviewsStore.queue.length === 0 &&
+    !reviewsStore.refreshing &&
+    !isRating.value &&
+    !("singleton" in route.query)
+  ) {
     router.replace(reviewSummaryRoute);
   }
 });
@@ -57,7 +81,7 @@ watchEffect(() => {
   if (nextCard) {
     router.replace({
       query: {
-        kanji: String.fromCodePoint(nextCard.cardId),
+        "card-id": nextCard.cardId,
         "card-type": nextCard.cardType,
         rating: undefined,
       },
@@ -73,8 +97,12 @@ type HandleRateParams = {
 function handleRate({ progress, next }: HandleRateParams) {
   reviewsStore.rateCard(progress, next);
 
-  if ("singleton" in route.query && typeof route.query.kanji === "string") {
-    router.replace(kanjiRoute(route.query.kanji));
+  if ("singleton" in route.query) {
+    if (progress.cardType.startsWith("kanji-")) {
+      router.replace(kanjiRoute(String.fromCodePoint(progress.cardId)));
+    } else if (progress.cardType.startsWith("kana-")) {
+      router.replace(kanaRoute(String.fromCodePoint(progress.cardId)));
+    }
     return;
   }
 
@@ -82,7 +110,7 @@ function handleRate({ progress, next }: HandleRateParams) {
   if (nextCard) {
     router.replace({
       query: {
-        kanji: String.fromCodePoint(nextCard.cardId),
+        "card-id": String.fromCodePoint(nextCard.cardId),
         "card-type": nextCard.cardType,
         rating: undefined,
       },
@@ -98,13 +126,9 @@ function handleRate({ progress, next }: HandleRateParams) {
   <article ref="el">
     <header class="header">
       <strong class="title">
-        <template v-if="currentCard">
-          <template v-if="currentCard.cardType === 'kanji-read'">
-            Reading
-          </template>
-          <template v-else>Writing</template>
-          Review
-        </template>
+        <template v-if="cardType?.endsWith('-read')"> Reading </template>
+        <template v-else-if="cardType?.endsWith('-write')"> Writing </template>
+        Review
       </strong>
 
       <ReviewRemainCount class="counts" />
@@ -115,14 +139,14 @@ function handleRate({ progress, next }: HandleRateParams) {
       <AppLoading class="loading-icon" />
     </section>
 
-    <KanjiReview
-      v-else-if="currentCard"
-      :card="currentCard"
-      :is-rating="isRating"
-      :singleton="'singleton' in $route.query"
-      @answer="$router.replace({ query: { ...$route.query, rating: '' } })"
-      @rate="handleRate($event)"
-    />
+    <template v-else-if="currentCard">
+      <ReviewCard
+        :card="currentCard"
+        :is-rating="isRating"
+        @answer="$router.replace({ query: { ...$route.query, rating: '' } })"
+        @rate="handleRate($event)"
+      />
+    </template>
   </article>
 </template>
 

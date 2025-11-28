@@ -1,0 +1,22 @@
+{
+  "literal": "ちゅ",
+  "reading": "chu",
+  "base": ["ち", "ゆ"],
+  "dakuten": "ぢゅ",
+  "katakana": "チュ",
+  "vocab": [
+    {
+      "kana": "ちゅうごく",
+      "romaji": "chūgoku",
+      "en": "China",
+      "wordId": 1424270
+    },
+    { "kana": "ちゅうい", "romaji": "chūi", "en": "notice", "wordId": 1426530 },
+    {
+      "kana": "ちゅうしゃじょう",
+      "romaji": "chūshajō",
+      "en": "parking lot",
+      "wordId": 1426920
+    }
+  ]
+}

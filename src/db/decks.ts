@@ -7,11 +7,11 @@ import { WEEK } from "../helpers/time.ts";
 import { knownMinDueWeeks, knownMinRetention } from "../store/reviews.ts";
 import {
   Card,
-  CardProgress,
   CardType,
   Deck,
   DeckTemplate,
   Optional,
+  SyncStagingStore,
 } from "../types.ts";
 import { db } from "./index.ts";
 import { DB } from "./schema.ts";
@@ -24,6 +24,7 @@ function isNotNull<T>(thing: T | null | undefined): thing is T {
 async function maybeCreateCard(
   tx: IDBPTransaction<DB, Array<"cards" | "progress" | "decks">, "readwrite">,
   id: number,
+  types: CardType[],
 ) {
   const cards = tx.objectStore("cards");
   const progress = tx.objectStore("progress");
@@ -33,30 +34,27 @@ async function maybeCreateCard(
     const card: Card = {
       id,
       value: String.fromCodePoint(id),
-      types: ["kanji-read", "kanji-write"],
+      types,
       createdAt: now,
     };
 
-    const writeProgress: CardProgress = {
-      cardId: id,
-      cardType: "kanji-write",
-      fsrs: createEmptyCard(),
-    };
-
-    const readProgress: CardProgress = {
-      cardId: id,
-      cardType: "kanji-read",
-      fsrs: createEmptyCard(),
-    };
-
     cards.add(card);
-    progress.add(writeProgress);
-    progress.add(readProgress);
+
+    for (const type of types) {
+      progress.add({
+        cardId: id,
+        cardType: type,
+        fsrs: createEmptyCard(),
+      });
+    }
 
     addToSyncStaging([
       { store: "cards", op: "add", key: id },
-      { store: "progress", op: "add", key: [id, "kanji-write"] },
-      { store: "progress", op: "add", key: [id, "kanji-read"] },
+      ...types.map<SyncStagingStore>((type) => ({
+        store: "progress",
+        op: "add",
+        key: [id, type],
+      })),
     ]);
   }
 }
@@ -96,7 +94,7 @@ export async function activateDeck(
   });
 
   for (const cardId of deck.cards) {
-    maybeCreateCard(tx, cardId);
+    maybeCreateCard(tx, cardId, ["kanji-write", "kanji-read"]);
   }
 
   addToSyncStaging([{ store: "decks", key: deck.name, op: "put" }]);
@@ -136,6 +134,7 @@ export async function activateDeckCategory(
         priority,
         category,
         cards,
+        cardTypes: ["kanji-write", "kanji-read"],
         active: true,
       };
     }),
@@ -158,7 +157,7 @@ export async function activateDeckCategory(
       addToSyncStaging([{ store: "decks", op: "add", key: deck.name }]);
 
       for (const card of deck.cards) {
-        maybeCreateCard(tx, card);
+        maybeCreateCard(tx, card, ["kanji-write", "kanji-read"]);
       }
     }
   }
@@ -200,55 +199,55 @@ export async function deactivateDeckCategory(category: string) {
   await tx.done;
 }
 
-type DeckStatusCount = {
+export type DeckStatusCount = {
   new: number;
   due: number;
   review: number;
   know: number;
 };
 
-type DeckStatus = { [Property in CardType]: DeckStatusCount };
+function createDeckStatusCount(): DeckStatusCount {
+  return {
+    new: 0,
+    due: 0,
+    review: 0,
+    know: 0,
+  };
+}
 
 export async function getDeckStatus(
   name: string,
   fsrs = new FSRS(generatorParameters()),
-) {
+): Promise<Map<CardType, DeckStatusCount> | null> {
   const tx = (await db).transaction(["decks", "progress"]);
   const progressStore = tx.objectStore("progress");
-
-  const deckStatus: DeckStatus = {
-    "kanji-read": {
-      new: 0,
-      due: 0,
-      review: 0,
-      know: 0,
-    },
-
-    "kanji-write": {
-      new: 0,
-      due: 0,
-      review: 0,
-      know: 0,
-    },
-  };
 
   const now = new Date();
   const deck = await tx.objectStore("decks").get(name);
 
   if (!deck) {
-    return deckStatus;
+    return null;
   }
 
   const minRetentionProb = knownMinRetention.value / 100;
   const minDueDate = new Date(Date.now() + knownMinDueWeeks.value * WEEK);
 
+  const deckStatus = new Map(
+    deck.cardTypes.map((cardType) => [cardType, createDeckStatusCount()]),
+  );
+
   for await (const cardId of deck.cards) {
-    for (const [cardType, counts] of Object.entries(deckStatus) as Array<
-      [type: CardType, count: DeckStatusCount]
-    >) {
+    for (const cardType of deck.cardTypes) {
       const progress = await progressStore.get([cardId, cardType]);
 
       if (!progress) {
+        continue;
+      }
+
+      const counts = deckStatus.get(cardType);
+
+      if (!counts) {
+        // never happens
         continue;
       }
 
@@ -301,7 +300,7 @@ export async function createDeck({
   addToSyncStaging([{ store: "decks", op: "add", key: deck.name }]);
 
   for (const card of deck.cards) {
-    maybeCreateCard(tx, card);
+    maybeCreateCard(tx, card, deckTemplate.cardTypes);
   }
 
   await tx.done;
@@ -335,7 +334,7 @@ export async function editDeck(deck: Deck): Promise<void> {
 
   for (const card of deck.cards) {
     if (!previousDeck.cards.includes(card)) {
-      maybeCreateCard(tx, card);
+      maybeCreateCard(tx, card, ["kanji-write", "kanji-read"]);
     }
   }
 

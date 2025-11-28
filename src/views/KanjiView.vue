@@ -40,7 +40,7 @@ provideKanjiVG(hex);
     </KanjiTitle>
 
     <KanjiReadings class="readings" :kanji="kanji" />
-    <KanjiStrokes class="strokes" :kanji="kanji" />
+    <KanjiStrokes class="strokes" :kanji="kanji.literal" />
     <KanjiComponents class="components" />
     <KanjiWordList v-if="kanjiVocab" class="words" :kanji-vocab="kanjiVocab" />
   </article>

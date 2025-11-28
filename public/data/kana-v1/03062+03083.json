@@ -1,0 +1,19 @@
+{
+  "literal": "ぢゃ",
+  "reading": "ja",
+  "base": ["ぢ", "や", "ちゃ"],
+  "vocab": [
+    {
+      "kana": "めしぢゃわん",
+      "romaji": "meshijawan",
+      "en": "rice bowl",
+      "wordId": 2590300
+    },
+    {
+      "kana": "くちぢゃ",
+      "romaji": "kuchija",
+      "en": "adding more tea leaves",
+      "wordId": 1276580
+    }
+  ]
+}

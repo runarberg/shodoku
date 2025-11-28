@@ -28,7 +28,7 @@ export function useDecks(): ComputedRef<Deck[] | null> {
     const db = await openingDb;
     const decks = await db
       .transaction("decks")
-      .store.index("category+priority")
+      .store.index("priority")
       .getAll();
 
     return decks.filter(({ active }) => active);
@@ -38,12 +38,16 @@ export function useDecks(): ComputedRef<Deck[] | null> {
 }
 
 export function useDecksContainingCard(
-  cardIdRef: MaybeRefOrGetter<number>,
+  cardIdRef: MaybeRefOrGetter<number | undefined>,
 ): ComputedRef<Deck[]> {
   const query = computed(() => {
     const cardId = toValue(cardIdRef);
 
     return async () => {
+      if (!cardId) {
+        return [];
+      }
+
       const db = await openingDb;
       const decks = await db
         .transaction("decks")

@@ -1,0 +1,22 @@
+{
+  "literal": "そ",
+  "reading": "so",
+  "dakuten": "ぞ",
+  "katakana": "ソ",
+  "vocab": [
+    {
+      "kana": "そうか",
+      "romaji": "sōka",
+      "en": "is that so?",
+      "wordId": 2093030
+    },
+    {
+      "kana": "そうだね",
+      "romaji": "sōdane",
+      "en": "so it is",
+      "wordId": 2831328
+    },
+    { "kana": "そこ", "romaji": "soko", "en": "that place", "wordId": 1006670 },
+    { "kana": "そら", "romaji": "sora", "en": "sky", "wordId": 1245290 }
+  ]
+}

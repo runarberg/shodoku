@@ -1,0 +1,29 @@
+{
+  "literal": "メ",
+  "reading": "me",
+  "hiragana": "め",
+  "vocab": [
+    { "kana": "メニュー", "romaji": "menyū", "en": "menu", "wordId": 1133790 },
+    { "kana": "メモ", "romaji": "memo", "en": "memo", "wordId": 1133830 },
+    { "kana": "メロン", "romaji": "meron", "en": "melon", "wordId": 1134190 },
+    { "kana": "メダル", "romaji": "medaru", "en": "medal", "wordId": 1133500 },
+    {
+      "kana": "メキシコ",
+      "romaji": "mekishiko",
+      "en": "Mexico",
+      "wordId": 1133090
+    },
+    {
+      "kana": "メラメラ",
+      "romaji": "mera-mera",
+      "en": "flaring up",
+      "wordId": 2009890
+    },
+    {
+      "kana": "メー",
+      "romaji": "mē",
+      "en": "baa (sound of a sheep)",
+      "wordId": 2078440
+    }
+  ]
+}

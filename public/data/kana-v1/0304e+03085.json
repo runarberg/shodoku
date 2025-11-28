@@ -1,0 +1,20 @@
+{
+  "literal": "ぎゅ",
+  "reading": "gyu",
+  "base": ["ぎ", "ゆ", "きゅ"],
+  "katakana": "ギュ",
+  "vocab": [
+    {
+      "kana": "ぎゅうどん",
+      "romaji": "gyūdon",
+      "en": "gyudon",
+      "wordId": 1845250
+    },
+    {
+      "kana": "ぎゅうにゅう",
+      "romaji": "gyūnyū",
+      "en": "milk",
+      "wordId": 1231590
+    }
+  ]
+}

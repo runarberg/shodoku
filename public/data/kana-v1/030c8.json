@@ -1,0 +1,33 @@
+{
+  "literal": "ト",
+  "reading": "to",
+  "dakuten": "ド",
+  "hiragana": "と",
+  "vocab": [
+    { "kana": "トイレ", "romaji": "toire", "en": "toilet", "wordId": 1084810 },
+    {
+      "kana": "トレーナー",
+      "romaji": "torēnā",
+      "en": "sweatshirt",
+      "wordId": 1087090
+    },
+    {
+      "kana": "トルコ",
+      "romaji": "toruko",
+      "en": "Turkiye",
+      "wordId": 1086880
+    },
+    {
+      "kana": "トロント",
+      "romaji": "toronto",
+      "en": "Toronto (city)",
+      "wordId": 1087530
+    },
+    {
+      "kana": "トロリ",
+      "romaji": "torori",
+      "en": "creamily",
+      "wordId": 2568350
+    }
+  ]
+}

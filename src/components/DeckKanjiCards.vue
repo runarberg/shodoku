@@ -9,7 +9,7 @@ defineProps<{
 <template>
   <ol class="kanji-list">
     <li v-for="codepoint of kanji" :key="codepoint" class="kanji">
-      <DeckKanjiCardItem :codepoint="codepoint" />
+      <DeckKanjiCardItem type="kanji" :codepoint="codepoint" />
     </li>
   </ol>
 </template>

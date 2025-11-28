@@ -1,0 +1,33 @@
+{
+  "literal": "ザ",
+  "reading": "za",
+  "base": "サ",
+  "hiragana": "ざ",
+  "vocab": [
+    { "kana": "ザラ", "romaji": "zara", "en": "common", "wordId": 2064520 },
+    {
+      "kana": "ザクロ",
+      "romaji": "zakuro",
+      "en": "pomegranate",
+      "wordId": 1703280
+    },
+    {
+      "kana": "ザブザブ",
+      "romaji": "zabu-zabu",
+      "en": "splashing",
+      "wordId": 2097030
+    },
+    {
+      "kana": "ザンビア",
+      "romaji": "zanbia",
+      "en": "Zambia",
+      "wordId": 1059050
+    },
+    {
+      "kana": "ザーザー",
+      "romaji": "zā-zā",
+      "en": "raining heavily",
+      "wordId": 1058910
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "literal": "ニュ",
+  "reading": "nyu",
+  "base": ["ニ", "ユ"],
+  "hiragana": "にゅ",
+  "vocab": [
+    { "kana": "ニュース", "romaji": "nyūsu", "en": "news", "wordId": 1091500 },
+    {
+      "kana": "ニューヨーク",
+      "romaji": "nyūyōku",
+      "en": "New York",
+      "wordId": 1091940
+    },
+    {
+      "kana": "ニュー・ウェイヴ",
+      "romaji": "nyū weivu",
+      "en": "new wave (music)",
+      "wordId": 2471370
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "literal": "ナ",
+  "reading": "na",
+  "hiragana": "な",
+  "vocab": [
+    { "kana": "ナイフ", "romaji": "naifu", "en": "knife", "wordId": 1089890 },
+    {
+      "kana": "ナイロン",
+      "romaji": "nairon",
+      "en": "nylon",
+      "wordId": 1089930
+    },
+    {
+      "kana": "ナノ・セカンド",
+      "romaji": "nano sekando",
+      "en": "nanosecond",
+      "wordId": 1090540
+    },
+    {
+      "kana": "ナシ",
+      "romaji": "nashi",
+      "en": "Asian pear (pyrus pyrifolia)",
+      "wordId": 1549860
+    },
+    {
+      "kana": "ナミビア",
+      "romaji": "namibia",
+      "en": "Namibia",
+      "wordId": 1090670
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "literal": "よ",
+  "reading": "yo",
+  "katakana": "ヨ",
+  "vocab": [
+    { "kana": "よく", "romaji": "yoku", "en": "often", "wordId": 1605870 },
+    { "kana": "よむ", "romaji": "yomu", "en": "to read", "wordId": 1456360 },
+    { "kana": "よわい", "romaji": "yowai", "en": "weak", "wordId": 1324520 },
+    { "kana": "よん", "romaji": "yon", "en": "four", "wordId": 1579470 },
+    {
+      "kana": "よこはま",
+      "romaji": "yokohama",
+      "en": "Yokohama (city)",
+      "wordId": 2164610
+    },
+    {
+      "kana": "よかったら",
+      "romaji": "yokattara",
+      "en": "if you like",
+      "wordId": 1554530
+    },
+    {
+      "kana": "よろしくおねがいします",
+      "romaji": "yoroshiku onegai shimasu",
+      "en": "Nice to meet you",
+      "wordId": 2133750
+    }
+  ]
+}

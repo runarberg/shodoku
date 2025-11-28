@@ -1,0 +1,24 @@
+{
+  "literal": "ジ",
+  "reading": "ji",
+  "base": "シ",
+  "youon": ["ジャ", "ジュ", "ジョ"],
+  "hiragana": "じ",
+  "vocab": [
+    { "kana": "ジーンズ", "romaji": "jīnzu", "en": "jeans", "wordId": 1064120 },
+    { "kana": "ジム", "romaji": "jimu", "en": "gym", "wordId": 1064880 },
+    { "kana": "ジープ", "romaji": "jīpu", "en": "jeep", "wordId": 1064070 },
+    {
+      "kana": "ジロジロ",
+      "romaji": "jiro-jiro",
+      "en": "staringly",
+      "wordId": 2016440
+    },
+    {
+      "kana": "ジメジメ",
+      "romaji": "jime-jime",
+      "en": "humid",
+      "wordId": 1005890
+    }
+  ]
+}

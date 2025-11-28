@@ -120,7 +120,7 @@ export async function* getNewCards(): AsyncGenerator<
         continue;
       }
 
-      for (const cardType of ["kanji-write", "kanji-read"] as CardType[]) {
+      for (const cardType of deck.cardTypes) {
         const progress = await progressStore.get([cardId, cardType]);
         if (progress?.fsrs.state === State.New) {
           yield progress;

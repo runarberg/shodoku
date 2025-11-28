@@ -2,7 +2,7 @@
 import { State } from "ts-fsrs";
 import { computed, ref } from "vue";
 
-import { useKanjiProgress } from "../helpers/fsrs.ts";
+import { useCardProgress } from "../helpers/fsrs.ts";
 import { REVIEW_ROUTE_NAME } from "../router.ts";
 import { useDecksContainingCard } from "../store/decks.ts";
 import { KanjiInfo } from "../types.ts";
@@ -19,13 +19,20 @@ const manageDecksDialog = ref<InstanceType<
 > | null>(null);
 
 const decks = useDecksContainingCard(() => props.kanji.codepoint);
-const progress = useKanjiProgress(() => props.kanji.codepoint);
-
-const isNew = computed(
-  () =>
-    progress.value.read?.fsrs.state === State.New &&
-    progress.value.write?.fsrs.state === State.New,
+const progress = useCardProgress(
+  () => props.kanji.codepoint,
+  ["kanji-write", "kanji-read"],
 );
+
+const isNew = computed(() => {
+  for (const { fsrs } of progress.value.values()) {
+    if (fsrs.state !== State.New) {
+      return false;
+    }
+  }
+
+  return true;
+});
 </script>
 
 <template>
@@ -40,7 +47,7 @@ const isNew = computed(
       :to="{
         name: REVIEW_ROUTE_NAME,
         query: {
-          kanji: kanji.literal,
+          'card-id': kanji.codepoint,
           'card-type': 'kanji-write',
           singleton: '',
         },

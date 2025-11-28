@@ -53,6 +53,7 @@ async function activate() {
         category: props.category,
         cards:
           kanjiList.value?.map((kanji) => kanji.codePointAt(0) ?? NaN) ?? [],
+        cardTypes: ["kanji-write", "kanji-read"],
       });
     }
   } catch (error) {
@@ -106,7 +107,7 @@ watch(
   />
 
   <article v-else :aria-labelledby="labelId">
-    <div class="controls">
+    <header class="header">
       <strong :id="labelId">{{ deck?.label ?? template?.label }}</strong>
       <DeckActivateButton
         :toggling="toggling || togglingCategory"
@@ -137,7 +138,7 @@ watch(
       >
         Delete
       </AppButton>
-    </div>
+    </header>
 
     <ol class="kanji-list">
       <template v-if="deck">
@@ -159,7 +160,7 @@ watch(
 </template>
 
 <style scoped>
-.controls {
+.header {
   align-items: center;
   column-gap: 1ex;
   display: flex;
@@ -179,6 +180,7 @@ watch(
   column-gap: 1ex;
   list-style: none;
   margin: 0;
+  padding-inline-start: 2.5em;
 }
 
 .kanji {

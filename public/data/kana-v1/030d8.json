@@ -1,0 +1,28 @@
+{
+  "literal": "ヘ",
+  "reading": "he",
+  "dakuten": "ベ",
+  "handakuten": "ペ",
+  "hiragana": "へ",
+  "vocab": [
+    {
+      "kana": "ヘルメット",
+      "romaji": "herumetto",
+      "en": "helmet",
+      "wordId": 1119000
+    },
+    {
+      "kana": "ヘリコプター",
+      "romaji": "herikoputā",
+      "en": "helicopter",
+      "wordId": 1118780
+    },
+    { "kana": "ヘビ", "romaji": "hebi", "en": "snake", "wordId": 1323350 },
+    {
+      "kana": "ヘトヘト",
+      "romaji": "heto-heto",
+      "en": "completely exhausted",
+      "wordId": 1011330
+    }
+  ]
+}

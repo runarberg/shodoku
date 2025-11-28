@@ -1,0 +1,31 @@
+{
+  "literal": "オ",
+  "reading": "o",
+  "hiragana": "お",
+  "vocab": [
+    {
+      "kana": "オートバイ",
+      "romaji": "ōtobai",
+      "en": "motorcycle",
+      "wordId": 1032030
+    },
+    {
+      "kana": "オノマトペ",
+      "romaji": "onomatope",
+      "en": "onomatopoeia",
+      "wordId": 1034540
+    },
+    {
+      "kana": "オラオラ",
+      "romaji": "ora-ora",
+      "en": "overbearing",
+      "wordId": 2833430
+    },
+    {
+      "kana": "オーストラリア",
+      "romaji": "ōsutoraria",
+      "en": "Australia",
+      "wordId": 1031680
+    }
+  ]
+}

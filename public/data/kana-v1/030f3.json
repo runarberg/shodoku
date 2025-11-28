@@ -1,0 +1,21 @@
+{
+  "literal": "ン",
+  "reading": "n",
+  "hiragana": "ん",
+  "vocab": [
+    { "kana": "パン", "romaji": "pan", "en": "bread", "wordId": 1103090 },
+    { "kana": "ペン", "romaji": "pen", "en": "pen", "wordId": 1121380 },
+    {
+      "kana": "コンコン",
+      "romaji": "kon-kon",
+      "en": "bang-bang",
+      "wordId": 1004870
+    },
+    {
+      "kana": "ソンクラーン",
+      "romaji": "sonkurān",
+      "en": "Songkran (Thai New Year)",
+      "wordId": 2630290
+    }
+  ]
+}

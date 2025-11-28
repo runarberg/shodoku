@@ -32,7 +32,7 @@ const { result: storedDecks } = useLiveQuery(
         .store.index("category+priority")
         .iterate(
           IDBKeyRange.bound(
-            [category, 0],
+            [category, Number.NEGATIVE_INFINITY],
             [category, Number.POSITIVE_INFINITY],
             true,
             true,

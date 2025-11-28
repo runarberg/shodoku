@@ -1,0 +1,34 @@
+{
+  "literal": "パ",
+  "reading": "pa",
+  "base": "ハ",
+  "dakuten": "バ",
+  "hiragana": "ぱ",
+  "vocab": [
+    { "kana": "パン", "romaji": "pan", "en": "bread", "wordId": 1103090 },
+    {
+      "kana": "パンク",
+      "romaji": "panku",
+      "en": "flat tire",
+      "wordId": 1103110
+    },
+    {
+      "kana": "パンク・ロック",
+      "romaji": "panku rokku",
+      "en": "punk rock",
+      "wordId": 1103140
+    },
+    {
+      "kana": "パーティー",
+      "romaji": "pātī",
+      "en": "party",
+      "wordId": 1100760
+    },
+    {
+      "kana": "パクパク",
+      "romaji": "paku-paku",
+      "en": "eating (like pacman)",
+      "wordId": 1010380
+    }
+  ]
+}

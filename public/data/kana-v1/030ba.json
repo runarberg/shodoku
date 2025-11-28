@@ -1,0 +1,26 @@
+{
+  "literal": "ズ",
+  "reading": "zu",
+  "base": "ス",
+  "hiragana": "ず",
+  "vocab": [
+    {
+      "kana": "ズーミング",
+      "romaji": "zūmingu",
+      "en": "zooming",
+      "wordId": 1074190
+    },
+    {
+      "kana": "ズキズキ",
+      "romaji": "zuki-zuki",
+      "en": "throbbingly (of pain)",
+      "wordId": 1006340
+    },
+    {
+      "kana": "ズンズン",
+      "romaji": "zun-zun",
+      "en": "briskly",
+      "wordId": 1006470
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "literal": "ニ",
+  "reading": "ni",
+  "youon": ["ニャ", "ニュ", "ニョ"],
+  "hiragana": "に",
+  "vocab": [
+    { "kana": "ニット", "romaji": "nitto", "en": "knit", "wordId": 1091220 },
+    { "kana": "ニトロ", "romaji": "nitoro", "en": "nitro", "wordId": 1091250 },
+    {
+      "kana": "ニヤニヤ",
+      "romaji": "niya-niya",
+      "en": "grinning",
+      "wordId": 1009620
+    },
+    {
+      "kana": "ニコニコ",
+      "romaji": "niko-niko",
+      "en": "smilingly",
+      "wordId": 1091130
+    },
+    {
+      "kana": "ニシキヘビ",
+      "romaji": "nishikihebi",
+      "en": "python",
+      "wordId": 1241370
+    },
+    { "kana": "ニジェールかわ", "romaji": "nijēru kawa", "en": "Niger river" }
+  ]
+}

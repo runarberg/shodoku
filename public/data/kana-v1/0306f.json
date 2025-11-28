@@ -1,0 +1,26 @@
+{
+  "literal": "は",
+  "reading": "ha",
+  "dakuten": "ば",
+  "handakuten": "ぱ",
+  "katakana": "ハ",
+  "vocab": [
+    { "kana": "はい", "romaji": "hai", "en": "yes", "wordId": 1010080 },
+    { "kana": "はは", "romaji": "haha", "en": "mother", "wordId": 1514990 },
+    { "kana": "はち", "romaji": "hachi", "en": "eight", "wordId": 1583090 },
+    { "kana": "はる", "romaji": "haru", "en": "spring", "wordId": 1341000 },
+    { "kana": "はな", "romaji": "hana", "en": "flower", "wordId": 1194500 },
+    {
+      "kana": "はじめまして",
+      "romaji": "hajimemashite",
+      "en": "nice to meet you",
+      "wordId": 1625780
+    },
+    {
+      "kana": "はいく",
+      "romaji": "haiku",
+      "en": "haiku (poem)",
+      "wordId": 1471900
+    }
+  ]
+}

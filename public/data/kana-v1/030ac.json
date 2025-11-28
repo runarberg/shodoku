@@ -1,0 +1,28 @@
+{
+  "literal": "ガ",
+  "reading": "ga",
+  "base": "カ",
+  "hiragana": "が",
+  "vocab": [
+    { "kana": "ガラス", "romaji": "garasu", "en": "glass", "wordId": 1040380 },
+    {
+      "kana": "ガイドブック",
+      "romaji": "gaidobukku",
+      "en": "guidebook",
+      "wordId": 1039920
+    },
+    {
+      "kana": "ガソリン",
+      "romaji": "gasorin",
+      "en": "gasoline",
+      "wordId": 1040250
+    },
+    {
+      "kana": "ガブガブ",
+      "romaji": "gabu-gabu",
+      "en": "guzzling",
+      "wordId": 1003250
+    },
+    { "kana": "ガーン", "romaji": "gān", "en": "bummer!", "wordId": 2207790 }
+  ]
+}

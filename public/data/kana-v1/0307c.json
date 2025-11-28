@@ -1,0 +1,28 @@
+{
+  "literal": "ぼ",
+  "reading": "bo",
+  "base": "ほ",
+  "handakuten": "ぽ",
+  "katakana": "ボ",
+  "vocab": [
+    { "kana": "ぼうし", "romaji": "bōshi", "en": "hat", "wordId": 1519170 },
+    {
+      "kana": "ぼく",
+      "romaji": "boku",
+      "en": "me (often used by boys)",
+      "wordId": 1521400
+    },
+    {
+      "kana": "ぼんおどり",
+      "romaji": "bonodori",
+      "en": "Bonodori (dance)",
+      "wordId": 1523780
+    },
+    {
+      "kana": "ぼうねんかい",
+      "romaji": "bōnenkai",
+      "en": "year-end party",
+      "wordId": 1519280
+    }
+  ]
+}

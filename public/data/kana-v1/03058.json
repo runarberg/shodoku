@@ -1,0 +1,34 @@
+{
+  "literal": "じ",
+  "reading": "ji",
+  "base": "し",
+  "youon": ["じゃ", "じゅ", "じょ"],
+  "katakana": "ジ",
+  "vocab": [
+    {
+      "kana": "じしょ",
+      "romaji": "jisho",
+      "en": "dictionary",
+      "wordId": 1318970
+    },
+    { "kana": "じぶん", "romaji": "jibun", "en": "oneself", "wordId": 1318610 },
+    {
+      "kana": "じんじゃ",
+      "romaji": "jinja",
+      "en": "shrine",
+      "wordId": 1364670
+    },
+    {
+      "kana": "じてんしゃ",
+      "romaji": "jitensha",
+      "en": "bicycle",
+      "wordId": 1318290
+    },
+    {
+      "kana": "じどうはんばいき",
+      "romaji": "jidōhanbaiki",
+      "en": "vending machine",
+      "wordId": 1318480
+    }
+  ]
+}

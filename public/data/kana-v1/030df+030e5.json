@@ -1,0 +1,26 @@
+{
+  "literal": "ミュ",
+  "reading": "myu",
+  "base": ["ミ", "ユ"],
+  "hiragana": "みゅ",
+  "vocab": [
+    {
+      "kana": "ミュージック",
+      "romaji": "myūjikku",
+      "en": "music",
+      "wordId": 1131680
+    },
+    {
+      "kana": "ミューズリー",
+      "romaji": "myūzurī",
+      "en": "muesli",
+      "wordId": 2516170
+    },
+    {
+      "kana": "ミュンヘン",
+      "romaji": "myunhen",
+      "en": "Munich (Germany)",
+      "wordId": 1131740
+    }
+  ]
+}

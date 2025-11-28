@@ -1,0 +1,21 @@
+{
+  "literal": "ぺ",
+  "reading": "pe",
+  "base": "へ",
+  "dakuten": "べ",
+  "katakana": "ペ",
+  "vocab": [
+    {
+      "kana": "ぺこぺこ",
+      "romaji": "peko peko",
+      "en": "famished",
+      "wordId": 1011540
+    },
+    {
+      "kana": "ほっぺた",
+      "romaji": "hoppeta",
+      "en": "cheeks",
+      "wordId": 1520630
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "literal": "ジョ",
+  "reading": "jo",
+  "base": ["ジ", "ヨ", "ショ"],
+  "hiragana": "じょ",
+  "vocab": [
+    {
+      "kana": "ジョギング",
+      "romaji": "jogingu",
+      "en": "jogging",
+      "wordId": 1066360
+    },
+    {
+      "kana": "ジョーカー",
+      "romaji": "jōkā",
+      "en": "joker",
+      "wordId": 1066220
+    },
+    {
+      "kana": "ジョン・スミス",
+      "romaji": "jon sumisu",
+      "en": "John Smith"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "literal": "キ",
+  "reading": "ki",
+  "dakuten": "ギ",
+  "youon": ["キャ", "キュ", "キョ"],
+  "hiragana": "き",
+  "vocab": [
+    { "kana": "キロ", "romaji": "kiro", "en": "kilo", "wordId": 1042610 },
+    { "kana": "キリン", "romaji": "kirin", "en": "giraffe", "wordId": 1575200 },
+    {
+      "kana": "キッチン",
+      "romaji": "kitchin",
+      "en": "kitchen",
+      "wordId": 1041150
+    },
+    {
+      "kana": "キラキラ",
+      "romaji": "kira-kira",
+      "en": "glittering",
+      "wordId": 1003500
+    }
+  ]
+}

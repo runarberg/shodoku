@@ -1,0 +1,27 @@
+{
+  "literal": "シュ",
+  "reading": "shu",
+  "base": ["シ", "ユ"],
+  "dakuten": "ジュ",
+  "hiragana": "しゅ",
+  "vocab": [
+    {
+      "kana": "シュラフ",
+      "romaji": "shurafu",
+      "en": "sleeping bag",
+      "wordId": 1062180
+    },
+    {
+      "kana": "シュリンプ",
+      "romaji": "shurinpu",
+      "en": "shrimp",
+      "wordId": 1062200
+    },
+    {
+      "kana": "シュール",
+      "romaji": "shūri",
+      "en": "surreal",
+      "wordId": 1062010
+    }
+  ]
+}

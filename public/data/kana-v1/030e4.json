@@ -1,0 +1,16 @@
+{
+  "literal": "ヤ",
+  "reading": "ya",
+  "hiragana": "や",
+  "vocab": [
+    { "kana": "ヤム", "romaji": "yamu", "en": "yam", "wordId": 2787720 },
+    { "kana": "ヤギ", "romaji": "yagi", "en": "goat", "wordId": 1303200 },
+    { "kana": "ヤシ", "romaji": "yashi", "en": "palm tree", "wordId": 1568330 },
+    {
+      "kana": "ヤンしゃ",
+      "romaji": "yan sha",
+      "en": "low rider (car)",
+      "wordId": 2120670
+    }
+  ]
+}

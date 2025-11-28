@@ -1,0 +1,14 @@
+{
+  "literal": "リョ",
+  "reading": "ryo",
+  "base": ["リ", "ヨ"],
+  "hiragana": "りょ",
+  "vocab": [
+    {
+      "kana": "リョコウバト",
+      "romaji": "ryokoubato",
+      "en": "passenger pigeon",
+      "wordId": 2444300
+    }
+  ]
+}

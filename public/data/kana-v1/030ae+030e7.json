@@ -1,0 +1,21 @@
+{
+  "literal": "ギョ",
+  "reading": "gyo",
+  "base": ["ギ", "ヨ", "キョ"],
+  "hiragana": "ぎょ",
+  "vocab": [
+    {
+      "kana": "ギョーザ",
+      "romaji": "gyōza",
+      "en": "Gyoza (food)",
+      "wordId": 1574430
+    },
+    { "kana": "ギョッ", "romaji": "gyo'", "en": "shock", "wordId": 2002970 },
+    {
+      "kana": "ギョロリ",
+      "romaji": "gyorori",
+      "en": "glaring",
+      "wordId": 2261890
+    }
+  ]
+}

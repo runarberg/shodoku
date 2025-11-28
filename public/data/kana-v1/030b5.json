@@ -1,0 +1,33 @@
+{
+  "literal": "サ",
+  "reading": "sa",
+  "dakuten": "ザ",
+  "hiragana": "さ",
+  "vocab": [
+    {
+      "kana": "サッカー",
+      "romaji": "sakkā",
+      "en": "soccer",
+      "wordId": 1056700
+    },
+    {
+      "kana": "サーフィン",
+      "romaji": "sāfin",
+      "en": "surfing",
+      "wordId": 1055090
+    },
+    { "kana": "サラダ", "romaji": "sarada", "en": "aalad", "wordId": 1057850 },
+    {
+      "kana": "サッパリ",
+      "romaji": "sappari",
+      "en": "feeling refreshed",
+      "wordId": 1005210
+    },
+    {
+      "kana": "サラリーマン",
+      "romaji": "sararīman",
+      "en": "salary man",
+      "wordId": 1057960
+    }
+  ]
+}

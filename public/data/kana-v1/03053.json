@@ -1,0 +1,34 @@
+{
+  "literal": "こ",
+  "reading": "ko",
+  "dakuten": "ご",
+  "katakana": "コ",
+  "vocab": [
+    { "kana": "ここ", "romaji": "koko", "en": "here", "wordId": 1288810 },
+    {
+      "kana": "こうこう",
+      "romaji": "kōkō",
+      "en": "high school",
+      "wordId": 1283500
+    },
+    {
+      "kana": "こんにちは",
+      "romaji": "konnichiwa",
+      "en": "good afternoon",
+      "wordId": 1289400
+    },
+    {
+      "kana": "こんばんは",
+      "romaji": "konbanwa",
+      "en": "good evening",
+      "wordId": 1289480
+    },
+    {
+      "kana": "こっち",
+      "romaji": "kotchi",
+      "en": "this way",
+      "wordId": 1004500
+    },
+    { "kana": "こども", "romaji": "kodomo", "en": "child", "wordId": 1307850 }
+  ]
+}

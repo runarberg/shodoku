@@ -1,0 +1,11 @@
+{
+  "literal": "ピュ",
+  "reading": "pyu",
+  "base": ["ピ", "ユ", "ヒュ"],
+  "dakuten": "ビュ",
+  "hiragana": "ぴゅ",
+  "vocab": [
+    { "kana": "ピュア", "romaji": "pyua", "en": "pure", "wordId": 1106910 },
+    { "kana": "ピューマ", "romaji": "pyūma", "en": "puma", "wordId": 2074240 }
+  ]
+}

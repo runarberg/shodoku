@@ -1,0 +1,15 @@
+{
+  "literal": "ジェ",
+  "reading": "je",
+  "base": ["ジ", "エ", "シェ"],
+  "vocab": [
+    { "kana": "ジェム", "romaji": "jemu", "en": "gem", "wordId": 1064420 },
+    { "kana": "ジェット", "romaji": "jetto", "en": "jet", "wordId": 1064180 },
+    {
+      "kana": "ジェットコースター",
+      "romaji": "jetto kōsutā",
+      "en": "roller coaster",
+      "wordId": 1064200
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "literal": "イ",
+  "reading": "i",
+  "hiragana": "い",
+  "vocab": [
+    { "kana": "インク", "romaji": "inku", "en": "ink", "wordId": 1022210 },
+    {
+      "kana": "イアリング",
+      "romaji": "earingu",
+      "en": "earring",
+      "wordId": 1021910
+    },
+    {
+      "kana": "インターネット",
+      "romaji": "intānetto",
+      "en": "internet",
+      "wordId": 1022880
+    },
+    {
+      "kana": "インドネシア",
+      "romaji": "indoneshia",
+      "en": "Indonesia",
+      "wordId": 1023890
+    },
+    {
+      "kana": "イギリス",
+      "romaji": "igirisu",
+      "en": "United Kingdom",
+      "wordId": 1021160
+    },
+    {
+      "kana": "インスタントラーメン",
+      "romaji": "insutanto rāmen",
+      "en": "instant ramen",
+      "wordId": 1959580
+    }
+  ]
+}

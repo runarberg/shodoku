@@ -1,0 +1,28 @@
+{
+  "literal": "ぶ",
+  "reading": "bu",
+  "base": "ふ",
+  "handakuten": "ぷ",
+  "katakana": "ブ",
+  "vocab": [
+    { "kana": "ぶんか", "romaji": "bunka", "en": "culture", "wordId": 1505120 },
+    {
+      "kana": "ぶっか",
+      "romaji": "bukka",
+      "en": "cost of living",
+      "wordId": 1502430
+    },
+    {
+      "kana": "ぶんぽう",
+      "romaji": "bunpō",
+      "en": "grammar",
+      "wordId": 1505600
+    },
+    {
+      "kana": "ぶたにく",
+      "romaji": "butaniko",
+      "en": "pork",
+      "wordId": 1457440
+    }
+  ]
+}

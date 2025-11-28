@@ -1,0 +1,29 @@
+{
+  "literal": "び",
+  "reading": "bi",
+  "base": "ひ",
+  "handakuten": "ぴ",
+  "youon": ["びゃ", "びゅ", "びょ"],
+  "katakana": "ビ",
+  "vocab": [
+    { "kana": "びん", "romaji": "bin", "en": "bottle", "wordId": 1491120 },
+    {
+      "kana": "びっくり",
+      "romaji": "bikkuri",
+      "en": "surprise",
+      "wordId": 1226360
+    },
+    {
+      "kana": "びよういん",
+      "romaji": "biyōin",
+      "en": "hair salon",
+      "wordId": 1486680
+    },
+    {
+      "kana": "びじゅつかん",
+      "romaji": "bijutsukan",
+      "en": "art museum",
+      "wordId": 1486460
+    }
+  ]
+}

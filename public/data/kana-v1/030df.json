@@ -1,0 +1,38 @@
+{
+  "literal": "ミ",
+  "reading": "mi",
+  "youon": ["ミャ", "ミュ", "ミョ"],
+  "hiragana": "み",
+  "vocab": [
+    {
+      "kana": "ミカン",
+      "romaji": "mikan",
+      "en": "mandarin orange",
+      "wordId": 1528410
+    },
+    {
+      "kana": "ミラーボール",
+      "romaji": "mirā-bōru",
+      "en": "disco ball",
+      "wordId": 1131780
+    },
+    {
+      "kana": "ミニカー",
+      "romaji": "minikā",
+      "en": "mini-car",
+      "wordId": 1131270
+    },
+    {
+      "kana": "ミーティング",
+      "romaji": "mētingu",
+      "en": "meeting",
+      "wordId": 1130380
+    },
+    {
+      "kana": "ミキサーしゃ",
+      "romaji": "mikisā sha",
+      "en": "concrete mixer truck",
+      "wordId": 2194250
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "literal": "ぽ",
+  "reading": "po",
+  "base": "ほ",
+  "dakuten": "ぼ",
+  "katakana": "ポ",
+  "vocab": [
+    { "kana": "さんぽ", "romaji": "sanpo", "en": "walk", "wordId": 1303620 },
+    {
+      "kana": "ぽんず",
+      "romaji": "ponzu",
+      "en": "Ponzu (sauce)",
+      "wordId": 1631560
+    }
+  ]
+}

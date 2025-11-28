@@ -1,0 +1,20 @@
+{
+  "literal": "にゃ",
+  "reading": "nya",
+  "base": ["に", "や"],
+  "katakana": "ニャ",
+  "vocab": [
+    {
+      "kana": "にゃんこ",
+      "romaji": "nyanko",
+      "en": "kitty cat",
+      "wordId": 2407230
+    },
+    {
+      "kana": "ほにゃらら",
+      "romaji": "honyarara",
+      "en": "something smething",
+      "wordId": 2562210
+    }
+  ]
+}

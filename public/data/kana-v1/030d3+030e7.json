@@ -1,0 +1,15 @@
+{
+  "literal": "ビョ",
+  "reading": "byo",
+  "base": ["ビ", "ヨ", "ヒョ"],
+  "handakuten": "ピョ",
+  "hiragana": "びょ",
+  "vocab": [
+    {
+      "kana": "ビョンビョン",
+      "romaji": "byon-byon",
+      "en": "bouncily",
+      "wordId": 2838242
+    }
+  ]
+}

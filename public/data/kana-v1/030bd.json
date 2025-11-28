@@ -1,0 +1,21 @@
+{
+  "literal": "ソ",
+  "reading": "so",
+  "dakuten": "ゾ",
+  "hiragana": "そ",
+  "vocab": [
+    {
+      "kana": "ソフト",
+      "romaji": "sofuto",
+      "en": "software",
+      "wordId": 1075500
+    },
+    { "kana": "ソース", "romaji": "sōsu", "en": "sauce", "wordId": 1075270 },
+    {
+      "kana": "ソワソワ",
+      "romaji": "sowa-sowa",
+      "en": "nervously",
+      "wordId": 1007120
+    }
+  ]
+}

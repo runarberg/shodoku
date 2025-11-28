@@ -1,0 +1,27 @@
+{
+  "literal": "きゃ",
+  "reading": "kya",
+  "base": ["き", "や"],
+  "dakuten": "ぎゃ",
+  "katakana": "キャ",
+  "vocab": [
+    {
+      "kana": "きゃくさん",
+      "romaji": "kyakusan",
+      "en": "guest",
+      "wordId": 1001760
+    },
+    {
+      "kana": "きゃくほん",
+      "romaji": "kyakuhon",
+      "en": "script",
+      "wordId": 1226880
+    },
+    {
+      "kana": "きゃぴきゃぴ",
+      "romaji": "kyapikyapi",
+      "en": "in high spirits",
+      "wordId": 2120850
+    }
+  ]
+}

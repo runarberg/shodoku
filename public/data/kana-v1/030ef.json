@@ -1,0 +1,32 @@
+{
+  "literal": "ワ",
+  "reading": "wa",
+  "hiragana": "わ",
+  "vocab": [
+    { "kana": "ワイン", "romaji": "wain", "en": "wine", "wordId": 1148850 },
+    {
+      "kana": "ワサビ",
+      "romaji": "wasabi",
+      "en": "wasabi (horseradish)",
+      "wordId": 1302710
+    },
+    {
+      "kana": "ワイシャツ",
+      "romaji": "wai shatsu",
+      "en": "button-up shirt",
+      "wordId": 1148640
+    },
+    {
+      "kana": "ワールドカップ",
+      "romaji": "wārudo kappu",
+      "en": "world cup (soccer)",
+      "wordId": 1148570
+    },
+    {
+      "kana": "ワンワン",
+      "romaji": "wan-wan",
+      "en": "bow-wow",
+      "wordId": 1149310
+    }
+  ]
+}

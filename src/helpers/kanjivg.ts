@@ -39,6 +39,41 @@ function gatherPositions(el: SVGElement): string[] {
   return positions;
 }
 
+export async function fetchKanjiVG(hex: string): Promise<{
+  rect: DOMRect | null;
+  strokes: SVGGElement | null;
+}> {
+  const response = await fetch(`/kanjivg/kanji/${hex}.svg`);
+  const svgText = await response.text();
+  const svg = parser.parseFromString(svgText, "image/svg+xml");
+
+  let rect: DOMRect | null = null;
+  if (svg.documentElement instanceof SVGSVGElement) {
+    rect = svg.documentElement.viewBox.baseVal;
+  }
+
+  const strokes = svg.getElementById(`kvg:${hex}`) as SVGGElement | null;
+
+  if (strokes) {
+    for (const el of [...strokes.querySelectorAll("*"), strokes]) {
+      if (!(el instanceof SVGElement)) {
+        continue;
+      }
+
+      for (const attr of [...el.attributes]) {
+        if (attr.namespaceURI === KANJIVG_NAMESPACE) {
+          el.dataset[attr.localName] = attr.value;
+          el.removeAttributeNS(KANJIVG_NAMESPACE, attr.localName);
+        }
+      }
+
+      el.removeAttribute("xmlns:kvg");
+    }
+  }
+
+  return { strokes, rect };
+}
+
 export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
   const strokesEl = ref<SVGGElement | null>(null);
   const viewBox = ref<string | null>(null);
@@ -46,46 +81,27 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
 
   watch(
     () => toValue(hex),
-    async (hexValue) => {
+    async (hexValue, oldHexValue) => {
       if (!hexValue) {
+        strokesEl.value = null;
+        viewBox.value = null;
+
+        return;
+      }
+
+      if (hexValue === oldHexValue) {
         return;
       }
 
       syncing.value = true;
 
       try {
-        const response = await fetch(`/kanjivg/kanji/${hexValue}.svg`);
-        const svgText = await response.text();
-        const svg = parser.parseFromString(svgText, "image/svg+xml");
-
-        if (svg.documentElement instanceof SVGSVGElement) {
-          const { x, y, width, height } = svg.documentElement.viewBox.baseVal;
-
-          viewBox.value = `${x},${y},${width},${height}`;
-        }
-
-        const strokes = svg.getElementById(
-          `kvg:${hexValue}`,
-        ) as SVGGElement | null;
-
-        if (strokes) {
-          for (const el of [...strokes.querySelectorAll("*"), strokes]) {
-            if (!(el instanceof SVGElement)) {
-              continue;
-            }
-
-            for (const attr of [...el.attributes]) {
-              if (attr.namespaceURI === KANJIVG_NAMESPACE) {
-                el.dataset[attr.localName] = attr.value;
-                el.removeAttributeNS(KANJIVG_NAMESPACE, attr.localName);
-              }
-            }
-
-            el.removeAttribute("xmlns:kvg");
-          }
-        }
+        const { strokes, rect } = await fetchKanjiVG(hexValue);
 
         strokesEl.value = strokes;
+        if (rect) {
+          viewBox.value = `${rect.x},${rect.y},${rect.width},${rect.height}`;
+        }
       } finally {
         syncing.value = false;
       }

@@ -1,28 +1,43 @@
 <script setup lang="ts">
 import { Card as FSRSCard, State } from "ts-fsrs";
 import { computed } from "vue";
+import { RouteLocationRaw } from "vue-router";
 
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
 import { useFsrs } from "../helpers/fsrs.ts";
+import { isYoon, randomYoon } from "../helpers/kana.ts";
 import { WEEK } from "../helpers/time.ts";
-import { kanjiRoute } from "../router.ts";
+import { kanaRoute, kanjiRoute } from "../router.ts";
 import { knownMinDueWeeks, knownMinRetention } from "../store/reviews.ts";
 
 const props = defineProps<{
   codepoint: number;
+  type: "kanji" | "kana";
 }>();
 
-const kanji = computed(() => String.fromCodePoint(props.codepoint));
+const literal = computed(() => String.fromCodePoint(props.codepoint));
 
 const { result: progress } = useLiveQuery(async () => {
   const { codepoint } = props;
   const progressStore = (await db).transaction("progress").store;
 
-  const read = await progressStore.get([codepoint, "kanji-read"]);
-  const write = await progressStore.get([codepoint, "kanji-write"]);
+  const read = await progressStore.get([codepoint, `${props.type}-read`]);
+  const write = await progressStore.get([codepoint, `${props.type}-write`]);
 
   return { read, write };
+});
+
+const route = computed<RouteLocationRaw>(() => {
+  if (props.type === "kanji") {
+    return kanjiRoute(literal.value);
+  }
+
+  if (isYoon(literal.value)) {
+    return kanaRoute(randomYoon(literal.value));
+  }
+
+  return kanaRoute(literal.value);
 });
 
 const fsrs = useFsrs();
@@ -68,25 +83,42 @@ const writeStatus = computed(() => getStatus(progress.value?.write?.fsrs));
 
 <template>
   <RouterLink
-    :to="kanjiRoute(kanji)"
+    :to="route"
     class="kanji"
     :data-read="readStatus"
     :data-write="writeStatus"
   >
-    {{ kanji }}
+    <template v-if="isYoon(literal)">◌</template>
+    {{ literal }}
   </RouterLink>
 </template>
 
 <style scoped>
 .kanji {
   --border-color: var(--medium-gray);
+  --background-mix: 5%;
+  --background-write-color: color-mix(
+    in oklch,
+    var(--write-color, var(--background-strong)) var(--background-mix),
+    var(--background-strong)
+  );
+  --background-read-color: color-mix(
+    in oklch,
+    var(--read-color, var(--background-strong)) var(--background-mix),
+    var(--background-strong)
+  );
 
-  background: var(--background-strong);
+  background: var(--background-strong)
+    linear-gradient(
+      in oklch 45deg,
+      var(--background-read-color),
+      var(--background-write-color)
+    );
   border: 2px solid var(--border-color);
-  border-block-start-color: var(--write-color, var(--border-color));
-  border-inline-end-color: var(--read-color, var(--border-color));
-  border-block-end-color: var(--read-color, var(--border-color));
-  border-inline-start-color: var(--write-color, var(--border-color));
+  border-top-color: var(--write-color, var(--border-color));
+  border-right-color: var(--write-color, var(--border-color));
+  border-bottom-color: var(--read-color, var(--border-color));
+  border-left-color: var(--read-color, var(--border-color));
   color: inherit;
   font-size: 1.2em;
   padding: 0.3ex;
@@ -114,6 +146,10 @@ const writeStatus = computed(() => getStatus(progress.value?.write?.fsrs));
 
   &[data-write="due"] {
     --write-color: var(--orange);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    --background-mix: 30%;
   }
 }
 </style>

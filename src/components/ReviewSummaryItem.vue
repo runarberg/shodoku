@@ -2,7 +2,7 @@
 import { State } from "ts-fsrs";
 import { computed } from "vue";
 
-import { kanjiRoute } from "../router.ts";
+import { kanaRoute, kanjiRoute } from "../router.ts";
 import { CardReview } from "../types.ts";
 
 const props = defineProps<{
@@ -10,7 +10,7 @@ const props = defineProps<{
   reviews: CardReview[];
 }>();
 
-const kanji = computed(() => String.fromCharCode(props.cardId));
+const literal = computed(() => String.fromCharCode(props.cardId));
 const firstReview = computed(() => props.reviews.at(0));
 const isNew = computed(() => {
   if (!firstReview.value) {
@@ -19,15 +19,21 @@ const isNew = computed(() => {
 
   return firstReview.value.log.state === State.New;
 });
+
+const route = computed(() =>
+  firstReview.value?.cardType.startsWith("kana")
+    ? kanaRoute(literal.value)
+    : kanjiRoute(literal.value),
+);
 </script>
 
 <template>
   <RouterLink
-    :to="kanjiRoute(kanji)"
+    :to="route"
     class="review-summary-item"
     :class="{ 'is-new': isNew }"
   >
-    <strong class="card-value">{{ kanji }}</strong>
+    <strong class="card-value">{{ literal }}</strong>
   </RouterLink>
 </template>
 

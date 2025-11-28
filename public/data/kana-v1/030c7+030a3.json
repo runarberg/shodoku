@@ -1,0 +1,15 @@
+{
+  "literal": "ディ",
+  "reading": "di",
+  "base": ["デ", "イ", "ティ"],
+  "vocab": [
+    { "kana": "ディスク", "romaji": "disuku", "en": "disc", "wordId": 1081740 },
+    {
+      "kana": "ディーラー",
+      "romaji": "dīrā",
+      "en": "dealer",
+      "wordId": 1081610
+    },
+    { "kana": "ディスコ", "romaji": "disuko", "en": "disco", "wordId": 1081840 }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "literal": "ホ",
+  "reading": "ho",
+  "dakuten": "ボ",
+  "handakuten": "ポ",
+  "hiragana": "ほ",
+  "vocab": [
+    { "kana": "ホーム", "romaji": "hōmu", "en": "platform", "wordId": 1121740 },
+    { "kana": "ホテル", "romaji": "hoteru", "en": "hotel", "wordId": 1122650 },
+    { "kana": "ホラー", "romaji": "horā", "en": "horror", "wordId": 1122810 },
+    {
+      "kana": "ホチキス",
+      "romaji": "hochikisu",
+      "en": "stapler",
+      "wordId": 1122390
+    },
+    {
+      "kana": "ホットケーキ",
+      "romaji": "hottokēki",
+      "en": "pancake",
+      "wordId": 1122480
+    },
+    {
+      "kana": "ホンジュラス",
+      "romaji": "honjurasu",
+      "en": "Honduras",
+      "wordId": 1123180
+    },
+    {
+      "kana": "ホロリ",
+      "romaji": "horori",
+      "en": "being moved by (a movie)",
+      "wordId": 1011730
+    }
+  ]
+}

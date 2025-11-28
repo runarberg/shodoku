@@ -15,6 +15,7 @@ node_modules
 !/assets/radicals.csv
 /public/data/*
 !/public/data/kanji-lists/
+!/public/data/kana-v1/
 /public/kanjivg
 *.local
 

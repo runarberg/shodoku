@@ -1,0 +1,21 @@
+{
+  "literal": "ウォ",
+  "reading": "wo",
+  "base": ["ウ", "オ"],
+  "dakuten": "ヴォ",
+  "vocab": [
+    {
+      "kana": "ウォークマン",
+      "romaji": "wōkuman",
+      "en": "Walkman",
+      "wordId": 5740993
+    },
+    { "kana": "ウォッカ", "romaji": "wokka", "en": "vodka", "wordId": 1026610 },
+    {
+      "kana": "ウォーミングアップ",
+      "romaji": "wōmingu appu",
+      "en": "warm-up",
+      "wordId": 1026550
+    }
+  ]
+}

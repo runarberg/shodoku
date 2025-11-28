@@ -1,0 +1,21 @@
+{
+  "literal": "キョ",
+  "reading": "kyo",
+  "base": ["キ", "ヨ"],
+  "dakuten": "ギョ",
+  "hiragana": "きょ",
+  "vocab": [
+    {
+      "kana": "キョロキョロ",
+      "romaji": "kyoro-kyoro",
+      "en": "(looking around) restlessly",
+      "wordId": 1003490
+    },
+    {
+      "kana": "キョクアジサシ",
+      "romaji": "kyoku ajisashi",
+      "en": "Arctic tern",
+      "wordId": 1949690
+    }
+  ]
+}
