@@ -25,9 +25,23 @@ export function useKanji(
 
       const hex = value.toString(16).padStart(5, "0");
       const response = await fetch(`/data/kanji-v1/${hex}.json`);
-      const data = await response.json();
 
-      setKanji(data);
+      if (
+        !response.ok ||
+        !response.headers.get("Content-Type")?.startsWith("application/json")
+      ) {
+        // eslint-disable-next-line no-console
+        console.error("failed getting kanji:", value);
+        return;
+      }
+
+      try {
+        const data = await response.json();
+        setKanji(data);
+      } catch {
+        // eslint-disable-next-line no-console
+        console.error("failed getting kanji:", value);
+      }
     },
     { immediate: true },
   );
@@ -50,9 +64,23 @@ export function useKanjiVocab(
 
       const hex = value.toString(16).padStart(5, "0");
       const response = await fetch(`/data/kanji-vocab-v1/${hex}.json`);
-      const data = await response.json();
 
-      kanjiVocab.value = data;
+      if (
+        !response.ok ||
+        !response.headers.get("Content-Type")?.startsWith("application/json")
+      ) {
+        // eslint-disable-next-line no-console
+        console.error("failed getting kanji:", value);
+        return;
+      }
+
+      try {
+        const data = await response.json();
+        kanjiVocab.value = data;
+      } catch {
+        // eslint-disable-next-line no-console
+        console.error("failed getting kanji:", value);
+      }
     },
     { immediate: true },
   );

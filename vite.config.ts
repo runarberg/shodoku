@@ -1,6 +1,6 @@
+import { serwist } from "@serwist/vite";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
-import { VitePWA } from "vite-plugin-pwa";
 
 import createSvgSpritePlugin from "./vite-plugins/svg-sprite";
 
@@ -20,51 +20,21 @@ export default defineConfig({
       },
     }),
 
-    VitePWA({
-      strategies: "injectManifest",
-      srcDir: "src",
-      filename: "sw.ts",
-      registerType: "prompt",
-      includeAssets: [
-        "favicon.ico",
-        "icon.svg",
-        "apple-touch-icon.png",
+    serwist({
+      swSrc: "src/sw.ts",
+      swDest: "sw.js",
+      injectionPoint: "self.__SW_MANIFEST",
+
+      globDirectory: "dist",
+      globPatterns: [
+        "index.html",
+        "assets/**/*.{html,css,js,svg}",
         "robots.txt",
+        "favicon.ico",
+        "icon*.{png,svg}",
+        "apple-touch-icon.png",
+        "manifest.json",
       ],
-
-      manifest: {
-        name: "Shodoku",
-        description:
-          "Learn Kanji for free by reading and writing using spaced repetition and the whole dictionary.",
-        categories: ["Education", "Books and Reference"],
-        background_color: "oklch(90% 0.05 180)",
-        theme_color: "oklch(66.5% 0.226 3)",
-        orientation: "any",
-        display: "standalone",
-        display_override: ["standalone", "minimal-ui", "browser"],
-        icons: [
-          {
-            src: "/icon-192.png",
-            type: "image/png",
-            sizes: "192x192",
-          },
-          {
-            src: "/icon-mask.png",
-            type: "image/png",
-            sizes: "512x512",
-            purpose: "maskable",
-          },
-          {
-            src: "/icon-512.png",
-            type: "image/png",
-            sizes: "512x512",
-          },
-        ],
-      },
-
-      injectManifest: {
-        globPatterns: ["**/*.{html,css,js}", "assets/**/*.{png,svg}"],
-      },
     }),
 
     createSvgSpritePlugin("./src/assets/icons/", {

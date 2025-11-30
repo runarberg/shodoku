@@ -34,9 +34,23 @@ export function useKanjiComponent(
 
       const hex = toHex(value);
       const response = await fetch(`/data/components-v1/${hex}.json`);
-      const data = await response.json();
 
-      setKanjiComponent(data);
+      if (
+        !response.ok ||
+        !response.headers.get("Content-Type")?.startsWith("application/json")
+      ) {
+        // eslint-disable-next-line no-console
+        console.error("failed getting kanji components:", value);
+        return;
+      }
+
+      try {
+        const data = await response.json();
+        setKanjiComponent(data);
+      } catch {
+        // eslint-disable-next-line no-console
+        console.error("failed getting kanji components:", value);
+      }
     },
     { immediate: true },
   );

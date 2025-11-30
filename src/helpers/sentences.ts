@@ -11,9 +11,22 @@ export function useSentence(
     () => toValue(id),
     async (value) => {
       const response = await fetch(`/data/sentences-v1/${value}.json`);
-      const data = await response.json();
+      if (
+        !response.ok ||
+        !response.headers.get("Content-Type")?.startsWith("application/json")
+      ) {
+        // eslint-disable-next-line no-console
+        console.error("failed getting sentence:", id);
+        return;
+      }
 
-      sentenceInfo.value = data;
+      try {
+        const data = await response.json();
+        sentenceInfo.value = data;
+      } catch {
+        // eslint-disable-next-line no-console
+        console.error("failed getting sentence:", id);
+      }
     },
     { immediate: true },
   );

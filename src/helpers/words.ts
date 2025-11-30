@@ -18,9 +18,21 @@ export function useWord(
       }
 
       const response = await fetch(`/data/words-v1/${id}.json`);
-      const data = await response.json();
-
-      wordInfo.value = data;
+      if (
+        !response.ok ||
+        !response.headers.get("Content-Type")?.startsWith("application/json")
+      ) {
+        // eslint-disable-next-line no-console
+        console.error("failed getting word:", wordId);
+        return;
+      }
+      try {
+        const data = await response.json();
+        wordInfo.value = data;
+      } catch {
+        // eslint-disable-next-line no-console
+        console.error("failed getting word:", wordId);
+      }
     },
     { immediate: true },
   );
@@ -42,9 +54,22 @@ export function useWordSetenceIds(
       }
 
       const response = await fetch(`/data/words-sentences-v1/${id}.json`);
-      const data = await response.json();
+      if (
+        !response.ok ||
+        !response.headers.get("Content-Type")?.startsWith("application/json")
+      ) {
+        // eslint-disable-next-line no-console
+        console.error("failed getting sentences for word:", id);
+        return;
+      }
 
-      sentenceIds.value = data;
+      try {
+        const data = await response.json();
+        sentenceIds.value = data;
+      } catch {
+        // eslint-disable-next-line no-console
+        console.error("failed getting sentences for word:", id);
+      }
     },
     { immediate: true },
   );

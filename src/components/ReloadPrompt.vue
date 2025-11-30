@@ -1,19 +1,44 @@
 <script lang="ts" setup="setup">
-import { useRegisterSW } from "virtual:pwa-register/vue";
+import { getSerwist } from "virtual:serwist";
 import { ref } from "vue";
 
 import AppButton from "./AppButton.vue";
 
 const dialog = ref<HTMLDialogElement | null>(null);
 
-const { needRefresh, updateServiceWorker } = useRegisterSW();
+const needRefresh = ref(false);
+
+async function registerSW() {
+  if (!("serviceWorker" in navigator)) {
+    return;
+  }
+
+  const serwist = await getSerwist();
+
+  if (!serwist) {
+    return;
+  }
+
+  serwist.addEventListener("controlling", () => {
+    window.location.reload();
+  });
+
+  serwist.addEventListener("waiting", () => {
+    needRefresh.value = true;
+  });
+
+  serwist.register();
+}
+
+registerSW();
 
 function cancel() {
   needRefresh.value = false;
 }
 
-function submit() {
-  updateServiceWorker(true);
+async function submit() {
+  const serwist = await getSerwist();
+  serwist?.messageSkipWaiting();
 }
 </script>
 

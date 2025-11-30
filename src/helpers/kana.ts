@@ -26,9 +26,22 @@ export function useKanaInfo(
         .join("+");
 
       const response = await fetch(`/data/kana-v1/${hex}.json`);
-      const data = await response.json();
+      if (
+        !response.ok ||
+        !response.headers.get("Content-Type")?.startsWith("application/json")
+      ) {
+        // eslint-disable-next-line no-console
+        console.error("failed getting kana:", kana);
+        return;
+      }
 
-      cache.set(value, data);
+      try {
+        const data = await response.json();
+        cache.set(value, data);
+      } catch {
+        // eslint-disable-next-line no-console
+        console.error("failed getting kana:", kana);
+      }
     },
     { immediate: true },
   );
