@@ -19,12 +19,12 @@ const be = (a) => new URL(String(a), location.href).href.replace(new RegExp(`^${
   y.prefix,
   a,
   y.suffix
-].filter((e) => e && e.length > 0).join("-"), Re = (a) => {
+].filter((e) => e && e.length > 0).join("-"), ve = (a) => {
   for (const e of Object.keys(y))
     a(e);
-}, x = {
+}, C = {
   updateDetails: (a) => {
-    Re((e) => {
+    ve((e) => {
       const t = a[e];
       typeof t == "string" && (y[e] = t);
     });
@@ -35,7 +35,7 @@ const be = (a) => new URL(String(a), location.href).href.replace(new RegExp(`^${
   getRuntimeName: (a) => a || M(y.runtime),
   getSuffix: () => y.suffix
 };
-class ve {
+class Re {
   promise;
   resolve;
   reject;
@@ -45,14 +45,14 @@ class ve {
     });
   }
 }
-function z(a, e) {
+function J(a, e) {
   const t = new URL(a);
   for (const s of e)
     t.searchParams.delete(s);
   return t.href;
 }
 async function Ee(a, e, t, s) {
-  const n = z(e.url, t);
+  const n = J(e.url, t);
   if (e.url === n)
     return a.match(e, s);
   const r = {
@@ -60,48 +60,48 @@ async function Ee(a, e, t, s) {
     ignoreSearch: !0
   }, i = await a.keys(e, r);
   for (const o of i) {
-    const c = z(o.url, t);
+    const c = J(o.url, t);
     if (n === c)
       return a.match(o, s);
   }
 }
-const oe = /* @__PURE__ */ new Set(), xe = async () => {
+const oe = /* @__PURE__ */ new Set(), Ce = async () => {
   for (const a of oe)
     await a();
 };
 function ce(a) {
   return new Promise((e) => setTimeout(e, a));
 }
-let P;
-function Ce() {
-  if (P === void 0) {
+let N;
+function xe() {
+  if (N === void 0) {
     const a = new Response("");
     if ("body" in a)
       try {
-        new Response(a.body), P = !0;
+        new Response(a.body), N = !0;
       } catch {
-        P = !1;
+        N = !1;
       }
-    P = !1;
+    N = !1;
   }
-  return P;
+  return N;
 }
-const ke = "-precache-", De = async (a, e = ke) => {
+const De = "-precache-", ke = async (a, e = De) => {
   const s = (await self.caches.keys()).filter((n) => n.includes(e) && n.includes(self.registration.scope) && n !== a);
   return await Promise.all(s.map((n) => self.caches.delete(n))), s;
 }, Se = (a) => {
   self.addEventListener("activate", (e) => {
-    e.waitUntil(De(x.getPrecacheName(a)).then((t) => {
+    e.waitUntil(ke(C.getPrecacheName(a)).then((t) => {
     }));
   });
-}, Pe = () => {
+}, Ne = () => {
   self.addEventListener("activate", () => self.clients.claim());
 }, $ = (a, e) => {
   const t = e();
   return a.waitUntil(t), t;
 }, W = (a, e) => e.some((t) => a instanceof t);
 let Y, X;
-function Ne() {
+function Te() {
   return Y || (Y = [
     IDBDatabase,
     IDBObjectStore,
@@ -110,26 +110,26 @@ function Ne() {
     IDBTransaction
   ]);
 }
-function Te() {
+function Pe() {
   return X || (X = [
     IDBCursor.prototype.advance,
     IDBCursor.prototype.continue,
     IDBCursor.prototype.continuePrimaryKey
   ]);
 }
-const H = /* @__PURE__ */ new WeakMap(), B = /* @__PURE__ */ new WeakMap(), U = /* @__PURE__ */ new WeakMap();
+const H = /* @__PURE__ */ new WeakMap(), B = /* @__PURE__ */ new WeakMap(), j = /* @__PURE__ */ new WeakMap();
 function Ae(a) {
   const e = new Promise((t, s) => {
     const n = () => {
       a.removeEventListener("success", r), a.removeEventListener("error", i);
     }, r = () => {
-      t(R(a.result)), n();
+      t(v(a.result)), n();
     }, i = () => {
       s(a.error), n();
     };
     a.addEventListener("success", r), a.addEventListener("error", i);
   });
-  return U.set(e, a), e;
+  return j.set(e, a), e;
 }
 function Ie(a) {
   if (H.has(a))
@@ -154,7 +154,7 @@ let V = {
       if (e === "store")
         return t.objectStoreNames[1] ? void 0 : t.objectStore(t.objectStoreNames[0]);
     }
-    return R(a[e]);
+    return v(a[e]);
   },
   set(a, e, t) {
     return a[e] = t, !0;
@@ -166,29 +166,29 @@ let V = {
 function le(a) {
   V = a(V);
 }
-function je(a) {
-  return Te().includes(a) ? function(...e) {
-    return a.apply(G(this), e), R(this.request);
+function Ue(a) {
+  return Pe().includes(a) ? function(...e) {
+    return a.apply(G(this), e), v(this.request);
   } : function(...e) {
-    return R(a.apply(G(this), e));
+    return v(a.apply(G(this), e));
   };
 }
 function qe(a) {
-  return typeof a == "function" ? je(a) : (a instanceof IDBTransaction && Ie(a), W(a, Ne()) ? new Proxy(a, V) : a);
+  return typeof a == "function" ? Ue(a) : (a instanceof IDBTransaction && Ie(a), W(a, Te()) ? new Proxy(a, V) : a);
 }
-function R(a) {
+function v(a) {
   if (a instanceof IDBRequest)
     return Ae(a);
   if (B.has(a))
     return B.get(a);
   const e = qe(a);
-  return e !== a && (B.set(a, e), U.set(e, a)), e;
+  return e !== a && (B.set(a, e), j.set(e, a)), e;
 }
-const G = (a) => U.get(a);
+const G = (a) => j.get(a);
 function ue(a, e, { blocked: t, upgrade: s, blocking: n, terminated: r } = {}) {
-  const i = indexedDB.open(a, e), o = R(i);
+  const i = indexedDB.open(a, e), o = v(i);
   return s && i.addEventListener("upgradeneeded", (c) => {
-    s(R(i.result), c.oldVersion, c.newVersion, R(i.transaction), c);
+    s(v(i.result), c.oldVersion, c.newVersion, v(i.transaction), c);
   }), t && i.addEventListener("blocked", (c) => t(
     // Casting due to https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/1405
     c.oldVersion,
@@ -199,13 +199,13 @@ function ue(a, e, { blocked: t, upgrade: s, blocking: n, terminated: r } = {}) {
   }).catch(() => {
   }), o;
 }
-function Ue(a, { blocked: e } = {}) {
+function je(a, { blocked: e } = {}) {
   const t = indexedDB.deleteDatabase(a);
   return e && t.addEventListener("blocked", (s) => e(
     // Casting due to https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/1405
     s.oldVersion,
     s
-  )), R(t).then(() => {
+  )), v(t).then(() => {
   });
 }
 const Oe = ["get", "getKey", "getAll", "getAllKeys", "count"], Le = ["put", "add", "delete", "clear"], F = /* @__PURE__ */ new Map();
@@ -251,7 +251,7 @@ async function* Fe(...a) {
     return;
   e = e;
   const t = new Proxy(e, Be);
-  for (he.set(t, e), U.set(t, G(e)); e; )
+  for (he.set(t, e), j.set(t, G(e)); e; )
     yield t, e = await (Q.get(t) || e.continue()), Q.delete(t);
 }
 function te(a, e) {
@@ -365,7 +365,7 @@ const Ge = async (a, e, t) => {
 function I(a) {
   return typeof a == "string" ? new Request(a) : a;
 }
-class Je {
+class ze {
   event;
   request;
   url;
@@ -377,7 +377,7 @@ class Je {
   _plugins;
   _pluginStateMap;
   constructor(e, t) {
-    this.event = t.event, this.request = t.request, t.url && (this.url = t.url, this.params = t.params), this._strategy = e, this._handlerDeferred = new ve(), this._extendLifetimePromises = [], this._plugins = [
+    this.event = t.event, this.request = t.request, t.url && (this.url = t.url, this.params = t.params), this._strategy = e, this._handlerDeferred = new Re(), this._extendLifetimePromises = [], this._plugins = [
       ...e.plugins
     ], this._pluginStateMap = /* @__PURE__ */ new Map();
     for (const s of this._plugins)
@@ -463,7 +463,7 @@ class Je {
       await c.put(n, l ? r.clone() : r);
     } catch (d) {
       if (d instanceof Error)
-        throw d.name === "QuotaExceededError" && await xe(), d;
+        throw d.name === "QuotaExceededError" && await Ce(), d;
     }
     for (const d of this.iterateCallbacks("cacheDidUpdate"))
       await d({
@@ -552,7 +552,7 @@ class S {
   fetchOptions;
   matchOptions;
   constructor(e = {}) {
-    this.cacheName = x.getRuntimeName(e.cacheName), this.plugins = e.plugins || [], this.fetchOptions = e.fetchOptions, this.matchOptions = e.matchOptions;
+    this.cacheName = C.getRuntimeName(e.cacheName), this.plugins = e.plugins || [], this.fetchOptions = e.fetchOptions, this.matchOptions = e.matchOptions;
   }
   handle(e) {
     const [t] = this.handleAll(e);
@@ -563,7 +563,7 @@ class S {
       event: e,
       request: e.request
     });
-    const t = e.event, s = typeof e.request == "string" ? new Request(e.request) : e.request, n = new Je(this, e.url ? {
+    const t = e.event, s = typeof e.request == "string" ? new Request(e.request) : e.request, n = new ze(this, e.url ? {
       event: t,
       request: s,
       url: e.url,
@@ -636,7 +636,7 @@ class S {
 const fe = {
   cacheWillUpdate: async ({ response: a }) => a.status === 200 || a.status === 0 ? a : null
 };
-class J extends S {
+class z extends S {
   _networkTimeoutSeconds;
   constructor(e = {}) {
     super(e), this.plugins.some((t) => "cacheWillUpdate" in t) || this.plugins.unshift(fe), this._networkTimeoutSeconds = e.networkTimeoutSeconds || 0;
@@ -687,7 +687,7 @@ class J extends S {
     return e && clearTimeout(e), (r || !i) && (i = await n.cacheMatch(t)), i;
   }
 }
-class ze extends S {
+class Je extends S {
   _networkTimeoutSeconds;
   constructor(e = {}) {
     super(e), this._networkTimeoutSeconds = e.networkTimeoutSeconds || 0;
@@ -715,7 +715,7 @@ class ze extends S {
     return n;
   }
 }
-const se = 3, $e = "serwist-background-sync", g = "requests", N = "queueName";
+const se = 3, $e = "serwist-background-sync", g = "requests", T = "queueName";
 class Ye {
   _db = null;
   async addEntry(e) {
@@ -728,11 +728,11 @@ class Ye {
     return (await (await this.getDb()).transaction(g).store.openCursor())?.value.id;
   }
   async getAllEntriesByQueueName(e) {
-    const s = await (await this.getDb()).getAllFromIndex(g, N, IDBKeyRange.only(e));
+    const s = await (await this.getDb()).getAllFromIndex(g, T, IDBKeyRange.only(e));
     return s || [];
   }
   async getEntryCountByQueueName(e) {
-    return (await this.getDb()).countFromIndex(g, N, IDBKeyRange.only(e));
+    return (await this.getDb()).countFromIndex(g, T, IDBKeyRange.only(e));
   }
   async deleteEntry(e) {
     await (await this.getDb()).delete(g, e);
@@ -744,7 +744,7 @@ class Ye {
     return await this.getEndEntryFromIndex(IDBKeyRange.only(e), "prev");
   }
   async getEndEntryFromIndex(e, t) {
-    return (await (await this.getDb()).transaction(g).store.index(N).openCursor(e, t))?.value;
+    return (await (await this.getDb()).transaction(g).store.index(T).openCursor(e, t))?.value;
   }
   async getDb() {
     return this._db || (this._db = await ue($e, se, {
@@ -755,7 +755,7 @@ class Ye {
     t > 0 && t < se && e.objectStoreNames.contains(g) && e.deleteObjectStore(g), e.createObjectStore(g, {
       autoIncrement: !0,
       keyPath: "id"
-    }).createIndex(N, N, {
+    }).createIndex(T, T, {
       unique: !1
     });
   }
@@ -803,7 +803,7 @@ const Ze = [
   "integrity",
   "keepalive"
 ];
-class T {
+class P {
   _requestData;
   static async fromRequest(e) {
     const t = {
@@ -815,7 +815,7 @@ class T {
     });
     for (const s of Ze)
       e[s] !== void 0 && (t[s] = e[s]);
-    return new T(t);
+    return new P(t);
   }
   constructor(e) {
     e.mode === "navigate" && (e.mode = "same-origin"), this._requestData = e;
@@ -828,12 +828,12 @@ class T {
     return new Request(this._requestData.url, this._requestData);
   }
   clone() {
-    return new T(this.toObject());
+    return new P(this.toObject());
   }
 }
 const ae = "serwist-background-sync", et = 1440 * 7, K = /* @__PURE__ */ new Set(), ne = (a) => {
   const e = {
-    request: new T(a.requestData).toRequest(),
+    request: new P(a.requestData).toRequest(),
     timestamp: a.timestamp
   };
   return a.metadata && (e.metadata = a.metadata), e;
@@ -881,7 +881,7 @@ class tt {
   }
   async _addRequest({ request: e, metadata: t, timestamp: s = Date.now() }, n) {
     const i = {
-      requestData: (await T.fromRequest(e.clone())).toObject(),
+      requestData: (await P.fromRequest(e.clone())).toObject(),
       timestamp: s
     };
     switch (t && (i.metadata = t), n) {
@@ -976,10 +976,10 @@ const at = async (a, e) => {
     headers: new Headers(s.headers),
     status: s.status,
     statusText: s.statusText
-  }, i = Ce() ? s.body : await s.blob();
+  }, i = xe() ? s.body : await s.blob();
   return new Response(i, r);
 };
-class D extends S {
+class k extends S {
   _fallbackToNetwork;
   static defaultPrecacheCacheabilityPlugin = {
     async cacheWillUpdate({ response: e }) {
@@ -992,7 +992,7 @@ class D extends S {
     }
   };
   constructor(e = {}) {
-    e.cacheName = x.getPrecacheName(e.cacheName), super(e), this._fallbackToNetwork = e.fallbackToNetwork !== !1, this.plugins.push(D.copyRedirectedCacheableResponsesPlugin);
+    e.cacheName = C.getPrecacheName(e.cacheName), super(e), this._fallbackToNetwork = e.fallbackToNetwork !== !1, this.plugins.push(k.copyRedirectedCacheableResponsesPlugin);
   }
   async _handle(e, t) {
     const s = await t.getPreloadResponse();
@@ -1029,8 +1029,8 @@ class D extends S {
   _useDefaultCacheabilityPluginIfNeeded() {
     let e = null, t = 0;
     for (const [s, n] of this.plugins.entries())
-      n !== D.copyRedirectedCacheableResponsesPlugin && (n === D.defaultPrecacheCacheabilityPlugin && (e = s), n.cacheWillUpdate && t++);
-    t === 0 ? this.plugins.push(D.defaultPrecacheCacheabilityPlugin) : t > 1 && e !== null && this.plugins.splice(e, 1);
+      n !== k.copyRedirectedCacheableResponsesPlugin && (n === k.defaultPrecacheCacheabilityPlugin && (e = s), n.cacheWillUpdate && t++);
+    t === 0 ? this.plugins.push(k.defaultPrecacheCacheabilityPlugin) : t > 1 && e !== null && this.plugins.splice(e, 1);
   }
 }
 const nt = () => !!self.registration?.navigationPreload, rt = (a) => {
@@ -1039,7 +1039,7 @@ const nt = () => !!self.registration?.navigationPreload, rt = (a) => {
     }));
   });
 }, it = (a) => {
-  x.updateDetails(a);
+  C.updateDetails(a);
 };
 class ot {
   updatedURLs = [];
@@ -1144,7 +1144,7 @@ const dt = "serwist-google-analytics", ft = 2880, me = "www.google-analytics.com
     }
   }
 }, _t = (a) => {
-  const e = ({ url: s }) => s.hostname === me && gt.test(s.pathname), t = new ze({
+  const e = ({ url: s }) => s.hostname === me && gt.test(s.pathname), t = new Je({
     plugins: [
       a
     ]
@@ -1154,28 +1154,28 @@ const dt = "serwist-google-analytics", ft = 2880, me = "www.google-analytics.com
     new h(e, t, "POST")
   ];
 }, bt = (a) => {
-  const e = ({ url: s }) => s.hostname === me && s.pathname === mt, t = new J({
-    cacheName: a
-  });
-  return new h(e, t, "GET");
-}, Rt = (a) => {
-  const e = ({ url: s }) => s.hostname === pe && s.pathname === pt, t = new J({
+  const e = ({ url: s }) => s.hostname === me && s.pathname === mt, t = new z({
     cacheName: a
   });
   return new h(e, t, "GET");
 }, vt = (a) => {
-  const e = ({ url: s }) => s.hostname === pe && s.pathname === wt, t = new J({
+  const e = ({ url: s }) => s.hostname === pe && s.pathname === pt, t = new z({
+    cacheName: a
+  });
+  return new h(e, t, "GET");
+}, Rt = (a) => {
+  const e = ({ url: s }) => s.hostname === pe && s.pathname === wt, t = new z({
     cacheName: a
   });
   return new h(e, t, "GET");
 }, re = ({ serwist: a, cacheName: e, ...t }) => {
-  const s = x.getGoogleAnalyticsName(e), n = new st(dt, {
+  const s = C.getGoogleAnalyticsName(e), n = new st(dt, {
     maxRetentionTime: ft,
     onSync: yt(t)
   }), r = [
-    vt(s),
-    bt(s),
     Rt(s),
+    bt(s),
+    vt(s),
     ..._t(n)
   ];
   for (const i of r)
@@ -1200,7 +1200,7 @@ class Et {
       }
   }
 }
-class xt {
+class Ct {
   _precacheController;
   constructor({ precacheController: e }) {
     this._precacheController = e;
@@ -1212,14 +1212,14 @@ class xt {
     }) : e;
   };
 }
-const Ct = (a, e = {}) => {
-  const { cacheName: t, plugins: s = [], fetchOptions: n, matchOptions: r, fallbackToNetwork: i, directoryIndex: o, ignoreURLParametersMatching: c, cleanURLs: l, urlManipulation: f, cleanupOutdatedCaches: d, concurrency: k = 10, navigateFallback: A, navigateFallbackAllowlist: O, navigateFallbackDenylist: _ } = e ?? {};
+const xt = (a, e = {}) => {
+  const { cacheName: t, plugins: s = [], fetchOptions: n, matchOptions: r, fallbackToNetwork: i, directoryIndex: o, ignoreURLParametersMatching: c, cleanURLs: l, urlManipulation: f, cleanupOutdatedCaches: d, concurrency: D = 10, navigateFallback: A, navigateFallbackAllowlist: O, navigateFallbackDenylist: _ } = e ?? {};
   return {
     precacheStrategyOptions: {
-      cacheName: x.getPrecacheName(t),
+      cacheName: C.getPrecacheName(t),
       plugins: [
         ...s,
-        new xt({
+        new Ct({
           precacheController: a
         })
       ],
@@ -1235,14 +1235,14 @@ const Ct = (a, e = {}) => {
     },
     precacheMiscOptions: {
       cleanupOutdatedCaches: d,
-      concurrency: k,
+      concurrency: D,
       navigateFallback: A,
       navigateFallbackAllowlist: O,
       navigateFallbackDenylist: _
     }
   };
 };
-class kt {
+class Dt {
   _urlsToCacheKeys = /* @__PURE__ */ new Map();
   _urlsToCacheModes = /* @__PURE__ */ new Map();
   _cacheKeysToIntegrities = /* @__PURE__ */ new Map();
@@ -1252,13 +1252,13 @@ class kt {
   _defaultHandlerMap;
   _catchHandler;
   _requestRules;
-  constructor({ precacheEntries: e, precacheOptions: t, skipWaiting: s = !1, importScripts: n, navigationPreload: r = !1, cacheId: i, clientsClaim: o = !1, runtimeCaching: c, offlineAnalyticsConfig: l, disableDevLogs: f = !1, fallbacks: d, requestRules: k } = {}) {
-    const { precacheStrategyOptions: A, precacheRouteOptions: O, precacheMiscOptions: _ } = Ct(this, t);
-    if (this._concurrentPrecaching = _.concurrency, this._precacheStrategy = new D(A), this._routes = /* @__PURE__ */ new Map(), this._defaultHandlerMap = /* @__PURE__ */ new Map(), this._requestRules = k, this.handleInstall = this.handleInstall.bind(this), this.handleActivate = this.handleActivate.bind(this), this.handleFetch = this.handleFetch.bind(this), this.handleCache = this.handleCache.bind(this), n && n.length > 0 && self.importScripts(...n), r && rt(), i !== void 0 && it({
+  constructor({ precacheEntries: e, precacheOptions: t, skipWaiting: s = !1, importScripts: n, navigationPreload: r = !1, cacheId: i, clientsClaim: o = !1, runtimeCaching: c, offlineAnalyticsConfig: l, disableDevLogs: f = !1, fallbacks: d, requestRules: D } = {}) {
+    const { precacheStrategyOptions: A, precacheRouteOptions: O, precacheMiscOptions: _ } = xt(this, t);
+    if (this._concurrentPrecaching = _.concurrency, this._precacheStrategy = new k(A), this._routes = /* @__PURE__ */ new Map(), this._defaultHandlerMap = /* @__PURE__ */ new Map(), this._requestRules = D, this.handleInstall = this.handleInstall.bind(this), this.handleActivate = this.handleActivate.bind(this), this.handleFetch = this.handleFetch.bind(this), this.handleCache = this.handleCache.bind(this), n && n.length > 0 && self.importScripts(...n), r && rt(), i !== void 0 && it({
       prefix: i
     }), s ? self.skipWaiting() : self.addEventListener("message", (b) => {
       b.data && b.data.type === "SKIP_WAITING" && self.skipWaiting();
-    }), o && Pe(), e && e.length > 0 && this.addToPrecacheList(e), _.cleanupOutdatedCaches && Se(A.cacheName), this.registerRoute(new ht(this, O)), _.navigateFallback && this.registerRoute(new Ke(this.createHandlerBoundToUrl(_.navigateFallback), {
+    }), o && Ne(), e && e.length > 0 && this.addToPrecacheList(e), _.cleanupOutdatedCaches && Se(A.cacheName), this.registerRoute(new ht(this, O)), _.navigateFallback && this.registerRoute(new Ke(this.createHandlerBoundToUrl(_.navigateFallback), {
       allowlist: _.navigateFallbackAllowlist,
       denylist: _.navigateFallbackDenylist
     })), l !== void 0 && (typeof l == "boolean" ? l && re({
@@ -1467,8 +1467,8 @@ This is generally NOT safe. Learn more at https://bit.ly/wb-precache`;
             event: t,
             params: r
           });
-        } catch (k) {
-          k instanceof Error && (d = k);
+        } catch (D) {
+          D instanceof Error && (d = D);
         }
       if (this._catchHandler)
         return this._catchHandler.handle({
@@ -1498,7 +1498,7 @@ This is generally NOT safe. Learn more at https://bit.ly/wb-precache`;
     return {};
   }
 }
-const Dt = "serwist-expiration", j = "cache-entries", ie = (a) => {
+const kt = "serwist-expiration", U = "cache-entries", ie = (a) => {
   const e = new URL(a, location.href);
   return e.hash = "", e.href;
 };
@@ -1512,7 +1512,7 @@ class St {
     return `${this._cacheName}|${ie(e)}`;
   }
   _upgradeDb(e) {
-    const t = e.createObjectStore(j, {
+    const t = e.createObjectStore(U, {
       keyPath: "id"
     });
     t.createIndex("cacheName", "cacheName", {
@@ -1522,7 +1522,7 @@ class St {
     });
   }
   _upgradeDbAndDeleteOldDbs(e) {
-    this._upgradeDb(e), this._cacheName && Ue(this._cacheName);
+    this._upgradeDb(e), this._cacheName && je(this._cacheName);
   }
   async setTimestamp(e, t) {
     e = ie(e);
@@ -1531,16 +1531,16 @@ class St {
       cacheName: this._cacheName,
       url: e,
       timestamp: t
-    }, r = (await this.getDb()).transaction(j, "readwrite", {
+    }, r = (await this.getDb()).transaction(U, "readwrite", {
       durability: "relaxed"
     });
     await r.store.put(s), await r.done;
   }
   async getTimestamp(e) {
-    return (await (await this.getDb()).get(j, this._getId(e)))?.timestamp;
+    return (await (await this.getDb()).get(U, this._getId(e)))?.timestamp;
   }
   async expireEntries(e, t) {
-    let n = await (await this.getDb()).transaction(j, "readwrite").store.index("timestamp").openCursor(null, "prev");
+    let n = await (await this.getDb()).transaction(U, "readwrite").store.index("timestamp").openCursor(null, "prev");
     const r = [];
     let i = 0;
     for (; n; ) {
@@ -1550,12 +1550,12 @@ class St {
     return r;
   }
   async getDb() {
-    return this._db || (this._db = await ue(Dt, 1, {
+    return this._db || (this._db = await ue(kt, 1, {
       upgrade: this._upgradeDbAndDeleteOldDbs.bind(this)
     })), this._db;
   }
 }
-class Pt {
+class Nt {
   _isRunning = !1;
   _rerunRequested = !1;
   _maxEntries;
@@ -1590,20 +1590,20 @@ class Pt {
     this._rerunRequested = !1, await this._timestampModel.expireEntries(Number.POSITIVE_INFINITY);
   }
 }
-const Nt = (a) => {
+const Tt = (a) => {
   oe.add(a);
 };
 class p {
   _config;
   _cacheExpirations;
   constructor(e = {}) {
-    this._config = e, this._cacheExpirations = /* @__PURE__ */ new Map(), this._config.maxAgeFrom || (this._config.maxAgeFrom = "last-fetched"), this._config.purgeOnQuotaError && Nt(() => this.deleteCacheAndMetadata());
+    this._config = e, this._cacheExpirations = /* @__PURE__ */ new Map(), this._config.maxAgeFrom || (this._config.maxAgeFrom = "last-fetched"), this._config.purgeOnQuotaError && Tt(() => this.deleteCacheAndMetadata());
   }
   _getCacheExpiration(e) {
-    if (e === x.getRuntimeName())
+    if (e === C.getRuntimeName())
       throw new u("expire-custom-caches-only");
     let t = this._cacheExpirations.get(e);
-    return t || (t = new Pt(e, this._config), this._cacheExpirations.set(e, t)), t;
+    return t || (t = new Nt(e, this._config), this._cacheExpirations.set(e, t)), t;
   }
   cachedResponseWillBeUsed({ event: e, cacheName: t, request: s, cachedResponse: n }) {
     if (!n)
@@ -1642,7 +1642,7 @@ class p {
     this._cacheExpirations = /* @__PURE__ */ new Map();
   }
 }
-class v extends S {
+class R extends S {
   async _handle(e, t) {
     let s = await t.cacheMatch(e), n;
     if (!s)
@@ -1681,8 +1681,8 @@ class we extends S {
     return n;
   }
 }
-const Tt = 1e3, At = 60 * Tt, It = 60 * At, jt = 24 * It, w = 29.53 * jt;
-var qt = [{ url: "index.html", revision: "7fd196562417896a1a9f419f6d329ef5" }, { url: "assets/sprite-EDjWs5PV.svg", revision: null }, { url: "assets/search-words.worker-BRYPcS-Z.js", revision: null }, { url: "assets/search-kanji.worker-B7Vk2AbO.js", revision: null }, { url: "assets/reviews-BjQG9Nhh.js", revision: null }, { url: "assets/kanji-re1ONLR0.js", revision: null }, { url: "assets/kanji-components-0bMHtblv.js", revision: null }, { url: "assets/kana-RsG-lPzR.js", revision: null }, { url: "assets/index-sZE7bAWT.js", revision: null }, { url: "assets/index-caO2MYO7.js", revision: null }, { url: "assets/index-CetfrY3n.js", revision: null }, { url: "assets/index-CX-1RWR0.css", revision: null }, { url: "assets/fsrs-BAHU2VgB.js", revision: null }, { url: "assets/formats-B8hr5_5_.js", revision: null }, { url: "assets/decks-Dqx20Gkd.js", revision: null }, { url: "assets/decks-BkI394ym.js", revision: null }, { url: "assets/db-CaAx7W_9.js", revision: null }, { url: "assets/component-picker.worker-BeQQggMa.js", revision: null }, { url: "assets/WordWritingSelect-DjvD8_58.js", revision: null }, { url: "assets/WordWritingSelect-DFkfHvDQ.css", revision: null }, { url: "assets/WordView-CXKBRSmU.js", revision: null }, { url: "assets/WordView-B3ZEbYnV.css", revision: null }, { url: "assets/WordListItem-CQXMK56d.css", revision: null }, { url: "assets/WordListItem-9iMVk-v2.js", revision: null }, { url: "assets/WordKanjiListItem-BgXE0T0_.js", revision: null }, { url: "assets/WordKanjiListItem-1GLGuiuv.css", revision: null }, { url: "assets/SettingsView-DbKz7gEY.css", revision: null }, { url: "assets/SettingsView-CZjwDbpn.js", revision: null }, { url: "assets/ReviewView-Cwe8jh_U.js", revision: null }, { url: "assets/ReviewView-BVoKOeGU.css", revision: null }, { url: "assets/ReviewSummaryView-Br7-gkw8.css", revision: null }, { url: "assets/ReviewSummaryView-BN6R_kbi.js", revision: null }, { url: "assets/RemoteSyncSyncButton.vue_vue_type_script_setup_true_lang-DSHJOki5.js", revision: null }, { url: "assets/KanjiWordList-CMJwk4gO.css", revision: null }, { url: "assets/KanjiWordList-AtATzaQr.js", revision: null }, { url: "assets/KanjiView-DlgxLr8u.css", revision: null }, { url: "assets/KanjiView-CsMIfZVe.js", revision: null }, { url: "assets/KanjiComponentView-C3GJpHQs.js", revision: null }, { url: "assets/KanjiComponentView-B7A6or2X.css", revision: null }, { url: "assets/KanjiAsideView-DjjfIzCD.css", revision: null }, { url: "assets/KanjiAsideView-C7I6W1qm.js", revision: null }, { url: "assets/KanaView-D9r3pMlP.js", revision: null }, { url: "assets/KanaTitle-DQEf728K.js", revision: null }, { url: "assets/KanaTitle-C2FyZOz9.css", revision: null }, { url: "assets/KanaAsideView-DtFLZqq0.js", revision: null }, { url: "assets/KanaAsideView-CmNMPGDk.css", revision: null }, { url: "assets/HomeView-D07kEN8Q.css", revision: null }, { url: "assets/HomeView-D-57j2vc.js", revision: null }, { url: "assets/DictionaryView-GuB0PN9J.js", revision: null }, { url: "assets/DictionaryView-CeAp7w2W.css", revision: null }, { url: "assets/DecksView-CXH8Z2Nv.css", revision: null }, { url: "assets/DecksView-Bf8GUqKe.js", revision: null }, { url: "assets/DeckBrowserView-CjHjKeI9.css", revision: null }, { url: "assets/DeckBrowserView-08zFzPbd.js", revision: null }, { url: "assets/CardRetrievabilityLabel-Dfvx6Yw7.css", revision: null }, { url: "assets/CardRetrievabilityLabel-BgFlRhxu.js", revision: null }, { url: "assets/CardAsideNav-CfPJhJfm.css", revision: null }, { url: "assets/CardAsideNav-CaNejqEg.js", revision: null }, { url: "assets/AppTextArea-K1PWDzuO.css", revision: null }, { url: "assets/AppTextArea-B8NFmrxA.js", revision: null }, { url: "assets/AppNumberInput-DZAkqObI.js", revision: null }, { url: "assets/AppNumberInput-B8xdfG4U.css", revision: null }, { url: "assets/AppLoading-30x4pa5-.js", revision: null }, { url: "assets/AppCheckbox-Cu44I7yS.js", revision: null }, { url: "assets/AppCheckbox-CS53EF9k.css", revision: null }, { url: "assets/AboutView-jpVKRZly.js", revision: null }, { url: "assets/AboutView-Cm5oisJ1.css", revision: null }, { url: "robots.txt", revision: "5e0bd1c281a62a380d7a948085bfe2d1" }, { url: "favicon.ico", revision: "06b709863a75fd56b00564cbc1402934" }, { url: "icon.svg", revision: "02854578dd73b9dd133e03d5e4a63469" }, { url: "icon-mask.png", revision: "8cf586883d47b13c93c9f309e1c38c63" }, { url: "icon-512.png", revision: "78ffd1cff89cd8e897bd8f96a7b57321" }, { url: "icon-192.png", revision: "7d2fbd7640fefbb0fbf32ec060d71762" }, { url: "apple-touch-icon.png", revision: "48fbafa0594abafee1b49d3c16fb68cf" }, { url: "manifest.json", revision: "db0264cece5aba3150e3ea9c65879b8b" }];
+const Pt = 1e3, At = 60 * Pt, It = 60 * At, Ut = 24 * It, w = 29.53 * Ut;
+var qt = [{ url: "index.html", revision: "b1c0dd8466bbd26f4216ca01477f455f" }, { url: "assets/sprite-EDjWs5PV.svg", revision: null }, { url: "assets/search-words.worker-D90bN5mW.js", revision: null }, { url: "assets/search-kanji.worker-DUfWeBh-.js", revision: null }, { url: "assets/reviews-C0tp5JDi.js", revision: null }, { url: "assets/kanji-components-C9A26trC.js", revision: null }, { url: "assets/kanji-BFHyEMwy.js", revision: null }, { url: "assets/kana-DFdUvK8b.js", revision: null }, { url: "assets/index-CetfrY3n.js", revision: null }, { url: "assets/index-C7_WlZ0L.css", revision: null }, { url: "assets/index-BVkQD7g-.js", revision: null }, { url: "assets/index-3SZaU-iL.js", revision: null }, { url: "assets/fsrs-D14ruAop.js", revision: null }, { url: "assets/formats-BZjAUNO7.js", revision: null }, { url: "assets/decks-gvUqHaG3.js", revision: null }, { url: "assets/decks-BkI394ym.js", revision: null }, { url: "assets/db-CmzCis4b.js", revision: null }, { url: "assets/component-picker.worker-BeQQggMa.js", revision: null }, { url: "assets/WordWritingSelect-DnSPLHUE.js", revision: null }, { url: "assets/WordWritingSelect-DFkfHvDQ.css", revision: null }, { url: "assets/WordView-Cts0QTwq.css", revision: null }, { url: "assets/WordView-B1Tm2dxB.js", revision: null }, { url: "assets/WordListItem-DZ1Oghxl.js", revision: null }, { url: "assets/WordListItem-BUea7RNk.css", revision: null }, { url: "assets/WordKanjiListItem-CqnHlfCO.js", revision: null }, { url: "assets/WordKanjiListItem-1GLGuiuv.css", revision: null }, { url: "assets/SettingsView-DbKz7gEY.css", revision: null }, { url: "assets/SettingsView-B3-Fe4JX.js", revision: null }, { url: "assets/ReviewView-egfI1_Sl.css", revision: null }, { url: "assets/ReviewView-OALjwcV6.js", revision: null }, { url: "assets/ReviewSummaryView-DiOS_ym_.css", revision: null }, { url: "assets/ReviewSummaryView-C0pXedeB.js", revision: null }, { url: "assets/RemoteSyncSyncButton.vue_vue_type_script_setup_true_lang-BelrNG0v.js", revision: null }, { url: "assets/KanjiWordList-D7GvJb65.js", revision: null }, { url: "assets/KanjiWordList-BcX4ETOk.css", revision: null }, { url: "assets/KanjiView-Bu5hlxPa.css", revision: null }, { url: "assets/KanjiView-Bt6jnini.js", revision: null }, { url: "assets/KanjiComponentView-xrYzt-UG.css", revision: null }, { url: "assets/KanjiComponentView-DCY1nsPN.js", revision: null }, { url: "assets/KanjiAsideView-Cwao1DhF.js", revision: null }, { url: "assets/KanjiAsideView-BZHUN8Mw.css", revision: null }, { url: "assets/KanaView-D3BvhIpi.js", revision: null }, { url: "assets/KanaTitle-CEk6R7Iq.js", revision: null }, { url: "assets/KanaTitle-C2FyZOz9.css", revision: null }, { url: "assets/KanaAsideView-B_4HKO67.css", revision: null }, { url: "assets/KanaAsideView-BAL6JJHl.js", revision: null }, { url: "assets/HomeView-DZgNrc3U.css", revision: null }, { url: "assets/HomeView-CGIBTWA3.js", revision: null }, { url: "assets/DictionaryView-B16bvuI-.js", revision: null }, { url: "assets/DictionaryView-Aab3_ji7.css", revision: null }, { url: "assets/DecksView-Cf71FMbI.js", revision: null }, { url: "assets/DecksView-BoslpAQC.css", revision: null }, { url: "assets/DeckBrowserView-Di9ZAIVP.js", revision: null }, { url: "assets/DeckBrowserView-CG9Uz8SM.css", revision: null }, { url: "assets/CardRetrievabilityLabel-Dfvx6Yw7.css", revision: null }, { url: "assets/CardRetrievabilityLabel-46Oryz0n.js", revision: null }, { url: "assets/CardAsideNav-dF3tCJbt.css", revision: null }, { url: "assets/CardAsideNav-HjuI0nfu.js", revision: null }, { url: "assets/AppTextArea-K1PWDzuO.css", revision: null }, { url: "assets/AppTextArea-Cv4SwLFT.js", revision: null }, { url: "assets/AppNumberInput-Ds6KzMhA.js", revision: null }, { url: "assets/AppNumberInput-B8xdfG4U.css", revision: null }, { url: "assets/AppLoading-dOxd0OoU.js", revision: null }, { url: "assets/AppCheckbox-oFNiMTmY.js", revision: null }, { url: "assets/AppCheckbox-CS53EF9k.css", revision: null }, { url: "assets/AboutView-Cm5oisJ1.css", revision: null }, { url: "assets/AboutView-C-i4zXmO.js", revision: null }, { url: "robots.txt", revision: "5e0bd1c281a62a380d7a948085bfe2d1" }, { url: "favicon.ico", revision: "06b709863a75fd56b00564cbc1402934" }, { url: "icon.svg", revision: "02854578dd73b9dd133e03d5e4a63469" }, { url: "icon-mask.png", revision: "8cf586883d47b13c93c9f309e1c38c63" }, { url: "icon-512.png", revision: "78ffd1cff89cd8e897bd8f96a7b57321" }, { url: "icon-192.png", revision: "7d2fbd7640fefbb0fbf32ec060d71762" }, { url: "apple-touch-icon.png", revision: "48fbafa0594abafee1b49d3c16fb68cf" }, { url: "manifest.json", revision: "db0264cece5aba3150e3ea9c65879b8b" }];
 class E {
   #t;
   #e;
@@ -1702,12 +1702,12 @@ class E {
     return e;
   }
 }
-const m = new kt({
+const m = new Dt({
   precacheEntries: qt,
   skipWaiting: !0,
   clientsClaim: !0,
   navigationPreload: !0
-}), C = new Headers([["Content-Type", "application/json"]]), Ut = new Headers([["Content-Type", "image/svg+xml"]]);
+}), x = new Headers([["Content-Type", "application/json"]]), jt = new Headers([["Content-Type", "image/svg+xml"]]);
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/data/index/") && a.pathname.endsWith(".usv"),
@@ -1741,12 +1741,12 @@ m.registerRoute(
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/data/component-v1/") && a.pathname.endsWith(".json"),
-    new v({
+    new R({
       cacheName: "shodoku-data-components-v1",
       plugins: [
         new E({
           statuses: [0, 200],
-          headers: C
+          headers: x
         }),
         new p({
           maxAgeSeconds: 3 * w,
@@ -1760,12 +1760,12 @@ m.registerRoute(
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/data/kanji-v1/") && a.pathname.endsWith(".json"),
-    new v({
+    new R({
       cacheName: "shodoku-data-kanji-v1",
       plugins: [
         new E({
           statuses: [0, 200],
-          headers: C
+          headers: x
         }),
         new p({
           maxAgeSeconds: 3 * w,
@@ -1779,12 +1779,12 @@ m.registerRoute(
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/data/kana-v1/") && a.pathname.endsWith(".json"),
-    new v({
+    new R({
       cacheName: "shodoku-data-kana-v1",
       plugins: [
         new E({
           statuses: [0, 200],
-          headers: C
+          headers: x
         }),
         new p({
           maxAgeSeconds: 3 * w,
@@ -1797,12 +1797,12 @@ m.registerRoute(
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/kanjivg/kanji/") && a.pathname.endsWith(".svg"),
-    new v({
+    new R({
       cacheName: "shodoku-kanjivg",
       plugins: [
         new E({
           statuses: [0, 200],
-          headers: Ut
+          headers: jt
         }),
         new p({
           maxAgeSeconds: 3 * w,
@@ -1816,12 +1816,12 @@ m.registerRoute(
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/data/words-v1/") && a.pathname.endsWith(".json"),
-    new v({
+    new R({
       cacheName: "shodoku-data-words-v1",
       plugins: [
         new E({
           statuses: [0, 200],
-          headers: C
+          headers: x
         }),
         new p({
           maxAgeSeconds: 3 * w,
@@ -1836,12 +1836,12 @@ m.registerRoute(
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/data/kanji-vocab-v1/") && a.pathname.endsWith(".json"),
-    new v({
+    new R({
       cacheName: "shodoku-data-kanji-vocab-v1",
       plugins: [
         new E({
           statuses: [0, 200],
-          headers: C
+          headers: x
         }),
         new p({
           maxAgeSeconds: 3 * w,
@@ -1856,12 +1856,12 @@ m.registerRoute(
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/data/sentences-v1/") && a.pathname.endsWith(".json"),
-    new v({
+    new R({
       cacheName: "shodoku-data-sentences-v1",
       plugins: [
         new E({
           statuses: [0, 200],
-          headers: C
+          headers: x
         }),
         new p({
           maxAgeSeconds: 3 * w,
@@ -1876,12 +1876,12 @@ m.registerRoute(
 m.registerRoute(
   new h(
     ({ url: a, sameOrigin: e }) => e && a.pathname.startsWith("/data/words-sentences-v1/") && a.pathname.endsWith(".json"),
-    new v({
+    new R({
       cacheName: "shodoku-data-words-sentences-v1",
       plugins: [
         new E({
           statuses: [0, 200],
-          headers: C
+          headers: x
         }),
         new p({
           maxAgeSeconds: 3 * w,
