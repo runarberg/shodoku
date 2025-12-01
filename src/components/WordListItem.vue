@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useWord, useWordSetenceIds } from "../helpers/words.ts";
+import { useWord, useWordSetenceIndex } from "../helpers/words.ts";
 import BookmarkWordButton from "./BookmarkWordButton.vue";
-import VocabularySentence from "./VocabularySentence.vue";
 import VocabularyWord from "./VocabularyWord.vue";
 
 const props = defineProps<{
@@ -13,7 +12,7 @@ const props = defineProps<{
 }>();
 
 const wordInfo = useWord(() => props.word);
-const sentences = useWordSetenceIds(() => props.word);
+const sentenceIndex = useWordSetenceIndex(() => props.word);
 </script>
 
 <template>
@@ -33,21 +32,9 @@ const sentences = useWordSetenceIds(() => props.word);
       :hide-kanji="hideKanji"
       :hide-reading="hideReading"
       :hide-meaning="hideMeaning"
+      :sentence-index="sentenceIndex"
       class="word-section"
     />
-
-    <section v-if="sentences" aria-label="Sentences" class="sentences-section">
-      <ul class="sentences">
-        <li v-for="sentence of sentences" :key="sentence" class="sentence-item">
-          <VocabularySentence
-            :sentence-id="sentence"
-            :hide-kanji="hideKanji ? kanji : null"
-            :hide-reading="hideReading ? kanji : null"
-            :hide-meaning="hideMeaning"
-          />
-        </li>
-      </ul>
-    </section>
   </article>
 </template>
 
@@ -56,7 +43,6 @@ const sentences = useWordSetenceIds(() => props.word);
   display: grid;
   grid-template:
     "bullet . word"
-    ".      . sentences"
     / auto 0.5ex 1fr;
   margin-block-start: 2em;
   justify-content: start;
@@ -70,10 +56,6 @@ const sentences = useWordSetenceIds(() => props.word);
   & .word-section {
     grid-area: word;
   }
-
-  & .sentences-section {
-    grid-area: sentences;
-  }
 }
 
 .bookmark-button {
@@ -81,26 +63,6 @@ const sentences = useWordSetenceIds(() => props.word);
 
   .word-list-item:has(.word-section ruby rt) & {
     margin-block-start: 0.9em;
-  }
-}
-
-.sentences {
-  border-inline-start: 2px solid
-    light-dark(var(--light-gray), var(--medium-gray));
-  grid-area: sentences;
-  list-style: none;
-  padding-inline: 1ex;
-}
-
-.sentence-item {
-  margin-block: 1em;
-
-  &:first-child {
-    margin-block-start: 1ex;
-  }
-
-  &:last-child {
-    margin-block-end: 1ex;
   }
 }
 </style>

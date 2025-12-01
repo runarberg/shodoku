@@ -45,6 +45,7 @@ export type KanjiComponent = {
   original: string | null;
   position: string[];
   radical: string | null;
+  depth: number;
   phon: string | null;
 };
 
@@ -107,6 +108,11 @@ export type BookmarkedWord = {
   bookmarkedAt: Date;
   reading?: string | null;
 };
+
+export type WordSentenceIndex = Array<{
+  sentence: number;
+  meaning: number;
+}>;
 
 export type SentenceWord = {
   word: number;

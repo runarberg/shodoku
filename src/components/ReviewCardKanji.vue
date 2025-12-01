@@ -39,9 +39,9 @@ provideKanjiVG(() => props.cardId.toString(16).padStart(5, "0"));
     />
 
     <KanjiReadings
-      v-if="isRating || mode === 'write'"
       class="readings"
       :kanji="kanji"
+      :hide-readings="mode === 'read' && !isRating"
     />
 
     <KanjiStrokes
@@ -61,8 +61,8 @@ provideKanjiVG(() => props.cardId.toString(16).padStart(5, "0"));
     />
 
     <KanjiComponents
-      v-if="(isNew && mode === 'write') || isRating"
       class="components"
+      :hide="!isRating && !(mode === 'write' && isNew)"
     />
 
     <KanjiWordList

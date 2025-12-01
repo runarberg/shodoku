@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import { ref, watch } from "vue";
 import { pipe } from "yta";
 import { groupBy } from "yta/sync";
 
 import { useKanjiVGComponents } from "../helpers/kanjivg.ts";
 import { KanjiComponent } from "../types.ts";
+import AppButton from "./AppButton.vue";
 import KanjiComponentItem from "./KanjiComponentItem.vue";
 
+const MAX_SHOWN = 4;
+
 const components = useKanjiVGComponents();
+const showAll = ref(false);
+
+defineProps<{
+  hide?: boolean;
+}>();
 
 function originals(
   parts: KanjiComponent[],
@@ -16,26 +25,47 @@ function originals(
     groupBy((part) => part.original || null),
   );
 }
+
+watch(components, () => {
+  showAll.value = false;
+});
 </script>
 
 <template>
   <section>
     <h2>
       Components
-      <template v-if="components.size > 0"> ({{ components.size }}) </template>
+      <template v-if="!hide && components.size > 0">
+        ({{ components.size }})
+      </template>
     </h2>
 
     <ul class="component-list">
-      <template v-for="[literal, partss] of components" :key="literal">
-        <li v-for="[original, parts] of originals(partss)" :key="original ?? 0">
-          <KanjiComponentItem
-            :literal="literal"
-            :parts="parts"
-            :original="original"
-          />
-        </li>
+      <template v-for="([literal, partss], i) of components" :key="literal">
+        <template v-if="showAll || i < MAX_SHOWN">
+          <li
+            v-for="[original, parts] of originals(partss)"
+            :key="original ?? 0"
+          >
+            <KanjiComponentItem
+              :literal="literal"
+              :parts="parts"
+              :original="original"
+              :hide="hide"
+            />
+          </li>
+        </template>
       </template>
     </ul>
+
+    <AppButton
+      v-if="!hide && !showAll && components.size > MAX_SHOWN"
+      class="show-more-button"
+      inline
+      @click="showAll = true"
+    >
+      show {{ components.size - MAX_SHOWN }} more
+    </AppButton>
   </section>
 </template>
 
@@ -52,5 +82,10 @@ function originals(
     display: flex;
     flex-direction: column;
   }
+}
+
+.show-more-button {
+  margin-block-start: 1em;
+  font-weight: normal;
 }
 </style>

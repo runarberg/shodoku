@@ -1,19 +1,23 @@
 import fs from "node:fs/promises";
-import { fileURLToPath } from "node:url";
+import { DatabaseSync as Database } from "node:sqlite";
 
-import Database from "better-sqlite3";
-
-await fs.mkdir(new URL("../public/data/words-sentences-v1", import.meta.url), {
+await fs.mkdir(new URL("../public/data/words-sentences-v2", import.meta.url), {
   recursive: true,
 });
 
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
-db.pragma("journal_mode = WAL");
+const db = new Database(new URL("../assets.db", import.meta.url), {
+  readOnly: true,
+});
 
 const selectWords = db.prepare(`
   SELECT
     words.id as id,
-    json_group_array(sentence_words.sentence) as sentences
+    json_group_array(
+      json_object(
+        'sentence', sentence_words.sentence,
+        'meaning', coalesce(sentence_words.meaning, 1)
+      ) ORDER BY sentence_words.meaning
+    ) as sentences
   FROM words
   LEFT OUTER JOIN sentence_words ON sentence_words.word = words.id
   WHERE sentence_words.good_example = 1
@@ -22,7 +26,7 @@ const selectWords = db.prepare(`
 
 for (const row of selectWords.iterate()) {
   const fileURL = new URL(
-    `../public/data/words-sentences-v1/${row.id}.json`,
+    `../public/data/words-sentences-v2/${row.id}.json`,
     import.meta.url,
   );
 

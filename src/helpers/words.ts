@@ -1,6 +1,6 @@
 import { computed, MaybeRefOrGetter, Ref, ref, toValue, watch } from "vue";
 
-import { Word, WordReading, WordWriting } from "../types.ts";
+import { Word, WordReading, WordSentenceIndex, WordWriting } from "../types.ts";
 import { useHighKanjiReadingProficiency } from "./fsrs.ts";
 import { isKanji } from "./text.ts";
 
@@ -40,20 +40,20 @@ export function useWord(
   return wordInfo;
 }
 
-export function useWordSetenceIds(
+export function useWordSetenceIndex(
   wordId: MaybeRefOrGetter<number | null>,
-): Ref<number[]> {
-  const sentenceIds = ref<number[]>([]);
+): Ref<WordSentenceIndex> {
+  const sentenceIndex = ref<WordSentenceIndex>([]);
 
   watch(
     () => toValue(wordId),
     async (id) => {
       if (!id) {
-        sentenceIds.value = [];
+        sentenceIndex.value = [];
         return;
       }
 
-      const response = await fetch(`/data/words-sentences-v1/${id}.json`);
+      const response = await fetch(`/data/words-sentences-v2/${id}.json`);
       if (
         !response.ok ||
         !response.headers.get("Content-Type")?.startsWith("application/json")
@@ -65,7 +65,7 @@ export function useWordSetenceIds(
 
       try {
         const data = await response.json();
-        sentenceIds.value = data;
+        sentenceIndex.value = data;
       } catch {
         // eslint-disable-next-line no-console
         console.error("failed getting sentences for word:", id);
@@ -74,7 +74,7 @@ export function useWordSetenceIds(
     { immediate: true },
   );
 
-  return sentenceIds;
+  return sentenceIndex;
 }
 
 type UseWordFuriganaOptions = {

@@ -27,6 +27,18 @@ const RADICAL_TYPES = ["general", "tradit", "nelson"];
 
 const parser = new DOMParser();
 
+function countDepth(el: SVGGElement) {
+  let count = 0;
+  let closest: SVGGElement | null | undefined = el;
+
+  while (closest) {
+    count += 1;
+    closest = closest.parentElement?.closest("g");
+  }
+
+  return count;
+}
+
 function gatherPositions(el: SVGElement): string[] {
   const positions = [];
 
@@ -131,6 +143,7 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
         position: gatherPositions(el),
         radical: el.dataset.radical ?? null,
         phon: el.dataset.phon ?? null,
+        depth: countDepth(el),
       };
 
       let found = map.get(literal);
@@ -168,13 +181,13 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
               );
             }
 
-            return -1;
+            return 1;
           }
           if (b.radical) {
             return -1;
           }
 
-          return 0;
+          return a.depth - b.depth;
         });
 
         sorted.set(literal, component);
@@ -182,7 +195,11 @@ export function provideKanjiVG(hex: MaybeRefOrGetter<string | null>) {
       }
     }
 
-    for (const [literal, component] of map) {
+    for (const [literal, component] of [...map].sort(
+      ([, a], [, b]) =>
+        Math.min(...a.map(({ depth }) => depth)) -
+        Math.min(...b.map(({ depth }) => depth)),
+    )) {
       sorted.set(literal, component);
     }
 

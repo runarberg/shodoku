@@ -18,6 +18,7 @@
   --medium-dark-gray: oklch(50% none none);
   --dark-gray: oklch(30% none none);
   --text-color: light-dark(oklch(0% none none), oklch(100% none none));
+  --text-medium: light-dark(oklch(20% none none), oklch(85% none none));
   --text-light: light-dark(oklch(50% none none), oklch(80% none none));
 
   --background-gradient-color: light-dark(

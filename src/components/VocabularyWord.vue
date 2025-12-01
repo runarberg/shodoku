@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { pipe } from "yta";
+import { groupBy } from "yta/sync";
 
 import { hasKanjiRE } from "../helpers/text.ts";
 import { useWordFurigana } from "../helpers/words.ts";
 import { wordRoute } from "../router.ts";
-import { Furigana, Word } from "../types.ts";
+import { Furigana, Word, WordSentenceIndex } from "../types.ts";
 import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
 import VocabularyWordMeaning from "./VocabularyWordMeaning.vue";
+import VocabularyWordMeaningSentences from "./VocabularyWordMeaningSentences.vue";
 import WordWritingSelect from "./WordWritingSelect.vue";
 
 const props = withDefaults(
@@ -16,12 +19,14 @@ const props = withDefaults(
     hideKanji?: boolean;
     hideReading?: boolean;
     hideMeaning?: boolean;
+    sentenceIndex?: WordSentenceIndex | null;
   }>(),
   {
     kanji: null,
     hideKanji: false,
     hideReading: false,
     hideMeaning: false,
+    sentenceIndex: null,
   },
 );
 
@@ -63,6 +68,21 @@ const meaning = computed(() => meanings.value.at(0));
 const selectedFurigana = ref<Furigana | string | null>(null);
 
 const additionalMeanings = computed(() => meanings.value.slice(1));
+const additionalMeaningsToggledOnce = ref(false);
+
+const meaningSentenceMap = computed(() => {
+  if (!props.sentenceIndex) {
+    return null;
+  }
+
+  return pipe(
+    props.sentenceIndex,
+    groupBy(
+      (entry) => entry.meaning,
+      (entry) => entry.sentence,
+    ),
+  );
+});
 
 watch(
   () => props.word.id,
@@ -92,12 +112,26 @@ watch(
       </RouterLink>
     </p>
 
-    <div v-show="!hideMeaning" class="meaning">
-      <VocabularyWordMeaning v-if="meaning" :meaning="meaning" />
+    <div class="meaning">
+      <VocabularyWordMeaning
+        v-if="meaning && !hideMeaning"
+        :meaning="meaning"
+      />
+    </div>
+
+    <div class="extra">
+      <VocabularyWordMeaningSentences
+        :sentence-ids="meaningSentenceMap?.get(1)"
+        :kanji="kanji"
+        :hide-kanji="hideKanji"
+        :hide-reading="hideReading"
+        :hide-meaning="hideMeaning"
+      />
 
       <details
         v-if="additionalMeanings.length > 0"
         class="additional-meanings-details"
+        @toggle="additionalMeaningsToggledOnce = true"
       >
         <summary>{{ additionalMeanings.length }} more</summary>
 
@@ -107,7 +141,18 @@ watch(
             :key="i"
             class="additional-meaning-item"
           >
-            <VocabularyWordMeaning :meaning="additionalMeaning" />
+            <VocabularyWordMeaning
+              v-if="!hideMeaning"
+              :meaning="additionalMeaning"
+            />
+            <VocabularyWordMeaningSentences
+              v-if="additionalMeaningsToggledOnce"
+              :sentence-ids="meaningSentenceMap?.get(i + 2)"
+              :kanji="kanji"
+              :hide-kanji="hideKanji"
+              :hide-reading="hideReading"
+              :hide-meaning="hideMeaning"
+            />
           </li>
         </ul>
       </details>
@@ -130,6 +175,7 @@ watch(
   display: grid;
   grid-template:
     "word meaning actions"
+    "extra extra extra"
     / fit-content(50%) 1fr auto;
 
   @media screen and (max-width: 60ch) {
@@ -137,6 +183,7 @@ watch(
     grid-template:
       "word actions"
       "meaning meaning"
+      "extra extra"
       / 1fr auto;
   }
 }
@@ -159,6 +206,10 @@ watch(
 
 .actions {
   grid-area: actions;
+}
+
+.extra {
+  grid-area: extra;
 }
 
 .additional-meanings-details summary {

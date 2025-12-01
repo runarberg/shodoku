@@ -10,8 +10,9 @@ import VocabularyWordFurigana from "./VocabularyWordFurigana.vue";
 
 const props = defineProps<{
   sentenceId: number;
-  hideKanji?: string | null;
-  hideReading?: string | null;
+  kanji?: string | null;
+  hideKanji?: boolean;
+  hideReading?: boolean;
   hideMeaning?: boolean;
 }>();
 
@@ -23,7 +24,7 @@ const proficientKanji = useHighKanjiReadingProficiency(
 
 const knowsRuby = computed(() => {
   return (ruby: string): boolean => {
-    if (props.hideKanji && ruby.includes(props.hideKanji)) {
+    if (props.kanji && props.hideKanji && ruby.includes(props.kanji)) {
       // writing practice.
       return false;
     }
@@ -77,9 +78,9 @@ const furigana = computed(() => {
       >
         <VocabularyWordFurigana
           :furigana="furigana(word)"
-          :hide-kanji="hideKanji ? true : false"
-          :hide-reading="hideReading ? true : false"
-          :kanji="hideKanji ?? hideReading"
+          :hide-kanji="hideKanji"
+          :hide-reading="hideReading"
+          :kanji="kanji"
         />
       </component>
     </p>
@@ -98,6 +99,11 @@ const furigana = computed(() => {
 .sentence,
 .translation {
   margin: 0;
+}
+
+.translation {
+  font-size: 0.95em;
+  color: var(--text-medium);
 }
 
 .word {

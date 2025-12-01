@@ -3,6 +3,7 @@ import { KanjiInfo } from "../types.ts";
 
 defineProps<{
   kanji: KanjiInfo;
+  hideReadings?: boolean;
 }>();
 </script>
 
@@ -12,14 +13,14 @@ defineProps<{
 
     <dl class="kanji-readings">
       <dt>Kun</dt>
-      <div class="dd-items">
+      <div class="dd-items" :data-blur="hideReadings ? true : null">
         <dd v-for="reading of kanji.kunYomi" :key="reading">
           {{ reading }}
         </dd>
       </div>
 
       <dt>On</dt>
-      <div class="dd-items">
+      <div class="dd-items" :data-blur="hideReadings ? true : null">
         <dd v-for="reading of kanji.onYomi" :key="reading">
           {{ reading }}
         </dd>
@@ -55,5 +56,9 @@ defineProps<{
   gap: 0.5ex 1ex;
   display: flex;
   flex-wrap: wrap;
+
+  &[data-blur] {
+    filter: blur(3.5px);
+  }
 }
 </style>

@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { pipe } from "yta";
+import { groupBy } from "yta/sync";
 
 import BookmarkWordButton from "../components/BookmarkWordButton.vue";
 import VocabularyWordFurigana from "../components/VocabularyWordFurigana.vue";
 import VocabularyWordMeaning from "../components/VocabularyWordMeaning.vue";
+import VocabularyWordMeaningSentences from "../components/VocabularyWordMeaningSentences.vue";
 import WordKanjiList from "../components/WordKanjiList.vue";
-import WordSentencesList from "../components/WordSentencesList.vue";
 import WordWritingSelect from "../components/WordWritingSelect.vue";
-import { useWord, useWordFurigana } from "../helpers/words.ts";
+import {
+  useWord,
+  useWordFurigana,
+  useWordSetenceIndex,
+} from "../helpers/words.ts";
 import { Furigana } from "../types.ts";
 
 const route = useRoute();
@@ -31,6 +37,24 @@ const wordId = computed(() => {
 const word = useWord(wordId);
 const preferredFurigana = useWordFurigana(word);
 const selectedFurigana = ref<Furigana | string | null>(null);
+
+const firstMeaning = computed(() => word.value?.meanings?.at(0));
+const additionalMeanings = computed(() => word.value?.meanings?.slice(1));
+
+const sentenceIndex = useWordSetenceIndex(wordId);
+const meaningSentenceMap = computed(() => {
+  if (!sentenceIndex.value) {
+    return null;
+  }
+
+  return pipe(
+    sentenceIndex.value,
+    groupBy(
+      (entry) => entry.meaning,
+      (entry) => entry.sentence,
+    ),
+  );
+});
 
 watch(wordId, (newId, oldId) => {
   if (newId !== oldId) {
@@ -69,16 +93,30 @@ watch(wordId, (newId, oldId) => {
       </div>
     </header>
 
-    <section v-if="word.meanings && word.meanings.length > 0" class="section">
+    <div v-if="firstMeaning" class="section">
+      <VocabularyWordMeaning :meaning="firstMeaning" />
+      <VocabularyWordMeaningSentences
+        :sentence-ids="meaningSentenceMap?.get(1)"
+      />
+    </div>
+
+    <WordKanjiList v-if="word" :word="word" class="section" />
+
+    <section
+      v-if="additionalMeanings && additionalMeanings.length > 0"
+      class="section"
+    >
+      <h3>Other Meanings</h3>
+
       <ul class="meaning-list">
         <li v-for="(meaning, i) of word.meanings" :key="i">
           <VocabularyWordMeaning :meaning="meaning" />
+          <VocabularyWordMeaningSentences
+            :sentence-ids="meaningSentenceMap?.get(i + 2)"
+          />
         </li>
       </ul>
     </section>
-
-    <WordKanjiList v-if="word" :word="word" class="section" />
-    <WordSentencesList v-if="wordId" :word-id="wordId" class="section" />
   </article>
 </template>
 

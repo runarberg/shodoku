@@ -7,6 +7,8 @@ import { db } from "../db/index.ts";
 import { KanjiVocab } from "../types.ts";
 import WordListItem from "./WordListItem.vue";
 
+const PAGE_SIZE = 10;
+
 const props = defineProps<{
   kanjiVocab: KanjiVocab;
   hideKanji?: boolean;
@@ -30,7 +32,7 @@ const wordListsResult = asyncComputed(async () => {
   return { bookmarked, rest };
 }, null);
 
-const pageLimit = ref(20);
+const pageLimit = ref(PAGE_SIZE);
 const wordLists = computed(() => {
   const limit = pageLimit.value;
 
@@ -43,7 +45,7 @@ const wordLists = computed(() => {
 });
 
 function nextPage() {
-  pageLimit.value += 20;
+  pageLimit.value += PAGE_SIZE;
 }
 
 function handleNextPageIntersecting([
@@ -58,7 +60,7 @@ watch(
   () => props.kanjiVocab.codepoint,
   (newValue, oldValue) => {
     if (newValue !== oldValue) {
-      pageLimit.value = 20;
+      pageLimit.value = PAGE_SIZE;
     }
   },
 );
