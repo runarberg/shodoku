@@ -1,6 +1,6 @@
 import { IDBPDatabase, IDBPTransaction, StoreNames } from "idb";
 
-import { Card } from "../types.ts";
+import { Card, CardType } from "../types.ts";
 import { DB } from "./schema.ts";
 
 export default async function upgrade(
@@ -37,6 +37,41 @@ export default async function upgrade(
     reviews.createIndex("state+review", ["log.state", "log.review"]);
   }
 
+  if (oldVersion >= 1) {
+    const cards = tx.objectStore("cards");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (cards.indexNames.contains("decks" as any)) {
+      cards.deleteIndex("decks");
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (cards.indexNames.contains("position" as any)) {
+      cards.deleteIndex("position");
+    }
+
+    for await (const cursor of cards.iterate()) {
+      const card = cursor.value as Card & {
+        position?: unknown;
+        decks?: unknown;
+        deckPositions?: unknown;
+      };
+
+      if ("position" in card) {
+        delete card.position;
+      }
+
+      if ("decks" in card) {
+        delete card.decks;
+      }
+
+      if ("deckPositions" in card) {
+        delete card.deckPositions;
+      }
+
+      cursor.update(card);
+    }
+  }
   if (oldVersion < 2) {
     const reviewLimits = db.createObjectStore("review-limits", {
       keyPath: "id",
@@ -112,39 +147,18 @@ export default async function upgrade(
     decks.createIndex("priority", "priority");
   }
 
-  if (oldVersion >= 1) {
-    const cards = tx.objectStore("cards");
+  if (oldVersion < 7) {
+    const deckStore = tx.objectStore("decks");
+    for await (const cursor of deckStore.iterate()) {
+      const deck = cursor.value;
+      if (!deck.cardTypes) {
+        const cardTypes: CardType[] =
+          deck.category === "kana"
+            ? ["kana-write", "kana-read"]
+            : ["kanji-write", "kanji-read"];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (cards.indexNames.contains("decks" as any)) {
-      cards.deleteIndex("decks");
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (cards.indexNames.contains("position" as any)) {
-      cards.deleteIndex("position");
-    }
-
-    for await (const cursor of cards.iterate()) {
-      const card = cursor.value as Card & {
-        position?: unknown;
-        decks?: unknown;
-        deckPositions?: unknown;
-      };
-
-      if ("position" in card) {
-        delete card.position;
+        cursor.update({ ...deck, cardTypes });
       }
-
-      if ("decks" in card) {
-        delete card.decks;
-      }
-
-      if ("deckPositions" in card) {
-        delete card.deckPositions;
-      }
-
-      cursor.update(card);
     }
   }
 }

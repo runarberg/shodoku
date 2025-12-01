@@ -32,8 +32,8 @@ setupGlobalPreferences();
   align-items: start;
   display: grid;
   grid-template:
-    "header . main aside" 1fr
-    "header . . aside" 1em
+    "header . main   aside" 1fr
+    "header . .      aside" 1em
     "header . footer aside"
     / auto 1em minmax(min-content, 90ch) 1fr;
   margin: 2em;
@@ -43,9 +43,9 @@ setupGlobalPreferences();
   @media screen and (max-width: 90ch) {
     grid-template:
       "header header"
-      ". ." 2em
-      "main aside" 1fr
-      ". ." 2em
+      ".      .     " 2em
+      "main   aside " 1fr
+      ".      .     " 2em
       "footer footer"
       / 1fr auto;
     justify-items: stretch;

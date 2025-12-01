@@ -123,7 +123,7 @@ function handleRate({ progress, next }: HandleRateParams) {
 </script>
 
 <template>
-  <article ref="el">
+  <article ref="el" class="review-view">
     <header class="header">
       <strong class="title">
         <template v-if="cardType?.endsWith('-read')"> Reading </template>
@@ -151,6 +151,10 @@ function handleRate({ progress, next }: HandleRateParams) {
 </template>
 
 <style scoped>
+.review-view {
+  min-block-size: calc(100vh - 4em);
+}
+
 .header {
   display: flex;
   margin-block-end: 1em;

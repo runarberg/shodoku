@@ -71,7 +71,11 @@ export async function* getNewCards(): AsyncGenerator<
   const reviewed = await getReviewedToday();
 
   const tx = (await db).transaction(["decks", "progress"]);
+
+  const decksStore = tx.objectStore("decks");
   const progressStore = tx.objectStore("progress");
+
+  const decksStoreCardsIndex = decksStore.index("cards");
 
   const yielded = new Set<number>();
 
@@ -91,15 +95,30 @@ export async function* getNewCards(): AsyncGenerator<
       if (lastState !== State.New && state === State.New) {
         // We started reviewing the other side already, now start
         // reviewing this side.
-        yield cursor.value;
-        yielded.add(cardId);
+
+        // See if this card belongs to at least one deck.
+        const deckId = await decksStoreCardsIndex.getKey(
+          IDBKeyRange.only(cardId),
+        );
+
+        if (deckId) {
+          yield cursor.value;
+          yielded.add(cardId);
+        }
       } else if (lastState === 0 && state !== State.New) {
         // We started reviewing this side already, now start reviewing
         // the other side.
         const progress = await progressStore.get([lastCardId, lastCardType]);
         if (progress) {
-          yield progress;
-          yielded.add(lastCardId);
+          // See if this card belongs to at least one deck.
+          const deckId = await decksStoreCardsIndex.getKey(
+            IDBKeyRange.only(cardId),
+          );
+
+          if (deckId) {
+            yield progress;
+            yielded.add(lastCardId);
+          }
         }
       }
     } else {
