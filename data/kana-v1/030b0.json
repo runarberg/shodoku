@@ -1,0 +1,21 @@
+{
+  "literal": "グ",
+  "reading": "gu",
+  "base": "ク",
+  "hiragana": "ぐ",
+  "vocab": [
+    { "kana": "グレー", "romaji": "gurē", "en": "gray", "wordId": 1047480 },
+    { "kana": "グラス", "romaji": "gurasu", "en": "glas", "wordId": 1046430 },
+    {
+      "kana": "グビグビ",
+      "romaji": "gubi-gubi",
+      "en": "in loud gulps",
+      "wordId": 2512150
+    },
+    {
+      "kana": "グリンダヴィーク",
+      "romaji": "gurindavīku",
+      "en": "Grindavík (town in Iceland)"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "literal": "ク",
+  "reading": "ku",
+  "dakuten": "グ",
+  "hiragana": "く",
+  "vocab": [
+    {
+      "kana": "クッキー",
+      "romaji": "kukkī",
+      "en": "cookie",
+      "wordId": 1043760
+    },
+    { "kana": "クラブ", "romaji": "kurabu", "en": "club", "wordId": 1044310 },
+    {
+      "kana": "クリスマス",
+      "romaji": "kurisumasu",
+      "en": "Christmas",
+      "wordId": 1044830
+    },
+    {
+      "kana": "クスクス",
+      "romaji": "kusu-kusu",
+      "en": "giggle",
+      "wordId": 2007850
+    }
+  ]
+}

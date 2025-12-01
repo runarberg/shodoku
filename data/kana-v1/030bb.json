@@ -1,0 +1,27 @@
+{
+  "literal": "セ",
+  "reading": "se",
+  "dakuten": "ゼ",
+  "hiragana": "せ",
+  "vocab": [
+    {
+      "kana": "セーター",
+      "romaji": "sētā",
+      "en": "sweater",
+      "wordId": 1074270
+    },
+    { "kana": "セール", "romaji": "sēru", "en": "sale", "wordId": 1074330 },
+    {
+      "kana": "セネガル",
+      "romaji": "senegaru",
+      "en": "Senegal",
+      "wordId": 2006950
+    },
+    {
+      "kana": "センチ",
+      "romaji": "senchi",
+      "en": "centimeter",
+      "wordId": 1075060
+    }
+  ]
+}

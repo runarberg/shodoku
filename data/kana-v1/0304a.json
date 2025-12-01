@@ -1,0 +1,50 @@
+{
+  "literal": "お",
+  "reading": "o",
+  "katakana": "オ",
+  "vocab": [
+    { "kana": "おおきい", "romaji": "ōkī", "en": "big", "wordId": 1588880 },
+    {
+      "kana": "おはよう",
+      "romaji": "ohayō",
+      "en": "good morning",
+      "wordId": 1612820
+    },
+    {
+      "kana": "おおさか",
+      "romaji": "ōsaka",
+      "en": "Osaka (city)",
+      "wordId": 2078800
+    },
+    {
+      "kana": "おきなわ",
+      "romaji": "okinawa",
+      "en": "Okinawa (city)",
+      "wordId": 1182580
+    },
+    {
+      "kana": "おいしい",
+      "romaji": "oishī",
+      "en": "delicious",
+      "wordId": 1486650
+    },
+    {
+      "kana": "おにぎり",
+      "romaji": "onigiri",
+      "en": "onigiri",
+      "wordId": 1001620
+    },
+    {
+      "kana": "おみやげ",
+      "romaji": "omiyage",
+      "en": "souvenir",
+      "wordId": 1002500
+    },
+    {
+      "kana": "おんせん",
+      "romaji": "onsen",
+      "en": "hot spring",
+      "wordId": 1183450
+    }
+  ]
+}

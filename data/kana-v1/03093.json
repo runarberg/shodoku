@@ -1,0 +1,10 @@
+{
+  "literal": "ん",
+  "reading": "n",
+  "katakana": "ン",
+  "vocab": [
+    { "kana": "ん", "romaji": "n", "en": "huh?", "wordId": 2139720 },
+    { "kana": "うん", "romaji": "un", "en": "yeah", "wordId": 1001090 },
+    { "kana": "ううん", "romaji": "ūn", "en": "nuh-uh", "wordId": 2002400 }
+  ]
+}

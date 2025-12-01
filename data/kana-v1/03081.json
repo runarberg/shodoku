@@ -1,0 +1,26 @@
+{
+  "literal": "め",
+  "reading": "me",
+  "katakana": "メ",
+  "vocab": [
+    { "kana": "め", "romaji": "me", "en": "eye", "wordId": 1604890 },
+    {
+      "kana": "めがね",
+      "romaji": "megane",
+      "en": "glasses",
+      "wordId": 1577670
+    },
+    {
+      "kana": "めいし",
+      "romaji": "meishi",
+      "en": "business card",
+      "wordId": 1531550
+    },
+    {
+      "kana": "めずらしい",
+      "romaji": "mezurashī",
+      "en": "rare",
+      "wordId": 1431850
+    }
+  ]
+}

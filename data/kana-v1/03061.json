@@ -1,0 +1,23 @@
+{
+  "literal": "ち",
+  "reading": "chi",
+  "dakuten": "ぢ",
+  "youon": ["ちゃ", "ちゅ", "ちょ"],
+  "katakana": "チ",
+  "vocab": [
+    { "kana": "ちち", "romaji": "chichi", "en": "father", "wordId": 1497610 },
+    {
+      "kana": "ちいさい",
+      "romaji": "chīsai",
+      "en": "small",
+      "wordId": 1347750
+    },
+    { "kana": "ちかく", "romaji": "chikaku", "en": "near", "wordId": 1242160 },
+    {
+      "kana": "ちかてつ",
+      "romaji": "chikatetsu",
+      "en": "subway",
+      "wordId": 1420900
+    }
+  ]
+}

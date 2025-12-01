@@ -1,0 +1,21 @@
+{
+  "literal": "チョ",
+  "reading": "cho",
+  "base": ["チ", "ヨ"],
+  "hiragana": "ちょ",
+  "vocab": [
+    {
+      "kana": "チョコレート",
+      "romaji": "chokorēto",
+      "en": "chocolate",
+      "wordId": 1078270
+    },
+    { "kana": "チョップ", "romaji": "choppu", "en": "chop", "wordId": 1078290 },
+    {
+      "kana": "チョッピリ",
+      "romaji": "choppiri",
+      "en": "a wee bit",
+      "wordId": 1007840
+    }
+  ]
+}

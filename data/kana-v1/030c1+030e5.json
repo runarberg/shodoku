@@ -1,0 +1,27 @@
+{
+  "literal": "チュ",
+  "reading": "chu",
+  "base": ["チ", "ユ"],
+  "hiragana": "ちゅ",
+  "vocab": [
+    { "kana": "チューブ", "romaji": "chūbu", "en": "tube", "wordId": 1078140 },
+    {
+      "kana": "チューニング",
+      "romaji": "chūningu",
+      "en": "tuning",
+      "wordId": 1078120
+    },
+    {
+      "kana": "チュニス",
+      "romaji": "chunisu",
+      "en": "Tunis",
+      "wordId": 2826951
+    },
+    {
+      "kana": "チューチュー",
+      "romaji": "chū-chū",
+      "en": "slurp",
+      "wordId": 2040110
+    }
+  ]
+}

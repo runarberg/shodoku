@@ -1,0 +1,26 @@
+{
+  "literal": "ず",
+  "reading": "zu",
+  "base": "す",
+  "katakana": "ズ",
+  "vocab": [
+    {
+      "kana": "ずっと",
+      "romaji": "zutto",
+      "en": "(by) far",
+      "wordId": 1006380
+    },
+    {
+      "kana": "ずいぶん",
+      "romaji": "zuibun",
+      "en": "considerably",
+      "wordId": 1372800
+    },
+    {
+      "kana": "ずつう",
+      "romaji": "zutsū",
+      "en": "headache",
+      "wordId": 1450890
+    }
+  ]
+}

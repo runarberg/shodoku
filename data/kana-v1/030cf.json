@@ -1,0 +1,40 @@
+{
+  "literal": "ハ",
+  "reading": "ha",
+  "dakuten": "バ",
+  "handakuten": "パ",
+  "hiragana": "は",
+  "vocab": [
+    {
+      "kana": "ハンバーガー",
+      "romaji": "hanbāgā",
+      "en": "hamburger",
+      "wordId": 1096860
+    },
+    {
+      "kana": "ハンガー",
+      "romaji": "hangā",
+      "en": "coat hanger",
+      "wordId": 1096430
+    },
+    {
+      "kana": "ハンサム",
+      "romaji": "hansamu",
+      "en": "handsome",
+      "wordId": 1096560
+    },
+    { "kana": "ハワイ", "romaji": "hawai", "en": "Hawaii", "wordId": 1096400 },
+    {
+      "kana": "ハノイ",
+      "romaji": "hanoi",
+      "en": "Hanoi (Vietnam)",
+      "wordId": 1096110
+    },
+    {
+      "kana": "ハッキリ",
+      "romaji": "hakkiri",
+      "en": "definite",
+      "wordId": 1010150
+    }
+  ]
+}

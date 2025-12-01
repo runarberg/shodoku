@@ -1,0 +1,17 @@
+{
+  "literal": "ちゃ",
+  "reading": "cha",
+  "base": ["ち", "や"],
+  "dakuten": "ぢゃ",
+  "katakana": "チャ",
+  "vocab": [
+    { "kana": "ちゃ", "romaji": "cha", "en": "tea", "wordId": 1422570 },
+    {
+      "kana": "ちゃみせ",
+      "romaji": "chamise",
+      "en": "tea house",
+      "wordId": 1581670
+    },
+    { "kana": "ちゃわん", "romaji": "chawan", "en": "bowl", "wordId": 1597530 }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "literal": "マ",
+  "reading": "ma",
+  "hiragana": "ま",
+  "vocab": [
+    {
+      "kana": "マフラー",
+      "romaji": "mafurā",
+      "en": "scarf",
+      "wordId": 1129210
+    },
+    {
+      "kana": "マンション",
+      "romaji": "manshon",
+      "en": "apartment",
+      "wordId": 1130040
+    },
+    {
+      "kana": "マラソン",
+      "romaji": "marason",
+      "en": "marathon",
+      "wordId": 1129290
+    },
+    {
+      "kana": "マラカス",
+      "romaji": "marakasu",
+      "en": "maraca (shaker)",
+      "wordId": 1129270
+    },
+    {
+      "kana": "マレット",
+      "romaji": "maretto",
+      "en": "mullet",
+      "wordId": 2172940
+    }
+  ]
+}

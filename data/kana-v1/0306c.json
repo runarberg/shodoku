@@ -1,0 +1,25 @@
+{
+  "literal": "ぬ",
+  "reading": "nu",
+  "katakana": "ヌ",
+  "vocab": [
+    {
+      "kana": "ぬぐ",
+      "romaji": "nugu",
+      "en": "to take off (clothes, shoes, etc.)",
+      "wordId": 1416400
+    },
+    {
+      "kana": "ぬすむ",
+      "romaji": "nusumu",
+      "en": "to steal",
+      "wordId": 1448440
+    },
+    {
+      "kana": "ぬれる",
+      "romaji": "nureru",
+      "en": "to get wet",
+      "wordId": 1467620
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "literal": "で",
+  "reading": "de",
+  "base": "て",
+  "katakana": "デ",
+  "vocab": [
+    {
+      "kana": "でんわ",
+      "romaji": "denwa",
+      "en": "telephone",
+      "wordId": 1443840
+    },
+    {
+      "kana": "でんしゃ",
+      "romaji": "densha",
+      "en": "train",
+      "wordId": 1443530
+    },
+    { "kana": "でも", "romaji": "demo", "en": "but", "wordId": 1008460 },
+    { "kana": "でぐち", "romaji": "deguchi", "en": "exit", "wordId": 1338850 },
+    {
+      "kana": "でんき",
+      "romaji": "denki",
+      "en": "electricity",
+      "wordId": 1443000
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "literal": "ヒョ",
+  "reading": "hyo",
+  "base": ["ヒ", "ヨ"],
+  "dakuten": "ビョ",
+  "handakuten": "ピョ",
+  "hiragana": "ひょ",
+  "vocab": [
+    { "kana": "ヒョウ", "romaji": "hyou", "en": "leopard", "wordId": 1629070 }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "literal": "ユ",
+  "reading": "yu",
+  "hiragana": "ゆ",
+  "vocab": [
+    {
+      "kana": "ユニホーム",
+      "romaji": "yunihōmu",
+      "en": "uniform",
+      "wordId": 1137430
+    },
+    { "kana": "ユーモア", "romaji": "yūmoa", "en": "humor", "wordId": 1136850 },
+    { "kana": "ユーフォー", "romaji": "yūfō", "en": "UFO", "wordId": 1136810 },
+    {
+      "kana": "ユラユラ",
+      "romaji": "yura-yura",
+      "en": "swinging",
+      "wordId": 1013080
+    },
+    {
+      "kana": "ユニクロ",
+      "romaji": "yunikuro",
+      "en": "UNIQLO",
+      "wordId": 5087744
+    }
+  ]
+}

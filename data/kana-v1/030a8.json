@@ -1,0 +1,26 @@
+{
+  "literal": "エ",
+  "reading": "e",
+  "hiragana": "え",
+  "vocab": [
+    {
+      "kana": "エアコン",
+      "romaji": "eakon",
+      "en": "air conditioner",
+      "wordId": 1027180
+    },
+    {
+      "kana": "エプロン",
+      "romaji": "epuron",
+      "en": "apron",
+      "wordId": 1029760
+    },
+    {
+      "kana": "エンジン",
+      "romaji": "enjin",
+      "en": "engine",
+      "wordId": 1030950
+    },
+    { "kana": "エーン", "romaji": "ēn", "en": "boohoo", "wordId": 2862379 }
+  ]
+}

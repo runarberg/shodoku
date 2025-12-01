@@ -1,0 +1,21 @@
+{
+  "literal": "びゃ",
+  "reading": "bya",
+  "base": ["び", "や", "ひゃ"],
+  "handakuten": "ぴゃ",
+  "katakana": "ビャ",
+  "vocab": [
+    {
+      "kana": "なんびゃく",
+      "romaji": "nanbyaku",
+      "en": "hundreds",
+      "wordId": 1189290
+    },
+    {
+      "kana": "こびゃくしょう",
+      "romaji": "kobyakushō",
+      "en": "peasant",
+      "wordId": 1743650
+    }
+  ]
+}

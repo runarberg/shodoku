@@ -1,0 +1,22 @@
+{
+  "literal": "ぴ",
+  "reading": "pi",
+  "base": "ひ",
+  "dakuten": "び",
+  "youon": ["ぴゃ", "ぴゅ", "ぴょ"],
+  "katakana": "ピ",
+  "vocab": [
+    {
+      "kana": "えんぴつ",
+      "romaji": "enpitsu",
+      "en": "pencil",
+      "wordId": 1178590
+    },
+    {
+      "kana": "しんぴん",
+      "romaji": "shinpin",
+      "en": "new item",
+      "wordId": 1720370
+    }
+  ]
+}

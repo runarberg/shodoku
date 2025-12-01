@@ -1,0 +1,14 @@
+{
+  "literal": "ミャ",
+  "reading": "mya",
+  "base": ["ミ", "ヤ"],
+  "hiragana": "みゃ",
+  "vocab": [
+    {
+      "kana": "ミャンマー",
+      "romaji": "myanmā",
+      "en": "Myanmar",
+      "wordId": 1131610
+    }
+  ]
+}

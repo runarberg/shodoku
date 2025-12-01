@@ -1,0 +1,20 @@
+{
+  "literal": "りゃ",
+  "reading": "rya",
+  "base": ["り", "や"],
+  "katakana": "リャ",
+  "vocab": [
+    {
+      "kana": "りゃくす",
+      "romaji": "ryakusu",
+      "en": "to abbreviate",
+      "wordId": 1551960
+    },
+    {
+      "kana": "しょうりゃく",
+      "romaji": "shōryaku",
+      "en": "abbreviation",
+      "wordId": 1351120
+    }
+  ]
+}

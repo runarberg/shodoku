@@ -1,0 +1,28 @@
+{
+  "literal": "せ",
+  "reading": "se",
+  "dakuten": "ぜ",
+  "katakana": "セ",
+  "vocab": [
+    {
+      "kana": "せんせい",
+      "romaji": "sensei",
+      "en": "teacher",
+      "wordId": 1387990
+    },
+    {
+      "kana": "せいじ",
+      "romaji": "seiji",
+      "en": "politics",
+      "wordId": 1375970
+    },
+    {
+      "kana": "せかい",
+      "romaji": "sekai",
+      "en": "the world",
+      "wordId": 1373860
+    },
+    { "kana": "せまい", "romaji": "semai", "en": "narrow", "wordId": 1237680 },
+    { "kana": "せき", "romaji": "seki", "en": "cough", "wordId": 1204300 }
+  ]
+}

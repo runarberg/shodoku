@@ -1,0 +1,27 @@
+{
+  "literal": "ヨ",
+  "reading": "yo",
+  "hiragana": "よ",
+  "vocab": [
+    { "kana": "ヨーヨー", "romaji": "yō-yō", "en": "yo-yo", "wordId": 2075160 },
+    {
+      "kana": "ヨーグルト",
+      "romaji": "yōguruto",
+      "en": "yoghurt",
+      "wordId": 1137520
+    },
+    {
+      "kana": "ヨット",
+      "romaji": "yotto",
+      "en": "sailboat",
+      "wordId": 1137620
+    },
+    { "kana": "ヨーガ", "romaji": "yoga", "en": "yoga", "wordId": 1137490 },
+    {
+      "kana": "ヨルダン",
+      "romaji": "yorudan",
+      "en": "Jordan",
+      "wordId": 1137660
+    }
+  ]
+}

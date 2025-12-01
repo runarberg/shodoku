@@ -1,0 +1,21 @@
+{
+  "literal": "ぴゃ",
+  "reading": "pya",
+  "base": ["ぴ", "や", "ひゃ"],
+  "dakuten": "びゃ",
+  "katakana": "ピャ",
+  "vocab": [
+    {
+      "kana": "はっぴゃく",
+      "romaji": "happyaku",
+      "en": "800",
+      "wordId": 2038570
+    },
+    {
+      "kana": "ろっぴゃっけん",
+      "romaji": "roppyakken",
+      "en": "Roppyakken (game)",
+      "wordId": 2846387
+    }
+  ]
+}

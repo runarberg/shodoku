@@ -1,0 +1,29 @@
+{
+  "literal": "と",
+  "reading": "to",
+  "dakuten": "ど",
+  "katakana": "ト",
+  "vocab": [
+    { "kana": "とても", "romaji": "totemo", "en": "very", "wordId": 1008630 },
+    { "kana": "とき", "romaji": "toki", "en": "time", "wordId": 1315840 },
+    {
+      "kana": "ともだち",
+      "romaji": "tomodachi",
+      "en": "friend",
+      "wordId": 1540170
+    },
+    { "kana": "とけい", "romaji": "tokei", "en": "clock", "wordId": 1316140 },
+    {
+      "kana": "とうきょう",
+      "romaji": "tōkyō",
+      "en": "Tokyo",
+      "wordId": 1447690
+    },
+    {
+      "kana": "とうだい",
+      "romaji": "tōdai",
+      "en": "lighthouse",
+      "wordId": 1448730
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "literal": "じゅ",
+  "reading": "ju",
+  "base": ["じ", "ゆ", "しゅ"],
+  "katakana": "ジュ",
+  "vocab": [
+    {
+      "kana": "じゅんび",
+      "romaji": "junbi",
+      "en": "preparation",
+      "wordId": 1341670
+    },
+    { "kana": "じゅう", "romaji": "jū", "en": "ten", "wordId": 1579840 },
+    {
+      "kana": "じゅぎょう",
+      "romaji": "jugyō",
+      "en": "class",
+      "wordId": 1330290
+    },
+    {
+      "kana": "じゅうしょ",
+      "romaji": "jūsho",
+      "en": "address",
+      "wordId": 1334080
+    }
+  ]
+}

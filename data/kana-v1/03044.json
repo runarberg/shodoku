@@ -1,0 +1,25 @@
+{
+  "literal": "い",
+  "reading": "i",
+  "katakana": "イ",
+  "vocab": [
+    { "kana": "いち", "romaji": "ichi", "en": "one", "wordId": 1160790 },
+    { "kana": "いぬ", "romaji": "inu", "en": "dog", "wordId": 1258330 },
+    { "kana": "いま", "romaji": "ima", "en": "now", "wordId": 1288850 },
+    { "kana": "いく", "romaji": "iku", "en": "to go", "wordId": 1578850 },
+    { "kana": "いいえ", "romaji": "īe", "en": "no", "wordId": 1583250 },
+    {
+      "kana": "いもうと",
+      "romaji": "imōto",
+      "en": "younger syster",
+      "wordId": 1524590
+    },
+    {
+      "kana": "いただきます",
+      "romaji": "itadakimasu",
+      "en": "thank you (for the meal just served)",
+      "wordId": 1410800
+    },
+    { "kana": "いご", "romaji": "igo", "en": "go (game)", "wordId": 1155990 }
+  ]
+}

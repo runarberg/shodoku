@@ -1,0 +1,21 @@
+{
+  "literal": "ネ",
+  "reading": "ne",
+  "hiragana": "ね",
+  "vocab": [
+    { "kana": "ネオン", "romaji": "neon", "en": "neon", "wordId": 1092740 },
+    {
+      "kana": "ネクタイ",
+      "romaji": "nekutai",
+      "en": "necktie",
+      "wordId": 1092820
+    },
+    {
+      "kana": "ネバネバ",
+      "romaji": "neba neba",
+      "en": "gooey",
+      "wordId": 1600180
+    },
+    { "kana": "ネパール", "romaji": "nepāru", "en": "Nepal", "wordId": 2006900 }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "literal": "ちょ",
+  "reading": "cho",
+  "base": ["ち", "よ"],
+  "dakuten": "ぢょ",
+  "katakana": "チョ",
+  "vocab": [
+    {
+      "kana": "ちょっと",
+      "romaji": "chotto",
+      "en": "a bit",
+      "wordId": 1163940
+    },
+    {
+      "kana": "ちょきん",
+      "romaji": "chokin",
+      "en": "savings",
+      "wordId": 1427170
+    },
+    {
+      "kana": "ちょうどいい",
+      "romaji": "chōdo ī",
+      "en": "just right",
+      "wordId": 2276090
+    }
+  ]
+}

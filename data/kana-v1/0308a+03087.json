@@ -1,0 +1,32 @@
+{
+  "literal": "りょ",
+  "reading": "ryo",
+  "base": ["り", "よ"],
+  "katakana": "リョ",
+  "vocab": [
+    {
+      "kana": "りょうり",
+      "romaji": "ryōri",
+      "en": "cooking",
+      "wordId": 1554310
+    },
+    {
+      "kana": "りょこう",
+      "romaji": "ryokō",
+      "en": "travel",
+      "wordId": 1553170
+    },
+    {
+      "kana": "りょうしん",
+      "romaji": "ryōshin",
+      "en": "parents",
+      "wordId": 1602710
+    },
+    {
+      "kana": "りょかん",
+      "romaji": "ryokan",
+      "en": "ryokan (inn)",
+      "wordId": 1553130
+    }
+  ]
+}

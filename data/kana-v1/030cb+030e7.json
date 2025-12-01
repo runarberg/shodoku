@@ -1,0 +1,26 @@
+{
+  "literal": "ニョ",
+  "reading": "nyo",
+  "base": ["ニ", "ヨ"],
+  "hiragana": "にょ",
+  "vocab": [
+    {
+      "kana": "ニョキニョキ",
+      "romaji": "nyoki-nyoki",
+      "en": "growing rapidly",
+      "wordId": 2518040
+    },
+    {
+      "kana": "ニョロニョロ",
+      "romaji": "nyoro-nyoro",
+      "en": "Hattifnattar (Moomin)",
+      "wordId": 5743391
+    },
+    {
+      "kana": "ニョッキ",
+      "romaji": "nyokki",
+      "en": "gnocchi",
+      "wordId": 2181260
+    }
+  ]
+}

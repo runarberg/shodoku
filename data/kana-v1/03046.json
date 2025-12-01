@@ -1,0 +1,24 @@
+{
+  "literal": "う",
+  "reading": "u",
+  "katakana": "ウ",
+  "vocab": [
+    { "kana": "うえ", "romaji": "ue", "en": "above", "wordId": 1352130 },
+    { "kana": "うみ", "romaji": "umi", "en": "sea", "wordId": 1201190 },
+    { "kana": "うたう", "romaji": "utau", "en": "to sing", "wordId": 1588120 },
+    {
+      "kana": "うんどう",
+      "romaji": "undō",
+      "en": "exercise",
+      "wordId": 1172910
+    },
+    { "kana": "うりば", "romaji": "uriba", "en": "counter", "wordId": 1588550 },
+    {
+      "kana": "うんてんしゅ",
+      "romaji": "untenshu",
+      "en": "chauffeur",
+      "wordId": 1172870
+    },
+    { "kana": "う", "romaji": "u", "en": "cormorant", "wordId": 1172190 }
+  ]
+}

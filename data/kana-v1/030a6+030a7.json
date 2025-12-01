@@ -1,0 +1,20 @@
+{
+  "literal": "ウェ",
+  "reading": "we",
+  "base": ["ウ", "エ"],
+  "dakuten": "ヴェ",
+  "vocab": [
+    {
+      "kana": "ウェイター",
+      "romaji": "weitā",
+      "en": "waiter",
+      "wordId": 1025670
+    },
+    {
+      "kana": "ウェブ",
+      "romaji": "webu",
+      "en": "The World Wide Web",
+      "wordId": 1025850
+    }
+  ]
+}

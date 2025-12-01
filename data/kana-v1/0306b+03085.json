@@ -1,0 +1,20 @@
+{
+  "literal": "にゅ",
+  "reading": "nyu",
+  "base": ["に", "ゆ"],
+  "katakana": "ニュ",
+  "vocab": [
+    {
+      "kana": "にゅうりょく",
+      "romaji": "nyūryoku",
+      "en": "input",
+      "wordId": 1466850
+    },
+    {
+      "kana": "にゅうぎゅう",
+      "romaji": "nyūgyū",
+      "en": "dairy cow",
+      "wordId": 1582720
+    }
+  ]
+}

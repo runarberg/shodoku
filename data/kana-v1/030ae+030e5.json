@@ -1,0 +1,14 @@
+{
+  "literal": "ギュ",
+  "reading": "gyu",
+  "base": ["ギ", "ユ", "キュ"],
+  "hiragana": "ぎゅ",
+  "vocab": [
+    {
+      "kana": "ギュウギュウ",
+      "romaji": "gyū-gyū",
+      "en": "crammed tightly",
+      "wordId": 1003600
+    }
+  ]
+}

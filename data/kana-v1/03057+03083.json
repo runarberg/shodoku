@@ -1,0 +1,21 @@
+{
+  "literal": "しゃ",
+  "reading": "sha",
+  "base": ["し", "や"],
+  "dakuten": "じゃ",
+  "katakana": "シャ",
+  "vocab": [
+    {
+      "kana": "しゃしん",
+      "romaji": "shashin",
+      "en": "photo",
+      "wordId": 1321900
+    },
+    {
+      "kana": "しゃちょう",
+      "romaji": "shachō",
+      "en": "company president",
+      "wordId": 1322920
+    }
+  ]
+}

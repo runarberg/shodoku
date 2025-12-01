@@ -1,0 +1,21 @@
+{
+  "literal": "じゃ",
+  "reading": "ja",
+  "base": ["じ", "や", "しゃ"],
+  "katakana": "ジャ",
+  "vocab": [
+    { "kana": "じゃあ", "romaji": "jā", "en": "so", "wordId": 1005900 },
+    {
+      "kana": "じゃま",
+      "romaji": "jama",
+      "en": "disturbance",
+      "wordId": 1323500
+    },
+    {
+      "kana": "じゃくてん",
+      "romaji": "jakuten",
+      "en": "defect",
+      "wordId": 1324870
+    }
+  ]
+}

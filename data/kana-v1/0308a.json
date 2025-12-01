@@ -1,0 +1,11 @@
+{
+  "literal": "り",
+  "reading": "ri",
+  "youon": ["りゃ", "りゅ", "りょ"],
+  "katakana": "リ",
+  "vocab": [
+    { "kana": "りんご", "romaji": "ringo", "en": "apple", "wordId": 1555480 },
+    { "kana": "りゆう", "romaji": "riyū", "en": "reason", "wordId": 1550140 },
+    { "kana": "りこん", "romaji": "rikon", "en": "divorce", "wordId": 1550880 }
+  ]
+}

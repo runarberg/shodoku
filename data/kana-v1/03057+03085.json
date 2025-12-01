@@ -1,0 +1,28 @@
+{
+  "literal": "しゅ",
+  "reading": "shu",
+  "base": ["し", "ゆ"],
+  "dakuten": "じゅ",
+  "katakana": "シュ",
+  "vocab": [
+    { "kana": "しゅみ", "romaji": "shumi", "en": "hobby", "wordId": 1329000 },
+    {
+      "kana": "しゅくだい",
+      "romaji": "shukudai",
+      "en": "homework",
+      "wordId": 1337270
+    },
+    {
+      "kana": "しゅうまつ",
+      "romaji": "shūmatsu",
+      "en": "weekend",
+      "wordId": 1333520
+    },
+    {
+      "kana": "しゅっしん",
+      "romaji": "shusshin",
+      "en": "one’s origin",
+      "wordId": 1339260
+    }
+  ]
+}

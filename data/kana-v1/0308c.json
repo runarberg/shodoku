@@ -1,0 +1,31 @@
+{
+  "literal": "れ",
+  "reading": "re",
+  "katakana": "レ",
+  "vocab": [
+    {
+      "kana": "れんしゅう",
+      "romaji": "renshū",
+      "en": "exercise",
+      "wordId": 1559160
+    },
+    {
+      "kana": "れいぞうこ",
+      "romaji": "reizōko",
+      "en": "refridgerator",
+      "wordId": 1557110
+    },
+    {
+      "kana": "れきし",
+      "romaji": "rekishi",
+      "en": "history",
+      "wordId": 1558050
+    },
+    {
+      "kana": "れんきゅう",
+      "romaji": "renkyū",
+      "en": "long weekend",
+      "wordId": 1559380
+    }
+  ]
+}

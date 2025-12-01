@@ -1,0 +1,22 @@
+{
+  "literal": "ね",
+  "reading": "ne",
+  "katakana": "ネ",
+  "vocab": [
+    { "kana": "ねこ", "romaji": "neko", "en": "cat", "wordId": 1467640 },
+    { "kana": "ねむい", "romaji": "nemui", "en": "sleepy", "wordId": 1529330 },
+    { "kana": "ねがい", "romaji": "negai", "en": "wish", "wordId": 1217900 },
+    {
+      "kana": "ねぼう",
+      "romaji": "nebō",
+      "en": "sleeping in",
+      "wordId": 1360320
+    },
+    {
+      "kana": "ねばねば",
+      "romaji": "nebaneba",
+      "en": "gooey",
+      "wordId": 1600180
+    }
+  ]
+}

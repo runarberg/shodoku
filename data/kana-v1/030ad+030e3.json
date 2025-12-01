@@ -1,0 +1,28 @@
+{
+  "literal": "キャ",
+  "reading": "kya",
+  "base": ["キ", "ヤ"],
+  "dakuten": "ギャ",
+  "hiragana": "きゃ",
+  "vocab": [
+    { "kana": "キャンプ", "romaji": "kyanpu", "en": "camp", "wordId": 1042200 },
+    {
+      "kana": "キャベツ",
+      "romaji": "kyabetsu",
+      "en": "cabbage",
+      "wordId": 1041870
+    },
+    {
+      "kana": "キャンセル",
+      "romaji": "kyanseru",
+      "en": "cancellation",
+      "wordId": 1042050
+    },
+    {
+      "kana": "キャピキャピ",
+      "romaji": "kyapi-kyapi",
+      "en": "in high spirits",
+      "wordId": 2120850
+    }
+  ]
+}

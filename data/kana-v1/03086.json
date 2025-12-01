@@ -1,0 +1,33 @@
+{
+  "literal": "ゆ",
+  "reading": "yu",
+  "katakana": "ユ",
+  "vocab": [
+    { "kana": "ゆめ", "romaji": "yūme", "en": "dream", "wordId": 1529410 },
+    {
+      "kana": "ゆっくり",
+      "romaji": "yukkuri",
+      "en": "slowly",
+      "wordId": 1013050
+    },
+    { "kana": "ゆび", "romaji": "yubi", "en": "finger", "wordId": 1309650 },
+    {
+      "kana": "ゆうめい",
+      "romaji": "yūmei",
+      "en": "famous",
+      "wordId": 1541620
+    },
+    {
+      "kana": "ゆうがた",
+      "romaji": "yūgata",
+      "en": "early evening",
+      "wordId": 1542790
+    },
+    {
+      "kana": "ゆうびんきょく",
+      "romaji": "yūbinkyoku",
+      "en": "post office",
+      "wordId": 1542430
+    }
+  ]
+}

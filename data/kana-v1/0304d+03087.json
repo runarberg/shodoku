@@ -1,0 +1,28 @@
+{
+  "literal": "きょ",
+  "reading": "kyo",
+  "base": ["き", "よ"],
+  "dakuten": "ぎょ",
+  "katakana": "キョ",
+  "vocab": [
+    { "kana": "きょう", "romaji": "kyō", "en": "today", "wordId": 1579110 },
+    {
+      "kana": "きょうしつ",
+      "romaji": "kyōshitsu",
+      "en": "classroom",
+      "wordId": 1237150
+    },
+    {
+      "kana": "きょねん",
+      "romaji": "kyonen",
+      "en": "last year",
+      "wordId": 1231690
+    },
+    {
+      "kana": "きょうだい",
+      "romaji": "kyōdai",
+      "en": "brother and sister",
+      "wordId": 1249950
+    }
+  ]
+}

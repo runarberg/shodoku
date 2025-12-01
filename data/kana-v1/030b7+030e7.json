@@ -1,0 +1,28 @@
+{
+  "literal": "ショ",
+  "reading": "sho",
+  "base": ["シ", "ヨ"],
+  "dakuten": "ジョ",
+  "hiragana": "しょ",
+  "vocab": [
+    {
+      "kana": "ショット",
+      "romaji": "shotto",
+      "en": "shot (e.g. basketball)",
+      "wordId": 1062690
+    },
+    { "kana": "ショー", "romaji": "shō", "en": "show", "wordId": 1062240 },
+    {
+      "kana": "ショートケーキ",
+      "romaji": "shōtokēki",
+      "en": "shortcake",
+      "wordId": 1062340
+    },
+    {
+      "kana": "ショッピングモール",
+      "romaji": "shoppingu mōru",
+      "en": "shopping mall",
+      "wordId": 1062810
+    }
+  ]
+}

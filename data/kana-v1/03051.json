@@ -1,0 +1,21 @@
+{
+  "literal": "け",
+  "reading": "ke",
+  "dakuten": "げ",
+  "katakana": "ケ",
+  "vocab": [
+    {
+      "kana": "けさ",
+      "romaji": "kesa",
+      "en": "this morning",
+      "wordId": 1579100
+    },
+    {
+      "kana": "けっこん",
+      "romaji": "kekkon",
+      "en": "marriage",
+      "wordId": 1254790
+    },
+    { "kana": "けす", "romaji": "kesu", "en": "to turn off", "wordId": 1350110 }
+  ]
+}

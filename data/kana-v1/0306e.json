@@ -1,0 +1,26 @@
+{
+  "literal": "の",
+  "reading": "no",
+  "katakana": "ノ",
+  "vocab": [
+    { "kana": "のむ", "romaji": "nomu", "en": "to drink", "wordId": 1169870 },
+    {
+      "kana": "のりもの",
+      "romaji": "norimono",
+      "en": "ride",
+      "wordId": 1600530
+    },
+    {
+      "kana": "のぼる",
+      "romaji": "noboru",
+      "en": "to climb",
+      "wordId": 1352570
+    },
+    {
+      "kana": "のり",
+      "romaji": "nori",
+      "en": "nori seaweed",
+      "wordId": 1201620
+    }
+  ]
+}

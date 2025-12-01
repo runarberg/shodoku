@@ -1,0 +1,33 @@
+{
+  "literal": "ス",
+  "reading": "su",
+  "dakuten": "ズ",
+  "hiragana": "す",
+  "vocab": [
+    {
+      "kana": "スーパー",
+      "romaji": "sūpā",
+      "en": "supermarket",
+      "wordId": 1066710
+    },
+    {
+      "kana": "スマホ",
+      "romaji": "sumaho",
+      "en": "smartphone",
+      "wordId": 2641300
+    },
+    {
+      "kana": "スポーツ",
+      "romaji": "supōtsu",
+      "en": "sports",
+      "wordId": 1073210
+    },
+    { "kana": "スキー", "romaji": "sukī", "en": "ski", "wordId": 1067770 },
+    {
+      "kana": "スニーカー",
+      "romaji": "sunīkā",
+      "en": "sneakers",
+      "wordId": 1071680
+    }
+  ]
+}

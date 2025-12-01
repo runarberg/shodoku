@@ -1,0 +1,15 @@
+{
+  "literal": "ろ",
+  "reading": "ro",
+  "katakana": "ロ",
+  "vocab": [
+    { "kana": "ろうか", "romaji": "rōka", "en": "hallway", "wordId": 1560670 },
+    { "kana": "ろく", "romaji": "roku", "en": "six", "wordId": 1585310 },
+    {
+      "kana": "ろくが",
+      "romaji": "rokuga",
+      "en": "recording",
+      "wordId": 1561610
+    }
+  ]
+}

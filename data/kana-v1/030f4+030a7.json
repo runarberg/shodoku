@@ -1,0 +1,19 @@
+{
+  "literal": "ヴェ",
+  "reading": "ve",
+  "base": ["ヴ", "エ", "ウェ"],
+  "vocab": [
+    {
+      "kana": "ヴェルミチェッリ",
+      "romaji": "verumicherri",
+      "en": "vermicelli (pasta)",
+      "wordId": 2445320
+    },
+    {
+      "kana": "ヴェネツィア",
+      "romaji": "venetsia",
+      "en": "Venice (Italy)",
+      "wordId": 2851573
+    }
+  ]
+}

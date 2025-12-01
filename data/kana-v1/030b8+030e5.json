@@ -1,0 +1,21 @@
+{
+  "literal": "ジュ",
+  "reading": "ju",
+  "base": ["ジ", "ユ", "シュ"],
+  "hiragana": "じゅ",
+  "vocab": [
+    { "kana": "ジュース", "romaji": "jūsu", "en": "juice", "wordId": 1065950 },
+    {
+      "kana": "ジュラき",
+      "romaji": "juraki",
+      "en": "Jurassic (period)",
+      "wordId": 1066180
+    },
+    {
+      "kana": "ジュージュー",
+      "romaji": "jū-jū",
+      "en": "sizzling",
+      "wordId": 1005980
+    }
+  ]
+}

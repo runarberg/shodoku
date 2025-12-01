@@ -1,0 +1,16 @@
+{
+  "literal": "ひゅ",
+  "reading": "hyu",
+  "base": ["ひ", "ゆ"],
+  "dakuten": "びゅ",
+  "handakuten": "ぴゅ",
+  "katakana": "ヒュ",
+  "vocab": [
+    {
+      "kana": "ひゅうが",
+      "romaji": "hyūga",
+      "en": "Hyūga (city)",
+      "wordId": 2845072
+    }
+  ]
+}

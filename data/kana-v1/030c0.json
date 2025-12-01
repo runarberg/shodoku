@@ -1,0 +1,27 @@
+{
+  "literal": "ダ",
+  "reading": "da",
+  "base": "タ",
+  "hiragana": "だ",
+  "vocab": [
+    { "kana": "ダンス", "romaji": "dansu", "en": "dance", "wordId": 1077250 },
+    {
+      "kana": "ダブル",
+      "romaji": "daburu",
+      "en": "double (hotel room)",
+      "wordId": 1077110
+    },
+    {
+      "kana": "ダイエット",
+      "romaji": "daietto",
+      "en": "diet",
+      "wordId": 1076730
+    },
+    {
+      "kana": "ダラダラ",
+      "romaji": "dara-dara",
+      "en": "trickling",
+      "wordId": 1007510
+    }
+  ]
+}

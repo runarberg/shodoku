@@ -1,0 +1,20 @@
+{
+  "literal": "りゅ",
+  "reading": "ryu",
+  "base": ["り", "ゆ"],
+  "katakana": "リュ",
+  "vocab": [
+    {
+      "kana": "りゅうがく",
+      "romaji": "ryūgaku",
+      "en": "studuing abroad",
+      "wordId": 1552740
+    },
+    {
+      "kana": "りゅうきゅう",
+      "romaji": "ryūkyū",
+      "en": "Ryukyu (islands)",
+      "wordId": 2731460
+    }
+  ]
+}

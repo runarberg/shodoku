@@ -1,0 +1,25 @@
+{
+  "literal": "ペ",
+  "reading": "pe",
+  "base": "ヘ",
+  "dakuten": "ベ",
+  "hiragana": "ぺ",
+  "vocab": [
+    { "kana": "ペン", "romaji": "pen", "en": "pen", "wordId": 1121380 },
+    { "kana": "ページ", "romaji": "pēji", "en": "page", "wordId": 1120410 },
+    { "kana": "ペット", "romaji": "petto", "en": "pet", "wordId": 1120990 },
+    {
+      "kana": "ペンギン",
+      "romaji": "pengin",
+      "en": "penguin",
+      "wordId": 1121410
+    },
+    { "kana": "ペルー", "romaji": "perū", "en": "Peru", "wordId": 1121320 },
+    {
+      "kana": "ペラペラ",
+      "romaji": "pera-pera",
+      "en": "fluently",
+      "wordId": 1011580
+    }
+  ]
+}

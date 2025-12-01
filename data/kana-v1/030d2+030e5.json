@@ -1,0 +1,16 @@
+{
+  "literal": "ヒュ",
+  "reading": "hyu",
+  "base": ["ヒ", "ユ"],
+  "dakuten": "ビュ",
+  "handakuten": "ピュ",
+  "hiragana": "ひゅ",
+  "vocab": [
+    {
+      "kana": "ヒューヒュー",
+      "romaji": "hyū-hyū",
+      "en": "moaning wind",
+      "wordId": 2059800
+    }
+  ]
+}

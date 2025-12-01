@@ -1,0 +1,22 @@
+{
+  "literal": "ぱ",
+  "reading": "pa",
+  "base": "は",
+  "dakuten": "ば",
+  "katakana": "パ",
+  "vocab": [
+    {
+      "kana": "ぱらっと",
+      "romaji": "paratto",
+      "en": "quickly",
+      "wordId": 2766690
+    },
+    { "kana": "はっぱ", "romaji": "happa", "en": "leaf", "wordId": 1611230 },
+    {
+      "kana": "ぱらぱら",
+      "romaji": "para para",
+      "en": "crumbly",
+      "wordId": 1102580
+    }
+  ]
+}

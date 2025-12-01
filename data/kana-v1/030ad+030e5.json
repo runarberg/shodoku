@@ -1,0 +1,22 @@
+{
+  "literal": "キュ",
+  "reading": "kyu",
+  "base": ["キ", "ユ"],
+  "dakuten": "ギュ",
+  "hiragana": "きゅ",
+  "vocab": [
+    { "kana": "キューバ", "romaji": "kyūba", "en": "Cuba", "wordId": 1042340 },
+    {
+      "kana": "キュン",
+      "romaji": "kyun",
+      "en": "choked up (with emotion)",
+      "wordId": 2178870
+    },
+    {
+      "kana": "キュウリ",
+      "romaji": "kyuuri",
+      "en": "cucumber",
+      "wordId": 1591500
+    }
+  ]
+}

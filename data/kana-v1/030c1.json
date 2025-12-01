@@ -1,0 +1,23 @@
+{
+  "literal": "チ",
+  "reading": "chi",
+  "youon": ["チェ", "チャ", "チュ", "チョ"],
+  "hiragana": "ち",
+  "vocab": [
+    { "kana": "チーム", "romaji": "chīmu", "en": "team", "wordId": 1077360 },
+    {
+      "kana": "チケット",
+      "romaji": "chikketo",
+      "en": "ticket",
+      "wordId": 1077720
+    },
+    { "kana": "チリ", "romaji": "chiri", "en": "Chile", "wordId": 1078320 },
+    { "kana": "チーズ", "romaji": "chīzu", "en": "cheese", "wordId": 1077330 },
+    {
+      "kana": "チクチク",
+      "romaji": "chiku-chiku",
+      "en": "tingling",
+      "wordId": 1077690
+    }
+  ]
+}

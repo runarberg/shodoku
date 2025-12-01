@@ -1,0 +1,27 @@
+{
+  "literal": "カ",
+  "reading": "ka",
+  "dakuten": "ガ",
+  "hiragana": "か",
+  "vocab": [
+    {
+      "kana": "カタカナ",
+      "romaji": "katakana",
+      "en": "katakana",
+      "wordId": 1511600
+    },
+    {
+      "kana": "カラオケ",
+      "romaji": "karaoke",
+      "en": "karaoke",
+      "wordId": 1038660
+    },
+    { "kana": "カメラ", "romaji": "kamera", "en": "camera", "wordId": 1038350 },
+    {
+      "kana": "カチコチ",
+      "romaji": "kachi-kochi",
+      "en": "stiff",
+      "wordId": 1002840
+    }
+  ]
+}

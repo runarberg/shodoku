@@ -1,0 +1,21 @@
+{
+  "literal": "ぴょ",
+  "reading": "pyo",
+  "base": ["ぴ", "よ", "ひょ"],
+  "dakuten": "びょ",
+  "katakana": "ピョ",
+  "vocab": [
+    {
+      "kana": "はっぴょう",
+      "romaji": "happyō",
+      "en": "announcement",
+      "wordId": 1477840
+    },
+    {
+      "kana": "まんぴょう",
+      "romaji": "manpyō",
+      "en": "unanimously",
+      "wordId": 1812530
+    }
+  ]
+}

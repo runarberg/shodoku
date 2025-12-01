@@ -1,0 +1,40 @@
+{
+  "literal": "フ",
+  "reading": "fu",
+  "dakuten": "ブ",
+  "handakuten": "プ",
+  "hiragana": "ふ",
+  "youon": ["ファ", "フィ", "フェ", "フォ", "フュ"],
+  "vocab": [
+    {
+      "kana": "フロント",
+      "romaji": "furonto",
+      "en": "front desk",
+      "wordId": 1112990
+    },
+    {
+      "kana": "フライパン",
+      "romaji": "furaipan",
+      "en": "frying pan",
+      "wordId": 1111160
+    },
+    {
+      "kana": "フライドポテト",
+      "romaji": "furaido poteto",
+      "en": "french fries",
+      "wordId": 1111150
+    },
+    {
+      "kana": "フランス",
+      "romaji": "furansu",
+      "en": "France",
+      "wordId": 1652680
+    },
+    {
+      "kana": "フカフカ",
+      "romaji": "fuka-fuka",
+      "en": "soft and fluffy",
+      "wordId": 1632480
+    }
+  ]
+}

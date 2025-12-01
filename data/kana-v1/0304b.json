@@ -1,0 +1,24 @@
+{
+  "literal": "か",
+  "reading": "ka",
+  "dakuten": "が",
+  "katakana": "カ",
+  "vocab": [
+    { "kana": "かばん", "romaji": "kaban", "en": "bag", "wordId": 1208910 },
+    { "kana": "かわいい", "romaji": "kawaī", "en": "cute", "wordId": 1577200 },
+    {
+      "kana": "かんぱい",
+      "romaji": "kanpai",
+      "en": "cheers",
+      "wordId": 1590950
+    },
+    { "kana": "かさ", "romaji": "kasa", "en": "umbrella", "wordId": 1301940 },
+    { "kana": "かみ", "romaji": "kami", "en": "god", "wordId": 1364440 },
+    {
+      "kana": "かんこく",
+      "romaji": "kankoku",
+      "en": "South Korea",
+      "wordId": 1216170
+    }
+  ]
+}

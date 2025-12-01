@@ -1,0 +1,21 @@
+{
+  "literal": "びょ",
+  "reading": "byo",
+  "base": ["び", "よ", "ひょ"],
+  "handakuten": "ぴょ",
+  "katakana": "ビョ",
+  "vocab": [
+    {
+      "kana": "びょういん",
+      "romaji": "byōin",
+      "en": "hospital",
+      "wordId": 1490220
+    },
+    {
+      "kana": "びょうよみ",
+      "romaji": "byōyomi",
+      "en": "countdown",
+      "wordId": 1490460
+    }
+  ]
+}

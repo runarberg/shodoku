@@ -1,0 +1,21 @@
+{
+  "literal": "ビュ",
+  "reading": "byu",
+  "base": ["ビ", "ユ", "ヒュ"],
+  "handakuten": "ピュ",
+  "hiragana": "びゅ",
+  "vocab": [
+    {
+      "kana": "ビュッフェ",
+      "romaji": "byuffe",
+      "en": "buffet",
+      "wordId": 1105960
+    },
+    {
+      "kana": "ビュービュー",
+      "romaji": "byū-byū",
+      "en": "wuthering wind",
+      "wordId": 2059800
+    }
+  ]
+}

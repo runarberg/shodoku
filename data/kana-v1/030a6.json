@@ -1,0 +1,34 @@
+{
+  "literal": "ウ",
+  "reading": "u",
+  "dakuten": "ヴ",
+  "youon": ["ウィ", "ウェ", "ウォ"],
+  "hiragana": "う",
+  "vocab": [
+    { "kana": "ウサギ", "romaji": "ukagi", "en": "rabbit", "wordId": 1443970 },
+    {
+      "kana": "ウエイター",
+      "romaji": "ueitā",
+      "en": "waiter",
+      "wordId": 1025670
+    },
+    {
+      "kana": "ウイスキー",
+      "romaji": "uisukī",
+      "en": "whiskey",
+      "wordId": 1025140
+    },
+    {
+      "kana": "ウロウロ",
+      "romaji": "uro-uro",
+      "en": "wanter aimlessly",
+      "wordId": 1001060
+    },
+    {
+      "kana": "ウキウキ",
+      "romaji": "uki-uki",
+      "en": "in high spirits",
+      "wordId": 1497400
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "literal": "ぎょ",
+  "reading": "gyo",
+  "base": ["ぎ", "よ", "きょ"],
+  "katakana": "ギョ",
+  "vocab": [
+    { "kana": "ぎょうざ", "romaji": "gyōza", "en": "gyoza", "wordId": 1574430 },
+    {
+      "kana": "ぎょそん",
+      "romaji": "gyoson",
+      "en": "fishing village",
+      "wordId": 1233060
+    },
+    {
+      "kana": "ぎょうかい",
+      "romaji": "gyōkai",
+      "en": "(the) industry",
+      "wordId": 1239380
+    }
+  ]
+}

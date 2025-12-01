@@ -1,0 +1,19 @@
+{
+  "literal": "へ",
+  "reading": "he",
+  "dakuten": "べ",
+  "handakuten": "ぺ",
+  "katakana": "ヘ",
+  "vocab": [
+    { "kana": "へいわ", "romaji": "heiwa", "en": "peace", "wordId": 1508070 },
+    {
+      "kana": "へいじつ",
+      "romaji": "heijitsu",
+      "en": "weekday",
+      "wordId": 1507720
+    },
+    { "kana": "へんじ", "romaji": "henji", "en": "reply", "wordId": 1512220 },
+    { "kana": "へた", "romaji": "heta", "en": "unskillful", "wordId": 1185200 },
+    { "kana": "へん", "romaji": "hen", "en": "strange", "wordId": 1510640 }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "literal": "に",
+  "reading": "ni",
+  "youon": ["にゃ", "にゅ", "にょ"],
+  "katakana": "ニ",
+  "vocab": [
+    { "kana": "にほん", "romaji": "nihon", "en": "Japan", "wordId": 1582710 },
+    { "kana": "に", "romaji": "ni", "en": "two", "wordId": 1461140 },
+    { "kana": "にし", "romaji": "nishi", "en": "west", "wordId": 1380840 },
+    {
+      "kana": "について",
+      "romaji": "ni tsuite",
+      "en": "about",
+      "wordId": 1009780
+    },
+    {
+      "kana": "にもつ",
+      "romaji": "nimotsu",
+      "en": "baggage",
+      "wordId": 1195430
+    }
+  ]
+}

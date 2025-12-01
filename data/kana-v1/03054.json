@@ -1,0 +1,17 @@
+{
+  "literal": "ご",
+  "reading": "go",
+  "base": "こ",
+  "katakana": "ゴ",
+  "vocab": [
+    { "kana": "ごぜん", "romaji": "gozen", "en": "A.M.", "wordId": 1269060 },
+    { "kana": "ごご", "romaji": "gogo", "en": "P.M.", "wordId": 1268990 },
+    {
+      "kana": "ごめん",
+      "romaji": "gomen",
+      "en": "I’m sorry",
+      "wordId": 1270670
+    },
+    { "kana": "ご", "romaji": "go", "en": "five", "wordId": 1268060 }
+  ]
+}

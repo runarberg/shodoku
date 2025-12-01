@@ -1,0 +1,14 @@
+{
+  "literal": "る",
+  "reading": "ru",
+  "katakana": "ル",
+  "vocab": [
+    { "kana": "るす", "romaji": "rusu", "en": "not home", "wordId": 1552760 },
+    {
+      "kana": "るすばんでんわ",
+      "romaji": "rusubandenwa",
+      "en": "answering maching",
+      "wordId": 1552810
+    }
+  ]
+}

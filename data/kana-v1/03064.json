@@ -1,0 +1,23 @@
+{
+  "literal": "つ",
+  "reading": "tsu",
+  "dakuten": "づ",
+  "katakana": "ツ",
+  "vocab": [
+    { "kana": "つぎ", "romaji": "tsugi", "en": "next", "wordId": 1316380 },
+    { "kana": "つき", "romaji": "tsuki", "en": "moon", "wordId": 1255430 },
+    { "kana": "つかう", "romaji": "tsukau", "en": "to use", "wordId": 1305990 },
+    {
+      "kana": "つくる",
+      "romaji": "tsukuru",
+      "en": "to make",
+      "wordId": 1597890
+    },
+    {
+      "kana": "つなみ",
+      "romaji": "tsunami",
+      "en": "tsunami",
+      "wordId": 1432220
+    }
+  ]
+}

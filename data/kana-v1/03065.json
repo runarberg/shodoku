@@ -1,0 +1,25 @@
+{
+  "literal": "づ",
+  "reading": "zu",
+  "base": "つ",
+  "vocab": [
+    {
+      "kana": "つづける",
+      "romaji": "tsuzukeru",
+      "en": "to continue",
+      "wordId": 1405800
+    },
+    {
+      "kana": "くちづけ",
+      "romaji": "kuchizuke",
+      "en": "kiss",
+      "wordId": 1276850
+    },
+    {
+      "kana": "つづみ",
+      "romaji": "tsuzumi",
+      "en": "Tsuzumi (hand drum)",
+      "wordId": 1267900
+    }
+  ]
+}

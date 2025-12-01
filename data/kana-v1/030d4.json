@@ -1,0 +1,25 @@
+{
+  "literal": "ピ",
+  "reading": "pi",
+  "base": "ヒ",
+  "dakuten": "ビ",
+  "youon": ["ピャ", "ピュ", "ピョ"],
+  "hiragana": "ぴ",
+  "vocab": [
+    { "kana": "ピアノ", "romaji": "piano", "en": "piano", "wordId": 1106400 },
+    { "kana": "ピザ", "romaji": "piza", "en": "pizza", "wordId": 1106620 },
+    { "kana": "ピンク", "romaji": "pinku", "en": "pink", "wordId": 1107140 },
+    {
+      "kana": "ピンポン",
+      "romaji": "pin-pon",
+      "en": "ping-pong",
+      "wordId": 1107320
+    },
+    {
+      "kana": "ピカピカ",
+      "romaji": "pika-pika",
+      "en": "new and shiny",
+      "wordId": 1010830
+    }
+  ]
+}

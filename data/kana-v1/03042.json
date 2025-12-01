@@ -1,0 +1,22 @@
+{
+  "literal": "あ",
+  "reading": "a",
+  "katakana": "ア",
+  "vocab": [
+    {
+      "kana": "ありがとう",
+      "romaji": "arigatō",
+      "en": "thank you",
+      "wordId": 1586820
+    },
+    { "kana": "あなた", "romaji": "anata", "en": "you", "wordId": 1223615 },
+    { "kana": "あめ", "romaji": "ame", "en": "rain", "wordId": 1171900 },
+    { "kana": "あさ", "romaji": "asa", "en": "morning", "wordId": 1428280 },
+    {
+      "kana": "あした",
+      "romaji": "ashita",
+      "en": "tomorrow",
+      "wordId": 1584660
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "literal": "く",
+  "reading": "ku",
+  "dakuten": "ぐ",
+  "katakana": "ク",
+  "vocab": [
+    { "kana": "くるま", "romaji": "kuruma", "en": "car", "wordId": 1323080 },
+    { "kana": "くつ", "romaji": "kutsu", "en": "shoes", "wordId": 1246700 },
+    { "kana": "くま", "romaji": "kuma", "en": "bear", "wordId": 1246850 },
+    { "kana": "くろい", "romaji": "kuroi", "en": "black", "wordId": 1287420 }
+  ]
+}

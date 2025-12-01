@@ -1,0 +1,32 @@
+{
+  "literal": "む",
+  "reading": "mu",
+  "katakana": "ム",
+  "vocab": [
+    {
+      "kana": "むかし",
+      "romaji": "mukashi",
+      "en": "a long time ago",
+      "wordId": 1382370
+    },
+    {
+      "kana": "むずかしい",
+      "romaji": "muzukashī",
+      "en": "difficult",
+      "wordId": 1460850
+    },
+    { "kana": "むし", "romaji": "mushi", "en": "bug", "wordId": 1426680 },
+    {
+      "kana": "むすめ",
+      "romaji": "musme",
+      "en": "daughter",
+      "wordId": 1531190
+    },
+    {
+      "kana": "むかえにくる",
+      "romaji": "mukae ni kuru",
+      "en": "",
+      "wordId": 2037260
+    }
+  ]
+}

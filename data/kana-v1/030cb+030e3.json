@@ -1,0 +1,20 @@
+{
+  "literal": "ニャ",
+  "reading": "nya",
+  "base": ["ニ", "ヤ"],
+  "hiragana": "にゃ",
+  "vocab": [
+    {
+      "kana": "ニャーニャー",
+      "romaji": "nyā-nyā",
+      "en": "meow",
+      "wordId": 2222730
+    },
+    {
+      "kana": "ラザーニャ",
+      "romaji": "razānya",
+      "en": "lasagne",
+      "wordId": 1138750
+    }
+  ]
+}

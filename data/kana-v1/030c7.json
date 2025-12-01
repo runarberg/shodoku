@@ -1,0 +1,23 @@
+{
+  "literal": "デ",
+  "reading": "de",
+  "base": "テ",
+  "hiragana": "で",
+  "youon": ["ディ", "デュ"],
+  "vocab": [
+    {
+      "kana": "デパート",
+      "romaji": "depāto",
+      "en": "department store",
+      "wordId": 1083590
+    },
+    { "kana": "デート", "romaji": "dēto", "en": "date", "wordId": 1081430 },
+    { "kana": "データ", "romaji": "dēta", "en": "data", "wordId": 1081190 },
+    {
+      "kana": "デンマーク",
+      "romaji": "denmāku",
+      "en": "Denmark",
+      "wordId": 1084410
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "literal": "ウィ",
+  "reading": "wi",
+  "base": ["ウ", "イ"],
+  "dakuten": "ヴィ",
+  "vocab": [
+    {
+      "kana": "ウィスキー",
+      "romaji": "wisukī",
+      "en": "whiskey",
+      "wordId": 1025140
+    },
+    {
+      "kana": "ウィーン",
+      "romaji": "wīn",
+      "en": "Vienna (city)",
+      "wordId": 2826282
+    },
+    { "kana": "ウィッグ", "romaji": "wiggu", "en": "wig", "wordId": 1025380 },
+    { "kana": "ウィルス", "romaji": "wirusu", "en": "virus", "wordId": 1025450 }
+  ]
+}

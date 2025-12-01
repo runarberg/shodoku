@@ -1,0 +1,19 @@
+{
+  "literal": "ヴァ",
+  "reading": "va",
+  "base": ["ヴ", "ア"],
+  "vocab": [
+    {
+      "kana": "ヴァイオリン",
+      "romaji": "vaiorin",
+      "en": "violin",
+      "wordId": 1097740
+    },
+    {
+      "kana": "ヴァルハラ",
+      "romaji": "varuhara",
+      "en": "Valhalla",
+      "wordId": 2581330
+    }
+  ]
+}

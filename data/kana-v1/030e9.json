@@ -1,0 +1,16 @@
+{
+  "literal": "ラ",
+  "reading": "ra",
+  "hiragana": "ら",
+  "vocab": [
+    { "kana": "ラーメン", "romaji": "ramēn", "en": "ramen", "wordId": 1137720 },
+    { "kana": "ラジオ", "romaji": "rajio", "en": "radio", "wordId": 1138860 },
+    { "kana": "ライブ", "romaji": "raibu", "en": "live", "wordId": 1138270 },
+    {
+      "kana": "ラッシュ",
+      "romaji": "rasshu",
+      "en": "rush hour",
+      "wordId": 1139180
+    }
+  ]
+}

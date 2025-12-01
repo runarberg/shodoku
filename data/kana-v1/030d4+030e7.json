@@ -1,0 +1,21 @@
+{
+  "literal": "ピョ",
+  "reading": "pyo",
+  "base": ["ピ", "ヨ", "ヒョ"],
+  "dakuten": "ビョ",
+  "hiragana": "ぴょ",
+  "vocab": [
+    {
+      "kana": "ピョンピョン",
+      "romaji": "pyon-pyon",
+      "en": "hopping",
+      "wordId": 1010920
+    },
+    {
+      "kana": "ピョンヤン",
+      "romaji": "pyonyan",
+      "en": "Pyongyang (North Korea)",
+      "wordId": 1752020
+    }
+  ]
+}

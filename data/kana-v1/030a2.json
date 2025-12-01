@@ -1,0 +1,38 @@
+{
+  "literal": "ア",
+  "reading": "a",
+  "hiragana": "あ",
+  "vocab": [
+    {
+      "kana": "アパート",
+      "romaji": "apāto",
+      "en": "apartment",
+      "wordId": 1017760
+    },
+    { "kana": "アジア", "romaji": "ajia", "en": "asia", "wordId": 1015840 },
+    {
+      "kana": "アルバイト",
+      "romaji": "arubaito",
+      "en": "part time job",
+      "wordId": 1019420
+    },
+    {
+      "kana": "アイスクリーム",
+      "romaji": "aisukurīmu",
+      "en": "ice cream",
+      "wordId": 1013980
+    },
+    {
+      "kana": "アイスランド",
+      "romaji": "aisurando",
+      "en": "Iceland",
+      "wordId": 1648150
+    },
+    {
+      "kana": "アウトドア",
+      "romaji": "autodoa",
+      "en": "outdoors",
+      "wordId": 1014770
+    }
+  ]
+}

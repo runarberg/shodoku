@@ -1,0 +1,23 @@
+{
+  "literal": "ビ",
+  "reading": "bi",
+  "base": "ヒ",
+  "handakuten": "ピ",
+  "youon": ["ビャ", "ビュ", "ビョ"],
+  "hiragana": "び",
+  "vocab": [
+    { "kana": "ビール", "romaji": "bīru", "en": "beer", "wordId": 1104550 },
+    {
+      "kana": "ビタミン",
+      "romaji": "bitamin",
+      "en": "vitamin",
+      "wordId": 1105160
+    },
+    {
+      "kana": "ビッシリ",
+      "romaji": "bisshiri",
+      "en": "packed densely",
+      "wordId": 1010770
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "literal": "ジャ",
+  "reading": "ja",
+  "base": ["ジ", "ヤ", "シャ"],
+  "hiragana": "じゃ",
+  "vocab": [
+    {
+      "kana": "ジャケット",
+      "romaji": "jaketto",
+      "en": "jacket",
+      "wordId": 1065170
+    },
+    { "kana": "ジャズ", "romaji": "jazu", "en": "jazz", "wordId": 1065290 },
+    {
+      "kana": "ジャーナリスト",
+      "romaji": "jānarisuto",
+      "en": "journalist",
+      "wordId": 1064980
+    },
+    {
+      "kana": "ジャラジャラ",
+      "romaji": "jara-jara",
+      "en": "clinking",
+      "wordId": 2454080
+    }
+  ]
+}

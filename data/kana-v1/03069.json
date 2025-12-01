@@ -1,0 +1,23 @@
+{
+  "literal": "ど",
+  "reading": "do",
+  "base": "と",
+  "katakana": "ド",
+  "vocab": [
+    { "kana": "どうも", "romaji": "dōmo", "en": "thanks", "wordId": 1009000 },
+    { "kana": "どうぞ", "romaji": "dōzo", "en": "please", "wordId": 1189130 },
+    { "kana": "どこ", "romaji": "doko", "en": "where", "wordId": 1577140 },
+    {
+      "kana": "どんな",
+      "romaji": "donna",
+      "en": "what kind of",
+      "wordId": 1009330
+    },
+    {
+      "kana": "どくしょ",
+      "romaji": "dokusho",
+      "en": "reading (books)",
+      "wordId": 1456420
+    }
+  ]
+}

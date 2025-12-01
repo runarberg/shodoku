@@ -1,0 +1,11 @@
+{
+  "literal": "ぎ",
+  "reading": "gi",
+  "base": "き",
+  "youon": ["ぎゃ", "ぎゅ", "ぎょ"],
+  "katakana": "ギ",
+  "vocab": [
+    { "kana": "ぎんこう", "romaji": "ginkō", "en": "bank", "wordId": 1243490 },
+    { "kana": "ぎふ", "romaji": "gifu", "en": "Gifu (city)", "wordId": 1625240 }
+  ]
+}

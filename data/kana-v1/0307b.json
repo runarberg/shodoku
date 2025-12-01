@@ -1,0 +1,36 @@
+{
+  "literal": "ほ",
+  "reading": "ho",
+  "dakuten": "ぼ",
+  "handakuten": "ぽ",
+  "katakana": "ホ",
+  "vocab": [
+    { "kana": "ほしい", "romaji": "hoshī", "en": "to want", "wordId": 1547330 },
+    { "kana": "ほん", "romaji": "hon", "en": "book", "wordId": 1522150 },
+    {
+      "kana": "ほんとうに",
+      "romaji": "hontōni",
+      "en": "really",
+      "wordId": 1611580
+    },
+    { "kana": "ほうほう", "romaji": "hōhō", "en": "method", "wordId": 1517090 },
+    {
+      "kana": "ほめる",
+      "romaji": "homeru",
+      "en": "to praise",
+      "wordId": 1603550
+    },
+    {
+      "kana": "ほっかいどう",
+      "romaji": "hokkaidō",
+      "en": "Hokkaido (island)",
+      "wordId": 1520810
+    },
+    {
+      "kana": "ほんしゅう",
+      "romaji": "honshū",
+      "en": "Honshu (island)",
+      "wordId": 1522640
+    }
+  ]
+}

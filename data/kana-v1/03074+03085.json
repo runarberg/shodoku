@@ -1,0 +1,15 @@
+{
+  "literal": "ぴゅ",
+  "reading": "pyu",
+  "base": ["ぴ", "ゆ", "ひゅ"],
+  "dakuten": "びゅ",
+  "katakana": "ピュ",
+  "vocab": [
+    {
+      "kana": "ぴゅうぴゅう",
+      "romaji": "pyū pyū",
+      "en": "howling",
+      "wordId": 2059800
+    }
+  ]
+}

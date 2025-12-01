@@ -1,0 +1,29 @@
+{
+  "literal": "な",
+  "reading": "na",
+  "katakana": "ナ",
+  "vocab": [
+    { "kana": "なん", "romaji": "nan", "en": "what", "wordId": 2846738 },
+    { "kana": "なつ", "romaji": "natsu", "en": "summer", "wordId": 1191320 },
+    { "kana": "なか", "romaji": "naka", "en": "inside", "wordId": 1423310 },
+    { "kana": "なな", "romaji": "nana", "en": "seven", "wordId": 1319210 },
+    {
+      "kana": "なごや",
+      "romaji": "nagoya",
+      "en": "Nagoya (city)",
+      "wordId": 2164620
+    },
+    {
+      "kana": "ながさき",
+      "romaji": "nagasaki",
+      "en": "Nagasaki (city)",
+      "wordId": 2770680
+    },
+    {
+      "kana": "なっとう",
+      "romaji": "nattō",
+      "en": "natto (fermented soybeans)",
+      "wordId": 1470070
+    }
+  ]
+}

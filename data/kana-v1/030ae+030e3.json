@@ -1,0 +1,20 @@
+{
+  "literal": "ギャ",
+  "reading": "gya",
+  "base": ["ギ", "ヤ", "キャ"],
+  "hiragana": "ぎゃ",
+  "vocab": [
+    {
+      "kana": "ギャラリー",
+      "romaji": "gyararī",
+      "en": "gallery",
+      "wordId": 1043100
+    },
+    {
+      "kana": "ギャロップ",
+      "romaji": "gyaroppu",
+      "en": "gallop",
+      "wordId": 1043140
+    }
+  ]
+}

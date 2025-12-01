@@ -1,0 +1,26 @@
+{
+  "literal": "げ",
+  "reading": "ge",
+  "base": "け",
+  "katakana": "ゲ",
+  "vocab": [
+    {
+      "kana": "げんき",
+      "romaji": "genki",
+      "en": "energetic",
+      "wordId": 1260720
+    },
+    {
+      "kana": "げつようび",
+      "romaji": "getsuyōbi",
+      "en": "monday",
+      "wordId": 1255890
+    },
+    {
+      "kana": "げいじゅつ",
+      "romaji": "geijutsu",
+      "en": "art",
+      "wordId": 1253060
+    }
+  ]
+}

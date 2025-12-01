@@ -1,0 +1,22 @@
+{
+  "literal": "きゅ",
+  "reading": "kyu",
+  "base": ["き", "ゆ"],
+  "dakuten": "ぎゅ",
+  "katakana": "キュ",
+  "vocab": [
+    { "kana": "きゅう", "romaji": "kyū", "en": "nine", "wordId": 1578150 },
+    {
+      "kana": "きゅうしゅう",
+      "romaji": "kyūshū",
+      "en": "Kyushu",
+      "wordId": 1243710
+    },
+    {
+      "kana": "きゅうに",
+      "romaji": "kyūni",
+      "en": "suddenly",
+      "wordId": 2269050
+    }
+  ]
+}

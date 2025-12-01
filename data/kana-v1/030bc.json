@@ -1,0 +1,16 @@
+{
+  "literal": "ゼ",
+  "reading": "ze",
+  "base": "セ",
+  "hiragana": "ぜ",
+  "vocab": [
+    { "kana": "ゼロ", "romaji": "zero", "en": "zero", "wordId": 2839962 },
+    {
+      "kana": "ゼーゼー",
+      "romaji": "zē-zē",
+      "en": "puffing and panting",
+      "wordId": 2067490
+    },
+    { "kana": "ゼルダ", "romaji": "zeruda", "en": "Zelda", "wordId": 5046755 }
+  ]
+}

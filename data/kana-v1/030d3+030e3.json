@@ -1,0 +1,15 @@
+{
+  "literal": "ビャ",
+  "reading": "bya",
+  "base": ["ビ", "ヤ", "ヒャ"],
+  "handakuten": "ピャ",
+  "hiragana": "びゃ",
+  "vocab": [
+    {
+      "kana": "ビャンビャンめん",
+      "romaji": "byan-byan men",
+      "en": "biang-biang noodles",
+      "wordId": 2838377
+    }
+  ]
+}

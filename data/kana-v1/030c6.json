@@ -1,0 +1,24 @@
+{
+  "literal": "テ",
+  "reading": "te",
+  "dakuten": "デ",
+  "hiragana": "て",
+  "youon": ["ティ"],
+  "vocab": [
+    { "kana": "テレビ", "romaji": "terebi", "en": "TV", "wordId": 1080510 },
+    { "kana": "テスト", "romaji": "tesuto", "en": "exam", "wordId": 1079760 },
+    { "kana": "テニス", "romaji": "tenisu", "en": "tennis", "wordId": 1080000 },
+    {
+      "kana": "テキスト",
+      "romaji": "tekisuto",
+      "en": "textbook",
+      "wordId": 1079290
+    },
+    {
+      "kana": "テキパキ",
+      "romaji": "teki-paku",
+      "en": "briskly",
+      "wordId": 2009050
+    }
+  ]
+}

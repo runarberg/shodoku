@@ -1,0 +1,26 @@
+{
+  "literal": "みょ",
+  "reading": "myo",
+  "base": ["み", "よ"],
+  "katakana": "ミョ",
+  "vocab": [
+    {
+      "kana": "みょうじ",
+      "romaji": "myōji",
+      "en": "family name",
+      "wordId": 1604730
+    },
+    {
+      "kana": "みょうしゅ",
+      "romaji": "myōshu",
+      "en": "brilliant move",
+      "wordId": 1528530
+    },
+    {
+      "kana": "みょうにおもう",
+      "romaji": "myō ni omou",
+      "en": "to think (something) strange",
+      "wordId": 1910880
+    }
+  ]
+}

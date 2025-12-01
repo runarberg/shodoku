@@ -1,0 +1,28 @@
+{
+  "literal": "シャ",
+  "reading": "sha",
+  "base": ["シ", "ヤ"],
+  "dakuten": "ジャ",
+  "hiragana": "しゃ",
+  "vocab": [
+    { "kana": "シャツ", "romaji": "shatsu", "en": "shirt", "wordId": 1061520 },
+    {
+      "kana": "シャワー",
+      "romaji": "shawā",
+      "en": "shower",
+      "wordId": 1061820
+    },
+    {
+      "kana": "シャベル",
+      "romaji": "shaberu",
+      "en": "shovel",
+      "wordId": 1061710
+    },
+    {
+      "kana": "シャープペンシル",
+      "romaji": "shāpu penshiru",
+      "en": "mechanical pencil",
+      "wordId": 1061300
+    }
+  ]
+}

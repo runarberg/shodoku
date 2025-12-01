@@ -1,0 +1,32 @@
+{
+  "literal": "み",
+  "reading": "mi",
+  "youon": ["みゃ", "みゅ", "みょ"],
+  "katakana": "ミ",
+  "vocab": [
+    { "kana": "みる", "romaji": "miru", "en": "to see", "wordId": 1259290 },
+    { "kana": "みみ", "romaji": "mimi", "en": "ear", "wordId": 1317170 },
+    {
+      "kana": "みやげ",
+      "romaji": "miyage",
+      "en": "souvenir",
+      "wordId": 1445360
+    },
+    { "kana": "みず", "romaji": "mizu", "en": "water", "wordId": 1371260 },
+    {
+      "kana": "みんなさん",
+      "romaji": "minnasan",
+      "en": "everybody",
+      "wordId": 2826895
+    },
+    { "kana": "みぎ", "romaji": "migi", "en": "right", "wordId": 1171010 },
+    { "kana": "みらい", "romaji": "mirai", "en": "future", "wordId": 1528060 },
+    { "kana": "みなみ", "romaji": "minami", "en": "south", "wordId": 1459870 },
+    {
+      "kana": "みやざき",
+      "romaji": "miyazaki",
+      "en": "Miyazaki (city)",
+      "wordId": 2845084
+    }
+  ]
+}

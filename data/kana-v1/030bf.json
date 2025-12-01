@@ -1,0 +1,23 @@
+{
+  "literal": "タ",
+  "reading": "ta",
+  "dakuten": "ダ",
+  "hiragana": "た",
+  "vocab": [
+    { "kana": "タオル", "romaji": "taoru", "en": "towel", "wordId": 1076170 },
+    { "kana": "タイア", "romaji": "taia", "en": "tire", "wordId": 1075840 },
+    {
+      "kana": "タクシー",
+      "romaji": "takushī",
+      "en": "taxi",
+      "wordId": 1076190
+    },
+    { "kana": "タイ", "romaji": "tai", "en": "Thailand", "wordId": 2005380 },
+    {
+      "kana": "タダ",
+      "romaji": "tada",
+      "en": "free of charge",
+      "wordId": 1538900
+    }
+  ]
+}

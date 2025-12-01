@@ -1,0 +1,34 @@
+{
+  "literal": "ド",
+  "reading": "do",
+  "base": "ト",
+  "hiragana": "ど",
+  "vocab": [
+    { "kana": "ドア", "romaji": "doa", "en": "door", "wordId": 1087820 },
+    {
+      "kana": "ドライブ",
+      "romaji": "doraibu",
+      "en": "drive",
+      "wordId": 1088580
+    },
+    { "kana": "ドラマ", "romaji": "dorama", "en": "drama", "wordId": 1088830 },
+    {
+      "kana": "ドーナツ",
+      "romaji": "dōnatsu",
+      "en": "donut",
+      "wordId": 1087690
+    },
+    {
+      "kana": "ドイツ",
+      "romaji": "doitsu",
+      "en": "Germany",
+      "wordId": 1599200
+    },
+    {
+      "kana": "ドキドキ",
+      "romaji": "doki-doki",
+      "en": "bang-bang",
+      "wordId": 1009050
+    }
+  ]
+}

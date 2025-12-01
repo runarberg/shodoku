@@ -1,0 +1,15 @@
+{
+  "literal": "びゅ",
+  "reading": "byu",
+  "base": ["び", "ゆ", "ひゅ"],
+  "handakuten": "ぴゅ",
+  "katakana": "ビュ",
+  "vocab": [
+    {
+      "kana": "ごびゅう",
+      "romaji": "gobyū",
+      "en": "fallacy",
+      "wordId": 1271440
+    }
+  ]
+}

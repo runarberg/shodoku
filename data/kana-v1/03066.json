@@ -1,0 +1,24 @@
+{
+  "literal": "て",
+  "reading": "te",
+  "dakuten": "で",
+  "katakana": "テ",
+  "vocab": [
+    { "kana": "てんき", "romaji": "tenki", "en": "weather", "wordId": 1438690 },
+    { "kana": "て", "romaji": "te", "en": "hand", "wordId": 1327190 },
+    { "kana": "てがみ", "romaji": "tegami", "en": "letter", "wordId": 1327720 },
+    {
+      "kana": "てつだう",
+      "romaji": "tetsudau",
+      "en": "to help",
+      "wordId": 1328190
+    },
+    {
+      "kana": "てんぷら",
+      "romaji": "tenpura",
+      "en": "Tempura",
+      "wordId": 1440590
+    },
+    { "kana": "てら", "romaji": "tera", "en": "temple", "wordId": 1315240 }
+  ]
+}
