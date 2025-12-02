@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { asyncComputed } from "@vueuse/core";
+import { computedAsync } from "@vueuse/core";
 import { computed, ref } from "vue";
 
 import { fetchKanjiVG } from "../helpers/kanjivg.ts";
@@ -17,7 +17,7 @@ defineEmits<{
 
 const isKanjiVGSyncing = ref(true);
 
-const kanjiVGs = asyncComputed(
+const kanjiVGs = computedAsync(
   () =>
     Promise.all(
       [...props.kana].map((char) => {

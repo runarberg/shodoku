@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { vIntersectionObserver } from "@vueuse/components";
-import { asyncComputed } from "@vueuse/core";
+import { computedAsync } from "@vueuse/core";
 import { computed, ref, watch } from "vue";
 
 import { db } from "../db/index.ts";
@@ -16,7 +16,7 @@ const props = defineProps<{
   hideMeaning?: boolean;
 }>();
 
-const wordListsResult = asyncComputed(async () => {
+const wordListsResult = computedAsync(async () => {
   const { words } = props.kanjiVocab;
   const bookmarked = [];
   const rest = [];

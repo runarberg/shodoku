@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { asyncComputed } from "@vueuse/core";
+import { computedAsync } from "@vueuse/core";
 import { RecordLogItem, State } from "ts-fsrs";
 import { computed } from "vue";
 
@@ -18,7 +18,7 @@ defineEmits<{
   rate: [value: { progress: CardProgress; next: RecordLogItem }];
 }>();
 
-const progress = asyncComputed(async () => {
+const progress = computedAsync(async () => {
   const { cardId, cardType, fsrs } = props.card;
 
   if (fsrs) {

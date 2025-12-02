@@ -37,8 +37,25 @@ export function useWordSearch(
 
   function handleMessage(event: MessageEvent<WordSearchResult>) {
     const result = event.data;
+    const needle = toValue(searchPhrase);
 
-    if (result.phrase === toValue(searchPhrase)) {
+    if (result.phrase !== needle) {
+      return;
+    }
+
+    if (result.matchShort.length < needle.length + 4) {
+      // Close match, move it to the front.
+      let index = 0;
+      for (const other of wordResults) {
+        if (other.matchShort.length > result.matchShort.length) {
+          break;
+        }
+
+        index += 1;
+      }
+
+      wordResults.splice(index, 0, result);
+    } else {
       wordResults.push(result);
     }
   }

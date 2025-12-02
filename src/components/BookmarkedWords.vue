@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { vIntersectionObserver } from "@vueuse/components";
-import { asyncComputed } from "@vueuse/core";
+import { computedAsync } from "@vueuse/core";
 import { ref } from "vue";
 
 import { db } from "../db/index.ts";
 import WordListItem from "./WordListItem.vue";
 
-const wordIds = asyncComputed(async () => {
+const PAGE_SIZE = 10;
+
+const wordIds = computedAsync(async () => {
   const result = [];
   const cursors = (await db)
     .transaction("bookmarked-words")
@@ -20,10 +22,10 @@ const wordIds = asyncComputed(async () => {
   return result;
 }, []);
 
-const pageLimit = ref(20);
+const pageLimit = ref(PAGE_SIZE);
 
 function nextPage() {
-  pageLimit.value += 20;
+  pageLimit.value += PAGE_SIZE;
 }
 
 function handleNextPageIntersecting([

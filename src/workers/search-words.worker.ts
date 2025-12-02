@@ -1,6 +1,6 @@
 import { hasKanaOrKanji, hasKanji } from "../helpers/text.ts";
 
-const LIMIT = 20;
+const LIMIT = 100;
 
 const UNIT_SEP = "\u{241f}";
 const RECORD_SEP = "\u{241e}";
@@ -11,6 +11,7 @@ const fetchingIndex = fetch("/data/index/words-v1.usv").then((response) =>
 );
 
 function isInParams(heystack: string, needle: string): boolean {
+  // FIXME: False positive in "(haystack) needle"
   const openParam = heystack.indexOf("(");
 
   if (openParam === -1) {
@@ -24,6 +25,7 @@ export type WordSearchResult = {
   id: number;
   phrase: string;
   match: string;
+  matchShort: string;
   writings: string[];
   readings: string[];
   glossary: string[];
@@ -91,10 +93,24 @@ async function findWords(search: {
         );
         const id = Number.parseInt(idStr);
 
+        // Maybe remove parens for sorting etc.
+        let matchShort = matchContent;
+        if (search.glossary && matchShort.includes(" (")) {
+          const matchIndex = matchShort.indexOf(search.phrase);
+          const parenIndex = matchShort.indexOf(
+            " (",
+            matchIndex + search.phrase.length,
+          );
+          if (parenIndex !== -1) {
+            matchShort = matchShort.slice(0, parenIndex);
+          }
+        }
+
         const result: WordSearchResult = {
           id,
           phrase: search.phrase,
           match: matchContent,
+          matchShort,
           readings: readingRec.split(UNIT_SEP),
           writings: writingRec.split(UNIT_SEP),
           glossary: glossaryRec.split(UNIT_SEP),
@@ -121,7 +137,7 @@ async function findWords(search: {
 }
 
 addEventListener("message", async (event: MessageEvent<string>) => {
-  const { data: phrase } = event;
+  const phrase = event.data.trim();
 
   const searchWriting = hasKanji(phrase);
   const searchReading = !searchWriting && hasKanaOrKanji(phrase);
