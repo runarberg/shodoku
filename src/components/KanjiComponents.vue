@@ -40,7 +40,8 @@ watch(components, () => {
       </template>
     </h2>
 
-    <ul class="component-list">
+    <p v-if="hide" class="hidden-info">[hidden]</p>
+    <ul v-else class="component-list">
       <template v-for="([literal, partss], i) of components" :key="literal">
         <template v-if="showAll || i < MAX_SHOWN">
           <li
@@ -51,7 +52,6 @@ watch(components, () => {
               :literal="literal"
               :parts="parts"
               :original="original"
-              :hide="hide"
             />
           </li>
         </template>
@@ -82,6 +82,11 @@ watch(components, () => {
     display: flex;
     flex-direction: column;
   }
+}
+
+hidden-info {
+  color: var(--text-light);
+  font-weight: 500;
 }
 
 .show-more-button {

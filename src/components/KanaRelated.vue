@@ -5,12 +5,13 @@ import KanaReading from "./KanaReading.vue";
 
 defineProps<{
   kana: KanaInfo;
+  hideReading?: boolean;
 }>();
 </script>
 
 <template>
   <aside class="kana-related">
-    <dl class="related-dl">
+    <dl class="related-dl" :class="{ 'dd-hidden': hideReading }">
       <dt>Reading</dt>
       <dd>
         <strong class="reading base-reading">{{ kana.reading }}</strong>
@@ -120,6 +121,10 @@ defineProps<{
     gap: 0.5ex 1ex;
     display: flex;
     flex-wrap: wrap;
+  }
+
+  &.dd-hidden dd {
+    visibility: hidden;
   }
 }
 

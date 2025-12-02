@@ -6,7 +6,6 @@ import {
   useKanjiVGSyncing,
   useKanjiVGViewBox,
 } from "../helpers/kanjivg.ts";
-import AppLoading from "./AppLoading.vue";
 import StrokesFigure from "./StrokesFigure.vue";
 
 defineProps<{
@@ -55,30 +54,10 @@ const strokes = computed<[string[]]>(() => {
       :auto-hint="autoHint"
       @practice-done="$emit('practiceDone')"
     />
-    <div v-else-if="isKanjiVGSyncing" class="loading-container">
-      <AppLoading class="loading" />
-    </div>
+    <StrokesFigure
+      v-else-if="isKanjiVGSyncing"
+      :char-strokes="[]"
+      class="loading-container"
+    />
   </section>
 </template>
-
-<style scoped>
-.loading-container {
-  align-items: center;
-  border-radius: 1em;
-  background: var(--background-light);
-  aspect-ratio: 1;
-  display: flex;
-  inline-size: 100%;
-  justify-content: center;
-  max-inline-size: 25em;
-  min-inline-size: 15em;
-}
-
-.loading {
-  color: var(--accent-color);
-  display: block;
-  line-height: 1;
-  font-size: 10em;
-  opacity: 0.7;
-}
-</style>

@@ -58,7 +58,7 @@ defineProps<{
   flex-wrap: wrap;
 
   &[data-blur] {
-    filter: blur(3.5px);
+    visibility: hidden;
   }
 }
 </style>

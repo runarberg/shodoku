@@ -10,11 +10,17 @@ import KanjiStrokesPracticeCanvas from "./KanjiStrokesPracticeCanvas.vue";
 const practicing = defineModel<boolean>("practicing", { default: false });
 const autoHint = defineModel<boolean>("auto-hint", { default: false });
 
-const props = defineProps<{
-  viewBox: string;
-  charStrokes: string[][];
-  practiceMode?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    charStrokes: string[][];
+    viewBox?: string;
+    practiceMode?: boolean;
+  }>(),
+  {
+    viewBox: "0,0,109,109",
+    practiceMode: false,
+  },
+);
 
 const emit = defineEmits<{
   practiceDone: [];
@@ -213,6 +219,23 @@ watch(practicing, (practiceStarted) => {
     clearPracticeStrokes();
   }
 });
+
+watch(
+  () => props.practiceMode,
+  (isPracticeMode, wasPracticeMode) => {
+    if (isPracticeMode === false && wasPracticeMode === true) {
+      // Practice is done.
+      if (practiceStrokeCount.value === 0) {
+        // User may be using a pen and paper, just show the answer.
+        practicing.value = false;
+      } else if (practiceStrokeCount.value < strokes.value.length) {
+        // User clicked the “show answer” button before they finished
+        // writing out the character.
+        comparing.value = true;
+      }
+    }
+  },
+);
 
 watch(
   strokes,

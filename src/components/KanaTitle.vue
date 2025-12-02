@@ -76,8 +76,9 @@ const retrievability = useCardRetrievability(cardId, [
     <KanaRelated
       v-if="kanaInfo"
       :kana="kanaInfo"
-      class="related"
+      :hide-reading="hideKana || hideRomaji"
       :data-blur="hideKana || hideRomaji ? true : null"
+      class="related"
     />
   </header>
 </template>

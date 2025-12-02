@@ -11,7 +11,6 @@ const props = defineProps<{
   literal: string;
   original?: string | null;
   parts: KanjiComponent[];
-  hide?: boolean;
 }>();
 
 const kanjiVG = useKanjiVG();
@@ -160,14 +159,10 @@ watchEffect(() => {
     class="kanji-component-item"
   >
     <svg v-if="kanjiVG" :viewBox="viewBox" class="kanji-component-strokes">
-      <KanjiStrokesGroup
-        v-if="!hide"
-        class="strokes-group"
-        :strokes="kanjiVG"
-      />
+      <KanjiStrokesGroup class="strokes-group" :strokes="kanjiVG" />
     </svg>
 
-    <div v-if="!hide" class="component-info">
+    <div class="component-info">
       <span v-if="!isCDPCodePoint" class="literal">{{ literal }}</span>
 
       <p class="meaning">
