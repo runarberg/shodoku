@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, toRaw } from "vue";
 
 import { editDeck } from "../db/decks.ts";
 import { Deck, KanjiInfo } from "../types.ts";
@@ -15,7 +15,7 @@ const deckHasCard = computed(() =>
 );
 
 async function toggleActive() {
-  const { deck } = props;
+  const deck = toRaw(props.deck);
   const { cards } = deck;
   const { codepoint } = props.kanji;
 

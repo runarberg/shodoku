@@ -82,9 +82,8 @@ const retrievability = useCardRetrievability(
         v-for="deck of decks"
         :key="deck.name"
         :to="{ name: DECKS_ROUTE_NAME, query: { deck: deck.name } }"
-        class="deck-label"
       >
-        <AppLabel>{{ deckLabel(deck) }}</AppLabel>
+        <AppLabel class="deck-label">{{ deckLabel(deck) }}</AppLabel>
       </RouterLink>
 
       <CardRetrievabilityLabel
@@ -179,6 +178,9 @@ const retrievability = useCardRetrievability(
 
   & .deck-label {
     background: var(--blue);
+  }
+
+  & a {
     color: var(--background-strong);
     text-decoration: none;
   }
