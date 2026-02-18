@@ -4,7 +4,6 @@
   "categories": ["Education", "Books and Reference"],
   "background_color": "oklch(90% 0.05 180)",
   "theme_color": "oklch(66.5% 0.226 3)",
-  "orientation": "any",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui", "browser"],
   "icons": [
