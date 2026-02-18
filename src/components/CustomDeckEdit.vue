@@ -21,8 +21,10 @@ const model = reactive({
 });
 
 async function handleSubmit() {
+  const deck = toRaw(props.deck);
+
   await editDeck({
-    ...props.deck,
+    ...deck,
     label: model.label,
     priority: model.priority,
     cards: toRaw(model.cards),

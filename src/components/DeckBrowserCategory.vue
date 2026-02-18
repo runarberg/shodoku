@@ -166,7 +166,7 @@ function handleDeckCreated() {
       </template>
       <template v-else-if="storedDecks">
         <li v-for="[name, deck] of storedDecks" :key="name">
-          <DeckBrowserItem :deck="deck" />
+          <DeckBrowserItem :deck="deck" category="custom" :template="null" />
         </li>
       </template>
     </ol>

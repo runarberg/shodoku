@@ -142,7 +142,7 @@ watch(
   border-radius: 0.5ex;
   inline-size: max-content;
   inset: auto;
-  margin-inline: 0;
+  margin: 0;
   max-inline-size: 25ch;
   padding: 0;
   position: absolute;

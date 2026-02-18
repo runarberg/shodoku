@@ -326,6 +326,15 @@ async function applySyncPatches(
 
       for (const recordStr of patchStore.add ?? []) {
         const record = parse(recordStr);
+        if (patchStore.name === "decks" && !record.cardTypes) {
+          // Old patch that needs migration.
+          const deck = record as Deck;
+          deck.cardTypes =
+            deck.category === "kana"
+              ? ["kana-write", "kana-read"]
+              : ["kanji-write", "kanji-read"];
+        }
+
         const adding = store.add(record);
 
         // Make sure a constraint error does’t abort the whole transaction.
