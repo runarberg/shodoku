@@ -28,6 +28,11 @@ const searchPhrase = computed<string>({
     router.replace({ query: { search: value || undefined } });
   },
 });
+
+function handleComponentPickerSelect(literal: string) {
+  searchPhrase.value += literal;
+  componentPickerExpanded.value = false;
+}
 </script>
 
 <template>
@@ -58,12 +63,12 @@ const searchPhrase = computed<string>({
     v-if="componentPickerExpanded"
     :id="componentPickerId"
     @close="componentPickerExpanded = false"
-    @select="searchPhrase += $event"
+    @select="handleComponentPickerSelect"
   />
 
   <template v-if="searchPhrase">
-    <KanjiSearchResults class="kanji-results" :phrase="searchPhrase" />
-    <WordSearchResults class="word-results" :phrase="searchPhrase" />
+    <KanjiSearchResults class="kanji-results" :phrase="searchPhrase.trim()" />
+    <WordSearchResults class="word-results" :phrase="searchPhrase.trim()" />
   </template>
 
   <BookmarkedWords v-else class="bookmark-results" />
