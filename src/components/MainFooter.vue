@@ -5,7 +5,7 @@ const currentYear = new Date().getFullYear();
 </script>
 
 <template>
-  <footer>
+  <footer class="main-footer">
     <nav class="footer-nav">
       <ul>
         <li>
@@ -23,8 +23,10 @@ const currentYear = new Date().getFullYear();
       </ul>
     </nav>
 
-    <small class="copyright"
-      >© 2024-{{ currentYear }} Rúnar Berg Baugsson Sigríðarson.
+    <small class="copyright">
+      © 2024-{{ currentYear }}
+      Rúnar Berg Baugsson Sigríðarson.
+      <br />
       <a
         href="https://github.com/runarberg/shodoku/blob/main/LICENSE.txt"
         target="_blank"
@@ -46,14 +48,15 @@ const currentYear = new Date().getFullYear();
   & > li {
     align-items: center;
     display: flex;
-  }
-  & > li:not(:first-child)::before {
-    background: var(--accent-color);
-    block-size: 1em;
-    content: "";
-    display: block;
-    inline-size: 1px;
-    margin-inline-end: 1ex;
+
+    &:not(:first-child)::before {
+      background: var(--accent-color);
+      block-size: 1em;
+      content: "";
+      display: block;
+      inline-size: 1px;
+      margin-inline-end: 1ex;
+    }
   }
 }
 

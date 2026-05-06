@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import AppearanceSettings from "../components/AppearanceSettings.vue";
+import PageMain from "../components/PageMain.vue";
 import PreferencesForm from "../components/PreferencesForm.vue";
 import RemoteSyncSettings from "../components/RemoteSyncSettings.vue";
 </script>
 
 <template>
-  <article class="settings-view">
+  <PageMain class="settings-view">
     <section>
       <h2>Preferences</h2>
 
@@ -23,5 +24,5 @@ import RemoteSyncSettings from "../components/RemoteSyncSettings.vue";
 
       <RemoteSyncSettings />
     </section>
-  </article>
+  </PageMain>
 </template>

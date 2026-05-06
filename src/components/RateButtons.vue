@@ -60,6 +60,8 @@ function rateCard(rating: Rating) {
 .rating-button {
   background: var(--background-strong);
   border-color: currentColor;
+  flex-grow: 1;
+  justify-content: center;
 
   &[data-rating="Again"] {
     color: var(--pink);

@@ -6,6 +6,7 @@ import { count, filter, map } from "yta/async";
 
 import AppButton from "../components/AppButton.vue";
 import AppLoading from "../components/AppLoading.vue";
+import PageMain from "../components/PageMain.vue";
 import RemoteSyncSyncButton from "../components/RemoteSyncSyncButton.vue";
 import { db } from "../db/index.ts";
 import { useLiveQuery } from "../helpers/db.ts";
@@ -53,7 +54,7 @@ function continueReview() {
 </script>
 
 <template>
-  <article>
+  <PageMain>
     <div v-if="deckCount === null" class="loading">
       <AppLoading class="loading-icon" />
     </div>
@@ -99,7 +100,7 @@ function continueReview() {
         <RemoteSyncSyncButton conditional />
       </nav>
     </template>
-  </article>
+  </PageMain>
 </template>
 
 <style scoped>

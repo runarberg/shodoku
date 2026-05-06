@@ -18,7 +18,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="advance-buttons">
+  <div class="advance-buttons" :class="{ 'is-rating': isRating }">
     <RateButtons
       v-if="isRating"
       :progress="progress"
@@ -50,10 +50,19 @@ defineEmits<{
   backdrop-filter: blur(2em);
   display: flex;
   column-gap: 1ex;
-  inline-size: max-content;
   inset-block-start: 0;
-  padding-block: 1em 1ex;
-  padding-inline-end: 1em;
+  margin-block: 1ex;
+  margin-inline: -1em;
+  padding-block: 1ex;
+  padding-inline: 1em;
   position: sticky;
+
+  &:not(.is-rating) {
+    inline-size: max-content;
+  }
+
+  @media screen and (max-width: 90ch) {
+    inset-block-start: 4.5em;
+  }
 }
 </style>

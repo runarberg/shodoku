@@ -51,17 +51,20 @@ export const router = createRouter({
       return;
     }
 
-    if (savedPosition) {
-      return savedPosition;
-    }
-
     if (to.hash) {
       return { el: to.hash };
     }
 
+    if (savedPosition) {
+      return savedPosition;
+    }
+
     const appMainEl = document.getElementById("app:main");
     if (appMainEl && appMainEl.getBoundingClientRect().top < 0) {
-      return { el: appMainEl };
+      return {
+        el: appMainEl,
+        top: window.matchMedia("(max-width: 90ch)").matches ? 80 : 0,
+      };
     }
   },
   routes: [
@@ -72,41 +75,18 @@ export const router = createRouter({
     },
     {
       path: "/review",
-      name: REVIEW_ROUTE_NAME,
-      component: () => import("./views/ReviewView.vue"),
-    },
-    {
-      path: "/review/summary",
-      name: REVIEW_SUMMARY_ROUTE_NAME,
-      component: () => import("./views/ReviewSummaryView.vue"),
-    },
-    {
-      path: "/kana/:kana",
-      name: KANA_ROUTE_NAME,
-      components: {
-        default: () => import("./views/KanaView.vue"),
-        aside: () => import("./views/KanaAsideView.vue"),
-      },
-    },
-    {
-      path: "/kanji/:kanji",
-      name: KANJI_ROUTE_NAME,
-      components: {
-        default: () => import("./views/KanjiView.vue"),
-        aside: () => import("./views/KanjiAsideView.vue"),
-      },
-    },
-    {
-      path: "/kanji-component/:kanjiComponent",
-      name: KANJI_COMPONENT_ROUTE_NAME,
-      components: {
-        default: () => import("./views/KanjiComponentView.vue"),
-      },
-    },
-    {
-      path: "/word/:wordId",
-      name: WORD_ROUTE_NAME,
-      component: () => import("./views/WordView.vue"),
+      children: [
+        {
+          path: "",
+          name: REVIEW_ROUTE_NAME,
+          component: () => import("./views/ReviewView.vue"),
+        },
+        {
+          path: "summary",
+          name: REVIEW_SUMMARY_ROUTE_NAME,
+          component: () => import("./views/ReviewSummaryView.vue"),
+        },
+      ],
     },
     {
       path: "/decks",
@@ -125,8 +105,42 @@ export const router = createRouter({
     },
     {
       path: "/dictionary",
-      name: DICTIONARY_ROUTE_NAME,
-      component: () => import("./views/DictionaryView.vue"),
+      component: () => import("./views/DictionaryParentView.vue"),
+      children: [
+        {
+          path: "",
+          name: DICTIONARY_ROUTE_NAME,
+          component: () => import("./views/DictionaryView.vue"),
+        },
+        {
+          path: "/kana/:kana",
+          name: KANA_ROUTE_NAME,
+          components: {
+            default: () => import("./views/KanaView.vue"),
+            aside: () => import("./views/KanaAsideView.vue"),
+          },
+        },
+        {
+          path: "/kanji/:kanji",
+          name: KANJI_ROUTE_NAME,
+          components: {
+            default: () => import("./views/KanjiView.vue"),
+            aside: () => import("./views/KanjiAsideView.vue"),
+          },
+        },
+        {
+          path: "/kanji-component/:kanjiComponent",
+          name: KANJI_COMPONENT_ROUTE_NAME,
+          components: {
+            default: () => import("./views/KanjiComponentView.vue"),
+          },
+        },
+        {
+          path: "/word/:wordId",
+          name: WORD_ROUTE_NAME,
+          component: () => import("./views/WordView.vue"),
+        },
+      ],
     },
     {
       path: "/settings",

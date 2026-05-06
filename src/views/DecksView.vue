@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import AppButton from "../components/AppButton.vue";
 import DeckList from "../components/DeckList.vue";
+import PageMain from "../components/PageMain.vue";
 import { deckBrowserRoute } from "../router.ts";
 </script>
 
 <template>
-  <article>
+  <PageMain>
     <header class="article-header">
       <h2 class="title">Your Decks</h2>
 
@@ -17,7 +18,7 @@ import { deckBrowserRoute } from "../router.ts";
     </header>
 
     <DeckList />
-  </article>
+  </PageMain>
 </template>
 
 <style scoped>

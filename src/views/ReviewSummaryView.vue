@@ -1,15 +1,16 @@
 <script setup lang="ts">
+import PageMain from "../components/PageMain.vue";
 import ReviewSummary from "../components/ReviewSummary.vue";
 </script>
 
 <template>
-  <article>
+  <PageMain>
     <header class="article-header">
       <h2 class="title">Review Summary</h2>
     </header>
 
     <ReviewSummary />
-  </article>
+  </PageMain>
 </template>
 
 <style scoped>

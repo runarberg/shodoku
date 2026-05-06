@@ -36,42 +36,44 @@ function handleComponentPickerSelect(literal: string) {
 </script>
 
 <template>
-  <div class="search-field">
-    <label class="label">
-      <AppIcon icon="search" class="icon" />
-    </label>
+  <article class="dictionary-view">
+    <div class="search-field">
+      <label class="label">
+        <AppIcon icon="search" class="icon" />
+      </label>
 
-    <input
-      v-model="searchPhrase"
-      type="search"
-      aria-label="search"
-      placeholder="Search for words, kanji, meanings, etc."
+      <input
+        v-model="searchPhrase"
+        type="search"
+        aria-label="search"
+        placeholder="Search for words, kanji, meanings, etc."
+      />
+
+      <AppButton
+        :filled="componentPickerExpanded"
+        :aria-pressed="componentPickerExpanded"
+        :aria-controls="componentPickerId"
+        aria-label="Component Picker"
+        @click="componentPickerExpanded = !componentPickerExpanded"
+      >
+        部
+      </AppButton>
+    </div>
+
+    <ComponentPicker
+      v-if="componentPickerExpanded"
+      :id="componentPickerId"
+      @close="componentPickerExpanded = false"
+      @select="handleComponentPickerSelect"
     />
 
-    <AppButton
-      :filled="componentPickerExpanded"
-      :aria-pressed="componentPickerExpanded"
-      :aria-controls="componentPickerId"
-      aria-label="Component Picker"
-      @click="componentPickerExpanded = !componentPickerExpanded"
-    >
-      部
-    </AppButton>
-  </div>
+    <template v-if="searchPhrase">
+      <KanjiSearchResults class="kanji-results" :phrase="searchPhrase.trim()" />
+      <WordSearchResults class="word-results" :phrase="searchPhrase.trim()" />
+    </template>
 
-  <ComponentPicker
-    v-if="componentPickerExpanded"
-    :id="componentPickerId"
-    @close="componentPickerExpanded = false"
-    @select="handleComponentPickerSelect"
-  />
-
-  <template v-if="searchPhrase">
-    <KanjiSearchResults class="kanji-results" :phrase="searchPhrase.trim()" />
-    <WordSearchResults class="word-results" :phrase="searchPhrase.trim()" />
-  </template>
-
-  <BookmarkedWords v-else class="bookmark-results" />
+    <BookmarkedWords v-else class="bookmark-results" />
+  </article>
 </template>
 
 <style scoped>

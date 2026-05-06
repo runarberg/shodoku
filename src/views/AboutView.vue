@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import PageMain from "../components/PageMain.vue";
 import { deckBrowserRoute, reviewRoute } from "../router.ts";
 </script>
 
 <template>
-  <article class="about-view">
+  <PageMain class="about-view">
     <h2>About Shodoku</h2>
 
     <p>
@@ -165,7 +166,7 @@ import { deckBrowserRoute, reviewRoute } from "../router.ts";
         <strong class="free-palestine">Free Palestine 🇵🇸</strong>.
       </p>
     </section>
-  </article>
+  </PageMain>
 </template>
 
 <style scoped>

@@ -4,6 +4,7 @@ import { computed, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import AppLoading from "../components/AppLoading.vue";
+import PageMain from "../components/PageMain.vue";
 import ReviewCard from "../components/ReviewCard.vue";
 import ReviewRemainCount from "../components/ReviewRemainCount.vue";
 import { kanaRoute, kanjiRoute, reviewSummaryRoute } from "../router.ts";
@@ -123,7 +124,7 @@ function handleRate({ progress, next }: HandleRateParams) {
 </script>
 
 <template>
-  <article ref="el" class="review-view">
+  <PageMain ref="el" class="review-view">
     <header class="header">
       <strong class="title">
         <template v-if="cardType?.endsWith('-read')"> Reading </template>
@@ -147,7 +148,7 @@ function handleRate({ progress, next }: HandleRateParams) {
         @rate="handleRate($event)"
       />
     </template>
-  </article>
+  </PageMain>
 </template>
 
 <style scoped>

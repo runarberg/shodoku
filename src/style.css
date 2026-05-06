@@ -36,6 +36,10 @@
     oklch(from var(--accent-color) 15% c h)
   );
   --background-strong: light-dark(white, black);
+  --background-content: light-dark(
+    oklch(100% none none / 0.4),
+    oklch(0% none none / 0.7)
+  );
 
   accent-color: var(--accent-color);
   color: var(--text-color);

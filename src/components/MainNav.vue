@@ -5,14 +5,13 @@ import {
   reviewRoute,
   settingsRoute,
 } from "../router.ts";
-import AppButton from "./AppButton.vue";
 </script>
 
 <template>
   <nav class="main-nav">
     <ul class="nav-list">
       <li>
-        <AppButton :to="reviewRoute" filled> Review </AppButton>
+        <RouterLink :to="reviewRoute" class="nav-item"> Review </RouterLink>
       </li>
 
       <li>
@@ -39,12 +38,13 @@ import AppButton from "./AppButton.vue";
   list-style: none;
   padding: 0;
   margin: 0;
-  row-gap: 1ex;
+  max-inline-size: 100%;
+  overflow: auto;
+  scrollbar-width: none;
 
   @media screen and (max-width: 90ch) {
     align-items: center;
     justify-content: space-evenly;
-    column-gap: 1ex;
     flex-direction: row;
   }
 
@@ -54,8 +54,16 @@ import AppButton from "./AppButton.vue";
   }
 
   & .nav-item {
-    text-decoration: none;
+    border-radius: 0.5ex;
     color: var(--accent-color);
+    display: block;
+    padding: 1ex;
+    text-decoration: none;
+
+    &.router-link-active {
+      background: var(--accent-color);
+      color: light-dark(var(--background-light), var(--background-strong));
+    }
   }
 }
 </style>
