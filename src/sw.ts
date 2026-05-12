@@ -281,11 +281,11 @@ serwist.registerRoute(
   new Route(
     ({ url, sameOrigin }) =>
       sameOrigin &&
-      url.pathname.startsWith("/data/words-sentences-v1/") &&
+      url.pathname.startsWith("/data/words-sentences-v2/") &&
       url.pathname.endsWith(".json"),
 
     new CacheFirst({
-      cacheName: "shodoku-data-words-sentences-v1",
+      cacheName: "shodoku-data-words-sentences-v2",
       plugins: [
         new CacheableResponsePlugin({
           statuses: [0, 200],

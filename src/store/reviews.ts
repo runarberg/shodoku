@@ -1,4 +1,4 @@
-import { useLocalStorage } from "@vueuse/core";
+import { useDebounceFn, useLocalStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { RecordLogItem, State } from "ts-fsrs";
 import { computed, ref, watch } from "vue";
@@ -15,12 +15,23 @@ import {
   rateCard as rateCardDb,
 } from "../db/cards.ts";
 import { db } from "../db/index.ts";
-import { liveQueryBroadcaster } from "../helpers/channels.ts";
+import { liveQueryBroadcaster, liveQueryChannel } from "../helpers/channels.ts";
 import { useLiveQuery } from "../helpers/db.ts";
 import { HOUR, midnight } from "../helpers/time.ts";
 import { CardProgress, CardReview } from "../types.ts";
 
 const PREFIX = "shodoku.app.preferences";
+
+// DB events which should trigger a review queue refresh.
+const REFRESH_DB_EVENTS = [
+  "custom-deck-edited",
+  "custom-deck-removed",
+  "database-cleared",
+  "deck-category-added",
+  "deck-created",
+  "deck-removed",
+  "remote-synced",
+];
 
 export const dueLimit = useLocalStorage(`${PREFIX}.limit.due`, 50);
 export const newLimit = useLocalStorage(`${PREFIX}.limit.new`, 10);
@@ -227,7 +238,18 @@ const useReviewsStore = defineStore("reviews", () => {
 
   refreshQueues();
   setTimeout(refreshQueues, HOUR);
-  watch([dueLimit, newLimit], refreshQueues);
+
+  const refreshQueuesDebounced = useDebounceFn(refreshQueues, 500);
+  watch([dueLimit, newLimit], refreshQueuesDebounced);
+
+  liveQueryChannel.addEventListener(
+    "message",
+    (event: MessageEvent<string>) => {
+      if (REFRESH_DB_EVENTS.includes(event.data)) {
+        refreshQueuesDebounced();
+      }
+    },
+  );
 
   return {
     refreshing,

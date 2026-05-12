@@ -396,17 +396,26 @@ async function applySyncPatches(
   }
 
   await tx.done;
+  liveQueryBroadcaster.postMessage("remote-synced");
 
   if (last) {
     localStorage.setItem(SYNC_LATEST_HASH_KEY, last);
   }
 }
 
-export async function syncRemote() {
-  const patches = await fetchSyncPatches();
+export async function syncRemote({
+  squash = false,
+}: { squash?: boolean } = {}) {
+  if (squash) {
+    await disableSync();
+  }
+
+  const patches = squash ? [] : await fetchSyncPatches();
   const staged = await createSyncPatch();
 
-  await applySyncPatches(patches, staged);
+  if (!squash) {
+    await applySyncPatches(patches, staged);
+  }
 
   if (!staged) {
     return;
