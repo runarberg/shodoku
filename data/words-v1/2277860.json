@@ -1,1 +1,1 @@
-{"id":2277860,"writings":[],"readings":[{"text":"アールデービーエムエス"}],"furigana":[],"meanings":[{"pos":["n"],"glossary":["RDBMS"]}]}
+{"id":2277860,"writings":[{"text":"ＲＤＢＭＳ"}],"readings":[{"text":"アールディービーエムエス","searchOnly":true},{"text":"アール・ディー・ビー・エム・エス"}],"furigana":[{"writing":"ＲＤＢＭＳ","reading":"アールディービーエムエス","furigana":[{"ruby":"Ｒ","rt":"アール"},{"ruby":"Ｄ","rt":"ディー"},{"ruby":"Ｂ","rt":"ビー"},{"ruby":"Ｍ","rt":"エム"},{"ruby":"Ｓ","rt":"エス"}]}],"meanings":[{"pos":["n"],"glossary":["RDBMS","relational database management system"]}]}

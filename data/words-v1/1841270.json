@@ -1,1 +1,1 @@
-{"id":1841270,"writings":[{"text":"白百合","priority":{"freq":38,"news":2}}],"readings":[{"text":"しらゆり","priority":{"freq":38,"news":2}}],"furigana":[],"meanings":[{"pos":["n"],"glossary":["white lily"]}]}
+{"id":1841270,"writings":[{"text":"白百合","priority":{"freq":38,"news":2}},{"text":"白ゆり","searchOnly":true}],"readings":[{"text":"しらゆり","priority":{"freq":38,"news":2}}],"furigana":[{"writing":"白ゆり","reading":"しらゆり","furigana":[{"ruby":"白","rt":"しら"},{"ruby":"ゆり"}]}],"meanings":[{"pos":["n"],"glossary":["white lily"]}]}
