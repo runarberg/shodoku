@@ -1,0 +1,2 @@
+var e=new Intl.NumberFormat(`default`,{style:`percent`});function t(t){return e.format(t)}var n=[``,`Ki`,`Mi`,`Gi`,`Ti`,`Pi`,`Ei`,`Zi`,`Yi`];function r(e){if(!Number.isFinite(e)||Math.abs(e)<1)return[e,0];let t=Math.min(Math.trunc(Math.log2(Math.abs(e))/10),n.length-1);return[e/2**(t*10),t]}function i(e){let[t,i]=r(e);return`${new Intl.NumberFormat(`default`,{maximumFractionDigits:0,style:`decimal`}).format(t)} ${n[i]}B`}export{t as n,i as t};
+//# sourceMappingURL=formats-C_Dw3tH5.js.map

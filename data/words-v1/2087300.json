@@ -1,1 +1,1 @@
-{"id":2087300,"writings":[],"readings":[{"text":"かどうか","priority":{"spec":1}}],"furigana":[],"meanings":[{"pos":["exp"],"glossary":["whether or not (in phrases like \"I don't know whether or not I can come\")"]}]}
+{"id":2087300,"writings":[{"text":"か如何か","searchOnly":true}],"readings":[{"text":"かどうか","priority":{"spec":1}}],"furigana":[{"writing":"か如何か","reading":"かどうか","furigana":[{"ruby":"か"},{"ruby":"如何","rt":"どう"},{"ruby":"か"}]}],"meanings":[{"pos":["exp"],"glossary":["if","whether (or not)"]}]}

@@ -1,1 +1,1 @@
-{"id":1008360,"writings":[],"readings":[{"text":"でか"},{"text":"デカ"}],"furigana":[],"meanings":[{"pos":["n"],"misc":["sl"],"glossary":["detective"]}]}
+{"id":1008360,"writings":[{"text":"刑事"}],"readings":[{"text":"でか","gikun":true},{"text":"デカ","noKanji":true}],"furigana":[{"writing":"刑事","reading":"でか","furigana":[{"ruby":"刑","rt":"で"},{"ruby":"事","rt":"か"}]}],"meanings":[{"pos":["n"],"misc":["sl"],"glossary":["(police) detective"]}]}

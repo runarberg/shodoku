@@ -1,1 +1,1 @@
-{"id":2856154,"writings":[{"text":"旭"}],"readings":[{"text":"あさひ"}],"furigana":[{"writing":"旭","reading":"あさひ","furigana":[{"ruby":"旭","rt":"あさひ"}]}],"meanings":[{"pos":["n"],"glossary":["McIntosh (apple)","McIntosh red"]}]}
+{"id":2856154,"writings":[{"text":"旭"},{"text":"朝日","searchOnly":true}],"readings":[{"text":"あさひ"}],"furigana":[{"writing":"旭","reading":"あさひ","furigana":[{"ruby":"旭","rt":"あさひ"}]},{"writing":"朝日","reading":"あさひ","furigana":[{"ruby":"朝","rt":"あさ"},{"ruby":"日","rt":"ひ"}]}],"meanings":[{"pos":["n"],"glossary":["McIntosh (apple)","McIntosh red"]}]}
