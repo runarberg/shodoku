@@ -1,1 +1,1 @@
-{"id":2005380,"writings":[{"text":"泰"}],"readings":[{"text":"たい"},{"text":"タイ","noKanji":true,"priority":{"freq":4,"news":1}}],"furigana":[{"writing":"泰","reading":"たい","furigana":[{"ruby":"泰","rt":"たい"}]}],"meanings":[{"pos":["n"],"kanaPreferred":true,"glossary":["Thailand"]}]}
+{"id":2005380,"writings":[{"text":"泰","priority":{"freq":4,"news":1}}],"readings":[{"text":"タイ","priority":{"freq":4,"news":1}}],"furigana":[{"writing":"泰","reading":"タイ","furigana":[{"ruby":"泰","rt":"タイ"}]}],"meanings":[{"pos":["n"],"kanaPreferred":true,"glossary":["Thailand"]}]}
