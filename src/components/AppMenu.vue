@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, useId, watch } from "vue";
+import { useId, useTemplateRef, watch } from "vue";
 
 import { provideMenu } from "../helpers/menu.ts";
 import AppIcon from "./AppIcon.vue";
@@ -21,9 +21,9 @@ const emit = defineEmits<{
   (event: "update:open", open: boolean): void;
 }>();
 
-const toggleButton = ref<HTMLButtonElement | null>(null);
-const popoverEl = ref<HTMLElement | null>(null);
-const menuEl = ref<HTMLElement | null>(null);
+const toggleButton = useTemplateRef("toggle-button");
+const popoverEl = useTemplateRef("popover-container");
+const menuEl = useTemplateRef("menu-container");
 
 const menu = provideMenu();
 
@@ -87,13 +87,9 @@ watch(
 </script>
 
 <template>
-  <div
-    ref="menuEl"
-    class="app-menu popover-container"
-    @focusout="handleFocusout($event)"
-  >
+  <div ref="menu-container" class="app-menu" @focusout="handleFocusout($event)">
     <button
-      ref="toggleButton"
+      ref="toggle-button"
       class="toggle-button"
       :class="{ open: menu.open.value }"
       :aria-label="$slots.toggle ? undefined : 'Options'"
@@ -107,20 +103,20 @@ watch(
 
     <div
       :id="id"
-      ref="popoverEl"
+      ref="popover-container"
       class="popover"
       popover
       @beforetoggle="handleBeforeToggle"
       @toggle="handleToggle"
     >
-      <menu role="list" class="menu">
+      <menu class="menu">
         <slot />
       </menu>
     </div>
   </div>
 </template>
 
-<style lang="postcss" scoped>
+<style scoped>
 .toggle-button {
   background: none;
   border: none;
@@ -131,7 +127,7 @@ watch(
   margin: 0;
   padding: 0;
 
-  .popover-container:has(:popover-open) & {
+  .app-menu:has(:popover-open) & {
     color: var(--accent-color);
   }
 }

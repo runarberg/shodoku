@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, useTemplateRef, watch } from "vue";
 
 const props = defineProps<{
   strokes: SVGGElement;
 }>();
 
-const container = ref<SVGGElement | null>(null);
+const container = useTemplateRef("container");
 
 function render() {
   container.value?.replaceChildren(props.strokes ?? "");

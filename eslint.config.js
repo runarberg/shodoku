@@ -129,7 +129,6 @@ export default ts.config(
       ],
       "prefer-promise-reject-errors": "error",
       "prefer-template": "error",
-      radix: ["error", "as-needed"],
       "require-atomic-updates": "error",
     },
   },

@@ -1,12 +1,9 @@
 import fs from "node:fs/promises";
-import { fileURLToPath } from "node:url";
-
-import Database from "better-sqlite3";
+import { DatabaseSync } from "node:sqlite";
 
 import { parseSentenceIndexLine } from "./parsers.js";
 
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
-db.pragma("journal_mode = WAL");
+const db = new DatabaseSync(new URL("../assets.db", import.meta.url));
 
 db.exec(`DROP TABLE IF EXISTS sentence_meanings`);
 db.exec("DROP TABLE IF EXISTS sentence_words");
@@ -184,6 +181,12 @@ const sentencesJpnPath = new URL(
 for await (const line of (await fs.open(sentencesJpnPath)).readLines()) {
   const [id, lang, text] = line.split("\t");
 
+  if (!lang || !text) {
+    // eslint-disable-next-line no-console
+    console.error("NULL found:", id, `[${lang}]: "${text}"`);
+    continue;
+  }
+
   insertSentence.run(Number.parseInt(id), lang, text);
 }
 db.exec("COMMIT");
@@ -220,24 +223,54 @@ for await (const line of (await fs.open(sentenceJpnIndicesPath)).readLines()) {
   let seq = 0;
   for (const word of words) {
     seq += 1;
-    const entry = { sentenceId, seq, ...word };
 
     try {
       if (word.reading && word.writing) {
-        insertSentenceWordReadingWriting.run(entry);
+        insertSentenceWordReadingWriting.run({
+          sentenceId,
+          seq,
+          word: word.word,
+          writing: word.writing,
+          reading: word.reading,
+          text: word.text,
+          meaning: word.meaning,
+          goodExample: word.goodExample,
+        });
       } else if (word.reading) {
-        insertSentenceWordReading.run(entry);
+        insertSentenceWordReading.run({
+          sentenceId,
+          seq,
+          word: word.word,
+          reading: word.reading,
+          text: word.text,
+          meaning: word.meaning,
+          goodExample: word.goodExample,
+        });
       } else {
-        insertSentenceWordWriting.run(entry);
+        insertSentenceWordWriting.run({
+          sentenceId,
+          seq,
+          word: word.word,
+          writing: word.writing,
+          text: word.text,
+          meaning: word.meaning,
+          goodExample: word.goodExample,
+        });
       }
     } catch {
       // Word not found. Write the entry as a standalone text.
-      entry.text = entry.text || entry.writing || entry.reading;
+      const text = word.text || word.writing || word.reading;
       // eslint-disable-next-line no-console
-      console.error("Failed sentence word", sentenceId, entry);
+      console.error("Failed sentence word", sentenceId, word);
 
       try {
-        insertSentenceWord.run(entry);
+        insertSentenceWord.run({
+          sentenceId,
+          seq,
+          text,
+          meaning: word.meaning,
+          goodExample: word.goodExample,
+        });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);

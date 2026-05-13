@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { reactive, useTemplateRef } from "vue";
 
 import {
   remoteSyncFetchHeaders,
@@ -33,7 +33,7 @@ const model = reactive({
   },
 });
 
-const syncButton = ref<InstanceType<typeof RemoteSyncSyncButton> | null>(null);
+const syncButton = useTemplateRef("sync-button");
 
 function saveValues() {
   remoteSyncFetchHeaders.value = model.fetch.headers;
@@ -94,7 +94,7 @@ function resetValues() {
     <div class="form-buttons">
       <AppButton type="reset" @click="$emit('cancel')"> Cancel </AppButton>
       <RemoteSyncSyncButton
-        ref="syncButton"
+        ref="sync-button"
         filled
         @syncing="saveValues"
         @success="$emit('success')"

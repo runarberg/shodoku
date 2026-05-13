@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, useId } from "vue";
+import { computed, onMounted, useId, useTemplateRef } from "vue";
 import { useRoute } from "vue-router";
 
 import { type DeckStatusCount } from "../db/decks.ts";
@@ -14,7 +14,7 @@ const props = defineProps<{
   deck: Deck;
 }>();
 
-const el = ref<HTMLElement | null>(null);
+const el = useTemplateRef("el");
 const labelId = useId();
 const route = useRoute();
 

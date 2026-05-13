@@ -3,8 +3,8 @@ import { fileURLToPath } from "node:url";
 
 import Database from "better-sqlite3";
 import { chain } from "stream-chain";
-import StreamJSON from "stream-json";
-import StreamArray from "stream-json/streamers/StreamArray.js";
+import { parser } from "stream-json";
+import { streamArray } from "stream-json/streamers/stream-array.js";
 
 const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
 db.pragma("journal_mode = WAL");
@@ -29,8 +29,8 @@ const pipeline = chain([
   createReadStream(new URL("../assets/JmdictFurigana.json", import.meta.url), {
     encoding: "utf8",
   }),
-  StreamJSON.parser(),
-  StreamArray.streamArray(),
+  parser(),
+  streamArray(),
 ]);
 
 pipeline.on("data", ({ value }) => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId } from "vue";
+import { computed, ref, useId, useTemplateRef } from "vue";
 import { zip } from "yta/sync";
 
 import { Furigana, Word } from "../types.ts";
@@ -74,8 +74,8 @@ const additionalReadings = computed(
     ) ?? [],
 );
 
-const toggleButton = ref<HTMLButtonElement | null>(null);
-const popoverEl = ref<HTMLElement | null>(null);
+const toggleButton = useTemplateRef("toggle-button");
+const popover = useTemplateRef("popover-container");
 const open = ref(false);
 
 function handleToggle(event: ToggleEvent) {
@@ -90,7 +90,7 @@ function handleBeforeToggle(event: ToggleEvent) {
   // Polyfill the anchor positioning
   if (!("anchorName" in document.documentElement.style)) {
     const togglerBox = toggleButton.value?.getBoundingClientRect();
-    const style = popoverEl.value?.style;
+    const style = popover.value?.style;
 
     if (style && togglerBox) {
       style.insetBlockStart = `${togglerBox.bottom + window.scrollY}px`;
@@ -108,7 +108,7 @@ function handleBeforeToggle(event: ToggleEvent) {
     class="word-writing-details popover-container"
   >
     <button
-      ref="toggleButton"
+      ref="toggle-button"
       title="Additional Writings"
       class="toggle-button"
       :popovertarget="id"
@@ -123,7 +123,7 @@ function handleBeforeToggle(event: ToggleEvent) {
 
     <ul
       :id="id"
-      ref="popoverEl"
+      ref="popover-container"
       class="writing-list popover"
       popover
       @beforetoggle="handleBeforeToggle"

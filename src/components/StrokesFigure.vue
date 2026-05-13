@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, shallowReactive, watch } from "vue";
+import { computed, ref, shallowReactive, useTemplateRef, watch } from "vue";
 
 import { sleep } from "../helpers/time.ts";
 import AppButton from "./AppButton.vue";
@@ -26,10 +26,8 @@ const emit = defineEmits<{
   practiceDone: [];
 }>();
 
-const strokePaths = ref<SVGPathElement[]>([]);
-const practiceCanvases = ref<
-  Array<InstanceType<typeof KanjiStrokesPracticeCanvas>>
->([]);
+const strokePaths = useTemplateRef("stroke-path");
+const practiceCanvases = useTemplateRef("practice-canvas");
 
 const animations = shallowReactive<Animation[]>([]);
 const animating = computed(() => animations.length > 0);
@@ -57,6 +55,10 @@ const strokeAnimationOptions = {
 };
 
 function animate() {
+  if (!strokePaths.value) {
+    return;
+  }
+
   for (const path of strokePaths.value) {
     const animation = path.animate(
       strokeKeyframes(path),
@@ -87,13 +89,19 @@ async function playAnimations() {
 }
 
 async function playPracticeAnimations() {
-  for (const canvas of practiceCanvases.value) {
-    canvas.prepareForAnimation();
+  if (!practiceCanvases.value) {
+    return;
   }
 
   for (const canvas of practiceCanvases.value) {
-    await canvas.animate();
-    await sleep(100);
+    canvas?.prepareForAnimation();
+  }
+
+  for (const canvas of practiceCanvases.value) {
+    if (canvas) {
+      await canvas.animate();
+      await sleep(100);
+    }
   }
 }
 
@@ -146,7 +154,7 @@ function findNextStroke() {
     return null;
   }
 
-  const canvas = practiceCanvases.value.at(index);
+  const canvas = practiceCanvases.value?.at(index);
 
   if (!canvas) {
     return null;
@@ -183,13 +191,13 @@ function popPracticeStroke() {
   const lastIndex = practiceStrokeSequence.pop();
 
   if (lastIndex != null) {
-    practiceCanvases.value.at(lastIndex)?.pop();
+    practiceCanvases.value?.at(lastIndex)?.pop();
   }
 }
 
 function clearPracticeStrokes() {
-  for (const canvas of practiceCanvases.value) {
-    canvas.clear();
+  for (const canvas of practiceCanvases.value ?? []) {
+    canvas?.clear();
   }
 
   practiceStrokeSequence.splice(0, practiceStrokeSequence.length);
@@ -203,7 +211,7 @@ function clearAnimations() {
   animations.splice(0, animations.length);
   animationPaused.value = false;
 
-  for (const path of strokePaths.value) {
+  for (const path of strokePaths.value ?? []) {
     for (const animation of path.getAnimations()) {
       animation.cancel();
     }
@@ -290,7 +298,7 @@ watch(
           <path
             v-for="(path, j) of paths"
             :key="j"
-            ref="strokePaths"
+            ref="stroke-path"
             class="stroke-path"
             :d="path"
           />
@@ -298,7 +306,7 @@ watch(
 
         <KanjiStrokesPracticeCanvas
           v-if="practicing"
-          ref="practiceCanvases"
+          ref="practice-canvas"
           :animate-pause="animationPaused"
           @stroke="handleNewPracticeStroke(i)"
         />

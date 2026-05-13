@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RecordLogItem } from "ts-fsrs";
-import { computed, ref, watchEffect } from "vue";
+import { computed, useTemplateRef, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import AppLoading from "../components/AppLoading.vue";
@@ -10,7 +10,7 @@ import { kanaRoute, kanjiRoute, reviewSummaryRoute } from "../router.ts";
 import useReviewsStore from "../store/reviews.ts";
 import { CardProgress, CardType, isCardType, Optional } from "../types.ts";
 
-const el = ref<HTMLElement | null>(null);
+const el = useTemplateRef("el");
 const route = useRoute();
 const router = useRouter();
 

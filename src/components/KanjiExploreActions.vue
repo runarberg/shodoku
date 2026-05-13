@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { State } from "ts-fsrs";
-import { computed, ref } from "vue";
+import { computed, useTemplateRef } from "vue";
 
 import { useCardProgress } from "../helpers/fsrs.ts";
 import { REVIEW_ROUTE_NAME } from "../router.ts";
@@ -14,9 +14,7 @@ const props = defineProps<{
   kanji: KanjiInfo;
 }>();
 
-const manageDecksDialog = ref<InstanceType<
-  typeof KanjiManageDecksDialog
-> | null>(null);
+const manageDecksDialog = useTemplateRef("manage-decks-dialog");
 
 const decks = useDecksContainingCard(() => props.kanji.codepoint);
 const progress = useCardProgress(
@@ -57,6 +55,6 @@ const isNew = computed(() => {
       Review now
     </AppMenuItem>
 
-    <KanjiManageDecksDialog ref="manageDecksDialog" :kanji="kanji" />
+    <KanjiManageDecksDialog ref="manage-decks-dialog" :kanji="kanji" />
   </AppMenu>
 </template>

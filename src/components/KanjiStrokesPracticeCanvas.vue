@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import simplifySvgPath from "@luncheon/simplify-svg-path";
-import { computed, ref, shallowReactive, watch } from "vue";
+import { computed, ref, shallowReactive, useTemplateRef, watch } from "vue";
 
 import { sleep } from "../helpers/time.ts";
 
@@ -14,7 +14,7 @@ const emit = defineEmits<{
 
 type Point = { x: number; y: number };
 
-const el = ref<SVGGElement | null>(null);
+const el = useTemplateRef("el");
 const svg = computed(() => el.value?.closest("svg"));
 const viewBox = computed(() => svg.value?.viewBox.baseVal);
 const strokes = shallowReactive<string[]>([]);
@@ -133,7 +133,7 @@ watch(
   },
 );
 
-const hintPath = ref<SVGPathElement | null>(null);
+const hintPath = useTemplateRef("hint-path");
 watch(hintPath, (stroke) => {
   if (stroke) {
     const animation = stroke.animate(
@@ -200,7 +200,7 @@ defineExpose({
       />
     </g>
 
-    <path v-if="hinting" ref="hintPath" class="stroke hint" :d="hinting" />
+    <path v-if="hinting" ref="hint-path" class="stroke hint" :d="hinting" />
 
     <polyline
       class="stroke current-stroke"

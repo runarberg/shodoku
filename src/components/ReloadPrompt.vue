@@ -4,8 +4,6 @@ import { ref } from "vue";
 
 import AppButton from "./AppButton.vue";
 
-const dialog = ref<HTMLDialogElement | null>(null);
-
 const needRefresh = ref(false);
 
 async function registerSW() {
@@ -43,7 +41,7 @@ async function submit() {
 </script>
 
 <template>
-  <dialog ref="dialog" :open="needRefresh" class="dialog">
+  <dialog :open="needRefresh" class="dialog">
     <strong lang="ja" class="app-title">書読</strong>
 
     <form method="dialog" class="form" @submit="submit">

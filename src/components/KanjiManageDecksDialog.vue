@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, useTemplateRef } from "vue";
 import { pipe } from "yta";
 import { groupBy } from "yta/sync";
 
@@ -17,7 +17,7 @@ const props = defineProps<{
   kanji: KanjiInfo;
 }>();
 
-const dialog = ref<InstanceType<typeof AppDialog> | null>(null);
+const dialog = useTemplateRef("dialog");
 const allDecks = useDecks();
 const createNewExpanded = ref(false);
 

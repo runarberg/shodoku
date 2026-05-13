@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, useId } from "vue";
+import { ref, useId, useTemplateRef } from "vue";
 
 import AppButton from "./AppButton.vue";
 import AppIcon from "./AppIcon.vue";
@@ -26,7 +26,7 @@ const emit = defineEmits<{
 }>();
 
 const open = ref(false);
-const dialog = ref<HTMLDialogElement | null>(null);
+const dialog = useTemplateRef("dialog");
 
 const idPrefix = useId();
 
