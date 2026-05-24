@@ -1,5 +1,6 @@
 import { liveQueryBroadcaster } from "../helpers/channels.ts";
 import { db as openingDb } from "./index.ts";
+import { SYNC_LATEST_HASH_KEY } from "./sync.ts";
 
 export async function clearAllStores() {
   const db = await openingDb;
@@ -10,5 +11,6 @@ export async function clearAllStores() {
     await store.clear();
   }
 
+  localStorage.removeItem(SYNC_LATEST_HASH_KEY);
   liveQueryBroadcaster.postMessage("database-cleared");
 }

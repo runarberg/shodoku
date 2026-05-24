@@ -22,7 +22,7 @@ import {
 import { db as openingDb } from "./index.ts";
 import { DB } from "./schema.ts";
 
-const SYNC_LATEST_HASH_KEY = "shodoku.app.sync.latest";
+export const SYNC_LATEST_HASH_KEY = "shodoku.app.sync.latest";
 const SYNC_PATCH_VERSION = 1;
 
 async function createHash(
@@ -307,7 +307,7 @@ function isConstraintError(error: unknown) {
   return error instanceof DOMException && error.name === "ConstraintError";
 }
 
-async function applySyncPatches(
+export async function applySyncPatches(
   patches: SyncPatch[],
   staged?: PartialSyncPatch | null,
 ) {
@@ -317,10 +317,12 @@ async function applySyncPatches(
   const latest = localStorage.getItem(SYNC_LATEST_HASH_KEY) ?? null;
   let last: string | undefined;
 
-  for (const patch of pipe(
+  const latestPatches = pipe(
     patches,
     dropWhile(({ parent }) => parent !== latest),
-  )) {
+  );
+
+  for (const patch of latestPatches) {
     for (const patchStore of patch.stores) {
       const store = tx.objectStore(patchStore.name);
 
@@ -474,4 +476,9 @@ export async function addToSyncStaging(instructions: SyncStagingStore[]) {
   }
 
   await tx.done;
+}
+
+export async function getPatches() {
+  const db = await openingDb;
+  return db.getAll("syncs");
 }

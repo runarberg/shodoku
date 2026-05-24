@@ -104,6 +104,26 @@ function assertKeyIsSyncPatchPreferencesArray<
   }
 }
 
+export function toSyncPatches(data: unknown): SyncPatch[] {
+  assertIsArray(data);
+
+  return data.map((item: unknown) => {
+    assertIsObject(item);
+    assertKeyIsString("hash", item);
+    assertKeyIsString("parent", item, { nullable: true });
+    assertKeyIsString("syncedAt", item);
+    assertKeyIsNumber("dbVersion", item);
+    assertKeyIsNumber("patchVersion", item);
+    assertKeyIsSyncPatchStoreArray("stores", item);
+    assertKeyIsSyncPatchPreferencesArray("preferences", item);
+
+    return {
+      ...item,
+      syncedAt: new Date(item.syncedAt),
+    };
+  });
+}
+
 export async function fetchSyncPatches(): Promise<SyncPatch[]> {
   const method = remoteSyncFetchMethod.value;
   const url = URL.parse(remoteSyncFetchURL.value);
@@ -132,23 +152,7 @@ export async function fetchSyncPatches(): Promise<SyncPatch[]> {
   const useBase64 = remoteSyncPushBody.value;
   const data: unknown = JSON.parse(useBase64 ? fromBase64(text) : text);
 
-  assertIsArray(data);
-
-  return data.map((item: unknown) => {
-    assertIsObject(item);
-    assertKeyIsString("hash", item);
-    assertKeyIsString("parent", item, { nullable: true });
-    assertKeyIsString("syncedAt", item);
-    assertKeyIsNumber("dbVersion", item);
-    assertKeyIsNumber("patchVersion", item);
-    assertKeyIsSyncPatchStoreArray("stores", item);
-    assertKeyIsSyncPatchPreferencesArray("preferences", item);
-
-    return {
-      ...item,
-      syncedAt: new Date(item.syncedAt),
-    };
-  });
+  return toSyncPatches(data);
 }
 
 export async function postSyncPatches(patches: SyncPatch[]) {

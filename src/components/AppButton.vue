@@ -11,6 +11,7 @@ const props = withDefaults(
     prefixIcon?: string | null;
     to?: RouteLocationRaw | null;
     replace?: boolean;
+    tag?: string | null;
   }>(),
   {
     filled: false,
@@ -18,10 +19,11 @@ const props = withDefaults(
     prefixIcon: null,
     to: null,
     replace: false,
+    tag: null,
   },
 );
 
-const tag = computed(() => (props.to ? "RouterLink" : "button"));
+const tag = computed(() => props.tag ?? (props.to ? "RouterLink" : "button"));
 
 // Sometimes button clicks don’t trigger in Safari. Focus the button should force it to listen.
 function handleTouchStart(event: TouchEvent) {
