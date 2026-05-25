@@ -5,6 +5,8 @@ import {
   jlptDecks,
   jouyouDecks,
   newsFrequencyDecks,
+  tobiraBegDecks,
+  tobiraIntDecks,
 } from "../helpers/decks.ts";
 import DeckBrowserCategory from "./DeckBrowserCategory.vue";
 import DeckBrowserCustom from "./DeckBrowserCustom.vue";
@@ -46,6 +48,22 @@ import DeckBrowserKana from "./DeckBrowserKana.vue";
         title="Genki"
         category="genki"
         :deck-templates="genkiDecks"
+      />
+    </li>
+
+    <li>
+      <DeckBrowserCategory
+        title="Tobira Beginning"
+        category="tobira-beg"
+        :deck-templates="tobiraBegDecks"
+      />
+    </li>
+
+    <li>
+      <DeckBrowserCategory
+        title="Tobira Intermediate"
+        category="tobira-int"
+        :deck-templates="tobiraIntDecks"
       />
     </li>
 

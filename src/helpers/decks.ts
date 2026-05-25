@@ -15,6 +15,14 @@ export function deckLabel(deck: Deck): string {
     return `Genki ${deck.label}`;
   }
 
+  if (deck.category === "tobira-beg") {
+    return `Tobira Beg. ${deck.label.replace("Lesson ", "L")}`;
+  }
+
+  if (deck.category === "tobira-int") {
+    return `Tobira Int. ${deck.label.replace("Lesson ", "L")}`;
+  }
+
   if (deck.category === "basic-kanji") {
     return `Basic Kanji ${deck.label.replace("Chapter", "ch.")}`;
   }
@@ -117,6 +125,32 @@ export const basicKanjiDecks = Array.from({ length: 45 }, (_, i) => ({
     .toString()
     .padStart(2, "0")}.csv`,
 }));
+
+export const tobiraBegDecks = Array.from({ length: 17 }, (_, i) => {
+  const skip = i < 16 ? 1 : 2;
+  const n = i + skip;
+  const nn = `${n}`.padStart(2, "0");
+
+  return {
+    name: `tobira-beg-${nn}`,
+    label: `Lesson ${n}`,
+    priority: n,
+    content: `/data/kanji-lists/tobira-beg-${nn}.csv`,
+  };
+});
+
+export const tobiraIntDecks = Array.from({ length: 15 }, (_, i) => {
+  const n = 1 + i;
+  const p = 20 + n;
+  const nn = `${n}`.padStart(2, "0");
+
+  return {
+    name: `tobira-int-${nn}`,
+    label: `Lesson ${n}`,
+    priority: p,
+    content: `/data/kanji-lists/tobira-int-${nn}.csv`,
+  };
+});
 
 export const jouyouDecks = [
   {
@@ -264,6 +298,8 @@ const allDeckTemplates = [
   jlptDecks,
   newsFrequencyDecks,
   genkiDecks,
+  tobiraBegDecks,
+  tobiraIntDecks,
   basicKanjiDecks,
   jouyouDecks,
   ...Object.values(kanaDeckTemplates),
