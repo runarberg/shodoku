@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, RouteLocationRaw } from "vue-router";
 export const HOME_ROUTE_NAME = Symbol("home-route-name");
 export const REVIEW_ROUTE_NAME = Symbol("review-route-name");
 export const REVIEW_SUMMARY_ROUTE_NAME = Symbol("review-summary-route-name");
+export const PRACTICE_DECK_ROUTE_NAME = Symbol("practice-deck-route-name");
 export const KANA_ROUTE_NAME = Symbol("kana-route-name");
 export const KANJI_ROUTE_NAME = Symbol("kanji-route-name");
 export const KANJI_COMPONENT_ROUTE_NAME = Symbol("kanji-component-route-name");
@@ -22,6 +23,11 @@ export const decksRoute: RouteLocationRaw = { name: DECKS_ROUTE_NAME };
 export const deckBrowserRoute: RouteLocationRaw = {
   name: DECK_BROWSER_ROUTE_NAME,
 };
+
+export function practiceDeckRoute(deckName: string): RouteLocationRaw {
+  return { name: PRACTICE_DECK_ROUTE_NAME, params: { deckName } };
+}
+
 export const dictionaryRoute: RouteLocationRaw = {
   name: DICTIONARY_ROUTE_NAME,
 };
@@ -79,6 +85,11 @@ export const router = createRouter({
       path: "/review/summary",
       name: REVIEW_SUMMARY_ROUTE_NAME,
       component: () => import("./views/ReviewSummaryView.vue"),
+    },
+    {
+      path: "/practice/:deckName",
+      name: PRACTICE_DECK_ROUTE_NAME,
+      component: () => import("./views/PracticeDeckView.vue"),
     },
     {
       path: "/kana/:kana",

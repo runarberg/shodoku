@@ -5,8 +5,11 @@ import { useRoute } from "vue-router";
 import { type DeckStatusCount } from "../db/decks.ts";
 import { deckLabel } from "../helpers/decks.ts";
 import { formatPercent } from "../helpers/formats.ts";
+import { practiceDeckRoute } from "../router.ts";
 import { useDeckStatus } from "../store/decks.ts";
 import { Deck } from "../types.ts";
+import AppButton from "./AppButton.vue";
+import AppIcon from "./AppIcon.vue";
 import DeckKanaCards from "./DeckKanaCards.vue";
 import DeckKanjiCards from "./DeckKanjiCards.vue";
 
@@ -103,6 +106,14 @@ onMounted(() => {
     </div>
 
     <template v-if="expanded">
+      <AppButton
+        :to="practiceDeckRoute(deck.name)"
+        class="practice-button"
+        slim
+      >
+        <AppIcon icon="play" />
+      </AppButton>
+
       <DeckKanaCards
         v-if="deck.category === 'kana'"
         :name="deck.name"
@@ -120,10 +131,10 @@ onMounted(() => {
   column-gap: 1em;
   display: grid;
   grid-template:
-    "label"
-    "status"
-    "cards"
-    / 1fr;
+    "label  practice-button"
+    "status practice-button"
+    "cards  cards"
+    / 1fr auto;
   justify-content: start;
 }
 
@@ -168,5 +179,11 @@ onMounted(() => {
 .cards {
   grid-area: cards;
   margin-block: 1ex 1em;
+}
+
+.practice-button {
+  align-self: start;
+  font-size: 0.8em;
+  grid-area: practice-button;
 }
 </style>

@@ -1,3 +1,13 @@
+import {
+  computed,
+  ComputedRef,
+  MaybeRefOrGetter,
+  Ref,
+  ref,
+  toValue,
+  watch,
+} from "vue";
+
 import { Deck } from "../types.ts";
 
 export function deckLabel(deck: Deck): string {
@@ -249,3 +259,75 @@ export const kanaDeckTemplates = {
   katakanaDakuten: katakanaDakutenDeckTemplate,
   katakanaYoon: katakanaYoonDeckTemplate,
 };
+
+const allDeckTemplates = [
+  jlptDecks,
+  newsFrequencyDecks,
+  genkiDecks,
+  basicKanjiDecks,
+  jouyouDecks,
+  ...Object.values(kanaDeckTemplates),
+].flat();
+
+type DeckTemplateWithCards = Omit<
+  Deck,
+  "category" | "active" | "createdAt" | "updatedAt"
+>;
+
+export function useDeckTemplate(name: MaybeRefOrGetter<string | null>): {
+  deck: ComputedRef<DeckTemplateWithCards | null>;
+  loading: Ref<boolean>;
+} {
+  const loading = ref(false);
+  const cards = ref<number[] | null>(null);
+
+  const template = computed(() => {
+    const nameValue = toValue(name);
+
+    return allDeckTemplates.find((other) => other.name === nameValue);
+  });
+
+  async function sync() {
+    if (!template.value || "cards" in template.value) {
+      return;
+    }
+
+    cards.value = null;
+    loading.value = true;
+
+    try {
+      const response = await fetch(template.value.content);
+      const text = await response.text();
+      cards.value = text
+        .split("\n")
+        .map((char) => char.codePointAt(0))
+        .filter(Number.isFinite) as number[];
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  watch(template, sync);
+
+  const deck = computed<DeckTemplateWithCards | null>(() => {
+    if (!template.value) {
+      return null;
+    }
+
+    if ("cards" in template.value) {
+      return template.value;
+    }
+
+    if (cards.value) {
+      return {
+        ...template.value,
+        cards: cards.value,
+        cardTypes: ["kanji-write", "kanji-read"],
+      };
+    }
+
+    return null;
+  });
+
+  return { loading, deck };
+}

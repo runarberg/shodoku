@@ -3,6 +3,9 @@ import { ref } from "vue";
 
 import { createDeck, removeDeck } from "../db/decks.ts";
 import { KanaDeckTemplate } from "../helpers/decks.ts";
+import { practiceDeckRoute } from "../router.ts";
+import AppButton from "./AppButton.vue";
+import AppIcon from "./AppIcon.vue";
 import DeckActivateButton from "./DeckActivateButton.vue";
 
 const props = defineProps<{
@@ -51,6 +54,14 @@ async function deactivate() {
         @activate="activate"
         @deactivate="deactivate"
       />
+
+      <AppButton
+        :to="practiceDeckRoute(template.name)"
+        aria-label="practice"
+        class="practice-button"
+      >
+        <AppIcon icon="play" />
+      </AppButton>
     </header>
 
     <div class="body">
@@ -64,6 +75,12 @@ async function deactivate() {
   align-items: center;
   column-gap: 1ex;
   display: flex;
+
+  & .practice-button {
+    background: none;
+    font-size: 0.8em;
+    padding: 0.5ex;
+  }
 }
 
 .body {

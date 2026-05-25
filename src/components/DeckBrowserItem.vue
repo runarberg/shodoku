@@ -7,9 +7,10 @@ import {
   deactivateDeck,
   removeDeck,
 } from "../db/decks.ts";
-import { kanjiRoute } from "../router.ts";
+import { kanjiRoute, practiceDeckRoute } from "../router.ts";
 import { Deck, DeckTemplate } from "../types.ts";
 import AppButton from "./AppButton.vue";
+import AppIcon from "./AppIcon.vue";
 import CustomDeckEdit from "./CustomDeckEdit.vue";
 import DeckActivateButton from "./DeckActivateButton.vue";
 
@@ -116,27 +117,37 @@ watch(
         @deactivate="deactivate"
       />
 
-      <AppButton
-        v-if="deck?.active || deck?.category === 'custom'"
-        class="edit-button"
-        @click="editing = true"
-      >
-        Edit
-      </AppButton>
-      <AppButton
-        v-else-if="deck && !deck.active && deck.category !== 'custom'"
-        class="edit-button"
-        @click="removeDeck(deck.name)"
-      >
-        Reset
-      </AppButton>
+      <template v-if="deck">
+        <AppButton
+          v-if="deck.active || deck.category === 'custom'"
+          class="edit-button"
+          @click="editing = true"
+        >
+          Edit
+        </AppButton>
+        <AppButton
+          v-else-if="deck && !deck.active && deck.category !== 'custom'"
+          class="edit-button"
+          @click="removeDeck(deck.name)"
+        >
+          Reset
+        </AppButton>
+
+        <AppButton
+          v-if="deck.category === 'custom'"
+          class="delete-button"
+          @click="removeDeck(deck.name)"
+        >
+          Delete
+        </AppButton>
+      </template>
 
       <AppButton
-        v-if="deck?.category === 'custom'"
-        class="delete-button"
-        @click="removeDeck(deck.name)"
+        :to="practiceDeckRoute(deck?.name ?? template?.name ?? '')"
+        aria-label="practice"
+        class="practice-button"
       >
-        Delete
+        <AppIcon icon="play" />
       </AppButton>
     </header>
 
@@ -171,6 +182,12 @@ watch(
     border: none;
     font-size: 0.8em;
     padding: 0.2ex;
+  }
+
+  & .practice-button {
+    background: none;
+    font-size: 0.8em;
+    padding: 0.5ex;
   }
 }
 
