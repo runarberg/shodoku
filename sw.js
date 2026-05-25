@@ -1423,34 +1423,34 @@ var Z = class {
 	precacheEntries: [
 		{
 			url: "index.html",
-			revision: "e9c253ba130e64719ac2f00b6865f748"
+			revision: "7e053addaa62c3b3c56a2775928c538b"
 		},
 		{
 			url: "assets/sprite-EDjWs5PV.svg",
 			revision: null
 		},
 		{
-			url: "assets/search-words.worker-JpGt8MP6.js",
+			url: "assets/search-words.worker-DFRHCWJF.js",
 			revision: null
 		},
 		{
-			url: "assets/search-kanji.worker-B0UovOYx.js",
+			url: "assets/search-kanji.worker-nXPUGFE3.js",
 			revision: null
 		},
 		{
-			url: "assets/reviews-yApnGH6B.js",
+			url: "assets/reviews-PhjNeRJZ.js",
 			revision: null
 		},
 		{
-			url: "assets/kanji-components-btH69bE2.js",
+			url: "assets/kanji-components-BVB-q498.js",
 			revision: null
 		},
 		{
-			url: "assets/kanji-D4Eg3txE.js",
+			url: "assets/kanji-DvD9pcWj.js",
 			revision: null
 		},
 		{
-			url: "assets/kana-C2aJnHMI.js",
+			url: "assets/kana-CatrJeHU.js",
 			revision: null
 		},
 		{
@@ -1458,55 +1458,43 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/index-H59uPY_V.js",
+			url: "assets/index-BylO0QI7.js",
 			revision: null
 		},
 		{
-			url: "assets/fsrs-Cn-8ZJnN.js",
+			url: "assets/fsrs-DJDrJVUy.js",
 			revision: null
 		},
 		{
-			url: "assets/formats-C_Dw3tH5.js",
+			url: "assets/formats-fKl6e9VR.js",
 			revision: null
 		},
 		{
-			url: "assets/dist-DX-uQjrK.js",
+			url: "assets/dist-D6bkPOSp.js",
 			revision: null
 		},
 		{
-			url: "assets/dist-CC17frgq.js",
+			url: "assets/dist-BrL2Y4Hu.js",
 			revision: null
 		},
 		{
-			url: "assets/dist-Be2nlcHk.js",
+			url: "assets/decks-DUFTTKG8.js",
 			revision: null
 		},
 		{
-			url: "assets/decks-D4maBAYc.js",
+			url: "assets/decks-DAgyDooS.js",
 			revision: null
 		},
 		{
-			url: "assets/decks-Bz26SKNR.js",
+			url: "assets/decks-C2cfld8U.js",
 			revision: null
 		},
 		{
-			url: "assets/decks-BUfBp1LD.js",
+			url: "assets/db-D4-kDK2D.js",
 			revision: null
 		},
 		{
-			url: "assets/db-CKEFCVgU.js",
-			revision: null
-		},
-		{
-			url: "assets/component-picker.worker-n2ffYYxy.js",
-			revision: null
-		},
-		{
-			url: "assets/_plugin-vue_export-helper-CCL0oOZ1.js",
-			revision: null
-		},
-		{
-			url: "assets/WordWritingSelect-vdOI4krK.js",
+			url: "assets/component-picker.worker-DvoCqwhu.js",
 			revision: null
 		},
 		{
@@ -1514,7 +1502,11 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/WordView-CMqzu7IP.js",
+			url: "assets/WordWritingSelect-7wBc850s.js",
+			revision: null
+		},
+		{
+			url: "assets/WordView-BCcQouYO.js",
 			revision: null
 		},
 		{
@@ -1522,15 +1514,11 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/WordListItem-tfYi0e5y.js",
-			revision: null
-		},
-		{
 			url: "assets/WordListItem-mo_cbGTp.css",
 			revision: null
 		},
 		{
-			url: "assets/WordKanjiListItem-jSEGayxe.js",
+			url: "assets/WordListItem-7QHnpU2H.js",
 			revision: null
 		},
 		{
@@ -1538,15 +1526,19 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/SettingsView-DTHLgy2W.js",
+			url: "assets/WordKanjiListItem-CGbJEbW_.js",
 			revision: null
 		},
 		{
-			url: "assets/SettingsView-BW8kUOSs.css",
+			url: "assets/SettingsView-BU3cCKlp.js",
 			revision: null
 		},
 		{
-			url: "assets/ReviewView-CPvxDpfD.js",
+			url: "assets/SettingsView-2Woo4irg.css",
+			revision: null
+		},
+		{
+			url: "assets/ReviewView-DBYi7Bdm.js",
 			revision: null
 		},
 		{
@@ -1554,7 +1546,7 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/ReviewSummaryView-Bye4-jON.js",
+			url: "assets/ReviewSummaryView-CQ4KA9_V.js",
 			revision: null
 		},
 		{
@@ -1562,11 +1554,15 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/RemoteSyncSyncButton-mEQzKGCb.js",
+			url: "assets/RemoteSyncSyncButton-8A8XBLOJ.js",
 			revision: null
 		},
 		{
-			url: "assets/KanjiWordList-nUfF1mDO.js",
+			url: "assets/PracticeDeckView-BMRKKRoN.css",
+			revision: null
+		},
+		{
+			url: "assets/PracticeDeckView-BLYrGGjL.js",
 			revision: null
 		},
 		{
@@ -1574,15 +1570,19 @@ var Z = class {
 			revision: null
 		},
 		{
+			url: "assets/KanjiWordList-BdUhH7A8.js",
+			revision: null
+		},
+		{
 			url: "assets/KanjiView-cmmNCiZH.css",
 			revision: null
 		},
 		{
-			url: "assets/KanjiView-DkOTObIW.js",
+			url: "assets/KanjiView-D2QUVfS0.js",
 			revision: null
 		},
 		{
-			url: "assets/KanjiComponentView-i2l4JSxP.js",
+			url: "assets/KanjiComponentView-MHvnuYPI.js",
 			revision: null
 		},
 		{
@@ -1594,11 +1594,11 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/KanjiAsideView-CMtbfjo6.js",
+			url: "assets/KanjiAsideView-CqOdIFvG.js",
 			revision: null
 		},
 		{
-			url: "assets/KanaView-B4a4dZKx.js",
+			url: "assets/KanaView-DJ_ddjwh.js",
 			revision: null
 		},
 		{
@@ -1606,11 +1606,11 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/KanaTitle-DOhD3oW8.js",
+			url: "assets/KanaTitle-CW8o-uxZ.js",
 			revision: null
 		},
 		{
-			url: "assets/KanaAsideView-CG6v0w3m.js",
+			url: "assets/KanaAsideView-CYpX8bzA.js",
 			revision: null
 		},
 		{
@@ -1618,15 +1618,11 @@ var Z = class {
 			revision: null
 		},
 		{
+			url: "assets/HomeView-CSpQ08DP.js",
+			revision: null
+		},
+		{
 			url: "assets/HomeView-CByMpJpP.css",
-			revision: null
-		},
-		{
-			url: "assets/HomeView-BF1iXRDg.js",
-			revision: null
-		},
-		{
-			url: "assets/DictionaryView-jdaegHjO.js",
 			revision: null
 		},
 		{
@@ -1634,23 +1630,23 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/DecksView-DneQE92F.js",
+			url: "assets/DictionaryView-BOuf9YpV.js",
 			revision: null
 		},
 		{
-			url: "assets/DecksView-ByyS_TLx.css",
+			url: "assets/DecksView-DdK_c_vj.js",
 			revision: null
 		},
 		{
-			url: "assets/DeckBrowserView-4bQuRK_1.js",
+			url: "assets/DecksView-D6ah-cPr.css",
 			revision: null
 		},
 		{
-			url: "assets/DeckBrowserView-0YW_riTZ.css",
+			url: "assets/DeckBrowserView-thPB_on1.js",
 			revision: null
 		},
 		{
-			url: "assets/CardRetrievabilityLabel-Dp5W-GnC.js",
+			url: "assets/DeckBrowserView-ChuX5FG1.css",
 			revision: null
 		},
 		{
@@ -1658,11 +1654,15 @@ var Z = class {
 			revision: null
 		},
 		{
+			url: "assets/CardRetrievabilityLabel-0CJ6VQdu.js",
+			revision: null
+		},
+		{
 			url: "assets/CardAsideNav-GTrwPYiV.css",
 			revision: null
 		},
 		{
-			url: "assets/CardAsideNav-3Mw8AQpW.js",
+			url: "assets/CardAsideNav-D7k0Xi7M.js",
 			revision: null
 		},
 		{
@@ -1670,7 +1670,11 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/AppTextArea-B4hhtULy.js",
+			url: "assets/AppTextArea-Ceajop4u.js",
+			revision: null
+		},
+		{
+			url: "assets/AppNumberInput-EqzU1FOP.js",
 			revision: null
 		},
 		{
@@ -1678,15 +1682,7 @@ var Z = class {
 			revision: null
 		},
 		{
-			url: "assets/AppNumberInput-CA4HphhS.js",
-			revision: null
-		},
-		{
-			url: "assets/AppLoading-Ls5b87xa.js",
-			revision: null
-		},
-		{
-			url: "assets/AppCheckbox-lOpPWTQ_.js",
+			url: "assets/AppLoading-iJmews6h.js",
 			revision: null
 		},
 		{
@@ -1694,11 +1690,15 @@ var Z = class {
 			revision: null
 		},
 		{
+			url: "assets/AppCheckbox-EiGMl13D.js",
+			revision: null
+		},
+		{
 			url: "assets/AboutView-Cm5oisJ1.css",
 			revision: null
 		},
 		{
-			url: "assets/AboutView-CevqEpdW.js",
+			url: "assets/AboutView-Ck5Suy2f.js",
 			revision: null
 		},
 		{
