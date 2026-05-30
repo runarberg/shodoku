@@ -1,11 +1,23 @@
-import { computed, ComputedRef, MaybeRefOrGetter, toValue } from "vue";
+import {
+  computed,
+  ComputedRef,
+  inject,
+  InjectionKey,
+  MaybeRefOrGetter,
+  onScopeDispose,
+  provide,
+  ShallowReactive,
+  shallowReactive,
+  toValue,
+  watch,
+} from "vue";
 
-import { getDeckStatus } from "../db/decks.ts";
+import { DeckStatusCount, getDeckStatus } from "../db/decks.ts";
 import { db as openingDb } from "../db/index.ts";
 import { LiveQueryResult, useLiveQuery } from "../helpers/db.ts";
 import { useDeckTemplate } from "../helpers/decks.ts";
 import { useFsrs } from "../helpers/fsrs.ts";
-import { type Deck } from "../types.ts";
+import { CardType, type Deck } from "../types.ts";
 
 function useDeckLiveQuery(
   name: MaybeRefOrGetter<string | null>,
@@ -108,8 +120,25 @@ export function useDecksContainingCard(
   return result;
 }
 
+type DeckStatus = Map<CardType, DeckStatusCount>;
+const DECK_STATUSES_INJECTION_KEY: InjectionKey<
+  ShallowReactive<Map<string, DeckStatus>>
+> = Symbol("deck-status");
+
+export function provideDeckStatuses() {
+  const deckStatuses = shallowReactive(new Map<string, DeckStatus>());
+
+  provide(DECK_STATUSES_INJECTION_KEY, deckStatuses);
+
+  return deckStatuses;
+}
+
 export function useDeckStatus(name: MaybeRefOrGetter<string>) {
   const fsrs = useFsrs();
+  const deckStatuses = inject(
+    DECK_STATUSES_INJECTION_KEY,
+    new Map<string, DeckStatus>(),
+  );
 
   const query = computed(() => {
     const nameValue = toValue(name);
@@ -117,6 +146,18 @@ export function useDeckStatus(name: MaybeRefOrGetter<string>) {
   });
 
   const { result } = useLiveQuery(query);
+
+  watch(result, (resultValue) => {
+    if (resultValue) {
+      deckStatuses.set(toValue(name), resultValue);
+    } else {
+      deckStatuses.delete(toValue(name));
+    }
+  });
+
+  onScopeDispose(() => {
+    deckStatuses.delete(toValue(name));
+  });
 
   return result;
 }

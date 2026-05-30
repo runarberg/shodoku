@@ -4,12 +4,12 @@ import { useRoute } from "vue-router";
 
 import { type DeckStatusCount } from "../db/decks.ts";
 import { deckLabel } from "../helpers/decks.ts";
-import { formatPercent } from "../helpers/formats.ts";
 import { practiceDeckRoute } from "../router.ts";
 import { useDeckStatus } from "../store/decks.ts";
 import { Deck } from "../types.ts";
 import AppButton from "./AppButton.vue";
 import AppIcon from "./AppIcon.vue";
+import CardStatusCount from "./CardStatusCount.vue";
 import DeckKanaCards from "./DeckKanaCards.vue";
 import DeckKanjiCards from "./DeckKanjiCards.vue";
 
@@ -67,11 +67,6 @@ function sumStatus(statusKey: keyof DeckStatusCount) {
   return sum / n;
 }
 
-const newCount = computed(() => sumStatus("new"));
-const dueCount = computed(() => sumStatus("due"));
-const reviewCount = computed(() => sumStatus("review"));
-const knowCount = computed(() => sumStatus("know"));
-
 onMounted(() => {
   if (expanded.value && expandedDeckNames.value.length === 1) {
     el.value?.scrollIntoView({ block: "start" });
@@ -87,23 +82,14 @@ onMounted(() => {
       </RouterLink>
     </strong>
 
-    <div class="status">
-      <span class="count total-count">{{ deck.cards.length }} cards</span>
-      <template v-if="deckStatus">
-        <span v-if="knowCount > 0" class="count know-count">
-          {{ formatPercent(knowCount / deck.cards.length) }} know
-        </span>
-        <span v-if="reviewCount > 0" class="count review-count">
-          {{ formatPercent(reviewCount / deck.cards.length) }} reviewed
-        </span>
-        <span v-if="dueCount > 0" class="count due-count">
-          {{ formatPercent(dueCount / deck.cards.length) }} due
-        </span>
-        <span v-if="newCount > 0" class="count new-count">
-          {{ formatPercent(newCount / deck.cards.length) }} remaining
-        </span>
-      </template>
-    </div>
+    <CardStatusCount
+      class="status"
+      :total="deck.cards.length"
+      :know="sumStatus('know')"
+      :review="sumStatus('review')"
+      :due="sumStatus('due')"
+      :remaining="sumStatus('new')"
+    />
 
     <template v-if="expanded">
       <AppButton
@@ -139,8 +125,6 @@ onMounted(() => {
 }
 
 .label {
-  font-size: 1.1em;
-  font-weight: 600;
   grid-area: label;
 
   & a {
@@ -150,30 +134,7 @@ onMounted(() => {
 }
 
 .status {
-  column-gap: 1ex;
-  display: flex;
-  font-size: 0.9em;
   grid-area: status;
-}
-
-.count {
-  font-weight: 500;
-
-  &.know-count {
-    color: var(--green);
-  }
-
-  &.review-count {
-    color: var(--blue);
-  }
-
-  &.due-count {
-    color: var(--orange);
-  }
-
-  &.new-count {
-    color: var(--medium-gray);
-  }
 }
 
 .cards {

@@ -35,6 +35,14 @@ export function categoryLabel(name: string): string {
     return "Jōyō";
   }
 
+  if (name === "tobira-beg") {
+    return "Tobira Beginning";
+  }
+
+  if (name === "tobira-int") {
+    return "Tobira Intermediate";
+  }
+
   return name;
 }
 
