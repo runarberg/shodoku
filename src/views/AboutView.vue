@@ -80,7 +80,7 @@ import { deckBrowserRoute, reviewRoute } from "../router.ts";
         <li>
           Kanji meaning, readings, and frequency data comes from
           <a
-            href="http://www.edrdg.org/wiki/index.php/KANJIDIC_Project"
+            href="https://www.edrdg.org/wiki/index.php/KANJIDIC_Project"
             target="_blank"
             >KANJIDIC Project</a
           >.
@@ -89,9 +89,9 @@ import { deckBrowserRoute, reviewRoute } from "../router.ts";
         <li>
           Vocabulary words, readings, and glosses come from
           <a
-            href="http://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project"
+            href="https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project"
             target="_blank"
-            >JMdict-EDICT Dictionary Project</a
+            >JMdict/EDICT Dictionary Project</a
           >.
         </li>
 
