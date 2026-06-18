@@ -111,6 +111,23 @@ import { deckBrowserRoute, reviewRoute } from "../router.ts";
       </ul>
     </section>
 
+    <section id="section:ai-policy">
+      <h3>AI Policy</h3>
+
+      <p>
+        This project will <em>not use generative AI</em> under any
+        circumstances, neither for generating content nor for code. Some third
+        party libraries might use generative AI to create code upstream, if I
+        notice a drop in quality I will evaluate whether to swap it out for an
+        AI free alternative.
+      </p>
+
+      <p>
+        I do accept contributions from the community, however, if I find out AI
+        was used to generate code or content, I will not accept it.
+      </p>
+    </section>
+
     <section id="section:development">
       <h3>Development</h3>
 
