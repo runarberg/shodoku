@@ -1,1 +1,1 @@
-{"id":2512030,"writings":[{"text":"釜場"}],"readings":[{"text":"かまば"}],"furigana":[{"writing":"釜場","reading":"かまば","furigana":[{"ruby":"釜","rt":"かま"},{"ruby":"場","rt":"ば"}]}],"meanings":[{"pos":["n"],"glossary":["boiler room"]}]}
+{"id":2512030,"writings":[{"text":"罐場","searchOnly":true},{"text":"釜場"}],"readings":[{"text":"かまば"}],"furigana":[{"writing":"罐場","reading":"かまば","furigana":[{"ruby":"罐","rt":"かま"},{"ruby":"場","rt":"ば"}]},{"writing":"釜場","reading":"かまば","furigana":[{"ruby":"釜","rt":"かま"},{"ruby":"場","rt":"ば"}]}],"meanings":[{"pos":["n"],"glossary":["boiler room"]}]}

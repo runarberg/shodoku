@@ -34,7 +34,7 @@ kvg:phon CDATA #IMPLIED >
 xmlns:kvg CDATA #FIXED "http://kanjivg.tagaini.net"
 kvg:type CDATA #IMPLIED >
 ]>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:kvg="http://kanjivg.tagaini.net" width="109" height="109" viewBox="0 0 109 109">
+<svg xmlns="http://www.w3.org/2000/svg" width="109" height="109" viewBox="0 0 109 109" xmlns:kvg="https://kanjivg.tagaini.net/">
 <g id="kvg:StrokePaths_0936e" style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;">
 <g id="kvg:0936e" kvg:element="鍮">
 	<g id="kvg:0936e-g1" kvg:element="金" kvg:position="left" kvg:radical="general">
@@ -62,7 +62,7 @@ kvg:type CDATA #IMPLIED >
 				<path id="kvg:0936e-s14" kvg:type="㇔" d="M55.37,60.3c2.15,0.94,5.56,3.88,6.1,5.34"/>
 				<path id="kvg:0936e-s15" kvg:type="㇔" d="M55.23,73.71c2.1,1.16,5.43,4.76,5.95,6.56"/>
 			</g>
-			<g id="kvg:0936e-g7" kvg:element="刂" kvg:variant="true" kvg:original="刀">
+			<g id="kvg:0936e-g7" kvg:element="巜">
 				<path id="kvg:0936e-s16" kvg:type="㇛" d="M80.03,50.06c0.32,0.98,1.19,2.66,0.72,4c-1.44,4.1-5.25,11.87-9.6,16.78c-1.19,1.35-0.02,2.2,0.31,2.48c5.28,4.49,8.4,10.53,11.06,20.25"/>
 				<path id="kvg:0936e-s17" kvg:type="㇛" d="M93.36,49.26c0.3,1.08,1.12,2.94,0.68,4.42c-1.35,4.53-5.56,10.67-9.64,16.08c-1.12,1.48-0.01,2.43,0.29,2.73c4.95,4.95,9.35,11.12,11.72,21.84"/>
 			</g>
