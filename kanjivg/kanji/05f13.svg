@@ -34,7 +34,7 @@ kvg:phon CDATA #IMPLIED >
 xmlns:kvg CDATA #FIXED "http://kanjivg.tagaini.net"
 kvg:type CDATA #IMPLIED >
 ]>
-<svg xmlns="http://www.w3.org/2000/svg" width="109" height="109" viewBox="0 0 109 109">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:kvg="http://kanjivg.tagaini.net" width="109" height="109" viewBox="0 0 109 109">
 <g id="kvg:StrokePaths_05f13" style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;">
 <g id="kvg:05f13" kvg:element="弓" kvg:radical="general">
 	<path id="kvg:05f13-s1" kvg:type="㇕c" d="M30.12,17.68c1.75,0.69,4.14,0.87,6.22,0.72c8.65-0.65,32.36-3.67,36.51-4.41c4.15-0.73,5.27,1.01,4.3,3.71c-0.85,2.37-3.43,9.69-4.31,13.31"/>
