@@ -1,13 +1,11 @@
 import fs from "node:fs/promises";
-import { fileURLToPath } from "node:url";
-
-import Database from "better-sqlite3";
+import { DatabaseSync as Database } from "node:sqlite";
 
 await fs.mkdir(new URL("../public/data/words-v1", import.meta.url), {
   recursive: true,
 });
 
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
+const db = new Database(import.meta.resolve("../assets.db"));
 
 function stripNull(obj) {
   if (typeof obj !== "object") {

@@ -1,9 +1,6 @@
-import { fileURLToPath } from "node:url";
+import { DatabaseSync as Database } from "node:sqlite";
 
-import Database from "better-sqlite3";
-
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
-db.pragma("journal_mode = WAL");
+const db = new Database(import.meta.resolve("../assets.db"));
 
 // Add some extra priorities
 const updateReadingPriority = db.prepare(`

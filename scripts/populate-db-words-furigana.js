@@ -1,13 +1,11 @@
 import { createReadStream } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { DatabaseSync as Database } from "node:sqlite";
 
-import Database from "better-sqlite3";
 import { chain } from "stream-chain";
 import { parser } from "stream-json";
 import { streamArray } from "stream-json/streamers/stream-array.js";
 
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
-db.pragma("journal_mode = WAL");
+const db = new Database(import.meta.resolve("../assets.db"));
 
 db.exec(`DROP TABLE IF EXISTS word_furigana`);
 db.exec(`

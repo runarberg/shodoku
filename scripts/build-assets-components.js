@@ -1,12 +1,11 @@
 import fs from "node:fs/promises";
 import { DatabaseSync as Database } from "node:sqlite";
-import { fileURLToPath } from "node:url";
 
 import { DOMParser } from "@xmldom/xmldom";
 import { pipe } from "yta";
 import { groupBy, toArray } from "yta/sync";
 
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
+const db = new Database(import.meta.resolve("../assets.db"));
 
 const selectKanji = db.prepare(`
   SELECT
@@ -105,16 +104,7 @@ for await (const filename of fs.glob("*.svg", {
 
   const pathURL = new URL(filename, kanjivgDirURL);
 
-  let xml = await fs.readFile(pathURL, "utf-8");
-  if (!/^<svg .*xmlns:kvg="/m.test(xml)) {
-    // Fix missing namespace https://github.com/KanjiVG/kanjivg/issues/524
-    xml = xml.replace(
-      `xmlns="http://www.w3.org/2000/svg"`,
-      `xmlns="http://www.w3.org/2000/svg" xmlns:kvg="http://kanjivg.tagaini.net"`,
-    );
-    await fs.writeFile(pathURL, xml, "utf-8");
-  }
-
+  const xml = await fs.readFile(pathURL, "utf-8");
   const dom = domParser.parseFromString(xml, "text/xml");
 
   const components = new Set();

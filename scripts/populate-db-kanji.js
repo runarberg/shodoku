@@ -1,11 +1,9 @@
 import { createReadStream } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { DatabaseSync as Database } from "node:sqlite";
 
-import Database from "better-sqlite3";
 import sax from "sax";
 
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
-db.pragma("journal_mode = WAL");
+const db = new Database(import.meta.resolve("../assets.db"));
 
 function* enumerate(iterable) {
   let i = 0;
@@ -64,33 +62,34 @@ const insertKanjiMeaning = db.prepare(`
   VALUES (@codepoint, @meaning, @seq)
 `);
 
-const insertCharacter = db.transaction(
-  (kanji, onReadings, kunReadings, meanings) => {
-    insertKanji.run(kanji);
+function insertCharacter(kanji, onReadings, kunReadings, meanings) {
+  db.exec("BEGIN TRANSACTION");
+  insertKanji.run(kanji);
 
-    for (const [seq, reading] of enumerate(onReadings)) {
-      insertKanjiReading.run({
-        codepoint: kanji.codepoint,
-        type: "on",
-        reading,
-        seq,
-      });
-    }
+  for (const [seq, reading] of enumerate(onReadings)) {
+    insertKanjiReading.run({
+      codepoint: kanji.codepoint,
+      type: "on",
+      reading,
+      seq,
+    });
+  }
 
-    for (const [seq, reading] of enumerate(kunReadings)) {
-      insertKanjiReading.run({
-        codepoint: kanji.codepoint,
-        type: "kun",
-        reading,
-        seq,
-      });
-    }
+  for (const [seq, reading] of enumerate(kunReadings)) {
+    insertKanjiReading.run({
+      codepoint: kanji.codepoint,
+      type: "kun",
+      reading,
+      seq,
+    });
+  }
 
-    for (const [seq, meaning] of enumerate(meanings)) {
-      insertKanjiMeaning.run({ codepoint: kanji.codepoint, meaning, seq });
-    }
-  },
-);
+  for (const [seq, meaning] of enumerate(meanings)) {
+    insertKanjiMeaning.run({ codepoint: kanji.codepoint, meaning, seq });
+  }
+
+  db.exec("END TRANSACTION");
+}
 
 const readStream = createReadStream(
   new URL("../assets/kanjidic2.xml", import.meta.url),

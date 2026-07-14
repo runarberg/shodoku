@@ -1,11 +1,9 @@
 import { createReadStream } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { DatabaseSync as Database } from "node:sqlite";
 
-import Database from "better-sqlite3";
 import sax from "sax";
 
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
-db.pragma("journal_mode = WAL");
+const db = new Database(import.meta.resolve("../assets.db"));
 
 db.exec("DROP TABLE IF EXISTS words");
 db.exec("CREATE TABLE words (id INTEGER PRIMARY KEY)");
@@ -216,7 +214,15 @@ async function saveEntryToDb(entry) {
   insertWord.run(entry.id);
 
   for (const writing of entry.kanji) {
-    insertWordWriting.run({ wordId: entry.id, ...writing });
+    insertWordWriting.run({
+      wordId: entry.id,
+      text: writing.text,
+      ateji: writing.ateji,
+      irregular: writing.irregular,
+      rare: writing.rare,
+      outdated: writing.outdated,
+      searchOnly: writing.searchOnly,
+    });
 
     if (writing.priority) {
       const priorities = {
@@ -242,7 +248,16 @@ async function saveEntryToDb(entry) {
   }
 
   for (const reading of entry.kana) {
-    insertWordReading.run({ wordId: entry.id, ...reading });
+    insertWordReading.run({
+      wordId: entry.id,
+      text: reading.text,
+      noKanji: reading.noKanji,
+      gikun: reading.gikun,
+      irregular: reading.irregular,
+      rare: reading.rare,
+      outdated: reading.outdated,
+      searchOnly: reading.searchOnly,
+    });
 
     if (reading.useWith) {
       for (const writing of reading.useWith) {

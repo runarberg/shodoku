@@ -1,7 +1,5 @@
 import fs from "node:fs";
-import { fileURLToPath } from "node:url";
-
-import Database from "better-sqlite3";
+import { DatabaseSync as Database } from "node:sqlite";
 
 import { annotateSentenceFurigana } from "./annotators.js";
 
@@ -9,8 +7,7 @@ fs.mkdirSync(new URL("../public/data/sentences-v1", import.meta.url), {
   recursive: true,
 });
 
-const db = new Database(fileURLToPath(import.meta.resolve("../assets.db")));
-db.pragma("journal_mode = WAL");
+const db = new Database(import.meta.resolve("../assets.db"));
 
 const selectSentences = db.prepare(`
   SELECT
